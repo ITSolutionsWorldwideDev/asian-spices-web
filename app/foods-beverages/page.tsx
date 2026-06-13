@@ -1,0 +1,98 @@
+// apps/web/app/foods-beverages/page.tsx
+
+import Footer from "@/components/ui/Footer";
+import HeadingDescription from "@/components/ui/HeadingDescription";
+import ProductPageHeader from "@/components/ui/ProductPageHeader";
+// import RegisterOnApp from "@/components/ui/RegisterOnApp";
+import Reviews from "@/components/ui/Reviews";
+
+import {
+  getBrands,
+  getProducts,
+  getSubcategories,
+} from "@/lib/dbactions/products";
+
+import FilterSidebar from "@/components/layout/products/FilterSidebar";
+import InfiniteProducts from "@/components/layout/products/InfiniteProducts";
+import SortDropdown from "@/components/layout/product_filter_search/SortDropdown";
+
+interface PageProps {
+  searchParams: Promise<{
+    subcategories?: string;
+    brands?: string;
+    min?: string;
+    max?: string;
+    search?: string;
+    page?: string;
+  }>;
+}
+
+type Filters = {
+  category: string;
+  subcategories: string[];
+  brands: string[];
+  minPrice?: string;
+  maxPrice?: string;
+  search?: string;
+  page: number;
+};
+
+export default async function KitchenAppliancesPage({
+  searchParams,
+}: PageProps) {
+  const params = await searchParams;
+
+  const cleanArray = (val?: string) => {
+    if (!val) return [];
+
+    return val
+      .split(",")
+      .map((v) => v.trim())
+      .filter((v) => v !== "" && v !== "null" && v !== "undefined");
+  };
+
+  const filters: Filters = {
+    category: "foods-beverages",
+    subcategories: cleanArray(params.subcategories),
+    brands: cleanArray(params.brands),
+    minPrice: params.min,
+    maxPrice: params.max,
+    search: params.search,
+    page: Number(params.page || 1),
+  };
+
+  const subcategories = await getSubcategories("foods-beverages");
+  const brands = await getBrands();
+
+  const products = await getProducts(filters);
+
+  return (
+    <div className="category-animation">
+      <ProductPageHeader
+        heading="Every Grain, A Burst of Taste"
+        text="Handpicked, pure, and powerful  our spices bring depth, warmth, and character to every recipe"
+        videoLink="/foods-beverages/0_Food_Asian_Food_3840x2160.mp4"
+      />
+
+      <HeadingDescription
+        heading="Explore Our Collection"
+        text="Shop By All Spices"
+        description="Discover authentic spices from across Asia, each category carefully for quality and flavor Indian Spices"
+      />
+
+      <div className="grid lg:grid-cols-[260px_1fr] gap-6 container mx-auto p-5">
+        <FilterSidebar subcategories={subcategories} brands={brands} />
+
+        <div>
+          <SortDropdown />
+
+          <InfiniteProducts initialProducts={products} filters={filters} />
+        </div>
+      </div>
+
+      {/* <RegisterOnApp /> */}
+      <Reviews />
+      <Footer />
+    </div>
+  );
+}
