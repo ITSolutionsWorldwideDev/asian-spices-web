@@ -3,21 +3,15 @@
 "use client";
 
 import Image from "next/image";
-import { GoTag } from "react-icons/go";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsCartPlus } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa6";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { Heart } from "lucide-react";
-import { useEffect } from "react";
 import Link from "next/link";
-import { TiTickOutline } from "react-icons/ti";
-
 import { usePathname } from "next/navigation";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
-import { useCategoryFilterStore } from "@/store/useCategoryFilterStore";
-
 import { useSession } from "next-auth/react";
 
 type Product = {
@@ -41,39 +35,33 @@ type Product = {
 
 interface ProductCardProps {
   products: Product[];
+  disableSlicing?: boolean;
 }
 
-export default function ProductCard({ products }: ProductCardProps) {
-
-  const { selectedCategories } = useCategoryFilterStore();
-  const { symbol, selectedCurrency, rate } = useCurrencyStore();
-
+export default function ProductCard({
+  products,
+  disableSlicing = false,
+}: ProductCardProps) {
+  const { symbol, rate } = useCurrencyStore();
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
 
-  const path = usePathname();
-  const pathname = path.startsWith("/") ? path.slice(1) : path;
-  const [cartBtn, setCartBtn] = useState<string | null>(null);
-
-  // const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
-  // const isInWishlist = useWishlistStore((state) => state.isInWishlist);
   const { toggleWishlist, isInWishlist } = useWishlistStore();
+  const { cart, addToCart, increaseQty, decreaseQty, setQty } = useCartStore();
 
   const [mounted, setMounted] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const { cart, addToCart, increaseQty, decreaseQty, setQty } = useCartStore();
+  // const path = usePathname();
+  // const pathname = path.startsWith("/") ? path.slice(1) : path;
+  // const [cartBtn, setCartBtn] = useState<string | null>(null);
 
-  const [showAll, setShowAll] = useState(false);
-
-  // const visibleProducts = showAll ? productData : productData.slice(0, 8);
-  const visibleProducts = showAll ? products : products.slice(0, 20);
-
-  console.log('products ==== ',products.length);
-  console.log('visibleProducts ==== ',visibleProducts.length);
+  const visibleProducts =
+    disableSlicing || showAll ? products : products.slice(0, 20);
 
   return (
     <div>
@@ -99,7 +87,6 @@ export default function ProductCard({ products }: ProductCardProps) {
                 </span>
               )} */}
 
-              {/* Like button */}
               <button
                 onClick={() =>
                   toggleWishlist(
@@ -115,14 +102,15 @@ export default function ProductCard({ products }: ProductCardProps) {
                   )
                 }
                 className="absolute top-4 right-4 bg-white rounded-full p-2 shadow transition hover:scale-110 z-10"
-
-                // className="absolute top-1/11 right-1/11 bg-white rounded-full p-2 shadow transition hover:scale-110"
               >
                 <Heart
-                  className={`w-5 h-5  transition ${mounted && isInWishlist(product.id) ? "fill-red-500 text-red-500" : "text-gray-500 "}`}
+                  className={`w-5 h-5 transition ${
+                    mounted && isInWishlist(product.id)
+                      ? "fill-red-500 text-red-500"
+                      : "text-gray-500"
+                  }`}
                 />
               </button>
-
 
               <Image
                 src={
@@ -141,7 +129,6 @@ export default function ProductCard({ products }: ProductCardProps) {
               <span className="text-gray-400 ml-1">({product.reviews})</span>
             </div> */}
 
-
               <Link
                 href={`/${product.category_slug || "spices"}/${product.slug}`.replace(
                   /\/+/g,
@@ -155,7 +142,7 @@ export default function ProductCard({ products }: ProductCardProps) {
                   {product.description?.split(" ").slice(0, 3).join(" ")}...
                 </span>
               </Link>
-          
+
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-orange-400 font-bold text-xl">
                   {symbol}
@@ -163,7 +150,6 @@ export default function ProductCard({ products }: ProductCardProps) {
                 </span>
               </div>
 
-        
               {cartItem ? (
                 <div className="mt-4 flex items-center justify-between border rounded-lg overflow-hidden">
                   <button
@@ -223,14 +209,13 @@ export default function ProductCard({ products }: ProductCardProps) {
 
       {/* See More/See Less Button */}
 
-      {products.length > 16 && (
+      {/* 🟢 Render pagination toggle ONLY if classic manual slicing mode is active */}
+      {!disableSlicing && products.length > 20 && (
         <div className="flex justify-center mt-8 mb-10">
           <button
             onClick={() => setShowAll(!showAll)}
-            /* py-5 bg-black */
-            className="relative flex items-center justify-center px-10  bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2  font-semibold rounded-lg transition-colors group"
+            className="flex items-center justify-center px-10 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2 font-semibold rounded-lg transition"
           >
-            {/* <span className="absolute inset-0 bg-linear-to-r  from-white/40 to-white/90 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-center"></span> */}
             {showAll ? (
               "See Less"
             ) : (
@@ -242,6 +227,24 @@ export default function ProductCard({ products }: ProductCardProps) {
           </button>
         </div>
       )}
+
+      {/* {products.length > 16 && (
+        <div className="flex justify-center mt-8 mb-10">
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="relative flex items-center justify-center px-10  bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2  font-semibold rounded-lg transition-colors group"
+          >
+            {showAll ? (
+              "See Less"
+            ) : (
+              <>
+                See More
+                <FaArrowRight className="ml-5" />
+              </>
+            )}
+          </button>
+        </div>
+      )} */}
     </div>
   );
 }

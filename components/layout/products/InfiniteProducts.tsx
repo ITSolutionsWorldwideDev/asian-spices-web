@@ -7,16 +7,14 @@ import ProductCard from "@/components/ui/ProductCard";
 import { useLoaderStore } from "@/store/useLoaderStore";
 
 export default function InfiniteProducts({ initialProducts, filters }: any) {
+
   const [products, setProducts] = useState(initialProducts || []);
   const [page, setPage] = useState(2);
-
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
   const { show, hide } = useLoaderStore();
-
   const observerRef = useRef<HTMLDivElement | null>(null);
-
   const isFetchingRef = useRef(false);
   const limit = 20;
 
@@ -34,9 +32,7 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
         params.set(key, String(value));
       }
     });
-
     params.set("page", String(page));
-
     return params.toString();
   };
 
@@ -105,7 +101,7 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
       },
       {
         threshold: 0.1, // Triggers as soon as 10% of the target element is visible
-        rootMargin: "50px", // Start pre-fetching 50px before touching the container absolute bottom
+        rootMargin: "150px", // Start pre-fetching 50px before touching the container absolute bottom
       },
     );
 
@@ -118,47 +114,31 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
     };
   }, [page, hasMore, filters, loading]);
 
-  /* useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry) return;
-
-        if (entry.isIntersecting && !loading && hasMore) {
-          fetchMore();
-        }
-      },
-      {
-        threshold: 1.0,
-      },
-    );
-
-    const el = observerRef.current;
-    if (el) observer.observe(el);
-
-    return () => {
-      if (el) observer.unobserve(el);
-    };
-  }, [loading, hasMore, page]); */
-
-  // useEffect(() => {
-  //   setProducts(initialProducts);
-  //   setPage(2);
-  //   setHasMore(true);
-  // }, [initialProducts]);
 
   useEffect(() => {
     setProducts(initialProducts || []);
     setPage(2);
-    setHasMore(true);
+    setHasMore(initialProducts?.length >= limit);
     isFetchingRef.current = false;
-  }, [initialProducts]);
+  }, [initialProducts, filters]);
 
   return (
     <>
-      <ProductCard products={products} />
+      <ProductCard products={products} disableSlicing={true} />
 
       {hasMore && (
+        <div ref={observerRef} className="h-20 flex items-center justify-center w-full mt-6">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+        </div>
+      )}
+
+      {!hasMore && products.length > 0 && (
+        <p className="text-center py-10 text-gray-400 text-sm font-medium">
+          You've viewed all available products
+        </p>
+      )}
+
+      {/* {hasMore && (
         <div
           ref={observerRef}
           className="h-10 flex items-center justify-center"
@@ -169,7 +149,7 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
 
       {!hasMore && (
         <p className="text-center py-6 text-gray-500">No more products</p>
-      )}
+      )} */}
     </>
   );
 }
