@@ -20,6 +20,7 @@ import { calculateTotals, convertTotals } from "@/lib/pricing";
 // import { SHIPPING_OPTIONS, ShippingMethod } from "@/lib/pricing";
 
 import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { useGlobalStore } from "@/store/useGlobalStore";
 
 export type CheckoutData = {
   email: string;
@@ -45,18 +46,11 @@ export default function Checkout() {
   const { data: session } = useSession();
   const isLoggedIn = !!session;
 
-  useEffect(() => {
-    if (session?.user?.email) {
-      setFormData((prev) => ({
-        ...prev,
-        email: session.user.email,
-      }));
-    }
-  }, [session]);
-
   const { show, hide } = useLoaderStore();
   const { cart, clearCart } = useCartStore();
   const { rate, selectedCurrency } = useCurrencyStore();
+
+  const { taxRate, setSelectedCountry, fetchInitialData } = useGlobalStore();
 
   const [addresses, setAddresses] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
@@ -68,7 +62,6 @@ export default function Checkout() {
   const [availableShippingOptions, setAvailableShippingOptions] = useState<
     any[]
   >([]);
-
 
   const [formData, setFormData] = useState<CheckoutData>({
     email: "",
@@ -90,6 +83,19 @@ export default function Checkout() {
     expiry: "",
   });
 
+  useEffect(() => {
+    fetchInitialData();
+  }, []);
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      setFormData((prev) => ({
+        ...prev,
+        email: session.user.email,
+      }));
+    }
+  }, [session]);
+
   // 2. Dynamic Price Calculations Block
   // Find the database price matching the currently selected method ID
   const selectedOption = availableShippingOptions.find(
@@ -98,7 +104,14 @@ export default function Checkout() {
   const currentShippingPrice = selectedOption ? selectedOption.price : 0;
 
   // 3. Update your totals calculation line to pass the price instead of the ID:
-  const totals = calculateTotals(cart, currentShippingPrice);
+  // const totals = calculateTotals(cart, currentShippingPrice, taxRate);
+
+  const totals = calculateTotals(
+    cart,
+    currentShippingPrice,
+    taxRate,
+    selectedOption?.code || selectedOption?.name,
+  );
   const convertedTotals = convertTotals(totals, rate, selectedCurrency);
 
   // const totals = calculateTotals(cart, shippingMethod);
@@ -119,6 +132,7 @@ export default function Checkout() {
 
         if (defaultAddr) {
           setSelectedAddress(defaultAddr);
+          const activeCountry = defaultAddr.country || "NL";
 
           setFormData((prev) => ({
             ...prev,
@@ -132,6 +146,8 @@ export default function Checkout() {
             zip: defaultAddr.postal_code || "",
             country: defaultAddr.country || "NL",
           }));
+
+          await setSelectedCountry(activeCountry);
         }
       } catch (err) {
         console.error("Failed to load addresses", err);
@@ -142,6 +158,12 @@ export default function Checkout() {
 
     loadAddresses();
   }, [session]);
+
+  useEffect(() => {
+    if (formData.country) {
+      setSelectedCountry(formData.country);
+    }
+  }, [formData.country]);
 
   const isFormValid = checkoutSchema.safeParse(formData).success;
 
@@ -270,7 +292,9 @@ export default function Checkout() {
             total: convertedTotals.total,
           },
           // shippingMethod,
-          shippingMethod: selectedOption ? selectedOption.name : "Standard Delivery",
+          shippingMethod: selectedOption
+            ? selectedOption.name
+            : "Standard Delivery",
           payment_status: "pending",
           order_status: "pending",
         }),

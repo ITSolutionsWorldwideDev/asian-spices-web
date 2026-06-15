@@ -6,6 +6,7 @@ import Link from "next/link";
 
 import { CartItem } from "@/store/useCartStore";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { useGlobalStore } from "@/store/useGlobalStore";
 import { SHIPPING_OPTIONS, ShippingMethod, FREE_SHIPPING_THRESHOLD } from "@/lib/pricing";
 
 interface Props {
@@ -31,6 +32,7 @@ export default function OrderSummary({
   deliveryDaysText,
 }: Props) {
   const { symbol, rate } = useCurrencyStore();
+  const { taxRate, taxName } = useGlobalStore();
 
   // const shippingOption = SHIPPING_OPTIONS[shippingMethod];
   const isValidShippingMethod = (method: any): method is ShippingMethod => {
@@ -108,12 +110,16 @@ export default function OrderSummary({
           </span>
         </div>
 
-        <div className="flex justify-between mt-3">
+        {/* <div className="flex justify-between mt-3">
           <span>Tax (21%)</span>
           <span>
             {symbol}
             {tax.toFixed(2)}
           </span>
+        </div> */}
+        <div className="flex justify-between mt-3">
+          <span>{taxName} ({(taxRate * 100).toFixed(0)}%)</span>
+          <span>{symbol}{(rate * tax).toFixed(2)}</span>
         </div>
       </div>
 
@@ -123,7 +129,7 @@ export default function OrderSummary({
         <span>Total</span>
         <span>
           {symbol}
-          {total.toFixed(2)}
+          {(rate * total).toFixed(2)}
         </span>
       </div>
 

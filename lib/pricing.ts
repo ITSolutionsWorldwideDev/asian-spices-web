@@ -2,7 +2,7 @@
 
 import { CartItem } from "@/store/useCartStore";
 
-export const TAX_RATE = 0.21;
+// export const TAX_RATE = 0.21;
 export const FREE_SHIPPING_THRESHOLD = 50;
 export const BASE_CURRENCY = "EUR";
 
@@ -17,16 +17,25 @@ export type ShippingMethod = keyof typeof SHIPPING_OPTIONS;
 export function calculateTotals(
   cart: CartItem[],
   shippingCost: number,
+  taxRate: number,
+  shippingCodeOrName?: string
 ) {
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
   );
 
-  const tax = subtotal * TAX_RATE;
+  // const tax = subtotal * TAX_RATE;
+  const tax = subtotal * taxRate;
+  const isStandardMethod = 
+    shippingCodeOrName?.toLowerCase() === "standard" || 
+    shippingCodeOrName?.toLowerCase() === "standard delivery";
 
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : shippingCost;
+  const shipping = (subtotal >= FREE_SHIPPING_THRESHOLD && isStandardMethod) 
+    ? 0 
+    : shippingCost;
 
+  // const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : shippingCost;
   const total = subtotal + tax + shipping;
 
   return { subtotal, tax, shipping, total };

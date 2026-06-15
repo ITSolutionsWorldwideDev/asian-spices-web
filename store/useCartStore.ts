@@ -9,9 +9,6 @@ export interface CartItem {
   price: number;
   quantity: number;
   image: string;
-  // weight?: string;
-  // oldPrice: number | null;
-  // weight: string;
 
   slug?: string;
   category_slug?: string;
@@ -72,7 +69,6 @@ export const useCartStore = create<CartState>()(
       /* ---------------- REMOVE ---------------- */
 
       removeFromCart: async (id, isLoggedIn) => {
-        // optimistic update
         set({
           cart: get().cart.filter((i) => i.id !== id),
         });
@@ -92,7 +88,6 @@ export const useCartStore = create<CartState>()(
         } catch (err) {
           console.error("Remove failed, reverting", err);
 
-          // ❗ rollback (important)
           const res = await fetch("/api/cart");
           const dbCart = await res.json();
 

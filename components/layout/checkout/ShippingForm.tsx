@@ -6,6 +6,7 @@ import { useLoaderStore } from "@/store/useLoaderStore";
 // import { ChevronRight } from "lucide-react";
 
 import { useEffect, useState } from "react";
+
 import {
   SHIPPING_OPTIONS,
   ShippingMethod,
@@ -61,6 +62,8 @@ export default function ShippingForm({
   const { show, hide } = useLoaderStore();
 
   const { symbol, rate } = useCurrencyStore();
+
+  const qualifiesForFreeStandard = subtotal >= FREE_SHIPPING_THRESHOLD;
 
   const isValidShippingMethod = (method: any): method is ShippingMethod => {
     return method in SHIPPING_OPTIONS;
@@ -400,6 +403,67 @@ export default function ShippingForm({
           </p>
         ) : (
           <div className="space-y-4">
+            {shippingOptions.map((option) => {
+              // 🟢 Check if the specific database option code indicates a standard route method context
+              const isOptionStandard =
+                option.code?.toLowerCase() === "standard" ||
+                option.name?.toLowerCase() === "standard";
+
+              const isFreeStandardApplied =
+                qualifiesForFreeStandard && isOptionStandard;
+
+              // Apply multi-currency rates explicitly to shipping options
+              const convertedPrice = option.price * rate;
+
+              return (
+                <label
+                  key={option.id}
+                  className={`flex items-center justify-between border rounded-xl p-4 cursor-pointer transition-all ${
+                    shippingMethod === option.id
+                      ? "border-orange-500 bg-orange-50/50"
+                      : "border-[#E5E7EB] hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="radio"
+                      name="shipping"
+                      value={option.id}
+                      checked={shippingMethod === option.id}
+                      onChange={() => setShippingMethod(option.id)}
+                      className="accent-orange-500"
+                    />
+                    <div>
+                      <p className="font-medium text-gray-900">{option.name}</p>
+                      <p className="text-sm text-gray-500">
+                        {option.minDays === option.maxDays
+                          ? `${option.minDays} business day${option.minDays > 1 ? "s" : ""}`
+                          : `${option.minDays}-${option.maxDays} business days`}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* 🟢 Render logic safely mirrors back computed pricing arrays */}
+                  {isFreeStandardApplied || option.price === 0 ? (
+                    <span className="text-[#00A63E] font-semibold">FREE</span>
+                  ) : (
+                    <span className="font-semibold text-gray-900">
+                      {symbol}
+                      {convertedPrice.toFixed(2)}
+                    </span>
+                  )}
+                </label>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+{
+  /* <div className="space-y-4">
             {shippingOptions.map((option) => (
               <label
                 key={option.id}
@@ -439,9 +503,5 @@ export default function ShippingForm({
                 )}
               </label>
             ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+          </div> */
 }

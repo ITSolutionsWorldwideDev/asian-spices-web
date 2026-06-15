@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { useGlobalStore } from "@/store/useGlobalStore";
 import { SHIPPING_OPTIONS, ShippingMethod } from "@/lib/pricing";
 
 interface Props {
@@ -60,6 +61,7 @@ export default function OrderSummaryReadOnly({
   // const total = subtotal + tax + shipping;
   // const { symbol, rate, currency } = useCurrencyStore();
   const { symbol, rate, selectedCurrency } = useCurrencyStore();
+  const { taxRate, taxName } = useGlobalStore();
 
   const safeSubtotal = safeNumber(subtotal);
   const safeTax = safeNumber(tax);
@@ -125,14 +127,18 @@ export default function OrderSummaryReadOnly({
         </div>
 
         <div className="flex justify-between">
+          <span>{taxName} ({(taxRate * 100).toFixed(0)}%)</span>
+          <span>{symbol}{taxConverted.toFixed(2)}</span>
+        </div>
+
+        {/* <div className="flex justify-between">
           <span>Tax</span>
           <span>
             {" "}
             {symbol}
             {taxConverted.toFixed(2)}
-            {/* {tax.toFixed(2)}  */}
           </span>
-        </div>
+        </div> */}
       </div>
 
       <hr className="my-4" />

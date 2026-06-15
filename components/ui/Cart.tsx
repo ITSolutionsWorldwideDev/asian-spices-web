@@ -2,20 +2,22 @@
 
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Heart, Trash2, ShieldCheck, Truck } from "lucide-react";
-import { useCartStore } from "@/store/useCartStore";
 import Link from "next/link";
-import { useWishlistStore } from "@/store/useWishlistStore";
-import { ArrowRight } from "lucide-react";
-import { useCurrencyStore } from "@/store/useCurrencyStore";
-
-import { useSession } from "next-auth/react";
-
 import { useRouter } from "next/navigation";
-import { calculateTotals } from "@/lib/pricing";
-import { SHIPPING_OPTIONS, ShippingMethod } from "@/lib/pricing";
-import { useState } from "react";
+
+import { Heart, Trash2, ShieldCheck, Truck, ArrowRight } from "lucide-react";
+import { useCartStore } from "@/store/useCartStore";
+import { useWishlistStore } from "@/store/useWishlistStore";
+import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { useGlobalStore } from "@/store/useGlobalStore";
+import { useSession } from "next-auth/react";
+import {
+  calculateTotals,
+  SHIPPING_OPTIONS,
+  ShippingMethod,
+} from "@/lib/pricing";
 
 const FALLBACK_IMAGE = "/images/placeholder.png";
 
@@ -23,26 +25,29 @@ export default function Cart() {
   const { cart, removeFromCart, clearCart, increaseQty, decreaseQty, setQty } =
     useCartStore();
 
-  const { addToWishlist } = useWishlistStore();
   const { symbol, rate } = useCurrencyStore();
+  const { addToWishlist } = useWishlistStore();
+
+  const { countries, selectedCountry, taxRate, taxName, fetchInitialData, setSelectedCountry } = useGlobalStore();
 
   const [shippingMethod, setShippingMethod] =
     useState<ShippingMethod>("standard");
 
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
-
-  
   const router = useRouter();
+
+  useEffect(() => {
+    fetchInitialData();
+  }, []);
 
   const currentShippingPrice = SHIPPING_OPTIONS[shippingMethod]?.price ?? 0;
 
-// Pass the raw numeric price into the calculation function
-const { subtotal, tax, shipping, total } = calculateTotals(
-  cart,
-  currentShippingPrice,
-);
-
+  const { subtotal, tax, shipping, total } = calculateTotals(
+    cart,
+    currentShippingPrice,
+    taxRate
+  );
 
   const itemInCart = cart.length;
 
@@ -191,7 +196,7 @@ const { subtotal, tax, shipping, total } = calculateTotals(
         {/* RIGHT - ORDER SUMMARY */}
         <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 h-fit">
           <h2 className="font-semibold mb-4">Order Summary</h2>
-          
+
           {/* Optional Shipping Selector UI inside Cart */}
           {/* <div className="flex flex-col gap-2 mb-4">
             <label className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Shipping Method</label>
@@ -208,6 +213,21 @@ const { subtotal, tax, shipping, total } = calculateTotals(
             </select>
           </div> */}
 
+          <div className="flex flex-col gap-1.5 mb-4">
+            <label className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Shipping Destination Country</label>
+            <select
+              value={selectedCountry}
+              onChange={(e) => setSelectedCountry(e.target.value)}
+              className="border p-2.5 rounded-xl text-sm bg-gray-50 outline-none cursor-pointer w-full h-[42px]"
+            >
+              {countries.map((c) => (
+                <option key={c.id} value={c.iso2}>
+                  {(c as any).emoji || "🏳️"} {c.name} ({c.iso2})
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="space-y-2 text-sm py-5">
             <div className="flex justify-between mt-3">
               <span>Subtotal</span>
@@ -217,14 +237,19 @@ const { subtotal, tax, shipping, total } = calculateTotals(
               </span>
             </div>
 
-            <div className="flex justify-between mt-3">
+            {/* <div className="flex justify-between mt-3">
               <span>Tax (21%)</span>
               <span>
                 {symbol}
                 {(rate * tax).toFixed(2)}
               </span>
+            </div> */}
+
+            <div className="flex justify-between mt-3">
+              <span>{taxName} ({(taxRate * 100).toFixed(0)}%)</span>
+              <span>{symbol}{(rate * tax).toFixed(2)}</span>
             </div>
-            
+
             <div className="flex justify-between mt-3">
               <span>Estimated Shipping</span>
               <span>
