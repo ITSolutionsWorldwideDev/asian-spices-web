@@ -23,7 +23,7 @@ const RedirectButtons = () => {
         {/* Subtext */}
         <p className="text-gray-600 mb-6">
           Add your favorite items to cart and enjoy free shipping on orders over
-          $50!
+          €50!
         </p>
 
         {/* Buttons */}

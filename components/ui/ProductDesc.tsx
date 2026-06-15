@@ -27,7 +27,7 @@ export default function ProductDesc({ product }: { product: Product }) {
   const features = [
     {
       icon: Truck,
-      title: "Free Shipping on $50+",
+      title: "Free Shipping on €50+",
     },
     {
       icon: RotateCcw,
@@ -300,7 +300,7 @@ export default function ProductDesc({ product }: { product: any }) {
   const features = [
     {
       icon: Truck,
-      title: "Free Shipping on $50+",
+      title: "Free Shipping on €50+",
     },
     {
       icon: RotateCcw,

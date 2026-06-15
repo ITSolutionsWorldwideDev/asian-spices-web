@@ -2,8 +2,12 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";
-import { assignNextStore, logOrderEvent, ORDER_EVENTS } from "@/core/order-routing";
-
+import {
+  assignNextStore,
+  logOrderEvent,
+  ORDER_EVENTS,
+} from "@/core/order-routing";
+import { sendOrderConfirmationEmail } from "@/core/email-templates";
 
 const PAYPAL_API =
   process.env.PAYPAL_ENV === "production"
@@ -41,20 +45,20 @@ export async function POST(req: NextRequest) {
     if (!paypalOrderId || !orderId) {
       return NextResponse.json(
         { success: false, error: "Missing parameters" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // 1️⃣ Check if order already paid (idempotency protection)
     const existing = await pool.query(
       `SELECT payment_status FROM store_orders WHERE id = $1`,
-      [orderId]
+      [orderId],
     );
 
     if (!existing.rows.length) {
       return NextResponse.json(
         { success: false, error: "Order not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -74,7 +78,7 @@ export async function POST(req: NextRequest) {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     const captureData = await captureRes.json();
@@ -84,7 +88,7 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json(
         { success: false, error: captureData },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -97,6 +101,8 @@ export async function POST(req: NextRequest) {
     // 3️⃣ Update Database and trigger Store Routing only if COMPLETED
     if (status === "COMPLETED") {
       const client = await pool.connect();
+      let shouldSendEmail = false;
+
       try {
         await client.query("BEGIN");
 
@@ -109,10 +115,12 @@ export async function POST(req: NextRequest) {
                updated_at = NOW()
            WHERE id = $2 AND payment_method = 'paypal' AND payment_status != 'paid'
            RETURNING id`,
-          [paypalOrderId, orderId]
+          [paypalOrderId, orderId],
         );
 
         if (updateResult?.rowCount > 0) {
+          shouldSendEmail = true;
+
           // Log payment collection completion event
           await logOrderEvent(client, {
             orderId: orderId,
@@ -122,7 +130,9 @@ export async function POST(req: NextRequest) {
           });
 
           // ⚡ RUN CRITICAL STORE SELECTION PIPELINE ⚡
-          console.log(`Executing decentralized routing for Order ID: ${orderId}`);
+          console.log(
+            `Executing decentralized routing for Order ID: ${orderId}`,
+          );
           await assignNextStore(client, orderId);
         }
 
@@ -133,20 +143,14 @@ export async function POST(req: NextRequest) {
       } finally {
         client.release();
       }
+
+      if (shouldSendEmail) {
+        // Run un-awaited to optimize response latency to the payment processor callback
+        sendOrderConfirmationEmail(orderId).catch((err) =>
+          console.error("[Email Trigger Error Background Execution]:", err),
+        );
+      }
     }
-    // if (status === "COMPLETED") {
-    //   await pool.query(
-    //     `
-    //     UPDATE store_orders
-    //     SET payment_status = 'paid',
-    //         order_status = 'completed',
-    //         transaction_id = $1,
-    //         updated_at = NOW()
-    //     WHERE id = $2 AND payment_method = 'paypal'
-    //     `,
-    //     [paypalOrderId, orderId]
-    //   );
-    // }
 
     return NextResponse.json({
       success: true,
@@ -158,7 +162,21 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { success: false, error: "Server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
+
+// if (status === "COMPLETED") {
+//   await pool.query(
+//     `
+//     UPDATE store_orders
+//     SET payment_status = 'paid',
+//         order_status = 'completed',
+//         transaction_id = $1,
+//         updated_at = NOW()
+//     WHERE id = $2 AND payment_method = 'paypal'
+//     `,
+//     [paypalOrderId, orderId]
+//   );
+// }

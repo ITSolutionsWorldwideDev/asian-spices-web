@@ -8,6 +8,8 @@ import {
   ORDER_EVENTS,
 } from "@/core/order-routing";
 
+import { sendOrderConfirmationEmail } from "@/core/email-templates";
+
 export async function POST(req: NextRequest) {
   try {
     const { orderId, statusAction, transactionId } = await req.json();
@@ -34,6 +36,8 @@ export async function POST(req: NextRequest) {
 
     if (paymentStatus === "paid") {
       const client = await pool.connect();
+      let shouldSendEmail = false;
+
       try {
         await client.query("BEGIN");
 
@@ -49,6 +53,8 @@ export async function POST(req: NextRequest) {
         );
 
         if (updateResult?.rowCount > 0) {
+          shouldSendEmail = true;
+
           // Log payment collection completion event
           await logOrderEvent(client, {
             orderId: orderId,
@@ -65,6 +71,12 @@ export async function POST(req: NextRequest) {
         }
 
         await client.query("COMMIT");
+
+        if (shouldSendEmail) {
+          sendOrderConfirmationEmail(orderId).catch((err) =>
+            console.error("[Email Trigger Error PayNL Workflow]:", err),
+          );
+        }
 
         return NextResponse.json({
           success: true,
