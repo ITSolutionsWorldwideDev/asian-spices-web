@@ -5,7 +5,7 @@ interface EmailOptions {
   to: string;
   subject: string;
   html: string;
-  fromAccount?: "billing" | "order" | "default";
+  fromAccount?: "billing" | "order" | "partners" | "default";
   replyTo?: string;
   attachments?: Array<{
     filename: string;
@@ -44,6 +44,17 @@ const SMTP_PROFILES = {
       pass: process.env.SMTP_FINANCE_PASS || "",
     },
     fromAddress: '"Asian Spices Finance" <finance@asianspices.online>',
+  },
+
+  partners: {
+    host: "mail.asianspices.online",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.SMTP_PARTNERS_USER || "partners@asianspices.online",
+      pass: process.env.SMTP_PARTNERS_PASS || "",
+    },
+    fromAddress: '"Asian Spices Partners" <partners@asianspices.online>',
   },
 };
 

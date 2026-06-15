@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";
-// import nodemailer from "nodemailer";
+import { sendPartnerRegistrationEmail } from "@/core/email-templates";
 
 const generateApplicationId = () => {
   const date = new Date();
@@ -149,7 +149,48 @@ export async function POST(req: NextRequest) {
       ],
     );
 
-    /* ---------------- EMAIL ---------------- */
+    
+
+    /* ---------------- COMMIT ---------------- */
+
+    await client.query("COMMIT");
+
+    sendPartnerRegistrationEmail({
+      email: business_email_address,
+      companyName: company_name,
+      firstName: first_name,
+      applicationId: application_id,
+    }).catch((emailErr) => {
+      console.error("[Background Email Notification Failed]:", emailErr);
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Registration submitted successfully",
+        application_id,
+        data: result.rows[0],
+      },
+      { status: 201 },
+    );
+  } catch (err: any) {
+    await client.query("ROLLBACK");
+
+    console.error("Partner Registration Error:", err);
+
+    return NextResponse.json(
+      {
+        error: err.message || "Internal Server Error",
+      },
+      { status: 500 },
+    );
+  } finally {
+    client.release();
+  }
+}
+
+
+/* ---------------- EMAIL ---------------- */
 
     /* const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
@@ -248,35 +289,6 @@ export async function POST(req: NextRequest) {
         </div>
       `,
     }); */
-
-    /* ---------------- COMMIT ---------------- */
-
-    await client.query("COMMIT");
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Registration submitted successfully",
-        application_id,
-        data: result.rows[0],
-      },
-      { status: 201 },
-    );
-  } catch (err: any) {
-    await client.query("ROLLBACK");
-
-    console.error("Partner Registration Error:", err);
-
-    return NextResponse.json(
-      {
-        error: err.message || "Internal Server Error",
-      },
-      { status: 500 },
-    );
-  } finally {
-    client.release();
-  }
-}
 
 /* import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";
