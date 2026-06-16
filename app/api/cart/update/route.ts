@@ -71,7 +71,7 @@ export async function PATCH(req: Request) {
 
 /* ---------------- HELPER ---------------- */
 
-async function getOrCreateCustomer(client: any, user: any) {
+/* async function getOrCreateCustomer(client: any, user: any) {
   const existing = await client.query(
     `SELECT id FROM customers WHERE user_id = $1 LIMIT 1`,
     [user.id],
@@ -86,6 +86,29 @@ async function getOrCreateCustomer(client: any, user: any) {
      VALUES ($1, $2)
      RETURNING id`,
     [user.id, user.email],
+  );
+
+  return created.rows[0].id;
+} */
+
+async function getOrCreateCustomer(client: any, user: any) {
+  const email = user.email;
+
+  // Swapped "customers" out for your ecommerce namespace "store_customers"
+  const existing = await client.query(
+    `SELECT id FROM store_customers WHERE user_id = $1 LIMIT 1`,
+    [user.id],
+  );
+
+  if (existing.rowCount) {
+    return existing.rows[0].id;
+  }
+
+  const created = await client.query(
+    `INSERT INTO store_customers (user_id, email)
+     VALUES ($1, $2)
+     RETURNING id`,
+    [user.id, email],
   );
 
   return created.rows[0].id;

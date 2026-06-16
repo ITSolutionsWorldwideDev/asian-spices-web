@@ -33,6 +33,10 @@ export async function sendOrderConfirmationEmail(orderId: string) {
     const deliveryWindow =
       DELIVERY_DAYS_MAP[order.shipping_provider] || "3 - 5 business days";
 
+      console.log('sendOrderConfirmationEmail orderId === ',orderId);
+      console.log('sendOrderConfirmationEmail order.customer_email === ',order.customer_email);
+      console.log('sendOrderConfirmationEmail order.order_number === ',order.order_number);
+
     // 2️⃣ Build modern HTML Email Structure
     const emailHtml = `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #f0f0f0; padding: 20px; border-radius: 12px;">
@@ -56,6 +60,9 @@ export async function sendOrderConfirmationEmail(orderId: string) {
         </p>
       </div>
     `;
+
+    
+      console.log('sendOrderConfirmationEmail emailHtml === ',emailHtml);
 
     // 3️⃣ Dispatch
     await sendEmail({

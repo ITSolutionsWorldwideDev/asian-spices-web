@@ -10,43 +10,33 @@ export default function PaynlReturnHandler({
   orderId,
   transactionId,
   statusAction,
-//   onDone,
+  //   onDone,
 }: {
   orderId: string;
   transactionId?: string;
   statusAction: string;
-//   onDone?: () => void;
+  //   onDone?: () => void;
 }) {
   const [processing, setProcessing] = useState(true);
-  // const { clearCart } = useCartStore();
-
-  
   const clearCart = useCartStore((s) => s.clearCart);
 
   useEffect(() => {
-    if (statusAction?.toLowerCase() === "paid") {
-      clearCart();
-    }
-  }, [statusAction]);
-
-   useEffect(() => {
-    let called = false; // 🔥 prevent double execution
+    let called = false;
 
     const confirmPayment = async () => {
       if (called) return;
       called = true;
 
       try {
-        await fetch("/api/paynl/confirm", {
+        const res = await fetch("/api/paynl/confirm", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            orderId,
-            transactionId,
-            statusAction,
-          }),
+          body: JSON.stringify({ orderId, transactionId, statusAction }),
         });
-        clearCart();
+
+        if (res.ok && statusAction?.toLowerCase() === "paid") {
+          clearCart(); // Clear local storage only on explicit success
+        }
       } catch (err) {
         console.error("Pay.nl confirm failed:", err);
       } finally {

@@ -94,7 +94,16 @@ export async function sendEmail({
   replyTo,
   attachments,
 }: EmailOptions) {
-  const profileKey: ProfileKey = SMTP_PROFILES[fromAccount] ? fromAccount : "default";
+  console.log(
+    "sendEmail SMTP_PROFILES[fromAccount] === ",
+    SMTP_PROFILES[fromAccount],
+  );
+
+  const profileKey: ProfileKey = SMTP_PROFILES[fromAccount]
+    ? fromAccount
+    : "default";
+
+  console.log("sendEmail profileKey === ", profileKey);
   const { transporter, fromAddress } = getTransporter(profileKey);
 
   const mailOptions = {
@@ -108,6 +117,7 @@ export async function sendEmail({
 
   try {
     const info = await transporter.sendMail(mailOptions);
+
     if (process.env.NODE_ENV !== "production") {
       console.log(`[Email Sent] ID: ${info.messageId} via [${profileKey}]`);
     }

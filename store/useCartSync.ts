@@ -11,21 +11,8 @@ import { useWishlistStore } from "@/store/useWishlistStore";
 export const useCartSync = () => {
   const { data: session, status } = useSession();
 
-  /* ---------------- CART ---------------- */
-
-  const {
-    cart,
-    clearCart,
-    setCart,
-  } = useCartStore();
-
-  /* ---------------- WISHLIST ---------------- */
-
-  const {
-    items: wishlist,
-    clearWishlist,
-    setWishlist,
-  } = useWishlistStore();
+  const { cart, clearCart, setCart } = useCartStore();
+  const { items: wishlist, clearWishlist, setWishlist } = useWishlistStore();
 
   const hasSynced = useRef(false);
 
@@ -34,11 +21,9 @@ export const useCartSync = () => {
 
     const syncCart = async () => {
       try {
-
         // =========================================================
         //    CART SYNC
         // =========================================================
-
 
         // ---------------- MERGE LOCAL → DB ----------------
 
@@ -49,24 +34,27 @@ export const useCartSync = () => {
             body: JSON.stringify({ items: cart }),
           });
 
-          clearCart(); // 🧹 clear local
+          // clearCart(); // 🧹 clear local
         } */
 
         // ---------------- FETCH DB CART ----------------
 
         const cartRes = await fetch("/api/cart");
-        const dbCart = await cartRes.json();
 
-        const formattedCart = dbCart.map((item: any) => ({
-          id: item.product_id,
-          title: item.title || "Product",
-          price: Number(item.price),
-          quantity: item.quantity,
-          image: item.image || "",
-          category_slug: item.category_slug || "",
-        }));
+        if (cartRes.ok) {
+          const dbCart = await cartRes.json();
 
-        setCart(formattedCart);
+          const formattedCart = dbCart.map((item: any) => ({
+            id: item.product_id,
+            title: item.title || "Product",
+            price: Number(item.price),
+            quantity: item.quantity,
+            image: item.image || "",
+            category_slug: item.category_slug || "",
+          }));
+
+          setCart(formattedCart);
+        }
 
         // =========================================================
         //    WISHLIST SYNC
@@ -76,21 +64,23 @@ export const useCartSync = () => {
         // Merge local wishlist into DB
 
         const wishlistRes = await fetch("/api/wishlist");
-        const dbWishlist = await wishlistRes?.json();
 
-        const formattedWishlist = dbWishlist?.map((item: any) => ({
-          id: item.product_id,
-          name: item.name || "Product",
-          image: item.image || "",
-          price: Number(item.price),
-          slug: item.slug || "",
-          category_slug: item.category_slug || "",
-        }));
+        if (wishlistRes?.ok) {
+          const dbWishlist = await wishlistRes?.json();
 
-        setWishlist(formattedWishlist);
+          const formattedWishlist = dbWishlist?.map((item: any) => ({
+            id: item.product_id,
+            name: item.name || "Product",
+            image: item.image || "",
+            price: Number(item.price),
+            slug: item.slug || "",
+            category_slug: item.category_slug || "",
+          }));
+
+          setWishlist(formattedWishlist);
+        }
 
         hasSynced.current = true;
-        
       } catch (err) {
         console.error("Cart sync failed", err);
       }
