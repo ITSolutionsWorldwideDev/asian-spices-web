@@ -18,6 +18,8 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
   const isFetchingRef = useRef(false);
   const limit = 20;
 
+  const serializedFilters = JSON.stringify(filters);
+
   const buildParams = (filters: any, page: number) => {
     const params = new URLSearchParams();
 
@@ -59,17 +61,21 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
 
       setProducts((prev: any) => {
         const map = new Map();
-
         [...prev, ...newProducts].forEach((p) => {
-          if (p && p.id) map.set(p.id, p);
+          if (p && p.id) map.set(p.id.toString(), p);
         });
-
-        // [...prev, ...newProducts].forEach((p) => {
-        //   map.set(p.id, p); // ensures unique by id
-        // });
-
         return Array.from(map.values());
       });
+
+      // setProducts((prev: any) => {
+      //   const map = new Map();
+
+      //   [...prev, ...newProducts].forEach((p) => {
+      //     if (p && p.id) map.set(p.id, p);
+      //   });
+
+      //   return Array.from(map.values());
+      // });
 
       if (newProducts.length < limit) {
         setHasMore(false);
@@ -86,6 +92,13 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
   };
 
   useEffect(() => {
+    setProducts(initialProducts || []);
+    setPage(2);
+    setHasMore((initialProducts || []).length >= limit);
+    isFetchingRef.current = false;
+  }, [serializedFilters, initialProducts]);
+
+  useEffect(() => {
     const currentTarget = observerRef.current;
     if (!currentTarget) return;
 
@@ -95,9 +108,13 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
         if (!entry) return;
 
         // Only fetch when element enters the viewport and we aren't currently loading items
-        if (entry.isIntersecting && !isFetchingRef.current && hasMore) {
+        if (entry?.isIntersecting && !isFetchingRef.current && hasMore && !loading) {
           fetchMore();
         }
+        
+        // if (entry.isIntersecting && !isFetchingRef.current && hasMore) {
+        //   fetchMore();
+        // }
       },
       {
         threshold: 0.1, // Triggers as soon as 10% of the target element is visible
@@ -112,15 +129,16 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
         observer.unobserve(currentTarget);
       }
     };
-  }, [page, hasMore, filters, loading]);
+  }, [page, hasMore, loading, serializedFilters]);
+  // }, [page, hasMore, filters, loading]);
 
 
-  useEffect(() => {
-    setProducts(initialProducts || []);
-    setPage(2);
-    setHasMore(initialProducts?.length >= limit);
-    isFetchingRef.current = false;
-  }, [initialProducts, filters]);
+  // useEffect(() => {
+  //   setProducts(initialProducts || []);
+  //   setPage(2);
+  //   setHasMore(initialProducts?.length >= limit);
+  //   isFetchingRef.current = false;
+  // }, [initialProducts, filters]);
 
   return (
     <>

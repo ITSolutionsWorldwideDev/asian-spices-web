@@ -61,7 +61,8 @@ export default async function KitchenAppliancesPage({
     page: Number(params.page || 1),
   };
 
-  const subcategories = await getSubcategories("foods-beverages");
+  // const subcategories = await getSubcategories("foods-beverages");
+  const subcategories = await getSubcategories("foods-beverages", filters);
   const brands = await getBrands();
 
   const products = await getProducts(filters);

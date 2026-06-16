@@ -34,17 +34,33 @@ export const useCartStore = create<CartState>()(
       cart: [],
 
       addToCart: async (item, isLoggedIn) => {
-        const existing = get().cart.find((i) => i.id === item.id);
+        // const existing = get().cart.find((i) => i.id === item.id);
+
+        const normalizeId = (id: string | number) =>
+          id.toString().toLowerCase().trim();
+
+        const targetId = normalizeId(item.id);
+        const existing = get().cart.find((i) => normalizeId(i.id) === targetId);
 
         let updatedCart;
 
         if (existing) {
           updatedCart = get().cart.map((i) =>
-            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i,
+            normalizeId(i.id) === targetId
+              ? { ...i, quantity: i.quantity + 1 }
+              : i,
           );
         } else {
-          updatedCart = [...get().cart, { ...item, quantity: 1 }];
+          updatedCart = [...get().cart, { ...item, id: targetId, quantity: 1 }];
         }
+
+        // if (existing) {
+        //   updatedCart = get().cart.map((i) =>
+        //     i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i,
+        //   );
+        // } else {
+        //   updatedCart = [...get().cart, { ...item, quantity: 1 }];
+        // }
 
         set({ cart: updatedCart });
 
@@ -69,9 +85,15 @@ export const useCartStore = create<CartState>()(
       /* ---------------- REMOVE ---------------- */
 
       removeFromCart: async (id, isLoggedIn) => {
+        const targetId = id.toString();
+
         set({
-          cart: get().cart.filter((i) => i.id !== id),
+          cart: get().cart.filter((i) => i.id.toString() !== targetId),
         });
+
+        // set({
+        //   cart: get().cart.filter((i) => i.id !== id),
+        // });
 
         if (!isLoggedIn) return;
 
@@ -106,9 +128,18 @@ export const useCartStore = create<CartState>()(
 
       /* ---------------- INCREASE ---------------- */
       increaseQty: async (id, isLoggedIn) => {
+        // set({
+        //   cart: get().cart.map((i) =>
+        //     i.id === id ? { ...i, quantity: i.quantity + 1 } : i,
+        //   ),
+        // });
+
+        const targetId = id.toString();
         set({
           cart: get().cart.map((i) =>
-            i.id === id ? { ...i, quantity: i.quantity + 1 } : i,
+            i.id.toString() === targetId
+              ? { ...i, quantity: i.quantity + 1 }
+              : i,
           ),
         });
 
@@ -130,7 +161,11 @@ export const useCartStore = create<CartState>()(
 
       /* ---------------- DECREASE ---------------- */
       decreaseQty: async (id, isLoggedIn) => {
-        const item = get().cart.find((i) => i.id === id);
+        // const item = get().cart.find((i) => i.id === id);
+
+        const targetId = id.toString();
+        const item = get().cart.find((i) => i.id.toString() === targetId);
+
         if (!item) return;
 
         if (item.quantity === 1) {
@@ -139,9 +174,17 @@ export const useCartStore = create<CartState>()(
 
         set({
           cart: get().cart.map((i) =>
-            i.id === id ? { ...i, quantity: i.quantity - 1 } : i,
+            i.id.toString() === targetId
+              ? { ...i, quantity: i.quantity - 1 }
+              : i,
           ),
         });
+
+        // set({
+        //   cart: get().cart.map((i) =>
+        //     i.id === id ? { ...i, quantity: i.quantity - 1 } : i,
+        //   ),
+        // });
 
         if (!isLoggedIn) return;
 
@@ -163,11 +206,19 @@ export const useCartStore = create<CartState>()(
         // prevent invalid values
         const qty = Math.max(1, quantity);
 
+        const targetId = id.toString();
+
         set({
           cart: get().cart.map((i) =>
-            i.id === id ? { ...i, quantity: qty } : i,
+            i.id.toString() === targetId ? { ...i, quantity: qty } : i,
           ),
         });
+
+        // set({
+        //   cart: get().cart.map((i) =>
+        //     i.id === id ? { ...i, quantity: qty } : i,
+        //   ),
+        // });
 
         if (!isLoggedIn) return;
 
@@ -196,7 +247,11 @@ export const useCartStore = create<CartState>()(
       version: 1,
       migrate: (state: any): CartState => {
         return {
-          cart: state?.cart || [],
+          // cart: state?.cart || [],
+          cart: (state?.cart || []).map((i: any) => ({
+            ...i,
+            id: i.id?.toString(),
+          })),
           addToCart: () => {},
           removeFromCart: () => {},
           increaseQty: () => {},

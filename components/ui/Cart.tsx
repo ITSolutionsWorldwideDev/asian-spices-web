@@ -293,7 +293,7 @@ export default function Cart() {
             </div>
             <div className="flex items-center gap-2">
               <Truck size={16} className="text-orange-500" />
-              Free Shipping on orders over {symbol}({(rate * 50).toFixed(2)})
+              Free Shipping on orders over {symbol}({(rate * 50).toFixed(2)}) on Standard Delivery
             </div>
           </div>
         </div>

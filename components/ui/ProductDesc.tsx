@@ -22,7 +22,12 @@ export default function ProductDesc({ product }: { product: Product }) {
 
   const { cart, addToCart, increaseQty, decreaseQty, setQty } = useCartStore();
 
-  const cartItem = cart.find((item) => item.id === product.id);
+  // const cartItem = cart.find((item) => item.id === product.id);
+  const cartItem = cart.find(
+    (item) =>
+      item.id.toString().toLowerCase().trim() ===
+      product.id.toString().toLowerCase().trim(),
+  );
 
   const features = [
     {

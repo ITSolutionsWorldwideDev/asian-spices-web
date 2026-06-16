@@ -71,7 +71,8 @@ export default async function SpicesPage({ searchParams }: PageProps) {
     page: Number(params.page || 1),
   }; */
 
-  const subcategories = await getSubcategories("spices");
+  // const subcategories = await getSubcategories("spices");
+  const subcategories = await getSubcategories("spices", filters);
   const brands = await getBrands();
 
   const products = await getProducts(filters);

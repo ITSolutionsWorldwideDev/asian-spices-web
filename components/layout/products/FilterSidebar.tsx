@@ -2,7 +2,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // =========================
 // 🔹 COLLAPSIBLE
@@ -47,6 +47,11 @@ export default function FilterSidebar({
   const [min, setMin] = useState(searchParams.get("min") || "");
   const [max, setMax] = useState(searchParams.get("max") || "");
 
+  useEffect(() => {
+    setMin(searchParams.get("min") || "");
+    setMax(searchParams.get("max") || "");
+  }, [searchParams]);
+
   // =========================
   // HELPERS
   // =========================
@@ -56,9 +61,15 @@ export default function FilterSidebar({
   const updateUrl = (params: URLSearchParams) => {
     params.set("page", "1");
 
-    router.replace(`?${params.toString()}`, {
+    const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
+
+    router.replace(`${currentPath}?${params.toString()}`, {
       scroll: false,
     });
+
+    // router.replace(`?${params.toString()}`, {
+    //   scroll: false,
+    // });
   };
 
   const updateSingle = (key: string, value: string) => {
@@ -75,7 +86,6 @@ export default function FilterSidebar({
 
   const updateMultiFilter = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-
     let current = getArray(key);
 
     if (current.includes(value)) {
@@ -95,9 +105,7 @@ export default function FilterSidebar({
 
   const clearFilter = (key: string) => {
     const params = new URLSearchParams(searchParams.toString());
-
     params.delete(key);
-
     updateUrl(params);
   };
 

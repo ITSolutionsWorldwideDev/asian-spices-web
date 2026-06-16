@@ -67,7 +67,13 @@ export default function ProductCard({
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10 ">
         {visibleProducts.map((product, index) => {
-          const cartItem = cart.find((item) => item.id === product.id);
+          // const cartItem = cart.find((item) => item.id === product.id);
+
+          const cartItem = cart.find(
+            (item) =>
+              item.id.toString().toLowerCase().trim() ===
+              product.id.toString().toLowerCase().trim(),
+          );
 
           return (
             <div

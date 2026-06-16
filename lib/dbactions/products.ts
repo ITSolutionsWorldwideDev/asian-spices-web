@@ -17,31 +17,57 @@ export const getProducts = async (filters: any) => {
   let values: any[] = [];
   let index = 0;
 
+  // let query = `
+  //   SELECT
+  //     p.*,
+  //     c.slug as category_slug,
+  //     md.file_url AS image,
+  //     ${
+  //       search
+  //         ? "ts_rank(p.search_vector, plainto_tsquery($1)) AS rank"
+  //         : "0 as rank"
+  //     }
+  //   FROM store_products p
+  //   LEFT JOIN store_categories c ON c.id = p.category_id
+  //   LEFT JOIN store_product_images pi
+  //     ON pi.product_id = p.id AND pi.is_primary = true
+  //   LEFT JOIN media md ON md.media_id = pi.url::int
+  //   WHERE 1=1
+  // `;
+
+  let rankField = "0 as rank";
+  if (search) {
+    index++;
+    values.push(search);
+    rankField = `ts_rank(p.search_vector, plainto_tsquery($${index})) AS rank`;
+  }
+
+  // 2️⃣ Use a DISTINCT ON subquery on store_product_images to force a single row match per product
   let query = `
     SELECT 
       p.*, 
       c.slug as category_slug,
-      md.file_url AS image,
-      ${
-        search
-          ? "ts_rank(p.search_vector, plainto_tsquery($1)) AS rank"
-          : "0 as rank"
-      }
+      img.file_url AS image,
+      ${rankField}
     FROM store_products p
     LEFT JOIN store_categories c ON c.id = p.category_id
-    LEFT JOIN store_product_images pi 
-      ON pi.product_id = p.id AND pi.is_primary = true
-    LEFT JOIN media md ON md.media_id = pi.url::int
+    LEFT JOIN (
+      SELECT DISTINCT ON (pi.product_id) 
+        pi.product_id, 
+        md.file_url
+      FROM store_product_images pi
+      LEFT JOIN media md ON md.media_id = pi.url::int
+      ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
+    ) img ON img.product_id = p.id
     WHERE 1=1
   `;
 
-  // ts_rank(p.search_vector, plainto_tsquery($1)) AS rank
-  // INNER JOIN store_categories c ON p.category_id = c.id
+  // console.log('query ==== ',query);
 
-  if (search) {
-    values.push(search);
-    index = values.length;
-  }
+  // if (search) {
+  //   values.push(search);
+  //   index = values.length;
+  // }
 
   // 🔹 Category
   if (category) {
@@ -82,6 +108,7 @@ export const getProducts = async (filters: any) => {
   }
 
   // 🔥 Sorting
+  const currentRankPlaceholder = search ? "$1" : "0";
   switch (sort) {
     case "price_asc":
       query += ` ORDER BY p.price ASC, p.id DESC`;
@@ -117,8 +144,8 @@ export const getProducts = async (filters: any) => {
 
   const result = await pool.query(query, values);
 
-  // console.log('products list query ====',query);
-  // console.log('products list values ====',values);
+  // console.log("products list query ====", query);
+  // console.log("products list values ====", values);
 
   return result.rows;
 };
@@ -241,7 +268,65 @@ export const getProductReviews = async (productId: string, page = 1) => {
   };
 };
 
-export const getSubcategories = async (category: string) => {
+export const getSubcategories = async (category: string, filters: any = {}) => {
+  const { brands, minPrice, maxPrice, search } = filters;
+
+  let values: any[] = [category];
+  let index = 1;
+
+  // Base conditions for filtering the counted products
+  let productConditions = `p.status = 1`;
+
+  // 🔹 Brand Constraint (Scoped strictly to product selection)
+  if (brands?.length > 0) {
+    index++;
+    productConditions += ` AND p.brand_id = ANY($${index}::uuid[])`;
+    values.push(brands);
+  }
+
+  // 🔹 Price Range Constraints
+  if (minPrice) {
+    index++;
+    productConditions += ` AND p.price >= $${index}`;
+    values.push(minPrice);
+  }
+
+  if (maxPrice) {
+    index++;
+    productConditions += ` AND p.price <= $${index}`;
+    values.push(maxPrice);
+  }
+
+  // 🔹 Text Search Constraint
+  if (search) {
+    index++;
+    productConditions += ` AND p.search_vector @@ plainto_tsquery($${index})`;
+    values.push(search);
+  }
+
+  // We build a clean query where c.slug filter is absolute,
+  // and the dynamic product filters ONLY apply inside the join predicate.
+  const query = `
+    SELECT 
+      sc.id,
+      sc.name,
+      COUNT(DISTINCT p.id) AS product_count
+    FROM store_subcategories sc
+    INNER JOIN store_categories c 
+      ON sc.category_id = c.id
+    LEFT JOIN store_products p 
+      ON p.subcategory_id = sc.id 
+      AND ${productConditions}
+    WHERE c.slug = $1
+    GROUP BY sc.id, sc.name
+    ORDER BY sc.name;
+  `;
+
+  const result = await pool.query(query, values);
+  return result.rows;
+};
+
+/* export const getSubcategories = async (category: string) => {
   const query = `
     SELECT 
       sc.id,
@@ -260,7 +345,7 @@ export const getSubcategories = async (category: string) => {
 
   const result = await pool.query(query, [category]);
   return result.rows;
-};
+}; */
 
 export const getBrands = async () => {
   const query = `
