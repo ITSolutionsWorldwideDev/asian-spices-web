@@ -57,8 +57,8 @@ export default function Checkout() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [apiError, setApiError] = useState<string | null>(null);
 
-  // 1. Core Dynamic Shipping States
-  const [shippingMethod, setShippingMethod] = useState<string>("");
+  const [shippingMethod, setShippingMethod] = useState<string>("standard");
+
   const [availableShippingOptions, setAvailableShippingOptions] = useState<
     any[]
   >([]);
@@ -96,23 +96,58 @@ export default function Checkout() {
     }
   }, [session]);
 
-  // 2. Dynamic Price Calculations Block
-  // Find the database price matching the currently selected method ID
   const selectedOption = availableShippingOptions.find(
-    (opt: any) => String(opt.id) === String(shippingMethod),
+    (opt: any) =>
+      String(opt.id) === String(shippingMethod) ||
+      opt.code?.toLowerCase() === shippingMethod.toLowerCase(),
   );
-  const currentShippingPrice = selectedOption ? selectedOption.price : 0;
 
-  // 3. Update your totals calculation line to pass the price instead of the ID:
+  const isStandardOption = 
+    selectedOption?.code?.toLowerCase() === "standard" || 
+    selectedOption?.name?.toLowerCase().includes("standard") ||
+    shippingMethod === "standard";
+
+  const baseSubtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  
+  const FREE_SHIPPING_THRESHOLD = 50;
+  const qualifiesForFreeStandard = baseSubtotal >= FREE_SHIPPING_THRESHOLD;
+
+  const currentShippingPrice = selectedOption 
+    ? (qualifiesForFreeStandard && isStandardOption ? 0 : selectedOption.price)
+    : 5.99;
+
+  useEffect(() => {
+    if (availableShippingOptions.length > 0) {
+      const hasActiveSelection = availableShippingOptions.some(
+        (opt: any) => String(opt.id) === String(shippingMethod),
+      );
+
+      if (!hasActiveSelection) {
+        const standardDbOption = availableShippingOptions.find(
+          (opt: any) =>
+            opt.code?.toLowerCase() === "standard" ||
+            opt.name?.toLowerCase().includes("standard"),
+        );
+
+        setShippingMethod(
+          String(
+            standardDbOption
+              ? standardDbOption.id
+              : availableShippingOptions[0].id,
+          ),
+        );
+      }
+    }
+  }, [availableShippingOptions, shippingMethod]); 
+ 
   // const totals = calculateTotals(cart, currentShippingPrice, taxRate);
-
   const totals = calculateTotals(
     cart,
     currentShippingPrice,
     taxRate,
-    selectedOption?.code || selectedOption?.name,
+    selectedOption?.name || selectedOption?.code || shippingMethod,
   );
-  const convertedTotals = convertTotals(totals, rate, selectedCurrency);
+  const convertedTotals = convertTotals(totals, rate || 1, selectedCurrency);
 
   // const totals = calculateTotals(cart, shippingMethod);
 

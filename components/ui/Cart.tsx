@@ -46,7 +46,8 @@ export default function Cart() {
   const { subtotal, tax, shipping, total } = calculateTotals(
     cart,
     currentShippingPrice,
-    taxRate
+    taxRate,
+    shippingMethod
   );
 
   const itemInCart = cart.length;

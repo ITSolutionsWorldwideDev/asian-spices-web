@@ -31,11 +31,7 @@ export async function sendOrderConfirmationEmail(orderId: string) {
 
     const order = orderQuery.rows[0];
     const deliveryWindow =
-      DELIVERY_DAYS_MAP[order.shipping_provider] || "3 - 5 business days";
-
-      console.log('sendOrderConfirmationEmail orderId === ',orderId);
-      console.log('sendOrderConfirmationEmail order.customer_email === ',order.customer_email);
-      console.log('sendOrderConfirmationEmail order.order_number === ',order.order_number);
+      DELIVERY_DAYS_MAP[order.shipping_provider] || "3 - 5 business days"; 
 
     // 2️⃣ Build modern HTML Email Structure
     const emailHtml = `
@@ -59,10 +55,7 @@ export async function sendOrderConfirmationEmail(orderId: string) {
           Need support? Reply directly to this thread or contact us via support@asianspices.online
         </p>
       </div>
-    `;
-
-    
-      console.log('sendOrderConfirmationEmail emailHtml === ',emailHtml);
+    `; 
 
     // 3️⃣ Dispatch
     await sendEmail({

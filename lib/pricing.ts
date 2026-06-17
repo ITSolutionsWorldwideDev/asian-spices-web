@@ -18,7 +18,7 @@ export function calculateTotals(
   cart: CartItem[],
   shippingCost: number,
   taxRate: number,
-  shippingCodeOrName?: string
+  shippingCodeOrName?: string,
 ) {
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -27,13 +27,12 @@ export function calculateTotals(
 
   // const tax = subtotal * TAX_RATE;
   const tax = subtotal * taxRate;
-  const isStandardMethod = 
-    shippingCodeOrName?.toLowerCase() === "standard" || 
+  const isStandardMethod =
+    shippingCodeOrName?.toLowerCase() === "standard" ||
     shippingCodeOrName?.toLowerCase() === "standard delivery";
 
-  const shipping = (subtotal >= FREE_SHIPPING_THRESHOLD && isStandardMethod) 
-    ? 0 
-    : shippingCost;
+  const shipping =
+    subtotal >= FREE_SHIPPING_THRESHOLD && isStandardMethod ? 0 : shippingCost;
 
   // const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : shippingCost;
   const total = subtotal + tax + shipping;
@@ -52,7 +51,11 @@ export function convertPrice(
   if (!currency || currency === baseCurrency) {
     return amount;
   }
-  return amount * rate;
+
+  const safeRate = rate <= 0 ? 1 : rate;
+  return amount * safeRate;
+
+  // return amount * rate;
 }
 
 export function safeNumber(value: any): number {
@@ -78,64 +81,3 @@ export function convertTotals(
     total: convertPrice(totals.total, rate, currency, baseCurrency),
   };
 }
-
-
-// export function calculateTotals(
-//   cart: CartItem[],
-//   shippingMethod: ShippingMethod,
-// ) {
-//   const subtotal = cart.reduce(
-//     (acc, item) => acc + item.price * item.quantity,
-//     0,
-//   );
-
-//   const tax = subtotal * TAX_RATE;
-
-//   const shipping =
-//     subtotal >= FREE_SHIPPING_THRESHOLD
-//       ? 0
-//       : SHIPPING_OPTIONS[shippingMethod].price;
-
-//   const total = subtotal + tax + shipping;
-
-//   return { subtotal, tax, shipping, total };
-// }
-/* export const TAX_RATE = 0.08;
-
-export function calculateCartTotals(cart: CartItem[]) {
-  const subtotal = cart.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-
-  const tax = subtotal * TAX_RATE;
-
-  const total = subtotal + tax;
-
-  return { subtotal, tax, total };
-}
-
-export const FREE_SHIPPING_THRESHOLD = 50;
-
-export function calculateTotals(cart, shippingMethod) {
-  const subtotal = cart.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-
-  const tax = subtotal * TAX_RATE;
-
-  const shippingPrice =
-    subtotal >= FREE_SHIPPING_THRESHOLD
-      ? 0
-      : SHIPPING_OPTIONS[shippingMethod].price;
-
-  const total = subtotal + tax + shippingPrice;
-
-  return {
-    subtotal,
-    tax,
-    shipping: shippingPrice,
-    total,
-  };
-} */

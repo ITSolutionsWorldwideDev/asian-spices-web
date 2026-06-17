@@ -102,8 +102,7 @@ export async function sendEmail({
   const profileKey: ProfileKey = SMTP_PROFILES[fromAccount]
     ? fromAccount
     : "default";
-
-  console.log("sendEmail profileKey === ", profileKey);
+ 
   const { transporter, fromAddress } = getTransporter(profileKey);
 
   const mailOptions = {

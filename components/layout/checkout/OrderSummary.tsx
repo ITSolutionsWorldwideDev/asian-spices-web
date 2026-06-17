@@ -43,13 +43,17 @@ export default function OrderSummary({
     ? shippingMethod
     : "standard";
 
+
+  const convertedThreshold = FREE_SHIPPING_THRESHOLD * (rate || 1);
+
   // const shippingOption = SHIPPING_OPTIONS[safeMethod];
   const amountForFreeShipping =
     subtotal < FREE_SHIPPING_THRESHOLD
-      ? FREE_SHIPPING_THRESHOLD - subtotal
+      ? convertedThreshold - subtotal
       : 0;
 
-  const hasFreeShipping = shipping === 0;
+  // const hasFreeShipping = shipping === 0;
+  const hasFreeShipping = shipping <= 0;
 
 
   // const shippingPrice = shippingOption?.price ?? 0;
