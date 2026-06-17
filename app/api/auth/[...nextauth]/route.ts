@@ -1,4 +1,4 @@
-// apps/web/app/api/auth/[...nextauth]/route.ts
+// app/api/auth/[...nextauth]/route.ts
 
 import NextAuth from "next-auth";
 import { webAuthOptions } from "@/core/auth";

@@ -1,4 +1,4 @@
-// apps/web/app/checkout/pending/page.tsx
+// app/checkout/pending/page.tsx
 import React from "react";
 import CheckoutStatus from "@/components/ui/CheckoutStatus";
 import Nav from "@/components/ui/Nav";

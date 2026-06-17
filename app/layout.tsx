@@ -1,4 +1,4 @@
-// apps/web/app/layout.tsx
+// app/layout.tsx
 
 import type { Metadata } from "next";
 import Providers from "./providers";
@@ -11,11 +11,10 @@ export const metadata: Metadata = {
     "Asian Spices is a powerful Bootstrap-based Inventory Management Admin Template designed for businesses, offering seamless invoicing, project tracking, and estimates.",
   keywords:
     "inventory management, admin dashboard, bootstrap template, invoicing, estimates, business management, responsive admin, POS system",
-  // author: "IT Solutions Worldwide",
   icons: {
     icon: "favicon.ico",
-    shortcut: "favicon.ico", // Add shortcut icon for better support
-    apple: "favicon.ico", // Optional: for Apple devices (place in `public/`)
+    shortcut: "favicon.ico",
+    apple: "favicon.ico",
   },
 };
 
@@ -26,10 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        // className={`${geistSans.variable} ${geistMono.variable}`}
-        className=""
-      >
+      <body className="">
         <Providers>
           <GlobalLoader />
           {children}

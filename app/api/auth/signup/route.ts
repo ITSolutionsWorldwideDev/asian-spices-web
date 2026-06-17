@@ -1,4 +1,4 @@
-// apps/web/app/api/auth/signup/route.ts
+// app/api/auth/signup/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";

@@ -1,4 +1,4 @@
-// apps/web/app/api/paypal/webhook/route.ts
+// app/api/paypal/webhook/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";
 import { assignNextStore, logOrderEvent, ORDER_EVENTS } from "@/core/order-routing";

@@ -1,4 +1,4 @@
-// apps/web/app/account/layout.tsx
+// app/account/layout.tsx
 
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";

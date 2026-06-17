@@ -1,4 +1,4 @@
-// apps/web/app/CartSyncProvider.tsx
+// app/CartSyncProvider.tsx
 
 "use client";
 

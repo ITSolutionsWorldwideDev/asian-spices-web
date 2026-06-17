@@ -1,4 +1,4 @@
-// apps/web/app/partner-registration/page.tsx
+// app/partner-registration/page.tsx
 
 import React from "react";
 import PartnerRegistration from "@/components/layout/partner_registration/PartnerRegistration";

@@ -1,4 +1,4 @@
-// apps/web/app/api/partner-registration/idin/callback/route.ts
+// app/api/partner-registration/idin/callback/route.ts
 
 export const dynamic = "force-dynamic";
 

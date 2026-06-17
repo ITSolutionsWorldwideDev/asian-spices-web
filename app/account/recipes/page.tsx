@@ -1,4 +1,4 @@
-// apps/web/app/account/recipes/page.tsx
+// app/account/recipes/page.tsx
 
 "use client";
 

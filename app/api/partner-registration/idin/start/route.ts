@@ -1,4 +1,4 @@
-// apps/web/app/api/partner-registration/idin/start/route.ts
+// app/api/partner-registration/idin/start/route.ts
 
 import { NextResponse } from "next/server";
 // import { createVerification } from "@/core/db";

@@ -1,4 +1,4 @@
-// apps/web/app/checkout/cancel/page.tsx
+// app/checkout/cancel/page.tsx
 
 import React from "react";
 import Nav from "@/components/ui/Nav";

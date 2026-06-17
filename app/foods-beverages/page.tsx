@@ -1,4 +1,4 @@
-// apps/web/app/foods-beverages/page.tsx
+// app/foods-beverages/page.tsx
 
 import Footer from "@/components/ui/Footer";
 import HeadingDescription from "@/components/ui/HeadingDescription";

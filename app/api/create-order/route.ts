@@ -1,4 +1,4 @@
-// apps/web/app/api/create-order/route.tsx
+// app/api/create-order/route.tsx
 
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";

@@ -1,4 +1,4 @@
-// apps/web/app/recipes/page.tsx
+// app/recipes/page.tsx
 
 import RecipeGrid from "@/components/layout/recipes/RecipeGrid";
 import RecipePagination from "@/components/layout/recipes/RecipePagination";

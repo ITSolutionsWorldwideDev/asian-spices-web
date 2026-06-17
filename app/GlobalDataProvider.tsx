@@ -1,4 +1,4 @@
-// apps/web/app/GlobalDataProvider.tsx
+// app/GlobalDataProvider.tsx
 
 "use client";
 

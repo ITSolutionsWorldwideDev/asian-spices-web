@@ -1,4 +1,4 @@
-// apps/web/app/checkout/page.tsx
+// app/checkout/page.tsx
 
 import Checkout from '@/components/ui/Checkout'
 import React from 'react'

@@ -1,4 +1,4 @@
-// apps/web/app/api/paypal/capture/route.ts
+// app/api/paypal/capture/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";

@@ -1,4 +1,4 @@
-// apps/web/app/foods-beverages/[slug]/page.tsx
+// app/foods-beverages/[slug]/page.tsx
 
 import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";

@@ -1,4 +1,4 @@
-// apps/web/app/wishlist/page.tsx
+// app/wishlist/page.tsx
 
 import WishList from "@/components/layout/wishlist/WishList";
 import Footer from "@/components/ui/Footer";

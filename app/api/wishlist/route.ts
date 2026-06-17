@@ -1,4 +1,4 @@
-// apps/web/app/api/wishlist/route.ts
+// app/api/wishlist/route.ts
 
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";

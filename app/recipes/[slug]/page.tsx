@@ -1,4 +1,4 @@
-// apps/web/app/recipes/[slug]/page.tsx
+// app/recipes/[slug]/page.tsx
 
 import Image from "next/image";
 

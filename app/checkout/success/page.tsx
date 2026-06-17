@@ -1,4 +1,4 @@
-// apps/web/app/checkout/success/page.tsx
+// app/checkout/success/page.tsx
 
 import Nav from "@/components/ui/Nav";
 import Link from "next/link";

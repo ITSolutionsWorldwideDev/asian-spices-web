@@ -1,4 +1,4 @@
-// apps/web/app/spices/page.tsx
+// app/spices/page.tsx
 
 import Footer from "@/components/ui/Footer";
 import HeadingDescription from "@/components/ui/HeadingDescription";

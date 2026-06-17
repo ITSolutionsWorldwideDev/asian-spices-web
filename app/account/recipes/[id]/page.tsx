@@ -1,4 +1,4 @@
-// apps/web/app/account/recipes/[id]/page.tsx
+// app/account/recipes/[id]/page.tsx
 
 import { notFound } from "next/navigation";
 

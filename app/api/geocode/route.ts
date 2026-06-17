@@ -1,4 +1,4 @@
-// apps/web/app/api/geocode/route.ts
+// app/api/geocode/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 

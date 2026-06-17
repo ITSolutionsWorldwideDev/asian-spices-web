@@ -1,4 +1,4 @@
-// apps/web/app/api/cart/update/route.ts
+// app/api/cart/update/route.ts
 
 import { pool } from "@/core/db";
 import { NextResponse } from "next/server";

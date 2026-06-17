@@ -1,4 +1,4 @@
-// apps/web/app/api/partner-registration/idin/status/route.ts
+// app/api/partner-registration/idin/status/route.ts
 
 import { NextResponse } from "next/server";
 import { pool } from "@/core/db";

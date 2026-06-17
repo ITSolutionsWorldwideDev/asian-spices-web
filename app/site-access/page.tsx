@@ -1,4 +1,4 @@
-//  apps/web/app/site-access/page.tsx
+//  app/site-access/page.tsx
 
 "use client";
 

@@ -1,4 +1,4 @@
-// apps/web/app/reset-password/ResetPasswordClient.tsx
+// app/reset-password/ResetPasswordClient.tsx
 
 "use client";
 

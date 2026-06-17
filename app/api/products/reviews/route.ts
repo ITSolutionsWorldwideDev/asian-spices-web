@@ -1,4 +1,4 @@
-// apps/web/app/api/products/reviews/route.ts
+// app/api/products/reviews/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import { getProductReviews } from "@/lib/dbactions/products";

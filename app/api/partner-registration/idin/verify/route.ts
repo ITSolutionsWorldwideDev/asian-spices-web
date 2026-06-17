@@ -1,4 +1,4 @@
-// apps/web/app/api/partner-registration/idin/verify/route.ts
+// app/api/partner-registration/idin/verify/route.ts
 
 import { NextResponse } from "next/server";
 

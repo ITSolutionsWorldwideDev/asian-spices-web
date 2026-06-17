@@ -1,4 +1,4 @@
-// apps/web/app/account/profile/page.tsx
+// app/account/profile/page.tsx
 
 import PasswordForm from "@/components/layout/account/profile/PasswordForm";
 import ProfileForm from "@/components/layout/account/profile/ProfileForm";

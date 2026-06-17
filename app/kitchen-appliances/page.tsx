@@ -1,4 +1,4 @@
-// apps/web/app/kitchen-appliances/page.tsx
+// app/kitchen-appliances/page.tsx
 
 import Footer from "@/components/ui/Footer";
 import HeadingDescription from "@/components/ui/HeadingDescription";

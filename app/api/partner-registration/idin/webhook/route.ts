@@ -1,4 +1,4 @@
-// apps/web/app/api/partner-registration/idin/webhook/route.ts
+// app/api/partner-registration/idin/webhook/route.ts
 
 import { NextResponse } from "next/server";
 // import { verifyIDIN } from "@/core/idin";

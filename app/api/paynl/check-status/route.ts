@@ -1,4 +1,4 @@
-// apps/web/app/api/paynl/check-status/route.ts
+// app/api/paynl/check-status/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";

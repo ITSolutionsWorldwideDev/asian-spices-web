@@ -1,4 +1,4 @@
-// apps/web/app/kitchen-appliances/[slug]/page.tsx
+// app/kitchen-appliances/[slug]/page.tsx
 
 import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";

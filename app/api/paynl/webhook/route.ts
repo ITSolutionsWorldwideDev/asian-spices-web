@@ -1,4 +1,4 @@
-// apps/web/app/api/paynl/webhook/route.ts
+// app/api/paynl/webhook/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";

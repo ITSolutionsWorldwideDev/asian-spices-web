@@ -1,4 +1,4 @@
-// apps/web/app/partner-registration/idin/failed/page.tsx
+// app/partner-registration/idin/failed/page.tsx
 
 "use client";
 

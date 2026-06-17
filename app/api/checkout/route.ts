@@ -1,4 +1,4 @@
-// apps/web/app/api/checkout/route.ts
+// app/api/checkout/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";

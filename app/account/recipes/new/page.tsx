@@ -1,4 +1,4 @@
-// apps/web/app/account/recipes/new/page.tsx
+// app/account/recipes/new/page.tsx
 
 import RecipeForm from "@/components/layout/account/recipes/RecipeForm";
 

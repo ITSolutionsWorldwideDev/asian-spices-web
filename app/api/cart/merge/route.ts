@@ -1,4 +1,4 @@
-// apps/web/app/api/cart/merge/route.ts
+// app/api/cart/merge/route.ts
 import { NextResponse } from "next/server";
 import { pool } from "@/core/db";
 import { getServerSession } from "next-auth";

@@ -1,4 +1,4 @@
-// apps/web/app/api/adyen/tenants/create/route.ts
+// app/api/adyen/tenants/create/route.ts
 
 import { NextResponse } from "next/server";
 import { runQuery } from "@/core/db";

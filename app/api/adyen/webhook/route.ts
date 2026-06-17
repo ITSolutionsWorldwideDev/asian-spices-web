@@ -1,4 +1,4 @@
-// apps/web/app/api/adyen/webhook/route.ts
+// app/api/adyen/webhook/route.ts
 
 import { NextResponse } from "next/server";
 

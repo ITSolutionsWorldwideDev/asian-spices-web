@@ -1,4 +1,4 @@
-// apps/web/app/spices/[slug]/page.tsx
+// app/spices/[slug]/page.tsx
 
 import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";
