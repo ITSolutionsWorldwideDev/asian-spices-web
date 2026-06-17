@@ -477,24 +477,3 @@ function InputField({
     </div>
   );
 }
-
-/* 
-  // const businessSchema = z.object({
-  //   kvk_number: z
-  //     .string()
-  //     .min(1, "KVK number is required")
-  //     .regex(/^[0-9]+$/, "KVK must be numeric"),
-  //   company_name: z.string().min(1, "Company name is required"),
-  //   chamber_of_commerce_number: z.string().min(1, "Chamber number is required"),
-  //   country: z.string().min(1, "Country is required"),
-  //   street: z.string().min(1, "Street is required"),
-  //   house_number: z.string().min(1, "House number is required"),
-  //   postal_code: z.string().min(1, "Postal code is required"),
-  //   city: z.string().min(1, "City is required"),
-  //   additional_address: z.string().optional(),
-  // }); */
-{
-  /* Results */
-}
-{
-}

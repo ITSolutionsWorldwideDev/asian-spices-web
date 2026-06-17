@@ -161,12 +161,9 @@ export default function IdentityVerification({
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    // ✅ validation
     if (!formData.selected_bank) {
-      throw {
-        message: "Please select a bank",
-        code: "BANK_SELECTION",
-      };
+      setApiError("Please select a bank");
+      return;
     }
 
     try {
@@ -182,26 +179,35 @@ export default function IdentityVerification({
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error("Submission failed");
+        throw new Error(data.error || "Submission failed");
       }
 
       // save backend-generated ID
-      setFormData((prev: any) => ({
-        ...prev,
-        application_id: data.application_id,
-      }));
+      // setFormData((prev: any) => ({
+      //   ...prev,
+      //   application_id: data.application_id,
+      // }));
+
+      setFormData({
+        ...formData,
+        ...data.data,
+        application_id: data.application_id, // Ensures the backend format is explicitly captured
+        submitted_at: data.data.created_at || new Date().toISOString(),
+      });
 
       // ✅ mark step complete
       setCompletedSteps((prev: number[]) => [
         ...new Set([...prev, activeStep]),
       ]);
 
-      // ✅ move to next step ONLY once
-      setActiveStep(activeStep + 1);
-
       localStorage.removeItem("partner_registration");
+      localStorage.removeItem("idin_transaction");
+      setActiveStep(activeStep + 1);
     } catch (err: any) {
       console.error("Error:", err);
+      setApiError(
+        err.message || "An unexpected error occurred during submission.",
+      );
       if (err.code === "BANK_SELECTION") {
         setApiError("Please select a bank");
       }

@@ -3,7 +3,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { useZodForm } from "@/core/utils";
 import { useZodForm } from "@/hooks/useZodForm";
 import { profileSchema } from "@/lib/validation/account";
 
@@ -20,6 +19,7 @@ export default function ProfileForm() {
     reset,
     formState: { errors, isSubmitting },
   } = useZodForm(profileSchema);
+
   const [loading, setLoading] = useState(true);
   const { show, hide } = useLoaderStore();
   const [apiError, setApiError] = useState<string | null>(null);
@@ -32,6 +32,7 @@ export default function ProfileForm() {
         reset({
           name: data.user.name || "",
           email: data.user.email || "",
+          phone: data.user.phone || "",
         });
         setLoading(false);
         hide();
@@ -78,6 +79,10 @@ export default function ProfileForm() {
             className="bg-gray-100 cursor-not-allowed"
           />
         </FormField>
+
+        <FormField label="Phone Number" error={getErrorMessage(errors.phone)}>
+          <Input {...register("phone")} placeholder="Your Phone" />
+        </FormField>
       </div>
 
       <div className="pt-4 border-t">
@@ -91,33 +96,3 @@ export default function ProfileForm() {
     </form>
   );
 }
-
-/* return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <label>Name</label>
-        <input
-          {...register("name")}
-          className="input"
-          placeholder="Your name"
-        />
-      </div>
-
-      <div>
-        <label>Email</label>
-        <input
-          {...register("email")}
-          disabled
-          className="input bg-gray-100"
-          onBlur={(e) => {
-            fetch("/api/account/change-email/request", {
-              method: "POST",
-              body: JSON.stringify({ newEmail: e.target.value }),
-            });
-          }}
-        />
-      </div>
-
-      <button className="btn-primary">Save Changes</button>
-    </form>
-  ); */

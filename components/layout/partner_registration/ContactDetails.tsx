@@ -42,28 +42,7 @@ export default function ContactDetails({
       .min(8, "VAT too short")
       .regex(/^[A-Z]{2}[A-Z0-9]+$/, "Invalid VAT format"),
   });
-  // const contactSchema = z.object({
-  //   first_name: z.string().min(1, "First name is required"),
-  //   // middle_name: z.string().optional(),
-  //   last_name: z.string().min(1, "Last name is required"),
 
-  //   business_phone_number: z
-  //     .string()
-  //     .min(1, "Phone number is required")
-  //     .regex(/^[+0-9\s]+$/, "Invalid phone number"),
-
-  //   business_email_address: z
-  //     .string()
-  //     .min(1, "Email is required")
-  //     .email("Invalid email address"),
-
-  //   vat_number: z
-  //     .string()
-  //     .min(1, "VAT number is required")
-  //     .regex(/^[A-Z]{2}[A-Z0-9]+$/, "Invalid VAT format"),
-  // });
-
-  // ✅ Error state
   const [errors, setErrors] = useState<any>({});
 
   const handleChange = (field: string, value: string) => {
@@ -78,7 +57,6 @@ export default function ContactDetails({
   };
   const requiredFields = [
     "first_name",
-    // "middle_name",
     "last_name",
     "business_phone_number",
     "business_email_address",
@@ -89,7 +67,7 @@ export default function ContactDetails({
   return (
     <div className=" bg-gray-100 flex justify-center p-6" id="contact">
       <div className="w-full max-w-4xl space-y-8">
-        {/* Header */}
+        {/* Header */}{" "}
         <div>
           <h1 className="text-3xl font-bold text-gray-800">
             Contact, Billing & Legal Confirmation
@@ -102,8 +80,6 @@ export default function ContactDetails({
             <ReadAloudBtn ID="contact" />
           </p>
         </div>
-
-        {/* Your Details */}
         <div className="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-6 space-y-6">
           <h2 className="font-semibold text-gray-800">Your Details</h2>
 
@@ -115,7 +91,6 @@ export default function ContactDetails({
               <input
                 type="text"
                 value={formData.first_name || ""}
-                // onChange={(e) => handleChange("first_name", e.target.value)}
                 onChange={(e) => {
                   const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
                   handleChange("first_name", value);
@@ -162,8 +137,6 @@ export default function ContactDetails({
             </div>
           </div>
         </div>
-
-        {/* Business Contact Details */}
         <div className="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-6 space-y-6">
           <h2 className="font-semibold text-gray-800">
             Business Contact Details
@@ -180,9 +153,6 @@ export default function ContactDetails({
                 const value = e.target.value.replace(/[^0-9+]/g, "");
                 handleChange("business_phone_number", value);
               }}
-              // onChange={(e) =>
-              //   handleChange("business_phone_number", e.target.value)
-              // }
               placeholder="+31 6 12345678"
               className="w-full mt-1 border border-[#E5E7EB] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
@@ -237,36 +207,6 @@ export default function ContactDetails({
             )}
           </div>
         </div>
-
-        {/* Business Delivery Settings */}
-        {/* <div className="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-6 space-y-4">
-          <h2 className="font-semibold text-gray-800">
-            Business Delivery Settings
-          </h2>
-
-          <div>
-            <p className="text-sm font-medium text-gray-700">
-              Select delivery countries <span className="text-red-500">*</span>
-            </p>
-
-            <div className="mt-3 space-y-2 text-gray-600">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="accent-orange-500" />
-                Netherlands
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="accent-orange-500" />
-                Belgium
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="accent-orange-500" />
-                Luxembourg
-              </label>
-            </div>
-          </div>
-        </div> */}
-
-        {/* Legal Confirmation */}
         <div className="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-6 space-y-4">
           <h2 className="font-semibold text-gray-800">Legal Confirmation</h2>
 
@@ -298,7 +238,6 @@ export default function ContactDetails({
             outlined in our Privacy Statement.
           </p>
         </div>
-
         <div className=" mt-6 bg-white rounded-lg shadow-sm border border-[#E5E7EB] p-6">
           <div className="text-sm text-gray-600 space-y-2">
             <h2 className="font-semibold text-gray-800">Need Help?</h2>
@@ -313,8 +252,6 @@ export default function ContactDetails({
             </div>
           </div>
         </div>
-
-        {/* Buttons */}
         <div className="flex justify-between">
           <button
             type="button"
@@ -346,25 +283,12 @@ export default function ContactDetails({
                 return;
               }
 
-              // ✅ mark step 4 complete
               setCompletedSteps((prev: number[]) => [
                 ...new Set([...prev, activeStep]),
               ]);
 
               setActiveStep(activeStep + 1);
             }}
-
-            // onClick={() => {
-            //   const result = contactSchema.safeParse(formData);
-
-            //   if (!result.success) {
-            //     const fieldErrors = result.error.flatten().fieldErrors;
-            //     setErrors(fieldErrors);
-            //     return;
-            //   }
-
-            //   setActiveStep(activeStep + 1);
-            // }}
           >
             Continue →
           </button>

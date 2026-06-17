@@ -52,6 +52,11 @@ export default function TabSwitching() {
       try {
         const parsed = JSON.parse(saved);
 
+        if (parsed.activeStep === 6) {
+          localStorage.removeItem("partner_registration");
+          return;
+        }
+
         if (parsed.formData) setFormData(parsed.formData);
         if (parsed.activeStep) setActiveStep(parsed.activeStep);
         if (parsed.completedSteps) setCompletedSteps(parsed.completedSteps);
@@ -62,14 +67,16 @@ export default function TabSwitching() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(
-      "partner_registration",
-      JSON.stringify({
-        formData,
-        activeStep,
-        completedSteps,
-      }),
-    );
+    if (activeStep < 6) {
+      localStorage.setItem(
+        "partner_registration",
+        JSON.stringify({
+          formData,
+          activeStep,
+          completedSteps,
+        }),
+      );
+    }
   }, [formData, activeStep, completedSteps]);
 
   useEffect(() => {
@@ -151,13 +158,10 @@ export default function TabSwitching() {
       />
     ),
   });
-  // const [activeStep, setActiveStep] = useState(1);
 
   return (
     <div className="w-full p-4 sm:p-8">
-      {/* Stepper - scrollable on mobile */}
       <div className="w-full overflow-x-auto max-w-6xl mx-auto pb-2">
-        {/* Mobile View */}
         <div className="sm:hidden  sticky top-0 z-10 bg-white pb-3 border-b shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-600">
@@ -168,7 +172,6 @@ export default function TabSwitching() {
             </span>
           </div>
 
-          {/* Progress Bar */}
           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className="h-full bg-orange-500 transition-all duration-300"
@@ -176,14 +179,13 @@ export default function TabSwitching() {
             />
           </div>
         </div>
-        {/* Desktop Stepper */} {/* flex min-w-140 */}
+
         <div className="hidden sm:flex  items-center justify-between relative  max-w-6xl mx-auto px-2">
-          {/* Background Line */}
           <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-300 -z-10" />
 
           {steps.map((step) => {
             const isActive = activeStep === step.id;
-            // const isCompleted = activeStep > step.id;
+
             const isCompleted = completedSteps.includes(step.id);
             const isClickable =
               step.id < activeStep || completedSteps.includes(step.id - 1);
@@ -195,12 +197,10 @@ export default function TabSwitching() {
                     ? "cursor-pointer"
                     : "cursor-not-allowed opacity-50"
                 }`}
-                // className="flex flex-col items-center cursor-pointer"
                 onClick={() => {
                   if (!isClickable) return;
                   setActiveStep(step.id);
                 }}
-                // onClick={() => setActiveStep(step.id)}
               >
                 <div
                   className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full text-xs sm:text-sm font-semibold transition-all duration-300
@@ -222,7 +222,6 @@ export default function TabSwitching() {
         </div>
       </div>
 
-      {/* Step Content */}
       <form
         ref={formRef}
         className="mt-6 sm:mt-12 max-w-4xl mx-auto bg-white p-4 sm:p-8 rounded-xl shadow-sm sm:shadow"

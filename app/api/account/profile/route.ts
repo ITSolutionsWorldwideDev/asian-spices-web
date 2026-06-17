@@ -1,4 +1,4 @@
-///api/account/profile/route.ts
+// api/account/profile/route.ts
 
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
@@ -27,7 +27,6 @@ export async function GET() {
        WHERE u.id = $1`,
       [session.user.id],
     );
-    // SELECT id, email, name FROM users 
 
     return NextResponse.json({ user: rows[0] });
   } finally {
@@ -43,8 +42,8 @@ export async function PUT(req: Request) {
   }
 
   const body = await req.json();
-
   const parsed = profileSchema.safeParse(body);
+
   if (!parsed.success) {
     return NextResponse.json(
       { error: parsed.error.flatten() },
@@ -55,12 +54,43 @@ export async function PUT(req: Request) {
   const client = await pool.connect();
 
   try {
+    await client.query("BEGIN");
+
     await client.query(
-      `UPDATE users SET name = $1 WHERE id = $2`,
+      `UPDATE users 
+       SET name = $1 
+       WHERE id = $2`,
       [parsed.data.name, session.user.id],
     );
 
+    const firstName = parsed.data.name.split(" ")[0] || "";
+    const lastName = parsed.data.name.split(" ").slice(1).join(" ") || "";
+
+    const updateResult = await client.query(
+      `UPDATE store_customers 
+     SET phone = $1, first_name = $2, last_name = $3
+     WHERE user_id = $4`,
+      [parsed.data.phone, firstName, lastName, session.user.id],
+    );
+
+    if (updateResult.rowCount === 0) {
+      await client.query(
+        `INSERT INTO store_customers (user_id, phone, first_name, last_name)
+       VALUES ($1, $2, $3, $4)`,
+        [session.user.id, parsed.data.phone, firstName, lastName],
+      );
+    }
+
+    await client.query("COMMIT");
+
     return NextResponse.json({ success: true });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Profile update failed:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   } finally {
     client.release();
   }
