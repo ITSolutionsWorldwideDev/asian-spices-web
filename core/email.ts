@@ -7,6 +7,7 @@ interface EmailOptions {
   html: string;
   fromAccount?: "billing" | "order" | "partners" | "default";
   replyTo?: string;
+  cc?: string | string[];
   attachments?: Array<{
     filename: string;
     content: any;
@@ -92,6 +93,7 @@ export async function sendEmail({
   html,
   fromAccount = "default",
   replyTo,
+  cc,
   attachments,
 }: EmailOptions) {
   console.log(
@@ -105,9 +107,13 @@ export async function sendEmail({
  
   const { transporter, fromAddress } = getTransporter(profileKey);
 
+  const defaultCC = ["admin@asianspices.online", "backup@asianspices.online"];
+  const finalCC = cc ? (Array.isArray(cc) ? [...cc, ...defaultCC] : [cc, ...defaultCC]) : defaultCC;
+
   const mailOptions = {
     from: fromAddress,
     to,
+    cc: finalCC,
     subject,
     html,
     replyTo,

@@ -60,6 +60,7 @@ export async function sendOrderConfirmationEmail(orderId: string) {
     // 3️⃣ Dispatch
     await sendEmail({
       to: order.customer_email,
+      cc: ["sales@asianspices.online", "order@asianspices.online"],
       subject: `Order Confirmed! 🎉 (Ref: ${order.order_number})`,
       html: emailHtml,
       fromAccount: "order",
@@ -114,6 +115,7 @@ export async function sendPartnerRegistrationEmail({
 
     await sendEmail({
       to: email,
+      cc: ["partners@asianspices.online"],
       subject: `Your Asian Spices Partner Application - ${applicationId}`,
       html: emailHtml,
       fromAccount: "partners",
