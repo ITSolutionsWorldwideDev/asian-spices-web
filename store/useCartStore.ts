@@ -25,7 +25,7 @@ interface CartState {
   setQty: (id: string, quantity: number, isLoggedIn: boolean) => void;
 
   setCart: (items: CartItem[]) => void;
-  clearCart: () => void;
+  clearCart: (isLoggedIn?: boolean) => void;
 }
 
 export const useCartStore = create<CartState>()(
@@ -240,7 +240,22 @@ export const useCartStore = create<CartState>()(
 
       setCart: (items) => set({ cart: items }),
 
-      clearCart: () => set({ cart: [] }),
+      clearCart: async (isLoggedIn = false) => {
+        set({ cart: [] });
+        
+        if (!isLoggedIn) return;
+
+        try {
+          await fetch("/api/cart/clear", { // Ensure this endpoint executes your DELETE or TRUNCATE logic
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+          });
+        } catch (err) {
+          console.error("Failed to clear DB cart during checkout sync:", err);
+        }
+      },
+
+      // clearCart: () => set({ cart: [] }),
     }),
     {
       name: "cart-storage",

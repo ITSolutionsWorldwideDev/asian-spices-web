@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import CheckoutStatus from "./CheckoutStatus";
+import { useSession } from "next-auth/react";
 
 export default function PaynlReturnHandler({
   orderId,
@@ -17,8 +18,11 @@ export default function PaynlReturnHandler({
   statusAction: string;
   //   onDone?: () => void;
 }) {
+
   const [processing, setProcessing] = useState(true);
   const clearCart = useCartStore((s) => s.clearCart);
+  const { status } = useSession(); // 🚀 Extract auth status
+  const isLoggedIn = status === "authenticated";
 
   useEffect(() => {
     let called = false;
@@ -35,7 +39,8 @@ export default function PaynlReturnHandler({
         });
 
         if (res.ok && statusAction?.toLowerCase() === "paid") {
-          clearCart(); // Clear local storage only on explicit success
+          // clearCart(); // Clear local storage only on explicit success
+          clearCart(isLoggedIn);
         }
       } catch (err) {
         console.error("Pay.nl confirm failed:", err);
@@ -45,7 +50,7 @@ export default function PaynlReturnHandler({
     };
 
     confirmPayment();
-  }, [orderId, transactionId, statusAction]);
+  }, [orderId, transactionId, statusAction,isLoggedIn]);
 
   if (processing) {
     return (

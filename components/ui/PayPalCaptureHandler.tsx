@@ -5,6 +5,7 @@
 import { useEffect, useRef } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useLoaderStore } from "@/store/useLoaderStore";
+import { useSession } from "next-auth/react";
 
 export default function PayPalCaptureHandler({
   orderId,
@@ -16,6 +17,8 @@ export default function PayPalCaptureHandler({
   const clearCart = useCartStore((s) => s.clearCart);
   const hasRun = useRef(false);
   const { show, hide } = useLoaderStore();
+  const { status } = useSession(); // 🚀 Get session status
+  const isLoggedIn = status === "authenticated";
 
   useEffect(() => {
     if (!orderId || !token) return;
@@ -42,7 +45,7 @@ export default function PayPalCaptureHandler({
           throw new Error("PayPal capture failed");
         }
 
-        clearCart();
+        clearCart(isLoggedIn);
       } catch (err) {
         console.error("PayPal capture failed", err);
       } finally {
@@ -51,7 +54,7 @@ export default function PayPalCaptureHandler({
     };
 
     capture();
-  }, [orderId, token, clearCart]);
+  }, [orderId, token, clearCart, isLoggedIn]);
 
   return null;
 }

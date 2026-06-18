@@ -122,7 +122,15 @@ export async function DELETE(req: Request) {
     return NextResponse.json({}, { status: 401 });
   }
 
-  const { product_id } = await req.json();
+  let product_id: string | undefined;
+  try {
+    const body = await req.json().catch(() => ({}));
+    product_id = body.product_id;
+  } catch {
+    product_id = undefined;
+  }
+
+  // const { product_id } = await req.json();
 
   /* ---------------- FIND CUSTOMER ---------------- */
 
@@ -155,18 +163,58 @@ export async function DELETE(req: Request) {
 
     const cartId = cartRes.rows[0].id;
 
+    /* ---------------- DELETE ITEM OR CLEAR ALL ---------------- */
+    if (product_id) {
+      // 1. If a specific product_id is provided, delete only that item
+      await client.query(
+        `DELETE FROM store_cart_items 
+         WHERE cart_id = $1 AND product_id = $2`,
+        [cartId, product_id],
+      );
+    } else {
+      // 2. 🚀 If NO product_id is provided, clear the ENTIRE cart (for Checkout Clear)
+      await client.query(
+        `DELETE FROM store_cart_items 
+         WHERE cart_id = $1`,
+        [cartId],
+      );
+    }
+
     /* ---------------- DELETE ITEM ---------------- */
 
-    await client.query(
-      `DELETE FROM store_cart_items
-     WHERE cart_id = $1 AND product_id = $2`,
-      [cartId, product_id],
-    );
+    // await client.query(
+    //   `DELETE FROM store_cart_items
+    //  WHERE cart_id = $1 AND product_id = $2`,
+    //   [cartId, product_id],
+    // );
 
     return NextResponse.json({ success: true });
   } finally {
     client.release();
   }
+}
+
+async function getOrCreateCustomer(client: any, user: any) {
+  const email = user.email;
+
+  // Swapped "customers" out for your ecommerce namespace "store_customers"
+  const existing = await client.query(
+    `SELECT id FROM store_customers WHERE user_id = $1 LIMIT 1`,
+    [user.id],
+  );
+
+  if (existing.rowCount) {
+    return existing.rows[0].id;
+  }
+
+  const created = await client.query(
+    `INSERT INTO store_customers (user_id, email)
+     VALUES ($1, $2)
+     RETURNING id`,
+    [user.id, email],
+  );
+
+  return created.rows[0].id;
 }
 
 /* async function getOrCreateCustomer(client: any, user: any) {
@@ -191,26 +239,3 @@ export async function DELETE(req: Request) {
   return created.rows[0].id;
 }
  */
-
-async function getOrCreateCustomer(client: any, user: any) {
-  const email = user.email;
-
-  // Swapped "customers" out for your ecommerce namespace "store_customers"
-  const existing = await client.query(
-    `SELECT id FROM store_customers WHERE user_id = $1 LIMIT 1`,
-    [user.id],
-  );
-
-  if (existing.rowCount) {
-    return existing.rows[0].id;
-  }
-
-  const created = await client.query(
-    `INSERT INTO store_customers (user_id, email)
-     VALUES ($1, $2)
-     RETURNING id`,
-    [user.id, email],
-  );
-
-  return created.rows[0].id;
-}
