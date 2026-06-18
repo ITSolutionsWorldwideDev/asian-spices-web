@@ -107,13 +107,13 @@ export async function sendEmail({
  
   const { transporter, fromAddress } = getTransporter(profileKey);
 
-  const defaultCC = ["admin@asianspices.online", "backup@asianspices.online"];
-  const finalCC = cc ? (Array.isArray(cc) ? [...cc, ...defaultCC] : [cc, ...defaultCC]) : defaultCC;
+  // const defaultCC = ["admin@asianspices.online", "backup@asianspices.online"];
+  // const finalCC = cc ? (Array.isArray(cc) ? [...cc, ...defaultCC] : [cc, ...defaultCC]) : defaultCC;
 
   const mailOptions = {
     from: fromAddress,
     to,
-    cc: finalCC,
+    cc,
     subject,
     html,
     replyTo,
