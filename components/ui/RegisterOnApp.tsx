@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const RegisterOnApp: React.FC = () => {
   return (
@@ -11,10 +12,7 @@ const RegisterOnApp: React.FC = () => {
         <div className="absolute opacity-5 inset-0 left-[30%] -top-[15%] h-[650px] bg-[url('/assets/register_on_app/e4eed2a3a2c9a2ea3fec21ad0e3ce66d0ca86b12.png')] bg-contain bg-no-repeat" />
       </div>
 
-
       <div className="relative z-20 grid grid-cols-1 lg:grid-cols-12 items-center gap-8 p-6 sm:p-10 lg:p-16 max-w-7xl mx-auto">
-        
-
         <div className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start">
           <h1 className="font-bold text-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
             Be the First to <span className="text-white">Experience</span>
@@ -27,7 +25,6 @@ const RegisterOnApp: React.FC = () => {
             live, you’ll get instant email access to download from the App Store
             and Google Play.
           </p>
-
 
           <div className="flex items-center justify-center space-x-4 lg:justify-start mb-8 w-full">
             <a
@@ -60,15 +57,16 @@ const RegisterOnApp: React.FC = () => {
             </a>
           </div>
 
-
           <button className="cursor-pointer relative px-8 py-3.5 font-bold bg-white text-black rounded-lg overflow-hidden group w-full sm:w-auto shadow-md">
-            <span className="relative z-10 flex items-center justify-center transition-colors duration-300 group-hover:text-white">
-              Register Interest
-            </span>
+            <Link href="/signup">
+              <span className="relative z-10 flex items-center justify-center transition-colors duration-300 group-hover:text-white">
+                Register Interest
+              </span>
+            </Link>
+
             <span className="absolute inset-0 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-center" />
           </button>
         </div>
-
 
         <div className="lg:col-span-5 flex justify-center items-center mt-6 lg:mt-0 relative w-full h-[320px] sm:h-[450px] lg:h-[550px]">
           <Image
@@ -80,7 +78,6 @@ const RegisterOnApp: React.FC = () => {
             className="object-contain drop-shadow-2xl"
           />
         </div>
-
       </div>
     </div>
   );
