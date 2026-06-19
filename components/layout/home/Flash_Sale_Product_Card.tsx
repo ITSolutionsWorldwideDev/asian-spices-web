@@ -123,10 +123,10 @@ const FlashSaleProductCard = () => {
 
           <div className="mt-2 flex items-center gap-2">
             <span className="text-orange-500 text-xl font-bold">
-              ${item.price}
+              €{item.price}
             </span>
             <span className="text-gray-400 line-through text-sm">
-              ${item.oldPrice}
+              €{item.oldPrice}
             </span>
           </div>
 
