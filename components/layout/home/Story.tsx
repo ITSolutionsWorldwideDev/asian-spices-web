@@ -13,31 +13,33 @@ const Story = () => {
 
       <section className=" px-4 sm:px-6 lg:px-8 grid xl:grid-cols-2 gap-12 ">
         <div className="space-y-6">
-          <div className="relative  rounded-xl h-90 ">
+          <div className="relative  rounded-xl h-90 pl-10">
             <img
               src="/assets/home/our_story/d10f2c08d6ed5db2264f1e5628f7f832a2959af1 (1)-min.webp"
               alt="A farmer proudly standing in a field"
-              className="absolute inset-0 w-full h-full object-cover z-50 rounded-xl"
+              className="absolute inset-0 w-full h-full object-cover z-50 rounded-xl "
             />
-            <div className="absolute inset-0 bg-green-600 z-45"></div>
-            <div className="relative p-8 flex items-center justify-center h-full">
+            <div className="absolute inset-0 bg-green-600 z-45 rounded-xl"></div>
+            <div className="relative p-8 flex items-center justify-center h-full rounded-xl">
               <h2 className="text-white text-5xl sm:text-7xl lg:text-8xl font-bold  absolute top-7 left-0 z-100">
                 100%
                 <br />
                 Organic
               </h2>
               <div
-                className="absolute left-[55%] bottom-[-100] z-100"
+                className="absolute right-0 z-100"
                 style={{
                   clipPath: "inset(0 0 100px 0)",
                 }}
               >
+                {/*  59373efab59c6414e276ddc24d0285cf62ee6194-min.webp */}
                 <Image
-                  src={`/assets/home/our_story/59373efab59c6414e276ddc24d0285cf62ee6194-min.webp`}
+                  src={`/assets/home/our_story/farmer.png`}
                   alt="our story"
-                  height={300}
-                  width={300}
-                  className="object-cover w-200 h-250 "
+                  // objectFit="contain"
+                  height={550}
+                  width={280}
+                  className="object-cover w-[280px] h-[550px] "
                 />
               </div>
             </div>

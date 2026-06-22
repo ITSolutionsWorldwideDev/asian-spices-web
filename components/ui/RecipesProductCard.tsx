@@ -7,7 +7,6 @@ interface RecipeCard {
   image: string;
   description: string;
 }
-
 interface RecipesProductCardProps {
   card: RecipeCard;
 }
@@ -25,8 +24,6 @@ const RecipesProductCard = ({ card }: RecipesProductCardProps) => {
           className=" object-cover"
         />
       </div>
-
-      {/* Content */}
       <div className="px-7 pb-7 overflow-hidden">
         <h3 className="text-lg font-bold mb-2">{card.title}:</h3>
 
@@ -52,9 +49,7 @@ const RecipesProductCard = ({ card }: RecipesProductCardProps) => {
         </button>
       </div>
     </div>
-    // </div>
   );
-  // </div>
 };
 
 export default RecipesProductCard;

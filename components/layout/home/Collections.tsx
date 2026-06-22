@@ -42,7 +42,7 @@ export default function Collections() {
         <img
           src="/assets/home/collections/531683f465ac68a63e0eb661c769a19e4a41cb38-(1)-min.webp"
           alt=""
-          className="absolute inset-0 opacity-90"
+          className="absolute inset-0 opacity-90 w-full"
         />
       </div>
       <div className="bg-white/80 relative py-20">
