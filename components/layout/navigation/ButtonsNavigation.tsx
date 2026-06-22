@@ -11,14 +11,12 @@ const ButtonsNavigation = () => {
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
 
-  // loading state (important)
   if (status === "loading") {
     return null;
   }
 
   return (
     <div className="hidden lg:flex items-center space-x-3">
-      {/* ✅ NOT LOGGED IN */}
       {!session && (
         <>
           <div className="hover:rotate-10 bg-white rounded-full hover:text-white">
@@ -35,16 +33,13 @@ const ButtonsNavigation = () => {
         </>
       )}
 
-      {/* ✅ LOGGED IN */}
       {session && (
         <div className="relative">
           <button
             onClick={() => setOpen(!open)}
             className="bg-white p-2 rounded-full font-bold ml-2 cursor-pointer"
           >
-            <User  size={24} />
-            {/* {session.user?.email} */}
-            {/* <User size={14} /> */}
+            <User size={24} />
           </button>
 
           {open && (
@@ -76,7 +71,6 @@ const ButtonsNavigation = () => {
         </div>
       )}
 
-      {/* Contact (always visible) */}
       <div className="hover:rotate-10 bg-white rounded-full hover:text-white">
         <div className="hover:bg-black hover:-rotate-10 px-6 py-3 rounded-full">
           <Link href="/contactus" className="font-bold">

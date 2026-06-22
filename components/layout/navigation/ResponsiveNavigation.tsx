@@ -46,34 +46,22 @@ const ResponsiveNavigation = () => {
   }, [mobileMenu]);
 
   const navLinks: NavLink[] = [
-    // { name: "Home", link: "home" },
-    // { name: "About" },
-
     {
       name: "Shop by Category",
       hreflink: "#",
       children: [
         {
           name: "Asian Spices & Seasonings",
-          // image: "524531ab08204ddf1a7e11f44c85ef183cbf3159 (1).jpg",
           image: "spices.png",
           href: "spices",
         },
         {
           name: "Kitchen Appliances & Cooking Tools",
-          // image: "bef4555df0ac442433de79fbc2676fdbc3d5b455.jpg",
           image: "kitchen-appliances.png",
           href: "kitchen-appliances",
         },
-        // {
-        //   name: "Recipes",
-        //   image: "e50f5d03690c88ecb61ae41e5b6aa2fd285b988d.jpg",
-        //   image: "recipes.png",
-        //   href: "recipes",
-        // },
         {
           name: "Asian Foods & Beverages",
-          // image: "7998dbf578bd435e51167e00d97f1bc7f0963051.png",
           image: "foods-beverages.png",
           href: "foods-beverages",
         },
@@ -174,7 +162,8 @@ const ResponsiveNavigation = () => {
                 </Link>
               ) : !link.children ? (
                 <Link
-                  href={`/${link?.hreflink?.toLowerCase()
+                  href={`/${link?.hreflink
+                    ?.toLowerCase()
                     .replace(/[^a-z0-9\s-]/g, "")
                     .trim()
                     .replace(/\s+/g, "")}`}
@@ -207,10 +196,11 @@ const ResponsiveNavigation = () => {
 
                   {/* DROPDOWN MENU */}
                   {activeLink === link.name && isMenuOpen && (
-                    <div className="absolute top-full left-0 mt-5 z-50">
+                    <div className="absolute top-full mt-5 z-50">
                       {link.name === "Healthy Living" ? (
-                        <div className="fixed top-full left-0 mt-5 z-50">
-                          <div className="w-6xl bg-gray-100 rounded-xl shadow-md ">
+                        /* Changed from 'fixed' to 'absolute' and offset to align gracefully on screen */
+                        <div className="absolute top-full -left-48 xl:-left-64 z-50">
+                          <div className="w-[85vw] max-w-5xl bg-gray-100 rounded-xl shadow-md border border-gray-200 overflow-hidden">
                             {/* Top Section */}
                             <div className="grid grid-cols-4 gap-8 p-6">
                               {link.children.map((section, index) => (
@@ -229,10 +219,9 @@ const ResponsiveNavigation = () => {
                                     {section.category?.map((item, i) => (
                                       <li
                                         key={i}
-                                        className="hover:text-black cursor-pointer"
+                                        className="hover:text-black cursor-pointer transition-colors"
                                       >
                                         <Link href={`/${item.href}`}>
-                                          {" "}
                                           {item.name}
                                         </Link>
                                       </li>
@@ -242,7 +231,7 @@ const ResponsiveNavigation = () => {
                               ))}
                             </div>
 
-                            <div className="bg-orange-100 px-6 py-4 rounded-xl">
+                            <div className="bg-orange-100 px-6 py-4 rounded-b-xl">
                               <button className="text-orange-600 font-medium hover:underline">
                                 View All {link.name} Products →
                               </button>
@@ -255,7 +244,7 @@ const ResponsiveNavigation = () => {
                             <li key={child.name}>
                               <Link
                                 href={`/${child.href}`}
-                                className="flex items-center px-4 py-2 hover:bg-amber-800 transition-colors"
+                                className="flex items-center px-4 py-2 hover:bg-amber-800 hover:text-white transition-colors"
                                 onClick={() => setIsMenuOpen(false)}
                               >
                                 {child.image && (
@@ -495,3 +484,78 @@ const ResponsiveNavigation = () => {
 };
 
 export default ResponsiveNavigation;
+
+{
+  /* DROPDOWN MENU */
+}
+{
+  /* {activeLink === link.name && isMenuOpen && (
+                    <div className="absolute top-full left-0 mt-5 z-50">
+                      {link.name === "Healthy Living" ? (
+                        <div className="fixed top-full left-0 mt-5 z-50">
+                          <div className="w-6xl bg-gray-100 rounded-xl shadow-md ">
+                     
+                            <div className="grid grid-cols-4 gap-8 p-6">
+                              {link.children.map((section, index) => (
+                                <div key={index}>
+                                  <h3
+                                    className={`font-semibold text-gray-800 mb-3 ${
+                                      index === 0
+                                        ? "border-b-2 border-blue-400 inline-block"
+                                        : ""
+                                    }`}
+                                  >
+                                    {section.heading}
+                                  </h3>
+
+                                  <ul className="space-y-2 text-gray-600 text-sm">
+                                    {section.category?.map((item, i) => (
+                                      <li
+                                        key={i}
+                                        className="hover:text-black cursor-pointer"
+                                      >
+                                        <Link href={`/${item.href}`}>
+                                          {" "}
+                                          {item.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
+
+                            <div className="bg-orange-100 px-6 py-4 rounded-xl">
+                              <button className="text-orange-600 font-medium hover:underline">
+                                View All {link.name} Products →
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <ul className="bg-white text-black shadow-lg rounded-lg w-64">
+                          {link.children.map((child) => (
+                            <li key={child.name}>
+                              <Link
+                                href={`/${child.href}`}
+                                className="flex items-center px-4 py-2 hover:bg-amber-800 transition-colors"
+                                onClick={() => setIsMenuOpen(false)}
+                              >
+                                {child.image && (
+                                  <img
+                                    src={`/assets/navbar/${child.image}`}
+                                    alt={child.name}
+                                    className="w-12 h-7 object-cover rounded-md"
+                                  />
+                                )}
+                                <span className="ml-5 font-bold">
+                                  {child.name}
+                                </span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  )} */
+}
