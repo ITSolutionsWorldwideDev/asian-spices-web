@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import OrderCard from "@/components/layout/account/orders/OrderCard";
 // import OrderDrawer from "@/components/layout/account/orders/OrderDrawer";
 import { useLoaderStore } from "@/store/useLoaderStore";
@@ -24,7 +24,42 @@ export default function OrdersPage() {
   const { show, hide } = useLoaderStore();
   const recordsPerPage = 5;
 
+  const loadOrders = useCallback(async () => {
+    try {
+      show("Loading Orders...");
+
+      const res = await fetch(
+        `/api/account/orders?page=${currentPage}&limit=${recordsPerPage}`,
+      );
+      const data = await res.json();
+
+      if (!data?.orders) {
+        setOrders([]);
+        return;
+      }
+
+      setOrders(data.orders);
+      if (data.pagination) {
+        setPaginationMeta({
+          totalPages: data.pagination.totalPages,
+          totalRecords: data.pagination.totalRecords,
+          hasNextPage: data.pagination.hasNextPage,
+          hasPrevPage: data.pagination.hasPrevPage,
+        });
+      }
+    } catch (err) {
+      console.error("Failed to load orders:", err);
+      setOrders([]);
+    } finally {
+      hide();
+    }
+  }, [currentPage, show, hide]);
+
   useEffect(() => {
+    loadOrders();
+  }, [loadOrders]);
+
+  /* useEffect(() => {
     const loadOrders = async () => {
       try {
         show("Loading Orders...");
@@ -58,7 +93,7 @@ export default function OrdersPage() {
     };
 
     loadOrders();
-  }, [currentPage]);
+  }, [currentPage]); */
 
   return (
     <div className="space-y-6">
@@ -81,6 +116,7 @@ export default function OrdersPage() {
                 onToggle={() => {
                   setExpandedId(expandedId === order.id ? null : order.id);
                 }}
+                onRefresh={loadOrders}
               />
             </div>
           ))}
@@ -94,8 +130,8 @@ export default function OrdersPage() {
             disabled={!paginationMeta.hasPrevPage}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white transition"
           >
-            ← Previous
-          </button>
+            &larr;Previous
+          </button>{/* ← */}
 
           <span className="text-sm font-medium text-gray-700">
             Page {currentPage} of {paginationMeta.totalPages}
@@ -110,8 +146,8 @@ export default function OrdersPage() {
             disabled={!paginationMeta.hasNextPage}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white transition"
           >
-            Next →
-          </button>
+            Next &rarr;
+          </button>{/* → */}
         </div>
       )}
 

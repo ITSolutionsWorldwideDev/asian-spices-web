@@ -3,17 +3,29 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp, FileText, Undo2, X } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  FileText,
+  Undo2,
+  X,
+  AlertTriangle,
+} from "lucide-react";
 import OrderTimeline from "@/components/ui/OrderTimeline";
 import OrderSummaryReadOnly from "../../checkout/OrderSummaryReadOnly";
 import OrderActionWorkflow from "./OrderActionWorkflow";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 
-export default function OrderCard({ order, isOpen, onToggle }: any) {
+export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
   const [downloading, setDownloading] = useState(false);
   const [isActionActive, setIsActionActive] = useState(false);
+  const [cancellingOrder, setCancellingOrder] = useState(false);
   const isPaid = order.payment_status === "paid";
   const { symbol } = useCurrencyStore();
+
+  const canCancelDirectly = ["pending", "confirmed", "processing"].includes(
+    order.order_status?.toLowerCase(),
+  );
 
   const handleDownloadInvoice = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -45,13 +57,50 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
     }
   };
 
+  // Immediate Pre-Shipment Cancellation handler
+  const handleDirectCancellation = async () => {
+    const confirmCancel = confirm(
+      "Are you sure you want to cancel this entire order?",
+    );
+    if (!confirmCancel) return;
+
+    setCancellingOrder(true);
+    try {
+      const response = await fetch("/api/account/orders/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: order.id,
+          actionType: "PRE_SHIPMENT_CANCEL",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Cancellation request failed");
+      }
+
+      alert("Order cancelled successfully and quantities have been restocked.");
+      if (onRefresh) onRefresh();
+    } catch (error: any) {
+      alert(`Cancellation Failure: ${error.message}`);
+    } finally {
+      setCancellingOrder(false);
+    }
+  };
+
   // Inline Client API Form Submission handler
   const handleInlineSubmitAction = async (payload: any) => {
     try {
       const response = await fetch("/api/account/orders/action", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...payload,
+          actionType: "POST_SHIPMENT_RETURN",
+        }),
+        // body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -62,6 +111,7 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
 
       alert("Return request submitted successfully!");
       setIsActionActive(false);
+      if (onRefresh) onRefresh();
       onToggle(); // Close the card collapse view cleanly
     } catch (error: any) {
       alert(`Submission Failure: ${error.message}`);
@@ -99,11 +149,16 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
               {downloading ? "Generating..." : "Invoice PDF"}
             </button>
           )}
+
           <span
             className={`px-3 py-1 text-xs font-medium rounded-full ${
-              order.order_status === "confirmed"
+              ["confirmed", "fulfilled", "delivered"].includes(
+                order.order_status?.toLowerCase(),
+              )
                 ? "bg-green-100 text-green-600"
-                : "bg-yellow-100 text-yellow-600"
+                : order.order_status?.toLowerCase() === "cancelled"
+                  ? "bg-red-100 text-red-600"
+                  : "bg-yellow-100 text-yellow-600"
             }`}
           >
             {order.order_status}
@@ -120,6 +175,15 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
           >
             {order.payment_status}
           </span>
+          {/* <span
+            className={`px-3 py-1 text-xs font-medium rounded-full ${
+              order.order_status === "confirmed"
+                ? "bg-green-100 text-green-600"
+                : "bg-yellow-100 text-yellow-600"
+            }`}
+          >
+            {order.order_status}
+          </span>  */}
         </div>
       </div>
 
@@ -181,8 +245,30 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
                 total={order.total_amount}
               />
 
-              {/* Action Trigger Row */}
-              <div className="flex justify-end pt-2">
+              {/* Context-Aware Action Trigger Row */}
+              {order.order_status?.toLowerCase() !== "cancelled" && (
+                <div className="flex justify-end pt-2">
+                  {canCancelDirectly ? (
+                    <button
+                      onClick={handleDirectCancellation}
+                      disabled={cancellingOrder}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-red-700 bg-red-50 hover:bg-red-100 active:bg-red-200 border border-red-200 rounded-xl transition cursor-pointer disabled:opacity-40"
+                    >
+                      <AlertTriangle size={15} className="text-red-500" />
+                      {cancellingOrder ? "Cancelling..." : "Cancel Entire Order"}
+                    </button>
+                    ) : (
+                    <button
+                      onClick={() => setIsActionActive(true)}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 border border-gray-200 rounded-xl transition cursor-pointer"
+                    >
+                      <Undo2 size={15} className="text-gray-500" />
+                      File Item Return Request
+                    </button>
+                  )}
+                </div>
+              )}
+              {/* <div className="flex justify-end pt-2">
                 <button
                   onClick={() => setIsActionActive(true)}
                   className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 border border-gray-200 rounded-xl transition cursor-pointer"
@@ -190,7 +276,7 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
                   <Undo2 size={15} className="text-gray-500" />
                   File Return or Item Cancellation
                 </button>
-              </div>
+              </div> */}
             </>
           )}
         </div>
