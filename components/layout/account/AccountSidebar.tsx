@@ -1,4 +1,4 @@
-// apps/web/components/layout/account/AccountSidebar.tsx
+//  components/layout/account/AccountSidebar.tsx
 
 "use client";
 

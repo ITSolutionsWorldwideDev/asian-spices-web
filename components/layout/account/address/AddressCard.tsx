@@ -1,4 +1,4 @@
-// components/account/address/AddressCard.tsx
+// components/layout/account/address/AddressCard.tsx
 
 import { CheckCircle } from "lucide-react";
 

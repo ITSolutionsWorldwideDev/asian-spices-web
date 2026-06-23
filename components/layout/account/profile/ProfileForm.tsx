@@ -1,4 +1,4 @@
-// apps/web/components/layout/account/profile/ProfileForm.tsx
+// components/layout/account/profile/ProfileForm.tsx
 
 "use client";
 

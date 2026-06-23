@@ -1,4 +1,4 @@
-// apps/web/components/layout/checkout/ContactForm.tsx
+//  components/layout/checkout/ContactForm.tsx
 interface Props {
   data: {
     email: string;

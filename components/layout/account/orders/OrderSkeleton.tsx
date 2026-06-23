@@ -1,4 +1,4 @@
-//apps\web\components\layout\account\orders\OrderSkeleton.tsx
+// components/layout/account/orders/OrderSkeleton.tsx
 
 export default function OrderSkeleton() {
   return (

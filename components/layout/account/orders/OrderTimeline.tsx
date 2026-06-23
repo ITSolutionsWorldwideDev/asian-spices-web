@@ -1,4 +1,4 @@
-// components/account/orders/OrderTimeline.tsx
+// components/layout/account/orders/OrderTimeline.tsx
 
 export default function OrderTimeline({ status }: { status: string }) {
   const steps = ["pending", "confirmed", "shipped", "delivered"];

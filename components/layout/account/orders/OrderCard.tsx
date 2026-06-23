@@ -1,25 +1,26 @@
-// components/account/orders/OrderCard.tsx
+// components/layout/account/orders/OrderCard.tsx
 
 "use client";
 
 import { useState } from "react";
-import { Eye, ChevronDown, ChevronUp, FileText, Download } from "lucide-react";
+import { ChevronDown, ChevronUp, FileText, Undo2, X } from "lucide-react";
 import OrderTimeline from "@/components/ui/OrderTimeline";
 import OrderSummaryReadOnly from "../../checkout/OrderSummaryReadOnly";
+import OrderActionWorkflow from "./OrderActionWorkflow";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 
 export default function OrderCard({ order, isOpen, onToggle }: any) {
   const [downloading, setDownloading] = useState(false);
+  const [isActionActive, setIsActionActive] = useState(false);
   const isPaid = order.payment_status === "paid";
-    const { symbol, rate } = useCurrencyStore();
+  const { symbol } = useCurrencyStore();
 
   const handleDownloadInvoice = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Stop parent details chevron toggle triggers
+    e.stopPropagation();
     if (downloading) return;
 
     setDownloading(true);
     try {
-      // Direct asset fetch request to endpoint
       const response = await fetch(`/api/account/orders/${order.id}/invoice`);
 
       if (!response.ok) {
@@ -27,7 +28,6 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
         throw new Error(errData.error || "Failed printing invoice metadata.");
       }
 
-      // Convert chunk buffers into clean native browser binary downloads
       const blob = await response.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -36,8 +36,6 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
 
       document.body.appendChild(link);
       link.click();
-
-      // Clean memory spaces
       link.remove();
       window.URL.revokeObjectURL(downloadUrl);
     } catch (err: any) {
@@ -47,9 +45,37 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
     }
   };
 
+  // Inline Client API Form Submission handler
+  const handleInlineSubmitAction = async (payload: any) => {
+    try {
+      const response = await fetch("/api/account/orders/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Action submission failed");
+      }
+
+      alert("Return request submitted successfully!");
+      setIsActionActive(false);
+      onToggle(); // Close the card collapse view cleanly
+    } catch (error: any) {
+      alert(`Submission Failure: ${error.message}`);
+    }
+  };
+
+  // Handle accordion toggles cleanly while resetting dynamic sub-states
+  const handleToggleClick = () => {
+    setIsActionActive(false);
+    onToggle();
+  };
+
   return (
     <div className="border rounded-2xl p-5 bg-white transition-all duration-300 ease-in-out">
-      {/* HEADER */}
       <div className="flex justify-between items-center">
         <div>
           <p className="font-semibold">#{order.order_number}</p>
@@ -59,7 +85,6 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
         </div>
 
         <div className="flex gap-3 items-center flex-wrap">
-          {/* 📄 NEW: Conditionally served explicit Download Invoice Action */}
           {isPaid && (
             <button
               onClick={handleDownloadInvoice}
@@ -74,7 +99,6 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
               {downloading ? "Generating..." : "Invoice PDF"}
             </button>
           )}
-          {/* Order status */}
           <span
             className={`px-3 py-1 text-xs font-medium rounded-full ${
               order.order_status === "confirmed"
@@ -85,7 +109,6 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
             {order.order_status}
           </span>
 
-          {/* Payment status */}
           <span
             className={`px-3 py-1 text-xs font-medium rounded-full ${
               order.payment_status === "paid"
@@ -100,9 +123,11 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
         </div>
       </div>
 
-      {/* FOOTER */}
       <div className="mt-3 flex justify-between items-center">
-        <p className="font-bold">{symbol}{order.total_amount}</p>
+        <p className="font-bold">
+          {symbol}
+          {order.total_amount}
+        </p>
 
         <button
           onClick={onToggle}
@@ -113,13 +138,72 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
         </button>
       </div>
 
-      {/* 🔥 EXPANDED CONTENT */}
       {isOpen && (
+        <div className="mt-6 border-t pt-4 space-y-4">
+          {isActionActive ? (
+            /* Workflow Form Mode */
+            <div className="bg-gray-50/50 p-4 rounded-xl border border-dashed border-gray-200 space-y-4">
+              <div className="flex justify-between items-center pb-2 border-b">
+                <span className="text-sm font-bold text-gray-700">
+                  Return Workflow Process
+                </span>
+                <button
+                  onClick={() => setIsActionActive(false)}
+                  className="text-xs font-medium text-gray-500 hover:text-black inline-flex items-center gap-1 cursor-pointer"
+                >
+                  <X size={14} /> Cancel Process
+                </button>
+              </div>
+
+              <OrderActionWorkflow
+                order={order}
+                onSubmit={handleInlineSubmitAction}
+                onClose={async () => setIsActionActive(false)}
+              />
+            </div>
+          ) : (
+            /* Default Summary Viewing Mode */
+            <>
+              <OrderTimeline status={order.payment_status} />
+
+              <OrderSummaryReadOnly
+                items={
+                  Array.isArray(order.cart_items)
+                    ? order.cart_items.filter(
+                        (item: any) => item && item.id !== null,
+                      )
+                    : []
+                }
+                shippingMethod={order.shipping_method || "standard"}
+                subtotal={order.subtotal_amount || order.subtotal}
+                tax={order.tax_amount}
+                shipping={order.shipping_amount}
+                total={order.total_amount}
+              />
+
+              {/* Action Trigger Row */}
+              <div className="flex justify-end pt-2">
+                <button
+                  onClick={() => setIsActionActive(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 border border-gray-200 rounded-xl transition cursor-pointer"
+                >
+                  <Undo2 size={15} className="text-gray-500" />
+                  File Return or Item Cancellation
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+/* 
+{isOpen && (
         <div className="mt-6 border-t pt-4 space-y-4">
           <OrderTimeline status={order.payment_status} />
 
           <OrderSummaryReadOnly
-            // 🚀 Clean out null aggregations safely before passing array pointers downstream
             items={
               Array.isArray(order.cart_items)
                 ? order.cart_items.filter(
@@ -133,8 +217,18 @@ export default function OrderCard({ order, isOpen, onToggle }: any) {
             shipping={order.shipping_amount}
             total={order.total_amount}
           />
+
+         
+          <div className="flex justify-end pt-2">
+            <a
+              href={`/account/orders/${order.id}/action`}
+              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 border border-gray-200 rounded-xl transition cursor-pointer"
+            >
+              <Undo2 size={15} className="text-gray-500" />
+              File Return or Item Cancellation
+            </a>
+          </div>
+
         </div>
       )}
-    </div>
-  );
-}
+*/

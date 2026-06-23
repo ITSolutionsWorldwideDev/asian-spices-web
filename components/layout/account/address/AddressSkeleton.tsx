@@ -1,4 +1,4 @@
-// components\layout\account\address\AddressSkeleton.tsx
+// components/layout/account/address/AddressSkeleton.tsx
 
 export default function AddressSkeleton() {
   return (

@@ -1,4 +1,4 @@
-// apps/web/components/layout/account/Modal.tsx
+// components/layout/account/Modal.tsx
 
 "use client";
 

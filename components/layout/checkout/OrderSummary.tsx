@@ -1,4 +1,4 @@
-// apps/web/components/layout/checkout/OrderSummary.tsx
+//  components/layout/checkout/OrderSummary.tsx
 
 import Image from "next/image";
 import { ShoppingCart } from "lucide-react";

@@ -1,4 +1,4 @@
-// apps/web/components/layout/checkout/OrderSummaryReadOnly.tsx
+//  components/layout/checkout/OrderSummaryReadOnly.tsx
 
 import Image from "next/image";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
@@ -8,18 +8,11 @@ import { SHIPPING_OPTIONS, ShippingMethod } from "@/lib/pricing";
 interface Props {
   items: any[];
   shippingMethod: "standard" | "express" | "overnight";
-
   subtotal: number;
   tax: number;
   shipping: number;
   total: number;
 }
-
-/* export const SHIPPING_OPTIONS = {
-  standard: { label: "Standard Shipping", price: 5.99 },
-  express: { label: "Express Shipping", price: 12.99 },
-  overnight: { label: "Overnight Shipping", price: 24.99 },
-} as const; */
 
 export const BASE_CURRENCY = "EUR";
 
@@ -30,9 +23,8 @@ export function convertPrice(
   baseCurrency: string = "EUR",
 ) {
   if (currency === baseCurrency) {
-    return amount; // ✅ no conversion
+    return amount;
   }
-
   return amount * rate;
 }
 
@@ -49,17 +41,6 @@ export default function OrderSummaryReadOnly({
   shipping,
   total,
 }: Props) {
-  // const subtotal = items.reduce(
-  //   (acc, item) => acc + item.price * item.quantity,
-  //   0
-  // );
-
-  // const shipping =
-  //   SHIPPING_OPTIONS[shippingMethod]?.price ?? SHIPPING_OPTIONS.standard.price;
-
-  // const tax = subtotal * 0.08;
-  // const total = subtotal + tax + shipping;
-  // const { symbol, rate, currency } = useCurrencyStore();
   const { symbol, rate, selectedCurrency } = useCurrencyStore();
   const { taxRate, taxName } = useGlobalStore();
 
@@ -90,17 +71,16 @@ export default function OrderSummaryReadOnly({
                 fill
                 className="object-cover"
               />
-              {/* <span className="absolute top-0 -right-1 bg-black text-white text-xs h-5 w-5 rounded-full flex items-center justify-center">
-                {item.quantity}
-              </span> */}
             </div>
 
             <div className="flex-1">
               <p className="text-sm font-medium">{item.title}</p>
-              
-              <p className="text-xs text-gray-500 space-x-0.5">{symbol}{item.price} x {item.quantity} = {symbol}
-                      {(rate * (item.price * item.quantity)).toFixed(2)}</p>
-              {/* <p className="text-xs text-gray-500">{item.weight}</p> */}
+
+              <p className="text-xs text-gray-500 space-x-0.5">
+                {symbol}
+                {item.price} x {item.quantity} = {symbol}
+                {(rate * (item.price * item.quantity)).toFixed(2)}
+              </p>
             </div>
           </div>
         ))}
@@ -112,7 +92,6 @@ export default function OrderSummaryReadOnly({
           <span>
             {symbol}
             {subtotalConverted.toFixed(2)}
-            {/* {subtotal.toFixed(2)} */}
           </span>
         </div>
 
@@ -123,22 +102,17 @@ export default function OrderSummaryReadOnly({
               ? "FREE"
               : `${symbol}${shippingConverted.toFixed(2)}`}
           </span>
-          {/* <span>{symbol}{shipping.toFixed(2)}</span> */}
         </div>
 
         <div className="flex justify-between">
-          <span>{taxName} ({(taxRate * 100).toFixed(0)}%)</span>
-          <span>{symbol}{taxConverted.toFixed(2)}</span>
-        </div>
-
-        {/* <div className="flex justify-between">
-          <span>Tax</span>
           <span>
-            {" "}
+            {taxName} ({(taxRate * 100).toFixed(0)}%)
+          </span>
+          <span>
             {symbol}
             {taxConverted.toFixed(2)}
           </span>
-        </div> */}
+        </div>
       </div>
 
       <hr className="my-4" />
@@ -149,8 +123,30 @@ export default function OrderSummaryReadOnly({
           {symbol}
           {totalConverted.toFixed(2)}
         </span>
-        {/* <span>{symbol}{total.toFixed(2)}</span> */}
       </div>
     </div>
   );
+}
+
+/* export const SHIPPING_OPTIONS = {
+  standard: { label: "Standard Shipping", price: 5.99 },
+  express: { label: "Express Shipping", price: 12.99 },
+  overnight: { label: "Overnight Shipping", price: 24.99 },
+} as const; */
+// const subtotal = items.reduce(
+//   (acc, item) => acc + item.price * item.quantity,
+//   0
+// );
+
+// const shipping =
+//   SHIPPING_OPTIONS[shippingMethod]?.price ?? SHIPPING_OPTIONS.standard.price;
+
+// const tax = subtotal * 0.08;
+// const total = subtotal + tax + shipping;
+// const { symbol, rate, currency } = useCurrencyStore();
+
+{
+  /* <span className="absolute top-0 -right-1 bg-black text-white text-xs h-5 w-5 rounded-full flex items-center justify-center">
+                {item.quantity}
+              </span> */
 }

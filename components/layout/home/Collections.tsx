@@ -37,24 +37,31 @@ const categories = [
 
 export default function Collections() {
   return (
-    <div className=" relative   ">
-      <div>
-        <img
-          src="/assets/home/collections/531683f465ac68a63e0eb661c769a19e4a41cb38-(1)-min.webp"
-          alt=""
-          className="absolute inset-0 opacity-90 w-full"
-        />
-      </div>
-      <div className="bg-white/80 relative py-20">
-        <div className="container mx-auto  ">
-          {/* Top Section */}
-
-          <HeadingDescription
-            heading="Explore Our Collection"
-            // text="Shop By Category"
-            description={`Discover authentic spices from across Asia, each category carefully for quality and flavor Indian Spices`}
+    <>
+      <div className=" relative   ">
+        <div>
+          <img
+            src="/assets/home/collections/531683f465ac68a63e0eb661c769a19e4a41cb38-(1)-min.webp"
+            alt=""
+            className="absolute inset-0 opacity-90 w-full"
           />
-          <FlashSale />
+        </div>
+        <div className="bg-white/80 relative py-20">
+          <div className="container mx-auto  ">
+            {/* Top Section */}
+
+            <HeadingDescription
+              heading="Explore Our Collection"
+              // text="Shop By Category"
+              description={`Discover authentic spices from across Asia, each category carefully for quality and flavor Indian Spices`}
+            />
+            <FlashSale />
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white/80 py-20">
+        <div className="container mx-auto  ">
           {/* Grid Section */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-20">
             {categories.map((item, index) => {
@@ -91,10 +98,10 @@ export default function Collections() {
 
             <CollectionAnimatedText />
           </div>
-
-          {/* Bottom Typography */}
         </div>
       </div>
-    </div>
+
+      {/* Bottom Typography */}
+    </>
   );
 }

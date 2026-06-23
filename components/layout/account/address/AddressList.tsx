@@ -1,4 +1,4 @@
-// components/account/address/AddressList.tsx
+// components/layout/account/address/AddressList.tsx
 
 import AddressCard from "./AddressCard";
 

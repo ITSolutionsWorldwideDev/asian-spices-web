@@ -1,4 +1,4 @@
-// apps/web/components/layout/checkout/PaymentForm.tsx
+// components/layout/checkout/PaymentForm.tsx
 
 "use client";
 

@@ -1,4 +1,5 @@
-// apps\web\components\layout\account\profile\ProfileSkeleton.tsx
+// components/layout/account/profile/ProfileSkeleton.tsx
+
 export default function ProfileSkeleton() {
   return (
     <div className="space-y-4 animate-pulse">

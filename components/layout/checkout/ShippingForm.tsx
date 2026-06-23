@@ -1,4 +1,4 @@
-// apps/web/components/layout/checkout/ShippingForm.tsx
+// components/layout/checkout/ShippingForm.tsx
 
 "use client";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
