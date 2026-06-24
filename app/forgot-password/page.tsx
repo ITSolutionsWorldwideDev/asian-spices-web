@@ -31,7 +31,7 @@ export default function ForgotPasswordPage() {
         setStatus({
           type: "success",
           message:
-            "If that account exists, a link was generated in your terminal console logs!",
+            "If an account with that email address exists, a password reset link has been sent to the registered email address.",
         });
       } else {
         setStatus({

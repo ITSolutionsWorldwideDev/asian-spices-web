@@ -327,7 +327,7 @@ export async function sendReturnStatusUpdateEmail(returnId: string) {
 export async function sendPasswordResetEmail({ email, token }: PasswordResetEmailOptions) {
   try {
     // Generate base root URL dynamically using your system environment configurations
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
     const resetLink = `${baseUrl}/reset-password?token=${token}`;
 
     const emailHtml = `
