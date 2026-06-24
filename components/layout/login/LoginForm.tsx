@@ -235,8 +235,9 @@ export default function LoginForm() {
             {errors.password && <p className="error">{errors.password}</p>}
 
             <div className="flex justify-end">
+               {/* /reset-password */}
               <Link
-                href="/reset-password"
+                href="/forgot-password"
                 className="
                   text-sm
                   text-orange-600

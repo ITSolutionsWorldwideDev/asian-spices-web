@@ -1,6 +1,8 @@
 // apps/web/components/layout/wishlist/WishList.tsx
+
 "use client";
 
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -18,32 +20,75 @@ import { useCartStore } from "@/store/useCartStore";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 
 import EmptyWishList from "./EmptyWishList";
-
 import { useSession } from "next-auth/react";
 
 export default function WishList() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const isLoggedIn = !!session?.user;
 
   const { symbol, rate } = useCurrencyStore();
+  const { addToCart } = useCartStore();
+
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const {
     items: wishlist,
     removeFromWishlist,
     clearWishlist,
+    setWishlist,
   } = useWishlistStore();
 
-  const { addToCart } = useCartStore();
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (status === "loading") return;
+
+    if (isLoggedIn) {
+      // User logged in -> fetch actual database state
+      const fetchDatabaseWishlist = async () => {
+        try {
+          const res = await fetch("/api/wishlist");
+          if (res.ok) {
+            const data = await res.json();
+            setWishlist(data);
+          }
+        } catch (err) {
+          console.error("Failed to sync remote wishlist state", err);
+        }
+      };
+      fetchDatabaseWishlist();
+    } else {
+      // User logged out -> immediately clear unauthenticated local storage items
+      clearWishlist();
+    }
+  }, [isLoggedIn, status, setWishlist, clearWishlist]);
+
+  // Handle loading or hydration states cleanly
+  if (!isHydrated || status === "loading") {
+    return <div className="py-20 text-center text-gray-500">Loading your selections...</div>;
+  }
+
+  if (wishlist.length === 0) {
+    return <EmptyWishList />;
+  }
 
   const totalValue = wishlist.reduce(
     (acc, item) => acc + Number(item.price || 0),
     0,
   );
 
-  if (wishlist.length === 0) {
-    return <EmptyWishList />;
-  }
+  // const totalValue = wishlist.reduce(
+  //   (acc, item) => acc + Number(item.price || 0),
+  //   0,
+  // );
+
+  // if (wishlist.length === 0) {
+  //   return <EmptyWishList />;
+  // }
 
   return (
     <section className="py-10">
@@ -156,15 +201,6 @@ export default function WishList() {
         {/* =========================================================
             PRODUCTS
         ========================================================= */}
-
-        {/* 
-        {visibleProducts.map((product, index) => {
-        const cartItem = cart.find((item) => item.id === product.id);
-
-          return (
-            <div
-              key={`${product.id}-${index}`}
-        */}
 
         <div className="mt-10 space-y-5">
           {wishlist.map((item, index) => (

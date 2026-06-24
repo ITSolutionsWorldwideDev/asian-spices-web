@@ -54,14 +54,6 @@ export const useCartStore = create<CartState>()(
           updatedCart = [...get().cart, { ...item, id: targetId, quantity: 1 }];
         }
 
-        // if (existing) {
-        //   updatedCart = get().cart.map((i) =>
-        //     i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i,
-        //   );
-        // } else {
-        //   updatedCart = [...get().cart, { ...item, quantity: 1 }];
-        // }
-
         set({ cart: updatedCart });
 
         // ✅ Only sync if logged in
@@ -90,11 +82,7 @@ export const useCartStore = create<CartState>()(
         set({
           cart: get().cart.filter((i) => i.id.toString() !== targetId),
         });
-
-        // set({
-        //   cart: get().cart.filter((i) => i.id !== id),
-        // });
-
+        
         if (!isLoggedIn) return;
 
         try {

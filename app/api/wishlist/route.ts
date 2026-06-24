@@ -13,9 +13,9 @@ export async function GET() {
   }
 
   const client = await pool.connect();
-
-  const items = await client.query(
-    `
+  try {
+    const items = await client.query(
+      `
         SELECT 
             p.id,
             p.name,
@@ -31,10 +31,19 @@ export async function GET() {
         WHERE w.user_id = $1
         ORDER BY w.created_at DESC
     `,
-    [session.user.id],
-  );
+      [session.user.id],
+    );
 
-  return NextResponse.json(items.rows);
+    return NextResponse.json(items.rows);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
+  } finally {
+    client.release(); // Essential to avoid leaking database pool processes
+  }
 }
 
 export async function POST(req: Request) {

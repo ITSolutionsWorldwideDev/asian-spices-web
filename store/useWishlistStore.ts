@@ -8,24 +8,17 @@ export interface WishlistItem {
   name: string;
   image: string;
   price: number;
-
   slug?: string;
   category_slug?: string;
 }
 
 interface WishlistState {
   items: WishlistItem[];
-
   addToWishlist: (item: WishlistItem, isLoggedIn: boolean) => Promise<void>;
-
   removeFromWishlist: (id: string, isLoggedIn: boolean) => Promise<void>;
-
   toggleWishlist: (item: WishlistItem, isLoggedIn: boolean) => Promise<void>;
-
   isInWishlist: (id: string) => boolean;
-
   setWishlist: (items: WishlistItem[]) => void;
-
   clearWishlist: () => void;
 }
 
@@ -34,13 +27,8 @@ export const useWishlistStore = create<WishlistState>()(
     (set, get) => ({
       items: [],
 
-      /* =========================================================
-         ADD
-      ========================================================= */
-
       addToWishlist: async (item, isLoggedIn) => {
         const exists = get().items.some((i) => i.id === item.id);
-
         if (exists) return;
 
         // optimistic update
@@ -65,10 +53,6 @@ export const useWishlistStore = create<WishlistState>()(
         }
       },
 
-      /* =========================================================
-         REMOVE
-      ========================================================= */
-
       removeFromWishlist: async (id, isLoggedIn) => {
         // optimistic update
         set({
@@ -91,10 +75,6 @@ export const useWishlistStore = create<WishlistState>()(
           console.error("Remove wishlist failed", err);
         }
       },
-
-      /* =========================================================
-         TOGGLE
-      ========================================================= */
 
       toggleWishlist: async (item, isLoggedIn) => {
         const exists = get().items.some((i) => i.id === item.id);
@@ -135,93 +115,25 @@ export const useWishlistStore = create<WishlistState>()(
         }
       },
 
-      /* =========================================================
-         HELPERS
-      ========================================================= */
-
       isInWishlist: (id) => get().items.some((item) => item.id === id),
-
       setWishlist: (items) => set({ items }),
-
       clearWishlist: () => set({ items: [] }),
     }),
     {
       name: "wishlist-storage",
-
       version: 1,
 
       migrate: (state: any): WishlistState => {
         return {
           items: state?.items || [],
-
           addToWishlist: async () => {},
-
           removeFromWishlist: async () => {},
-
           toggleWishlist: async () => {},
-
           isInWishlist: () => false,
-
           setWishlist: () => {},
-
           clearWishlist: () => {},
         };
       },
     },
   ),
 );
-
-/* import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
-export interface WishlistItem {
-  id: string;
-  quantity: number;
-  name: string;
-  image: string;
-  price: number;
-  left: number;
-}
-
-interface WishlistState {
-  items: WishlistItem[];
-  addToWishlist: (item: WishlistItem) => void;
-  removeFromWishlist: (id: string) => void;
-  toggleWishlist: (item: WishlistItem) => void;
-  isInWishlist: (id: string) => boolean;
-  clearWishlist: () => void;
-}
-
-export const useWishlistStore = create<WishlistState>()(
-  persist(
-    (set, get) => ({
-      items: [],
-
-      addToWishlist: (item) =>
-        set((state) => ({
-          items: [...state.items, item],
-        })),
-
-      removeFromWishlist: (id) =>
-        set((state) => ({
-          items: state.items.filter((item) => item.id !== id),
-        })),
-
-      toggleWishlist: (item) => {
-        const exists = get().items.some((i) => i.id === item.id);
-        set((state) => ({
-          items: exists
-            ? state.items.filter((i) => i.id !== item.id)
-            : [...state.items, item],
-        }));
-      },
-
-      isInWishlist: (id) => get().items.some((item) => item.id === id),
-
-      clearWishlist: () => set({ items: [] }),
-    }),
-    {
-      name: "wishlist-storage", // key in localStorage
-    },
-  ),
-); */
