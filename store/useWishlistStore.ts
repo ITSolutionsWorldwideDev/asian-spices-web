@@ -28,12 +28,19 @@ export const useWishlistStore = create<WishlistState>()(
       items: [],
 
       addToWishlist: async (item, isLoggedIn) => {
-        const exists = get().items.some((i) => i.id === item.id);
+        const exists = get().items.some(
+          (i) => String(i.id) === String(item.id),
+        );
+
         if (exists) return;
 
         // optimistic update
         set({
-          items: [...get().items, item],
+          items: Array.from(
+            new Map(
+              [...get().items, item].map((i) => [String(i.id), i]),
+            ).values(),
+          ),
         });
 
         if (!isLoggedIn) return;
@@ -77,13 +84,18 @@ export const useWishlistStore = create<WishlistState>()(
       },
 
       toggleWishlist: async (item, isLoggedIn) => {
-        const exists = get().items.some((i) => i.id === item.id);
+        const exists = get().items.some(
+          (i) => String(i.id) === String(item.id),
+        );
 
-        // optimistic update
         set({
           items: exists
-            ? get().items.filter((i) => i.id !== item.id)
-            : [...get().items, item],
+            ? get().items.filter((i) => String(i.id) !== String(item.id))
+            : Array.from(
+                new Map(
+                  [...get().items, item].map((i) => [String(i.id), i]),
+                ).values(),
+              ),
         });
 
         if (!isLoggedIn) return;
@@ -122,6 +134,12 @@ export const useWishlistStore = create<WishlistState>()(
     {
       name: "wishlist-storage",
       version: 1,
+
+      // migrate: (persistedState: any, version: number) => {
+      //   return {
+      //     items: Array.isArray(persistedState?.items) ? persistedState.items : [],
+      //   };
+      // },
 
       migrate: (state: any): WishlistState => {
         return {

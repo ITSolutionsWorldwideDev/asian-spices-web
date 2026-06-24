@@ -26,12 +26,15 @@ export default function WishList() {
   // const { data: session } = useSession();
   const { data: session, status } = useSession();
 
-  const isLoggedIn = !!session?.user;
+  const isLoggedIn = status === "authenticated";
+
+  // const isLoggedIn = !!session?.user;
 
   const { symbol, rate } = useCurrencyStore();
   const { addToCart } = useCartStore();
 
   const [isHydrated, setIsHydrated] = useState(false);
+  // const isHydrated = useWishlistStore((state) => state._hasHydrated);
 
   const {
     items: wishlist,
@@ -40,15 +43,25 @@ export default function WishList() {
     setWishlist,
   } = useWishlistStore();
 
+  // useEffect(() => {
+  //   setIsHydrated(true);
+  // }, []);
+
   useEffect(() => {
-    setIsHydrated(true);
+    // Check if it's already hydrated, otherwise wait for it
+    if (useWishlistStore.persist?.hasHydrated()) {
+      setIsHydrated(true);
+    } else {
+      const unsub = useWishlistStore.persist.onHydrate(() => setIsHydrated(true));
+      return () => unsub();
+    }
   }, []);
+
 
   useEffect(() => {
     if (status === "loading") return;
 
     if (isLoggedIn) {
-      // User logged in -> fetch actual database state
       const fetchDatabaseWishlist = async () => {
         try {
           const res = await fetch("/api/wishlist");
@@ -61,16 +74,37 @@ export default function WishList() {
         }
       };
       fetchDatabaseWishlist();
-    } else {
-      // User logged out -> immediately clear unauthenticated local storage items
-      clearWishlist();
     }
-  }, [isLoggedIn, status, setWishlist, clearWishlist]);
+    // Fix: Removed the naked global `else { clearWishlist() }` which was 
+    // accidentally wiping guest user stores on page initialize.
+  }, [isLoggedIn, status, setWishlist]);
+
+  /* const handleClearAll = async () => {
+    clearWishlist(); // Instantly flushes local storage state
+    
+    if (isLoggedIn) {
+      try {
+        // Optimistically clear all elements on backend if authenticated
+        await fetch("/api/wishlist", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ product_id: "all" }), // Or your bulk API clear parameter
+        });
+      } catch (err) {
+        console.error("Failed to clear database wishlist items", err);
+      }
+    }
+  }; */
 
   // Handle loading or hydration states cleanly
   if (!isHydrated || status === "loading") {
     return <div className="py-20 text-center text-gray-500">Loading your selections...</div>;
   }
+
+  // Handle loading or hydration states cleanly
+  // if (!isHydrated || status === "loading") {
+  //   return <div className="py-20 text-center text-gray-500">Loading your selections...</div>;
+  // }
 
   if (wishlist.length === 0) {
     return <EmptyWishList />;

@@ -64,7 +64,7 @@ const SMTP_PROFILES = {
     secure: true,
     auth: {
       user: process.env.SMTP_SUPPORT_USER || "support@asianspices.online",
-      pass: process.env.SMTP_SUPPORT__PASS || "",
+      pass: process.env.SMTP_SUPPORT_PASS || "",
     },
     fromAddress: '"Asian Spices Support" <support@asianspices.online>',
   },
