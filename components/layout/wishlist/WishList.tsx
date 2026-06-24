@@ -160,7 +160,7 @@ export default function WishList() {
 
           <div className="flex items-center gap-3 flex-wrap">
             <button
-              onClick={clearWishlist}
+              onClick={() => clearWishlist(isLoggedIn)}
               className="border border-red-200 text-red-500 hover:bg-red-50 transition px-5 py-3 rounded-xl font-medium flex items-center gap-2 cursor-pointer"
             >
               <Trash2 size={18} />

@@ -19,7 +19,8 @@ interface WishlistState {
   toggleWishlist: (item: WishlistItem, isLoggedIn: boolean) => Promise<void>;
   isInWishlist: (id: string) => boolean;
   setWishlist: (items: WishlistItem[]) => void;
-  clearWishlist: () => void;
+  clearWishlist: (isLoggedIn: boolean) => Promise<void>;
+  // clearWishlist: () => void;
 }
 
 export const useWishlistStore = create<WishlistState>()(
@@ -63,7 +64,7 @@ export const useWishlistStore = create<WishlistState>()(
       removeFromWishlist: async (id, isLoggedIn) => {
         // optimistic update
         set({
-          items: get().items.filter((i) => i.id !== id),
+          items: get().items.filter((i) => String(i.id) !== String(id)),
         });
 
         if (!isLoggedIn) return;
@@ -84,6 +85,16 @@ export const useWishlistStore = create<WishlistState>()(
       },
 
       toggleWishlist: async (item, isLoggedIn) => {
+        const exists = get().items.some((i) => String(i.id) === String(item.id));
+
+        if (exists) {
+          await get().removeFromWishlist(item.id, isLoggedIn);
+        } else {
+          await get().addToWishlist(item, isLoggedIn);
+        }
+      },
+
+      /* toggleWishlist: async (item, isLoggedIn) => {
         const exists = get().items.some(
           (i) => String(i.id) === String(item.id),
         );
@@ -125,33 +136,47 @@ export const useWishlistStore = create<WishlistState>()(
         } catch (err) {
           console.error("Wishlist sync failed", err);
         }
-      },
+      }, */
 
-      isInWishlist: (id) => get().items.some((item) => item.id === id),
+      // isInWishlist: (id) => get().items.some((item) => item.id === id),
+      isInWishlist: (id) => get().items.some((item) => String(item.id) === String(id)),
       setWishlist: (items) => set({ items }),
-      clearWishlist: () => set({ items: [] }),
+      // clearWishlist: () => set({ items: [] }),
+      clearWishlist: async (isLoggedIn) => {
+        set({ items: [] }); // Clear local storage instantly
+
+        if (!isLoggedIn) return;
+
+        try {
+          await fetch("/api/wishlist", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ product_id: "all" }), // Informs API to clear the user's whole list
+          });
+        } catch (err) {
+          console.error("Failed to bulk clear remote wishlist", err);
+        }
+      },
     }),
     {
       name: "wishlist-storage",
       version: 1,
 
-      // migrate: (persistedState: any, version: number) => {
+      migrate: (persistedState: any) => ({
+        items: Array.isArray(persistedState?.items) ? persistedState.items : [],
+      }),
+
+      // migrate: (state: any): WishlistState => {
       //   return {
-      //     items: Array.isArray(persistedState?.items) ? persistedState.items : [],
+      //     items: state?.items || [],
+      //     addToWishlist: async () => {},
+      //     removeFromWishlist: async () => {},
+      //     toggleWishlist: async () => {},
+      //     isInWishlist: () => false,
+      //     setWishlist: () => {},
+      //     clearWishlist: () => {},
       //   };
       // },
-
-      migrate: (state: any): WishlistState => {
-        return {
-          items: state?.items || [],
-          addToWishlist: async () => {},
-          removeFromWishlist: async () => {},
-          toggleWishlist: async () => {},
-          isInWishlist: () => false,
-          setWishlist: () => {},
-          clearWishlist: () => {},
-        };
-      },
     },
   ),
 );

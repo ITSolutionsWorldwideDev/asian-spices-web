@@ -1,5 +1,6 @@
 // app/api/products/reviews/route.ts
 
+
 import { NextRequest, NextResponse } from "next/server";
 import { getProductReviews } from "@/lib/dbactions/products";
 import { pool } from "@/core/db";
