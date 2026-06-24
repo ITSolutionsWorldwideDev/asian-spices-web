@@ -9,28 +9,28 @@ const categories = [
     title: "Indian Spices",
     subtitle: "Aromatic and bold flavors",
     products: 45,
-    image: "51a25dd3ceed905ce38efab0118f616f234fbd37-min.webp",
+    image: "indian-spices.webp",
     gradient: "amber-300",
   },
   {
     title: "Chines Spices",
     subtitle: "Balanced and harmonious",
     products: 60,
-    image: "524531ab08204ddf1a7e11f44c85ef183cbf3159-min.webp",
+    image: "chinese-spices.webp",
     gradient: "red-500",
   },
   {
     title: "Thai Spices",
     subtitle: "Fresh and vibrant",
     products: 20,
-    image: "e01dc03bcc26642793fa084cbeeeb30acf275580-min.webp",
+    image: "thai-spices.webp",
     gradient: "green-600",
   },
   {
     title: "Blend Spices",
     subtitle: "Expert Combinations",
     products: 30,
-    image: "30ae0eaf7c426c1f8cd606e51796fc3d9a40c59d-min.webp",
+    image: "blend-spices.webp",
     gradient: "white",
   },
 ];
@@ -38,21 +38,18 @@ const categories = [
 export default function Collections() {
   return (
     <>
-      <div className=" relative   ">
+      <div className="relative overflow-hidden">
         <div>
           <img
-            src="/assets/home/collections/531683f465ac68a63e0eb661c769a19e4a41cb38-(1)-min.webp"
+            src="/assets/home/collections/collection-bg.webp"
             alt=""
-            className="absolute inset-0 opacity-90 w-full"
+            className="absolute inset-0 opacity-90 w-full h-full object-cover"
           />
         </div>
         <div className="bg-white/80 relative py-20">
-          <div className="container mx-auto  ">
-            {/* Top Section */}
-
+          <div className="container mx-auto">
             <HeadingDescription
               heading="Explore Our Collection"
-              // text="Shop By Category"
               description={`Discover authentic spices from across Asia, each category carefully for quality and flavor Indian Spices`}
             />
             <FlashSale />
@@ -61,16 +58,13 @@ export default function Collections() {
       </div>
 
       <div className="bg-white/80 py-20">
-        <div className="container mx-auto  ">
-          {/* Grid Section */}
+        <div className="container mx-auto ">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-20">
             {categories.map((item, index) => {
-              // Large card (left)
               if (index === 0) {
                 return <CollectionLargeCard key={index} item={item} />;
               }
 
-              // Right column (two stacked small cards)
               if (index === 1) {
                 return (
                   <div key="right-column" className="flex flex-col gap-6">
@@ -84,7 +78,6 @@ export default function Collections() {
                 );
               }
 
-              // Bottom full-width card
               if (index >= 3) {
                 return (
                   <div key={item.title}>
@@ -100,8 +93,6 @@ export default function Collections() {
           </div>
         </div>
       </div>
-
-      {/* Bottom Typography */}
     </>
   );
 }

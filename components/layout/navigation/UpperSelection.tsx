@@ -31,10 +31,10 @@ export default function UpperSelection() {
       <div></div>
 
       <div className="flex items-center gap-4">
-        {/* COUNTRY */}
+        {/* COUNTRY disabled*/}
         <select
           value={selectedCountry}
-          disabled
+          
           onChange={(e) => setSelectedCountry(e.target.value)}
           className="border px-3 py-1 text-xs rounded-md bg-white cursor-pointer"
         >

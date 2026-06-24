@@ -77,8 +77,8 @@ export default async function KitchenAppliancesPage({
 
       <HeadingDescription
         heading="Explore Our Collection"
-        text="Shop By All Spices"
-        description="Discover authentic spices from across Asia, each category carefully for quality and flavor Indian Spices"
+        text="Shop By All Foods & Beverages"
+        description="Discover authentic Foods & Beverages from across Asia, each category carefully for quality and flavor Foods"
       />
 
       <div className="grid lg:grid-cols-[260px_1fr] gap-6 container mx-auto p-5">
