@@ -247,7 +247,7 @@ export default function Cart() {
             </div> */}
 
             <div className="flex justify-between mt-3">
-              <span>{taxName} ({(taxRate * 100).toFixed(0)}%)</span>
+              <span>{taxName} ({(taxRate * 100).toFixed(2)}%)</span>
               <span>{symbol}{(rate * tax).toFixed(2)}</span>
             </div>
 

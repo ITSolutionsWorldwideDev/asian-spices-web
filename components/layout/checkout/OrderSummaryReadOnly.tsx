@@ -106,7 +106,7 @@ export default function OrderSummaryReadOnly({
 
         <div className="flex justify-between">
           <span>
-            {taxName} ({(taxRate * 100).toFixed(0)}%)
+            {taxName} ({(taxRate * 100).toFixed(2)}%)
           </span>
           <span>
             {symbol}
