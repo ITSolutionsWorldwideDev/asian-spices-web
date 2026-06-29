@@ -61,19 +61,9 @@ export default async function SpicesPage({ searchParams }: PageProps) {
     page: Number(params.page || 1),
   };
 
-  /* const filters: Filters = {
-    category: "spices",
-    subcategories: cleanArray(params.subcategories),
-    brands: cleanArray(params.brands),
-    minPrice: params.min,
-    maxPrice: params.max,
-    search: params.search,
-    page: Number(params.page || 1),
-  }; */
-
   // const subcategories = await getSubcategories("spices");
   const subcategories = await getSubcategories("spices", filters);
-  const brands = await getBrands();
+  const brands = await getBrands("spices", filters);
 
   const products = await getProducts(filters);
 
@@ -107,3 +97,14 @@ export default async function SpicesPage({ searchParams }: PageProps) {
     </div>
   );
 }
+
+
+  /* const filters: Filters = {
+    category: "spices",
+    subcategories: cleanArray(params.subcategories),
+    brands: cleanArray(params.brands),
+    minPrice: params.min,
+    maxPrice: params.max,
+    search: params.search,
+    page: Number(params.page || 1),
+  }; */
