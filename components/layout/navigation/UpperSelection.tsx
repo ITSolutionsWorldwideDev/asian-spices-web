@@ -51,7 +51,7 @@ export default function UpperSelection() {
         {/* CURRENCY */}
         <select
           value={selectedCurrency}
-          disabled
+          
           onChange={(e) => setSelectedCurrency(e.target.value)}
           className="border px-3 py-1 text-xs rounded-md bg-white cursor-pointer"
         >

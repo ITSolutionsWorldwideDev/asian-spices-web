@@ -17,6 +17,9 @@ export const getProducts = async (filters: any) => {
   let values: any[] = [];
   let index = 0;
 
+  console.log("Filters:", filters);
+  console.log("Subcategories:", subcategories);
+
   let rankField = "0 as rank";
   if (search) {
     index++;
@@ -298,8 +301,8 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
   `;
 
   // console.log("productConditions ==== ", productConditions);
-  // console.log("query ==== ", query);
-  // console.log("values ==== ", values);
+  console.log("query ==== ", query);
+  console.log("values ==== ", values);
 
   const result = await pool.query(query, values);
   return result.rows;
