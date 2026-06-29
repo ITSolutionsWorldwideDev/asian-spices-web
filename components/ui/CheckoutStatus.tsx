@@ -75,12 +75,6 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
     return () => clearInterval(interval);
   }, [orderId]);
 
-  // useEffect(() => {
-  //   if (order?.payment_status === "paid") {
-  //     clearCart();
-  //   }
-  // }, [order]);
-
   useEffect(() => {
     if (order?.payment_status === "paid") {
       clearCart();

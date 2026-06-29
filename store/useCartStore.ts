@@ -82,7 +82,7 @@ export const useCartStore = create<CartState>()(
         set({
           cart: get().cart.filter((i) => i.id.toString() !== targetId),
         });
-        
+
         if (!isLoggedIn) return;
 
         try {
@@ -230,17 +230,29 @@ export const useCartStore = create<CartState>()(
 
       clearCart: async (isLoggedIn = false) => {
         set({ cart: [] });
-        
+
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("cart-storage");
+        }
+
         if (!isLoggedIn) return;
 
         try {
-          await fetch("/api/cart/clear", { // Ensure this endpoint executes your DELETE or TRUNCATE logic
+          await fetch("/api/cart", {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" },
           });
         } catch (err) {
-          console.error("Failed to clear DB cart during checkout sync:", err);
+          console.error("Failed to clear DB cart:", err);
         }
+
+        // try {
+        //   await fetch("/api/cart/clear", { // Ensure this endpoint executes your DELETE or TRUNCATE logic
+        //     method: "DELETE",
+        //     headers: { "Content-Type": "application/json" },
+        //   });
+        // } catch (err) {
+        //   console.error("Failed to clear DB cart during checkout sync:", err);
+        // }
       },
 
       // clearCart: () => set({ cart: [] }),

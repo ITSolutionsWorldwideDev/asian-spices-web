@@ -56,10 +56,6 @@ export default function ProductCard({
     setMounted(true);
   }, []);
 
-  // const path = usePathname();
-  // const pathname = path.startsWith("/") ? path.slice(1) : path;
-  // const [cartBtn, setCartBtn] = useState<string | null>(null);
-
   const visibleProducts =
     disableSlicing || showAll ? products : products.slice(0, 20);
 
@@ -213,9 +209,6 @@ export default function ProductCard({
         })}
       </div>
 
-      {/* See More/See Less Button */}
-
-      {/* 🟢 Render pagination toggle ONLY if classic manual slicing mode is active */}
       {!disableSlicing && products.length > 20 && (
         <div className="flex justify-center mt-8 mb-10">
           <button
@@ -233,6 +226,10 @@ export default function ProductCard({
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
 
       {/* {products.length > 16 && (
         <div className="flex justify-center mt-8 mb-10">
@@ -251,6 +248,3 @@ export default function ProductCard({
           </button>
         </div>
       )} */}
-    </div>
-  );
-}

@@ -80,14 +80,25 @@ export async function DELETE(req: Request) {
 
   const { product_id } = await req.json();
 
-  await client.query(
-    `
-        DELETE FROM wishlists
-        WHERE user_id = $1
-        AND product_id = $2
-    `,
-    [session.user.id, product_id],
-  );
+  if (product_id === "all") {
+    await client.query(`DELETE FROM wishlists WHERE user_id = $1`, [
+      session.user.id,
+    ]);
+  } else {
+    await client.query(
+      `DELETE FROM wishlists WHERE user_id = $1 AND product_id = $2`,
+      [session.user.id, product_id],
+    );
+  }
+
+  // await client.query(
+  //   `
+  //       DELETE FROM wishlists
+  //       WHERE user_id = $1
+  //       AND product_id = $2
+  //   `,
+  //   [session.user.id, product_id],
+  // );
 
   return NextResponse.json({ success: true });
 }

@@ -39,31 +39,11 @@ export const useCartSync = () => {
             category_slug: item.category_slug || "",
           }));
 
-          setCart(formattedCart);
-        }
+          const localCart = useCartStore.getState().cart;
 
-        // =========================================================
-        //    WISHLIST SYNC
-        // =========================================================
-
-        // OPTIONAL:
-        // Merge local wishlist into DB
-
-        const wishlistRes = await fetch("/api/wishlist");
-
-        if (wishlistRes?.ok) {
-          const dbWishlist = await wishlistRes?.json();
-
-          const formattedWishlist = dbWishlist?.map((item: any) => ({
-            id: item.id || item.product_id,
-            name: item.name || "Product",
-            image: item.image || "",
-            price: Number(item.price),
-            slug: item.slug || "",
-            category_slug: item.category_slug || "",
-          }));
-
-          setWishlist(formattedWishlist);
+          if (localCart.length === 0 || formattedCart.length > 0) {
+            setCart(formattedCart);
+          }
         }
 
         hasSynced.current = true;
@@ -72,9 +52,37 @@ export const useCartSync = () => {
       }
     };
 
-    syncCart();
+    const t = setTimeout(() => {
+      syncCart();
+    }, 300); // let localStorage settle
+
+    return () => clearTimeout(t);
   }, [status]);
 };
+
+// =========================================================
+//    WISHLIST SYNC
+// =========================================================
+
+// OPTIONAL:
+// Merge local wishlist into DB
+
+// const wishlistRes = await fetch("/api/wishlist");
+
+// if (wishlistRes?.ok) {
+//   const dbWishlist = await wishlistRes?.json();
+
+//   const formattedWishlist = dbWishlist?.map((item: any) => ({
+//     id: item.id || item.product_id,
+//     name: item.name || "Product",
+//     image: item.image || "",
+//     price: Number(item.price),
+//     slug: item.slug || "",
+//     category_slug: item.category_slug || "",
+//   }));
+
+//   setWishlist(formattedWishlist);
+// }
 
 // ---------------- MERGE LOCAL → DB ----------------
 

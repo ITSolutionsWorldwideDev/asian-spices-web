@@ -71,25 +71,6 @@ export async function PATCH(req: Request) {
 
 /* ---------------- HELPER ---------------- */
 
-/* async function getOrCreateCustomer(client: any, user: any) {
-  const existing = await client.query(
-    `SELECT id FROM customers WHERE user_id = $1 LIMIT 1`,
-    [user.id],
-  );
-
-  if (existing.rowCount) {
-    return existing.rows[0].id;
-  }
-
-  const created = await client.query(
-    `INSERT INTO customers (user_id, email)
-     VALUES ($1, $2)
-     RETURNING id`,
-    [user.id, user.email],
-  );
-
-  return created.rows[0].id;
-} */
 
 async function getOrCreateCustomer(client: any, user: any) {
   const email = user.email;
@@ -113,3 +94,24 @@ async function getOrCreateCustomer(client: any, user: any) {
 
   return created.rows[0].id;
 }
+
+
+/* async function getOrCreateCustomer(client: any, user: any) {
+  const existing = await client.query(
+    `SELECT id FROM customers WHERE user_id = $1 LIMIT 1`,
+    [user.id],
+  );
+
+  if (existing.rowCount) {
+    return existing.rows[0].id;
+  }
+
+  const created = await client.query(
+    `INSERT INTO customers (user_id, email)
+     VALUES ($1, $2)
+     RETURNING id`,
+    [user.id, user.email],
+  );
+
+  return created.rows[0].id;
+} */

@@ -29,6 +29,9 @@ export const useWishlistStore = create<WishlistState>()(
       items: [],
 
       addToWishlist: async (item, isLoggedIn) => {
+
+        console.log("addToWishlist", item);
+
         if (!item.id) {
           console.error("Invalid wishlist item:", item);
           return;
@@ -90,6 +93,9 @@ export const useWishlistStore = create<WishlistState>()(
       },
 
       toggleWishlist: async (item, isLoggedIn) => {
+
+        console.log("toggleWishlist", item);
+        
         const exists = get().items.some(
           (i) => String(i.id) === String(item.id),
         );
@@ -107,7 +113,10 @@ export const useWishlistStore = create<WishlistState>()(
       // setWishlist: (items) => set({ items }),
       setWishlist: (items) =>
         set({
-          items: items.filter((item) => item && item.id && item.name),
+          items: items.filter(
+            (item) =>
+              item && item.id && item.name && typeof item.price === "number",
+          ),
         }),
       // clearWishlist: () => set({ items: [] }),
       clearWishlist: async (isLoggedIn) => {
