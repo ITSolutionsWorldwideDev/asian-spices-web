@@ -25,20 +25,6 @@ export const useCartSync = () => {
         //    CART SYNC
         // =========================================================
 
-        // ---------------- MERGE LOCAL → DB ----------------
-
-        /* if (cart.length > 0) {
-          await fetch("/api/cart/merge", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ items: cart }),
-          });
-
-          // clearCart(); // 🧹 clear local
-        } */
-
-        // ---------------- FETCH DB CART ----------------
-
         const cartRes = await fetch("/api/cart");
 
         if (cartRes.ok) {
@@ -69,7 +55,7 @@ export const useCartSync = () => {
           const dbWishlist = await wishlistRes?.json();
 
           const formattedWishlist = dbWishlist?.map((item: any) => ({
-            id: item.product_id,
+            id: item.id || item.product_id,
             name: item.name || "Product",
             image: item.image || "",
             price: Number(item.price),
@@ -89,3 +75,17 @@ export const useCartSync = () => {
     syncCart();
   }, [status]);
 };
+
+// ---------------- MERGE LOCAL → DB ----------------
+
+/* if (cart.length > 0) {
+          await fetch("/api/cart/merge", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ items: cart }),
+          });
+
+          // clearCart(); // 🧹 clear local
+        } */
+
+// ---------------- FETCH DB CART ----------------

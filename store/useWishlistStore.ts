@@ -29,6 +29,11 @@ export const useWishlistStore = create<WishlistState>()(
       items: [],
 
       addToWishlist: async (item, isLoggedIn) => {
+        if (!item.id) {
+          console.error("Invalid wishlist item:", item);
+          return;
+        }
+
         const exists = get().items.some(
           (i) => String(i.id) === String(item.id),
         );
@@ -85,7 +90,9 @@ export const useWishlistStore = create<WishlistState>()(
       },
 
       toggleWishlist: async (item, isLoggedIn) => {
-        const exists = get().items.some((i) => String(i.id) === String(item.id));
+        const exists = get().items.some(
+          (i) => String(i.id) === String(item.id),
+        );
 
         if (exists) {
           await get().removeFromWishlist(item.id, isLoggedIn);
@@ -94,7 +101,55 @@ export const useWishlistStore = create<WishlistState>()(
         }
       },
 
-      /* toggleWishlist: async (item, isLoggedIn) => {
+      // isInWishlist: (id) => get().items.some((item) => item.id === id),
+      isInWishlist: (id) =>
+        get().items.some((item) => String(item.id) === String(id)),
+      // setWishlist: (items) => set({ items }),
+      setWishlist: (items) =>
+        set({
+          items: items.filter((item) => item && item.id && item.name),
+        }),
+      // clearWishlist: () => set({ items: [] }),
+      clearWishlist: async (isLoggedIn) => {
+        set({ items: [] }); // Clear local storage instantly
+
+        if (!isLoggedIn) return;
+
+        try {
+          await fetch("/api/wishlist", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ product_id: "all" }), // Informs API to clear the user's whole list
+          });
+        } catch (err) {
+          console.error("Failed to bulk clear remote wishlist", err);
+        }
+      },
+    }),
+    {
+      name: "wishlist-storage",
+      version: 1,
+
+      migrate: (persistedState: any) => ({
+        items: Array.isArray(persistedState?.items) ? persistedState.items : [],
+      }),
+
+      // migrate: (state: any): WishlistState => {
+      //   return {
+      //     items: state?.items || [],
+      //     addToWishlist: async () => {},
+      //     removeFromWishlist: async () => {},
+      //     toggleWishlist: async () => {},
+      //     isInWishlist: () => false,
+      //     setWishlist: () => {},
+      //     clearWishlist: () => {},
+      //   };
+      // },
+    },
+  ),
+);
+
+/* toggleWishlist: async (item, isLoggedIn) => {
         const exists = get().items.some(
           (i) => String(i.id) === String(item.id),
         );
@@ -137,46 +192,3 @@ export const useWishlistStore = create<WishlistState>()(
           console.error("Wishlist sync failed", err);
         }
       }, */
-
-      // isInWishlist: (id) => get().items.some((item) => item.id === id),
-      isInWishlist: (id) => get().items.some((item) => String(item.id) === String(id)),
-      setWishlist: (items) => set({ items }),
-      // clearWishlist: () => set({ items: [] }),
-      clearWishlist: async (isLoggedIn) => {
-        set({ items: [] }); // Clear local storage instantly
-
-        if (!isLoggedIn) return;
-
-        try {
-          await fetch("/api/wishlist", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ product_id: "all" }), // Informs API to clear the user's whole list
-          });
-        } catch (err) {
-          console.error("Failed to bulk clear remote wishlist", err);
-        }
-      },
-    }),
-    {
-      name: "wishlist-storage",
-      version: 1,
-
-      migrate: (persistedState: any) => ({
-        items: Array.isArray(persistedState?.items) ? persistedState.items : [],
-      }),
-
-      // migrate: (state: any): WishlistState => {
-      //   return {
-      //     items: state?.items || [],
-      //     addToWishlist: async () => {},
-      //     removeFromWishlist: async () => {},
-      //     toggleWishlist: async () => {},
-      //     isInWishlist: () => false,
-      //     setWishlist: () => {},
-      //     clearWishlist: () => {},
-      //   };
-      // },
-    },
-  ),
-);
