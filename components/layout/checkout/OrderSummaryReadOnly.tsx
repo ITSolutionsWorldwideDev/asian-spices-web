@@ -78,7 +78,7 @@ export default function OrderSummaryReadOnly({
 
               <p className="text-xs text-gray-500 space-x-0.5">
                 {symbol}
-                {item.price} x {item.quantity} = {symbol}
+                {item.price.toFixed(2)} x {item.quantity} = {symbol}
                 {(rate * (item.price * item.quantity)).toFixed(2)}
               </p>
             </div>

@@ -286,10 +286,10 @@ export default function WishList() {
                     </div> */}
 
                     <div className="mt-4  text-sm text-orange-500">
-                      <p className="font-normal mb-2">
+                      {/* <p className="font-normal mb-2">
                         {symbol}
                         {(rate * item.price).toFixed(2)}
-                      </p>
+                      </p> */}
                       <p className="font-normal">
                         Total: {symbol}
                         {(rate * item.price).toFixed(2)}
@@ -367,7 +367,7 @@ export default function WishList() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/">
+            <Link href="/spices">
               <button className="border border-gray-300 bg-white hover:bg-gray-50 transition rounded-xl px-6 py-3 font-medium cursor-pointer">
                 Continue Shopping
               </button>

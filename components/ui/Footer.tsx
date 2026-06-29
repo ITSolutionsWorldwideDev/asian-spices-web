@@ -1,3 +1,4 @@
+import Link from "next/link";
 import FooterContent from "../layout/footer/FooterContent";
 
 export default function Footer() {
@@ -15,7 +16,7 @@ export default function Footer() {
       <FooterContent />
       {/* Bottom Text */}
       <p className="text-center mt-10 text-sm">
-        Powered by IT Solutions Worldwide
+        Powered by <Link href="https://www.itsolutionsworldwide.com/" className="cursor-pointer hove: underline ">IT Solutions Worldwide </Link>
       </p>
     </footer>
   );

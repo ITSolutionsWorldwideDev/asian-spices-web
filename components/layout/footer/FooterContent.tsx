@@ -99,9 +99,9 @@ const FooterContent = () => {
         <SubscribeNewsletter />
 
         <div className="mt-8">
-          <Link href={"/partner-registration"}>
+          <Link href={"/partnerplatform"}>
             {" "}
-            <h3 className="font-bold underline">Go To The Partners Hub</h3>
+            <h3 className="font-bold underline">Go To The Partner Hub</h3>
           </Link>
         </div>
       </div>

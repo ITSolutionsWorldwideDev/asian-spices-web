@@ -214,7 +214,7 @@ export default function Cart() {
             </select>
           </div> */}
 
-          <div className="flex flex-col gap-1.5 mb-4">
+          {/* <div className="flex flex-col gap-1.5 mb-4">
             <label className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Shipping Destination Country</label>
             <select
               value={selectedCountry}
@@ -227,7 +227,7 @@ export default function Cart() {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
 
           <div className="space-y-2 text-sm py-5">
             <div className="flex justify-between mt-3">
@@ -251,7 +251,7 @@ export default function Cart() {
               <span>{symbol}{(rate * tax).toFixed(2)}</span>
             </div>
 
-            <div className="flex justify-between mt-3">
+            {/* <div className="flex justify-between mt-3">
               <span>Estimated Shipping</span>
               <span>
                 {shipping === 0 ? (
@@ -260,7 +260,7 @@ export default function Cart() {
                   `${symbol}${(rate * shipping).toFixed(2)}`
                 )}
               </span>
-            </div>
+            </div> */}
           </div>
 
           <hr className="my-4" />
@@ -269,7 +269,7 @@ export default function Cart() {
             <span>Total</span>
             <span>
               {symbol}
-              {(rate * total).toFixed(2)}
+              {(rate * (total-shipping)).toFixed(2)}
             </span>
           </div>
 
