@@ -62,28 +62,37 @@ export default function OrderSummaryReadOnly({
       <h2 className="font-semibold mb-4">Order Summary</h2>
 
       <div className="space-y-4 mb-6">
-        {items.map((item: any) => (
-          <div key={item.id} className="flex gap-4">
-            <div className="relative h-14 w-14 rounded-lg overflow-hidden">
-              <Image
-                src={item.image || "/placeholder.png"}
-                alt={item.title}
-                fill
-                className="object-cover"
-              />
-            </div>
 
-            <div className="flex-1">
-              <p className="text-sm font-medium">{item.title}</p>
+        {items.map((item: any) => {
+          // 🚀 Parse the specific item variables defensively to prevent runtime crashes
+          const itemPrice = safeNumber(item?.price);
+          const itemQuantity = safeNumber(item?.quantity || 1);
+          const itemLineTotalConverted = rate * (itemPrice * itemQuantity);
 
-              <p className="text-xs text-gray-500 space-x-0.5">
-                {symbol}
-                {item.price.toFixed(2)} x {item.quantity} = {symbol}
-                {(rate * (item.price * item.quantity)).toFixed(2)}
-              </p>
+          return (
+            <div key={item.id} className="flex gap-4">
+              <div className="relative h-14 w-14 rounded-lg overflow-hidden">
+                <Image
+                  src={item.image || "/placeholder.png"}
+                  alt={item.title || "Product item"}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <div className="flex-1">
+                <p className="text-sm font-medium">{item.title}</p>
+
+                {/* Fixed numeric invocation using completely safe calculated variables */}
+                <p className="text-xs text-gray-500 space-x-0.5">
+                  {symbol}
+                  {itemPrice.toFixed(2)} x {itemQuantity} = {symbol}
+                  {itemLineTotalConverted.toFixed(2)}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="space-y-2 text-sm">
@@ -106,7 +115,7 @@ export default function OrderSummaryReadOnly({
 
         <div className="flex justify-between">
           <span>
-            {taxName} ({(taxRate * 100).toFixed(2)}%)
+            {taxName} ({(safeNumber(taxRate) * 100).toFixed(2)}%)
           </span>
           <span>
             {symbol}
@@ -145,8 +154,29 @@ export default function OrderSummaryReadOnly({
 // const total = subtotal + tax + shipping;
 // const { symbol, rate, currency } = useCurrencyStore();
 
-{
+
   /* <span className="absolute top-0 -right-1 bg-black text-white text-xs h-5 w-5 rounded-full flex items-center justify-center">
                 {item.quantity}
               </span> */
-}
+/* {items.map((item: any) => (
+          <div key={item.id} className="flex gap-4">
+            <div className="relative h-14 w-14 rounded-lg overflow-hidden">
+              <Image
+                src={item.image || "/placeholder.png"}
+                alt={item.title}
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            <div className="flex-1">
+              <p className="text-sm font-medium">{item.title}</p>
+
+              <p className="text-xs text-gray-500 space-x-0.5">
+                {symbol}
+                {item.price.toFixed(2)} x {item.quantity} = {symbol}
+                {(rate * (item.price * item.quantity)).toFixed(2)}
+              </p>
+            </div>
+          </div>
+        ))} */

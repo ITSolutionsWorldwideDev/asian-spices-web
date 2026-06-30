@@ -62,7 +62,6 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           serviceId: PAYNL_SERVICE_ID,
           amount: {
-            // value: amount.toFixed(2),
             value: Math.round(Number(amount) * 100), // ✅ integer in cents
             currency: "EUR",
           },

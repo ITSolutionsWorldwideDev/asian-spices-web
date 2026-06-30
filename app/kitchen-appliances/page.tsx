@@ -2,8 +2,7 @@
 
 import Footer from "@/components/ui/Footer";
 import HeadingDescription from "@/components/ui/HeadingDescription";
-import ProductPageHeader from "@/components/ui/ProductPageHeader";
-// import RegisterOnApp from "@/components/ui/RegisterOnApp";
+import ProductPageHeader from "@/components/ui/ProductPageHeader"; 
 import Reviews from "@/components/ui/Reviews";
 
 import {

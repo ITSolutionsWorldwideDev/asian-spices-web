@@ -1,9 +1,9 @@
 // app/foods-beverages/page.tsx
 
+import { Suspense } from "react";
 import Footer from "@/components/ui/Footer";
 import HeadingDescription from "@/components/ui/HeadingDescription";
 import ProductPageHeader from "@/components/ui/ProductPageHeader";
-// import RegisterOnApp from "@/components/ui/RegisterOnApp";
 import Reviews from "@/components/ui/Reviews";
 
 import {
@@ -37,7 +37,82 @@ type Filters = {
   page: number;
 };
 
+// 1. Isolated component for asynchronous database fetching
+async function FoodsBeveragesContent({ filters }: { filters: Filters }) {
+  const [subcategories, brands, products] = await Promise.all([
+    getSubcategories("foods-beverages", filters),
+    getBrands("foods-beverages", filters),
+    getProducts(filters),
+  ]);
+
+  return (
+    <div className="grid lg:grid-cols-[260px_1fr] gap-6 container mx-auto p-5">
+      <FilterSidebar subcategories={subcategories} brands={brands} />
+
+      <div>
+        <SortDropdown />
+        <InfiniteProducts initialProducts={products} filters={filters} />
+      </div>
+    </div>
+  );
+}
+
 export default async function KitchenAppliancesPage({
+  searchParams,
+}: PageProps) {
+  const params = await searchParams;
+
+  const cleanArray = (val?: string) => {
+    if (!val) return [];
+
+    return val
+      .split(",")
+      .map((v) => v.trim())
+      .filter((v) => v !== "" && v !== "null" && v !== "undefined");
+  };
+
+  const filters: Filters = {
+    category: "foods-beverages",
+    subcategories: cleanArray(params.subcategories),
+    brands: cleanArray(params.brands),
+    minPrice: params.min,
+    maxPrice: params.max,
+    search: params.search,
+    page: Number(params.page || 1),
+  };
+
+  return (
+    <div className="category-animation">
+      <ProductPageHeader
+        heading="Every Grain, A Burst of Taste"
+        text="Handpicked, pure, and powerful our spices bring depth, warmth, and character to every recipe"
+        videoLink="/foods-beverages/0_Food_Asian_Food_3840x2160.mp4"
+      />
+
+      <HeadingDescription
+        heading="Explore Our Collection"
+        text="Shop By All Foods & Beverages"
+        description="Discover authentic Foods & Beverages from across Asia, each category carefully for quality and flavor Foods"
+      />
+
+      {/* 2. Wrap content with Suspense boundary */}
+      <Suspense
+        fallback={
+          <div className="text-center py-20 text-gray-500 font-medium">
+            Loading items...
+          </div>
+        }
+      >
+        <FoodsBeveragesContent filters={filters} />
+      </Suspense>
+
+      <Reviews />
+      <Footer />
+    </div>
+  );
+}
+
+/* export default async function KitchenAppliancesPage({
   searchParams,
 }: PageProps) {
   const params = await searchParams;
@@ -90,10 +165,8 @@ export default async function KitchenAppliancesPage({
           <InfiniteProducts initialProducts={products} filters={filters} />
         </div>
       </div>
-
-      {/* <RegisterOnApp /> */}
       <Reviews />
       <Footer />
     </div>
   );
-}
+} */
