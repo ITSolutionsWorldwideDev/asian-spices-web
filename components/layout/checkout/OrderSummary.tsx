@@ -36,6 +36,118 @@ export default function OrderSummary({
   deliveryDaysText,
 }: Props) {
   const { symbol, rate } = useCurrencyStore();
+  const { taxRules } = useGlobalStore(); // 🌟 Grab full rules reference to lookup per row labels
+
+  const globalRule = taxRules.find((r) => r.category_id === null);
+  const globalRateLabel = globalRule
+    ? `${globalRule.tax_name} (${globalRule.tax_rate}%)`
+    : "VAT (21%)";
+
+  const hasFreeShipping = shipping <= 0;
+
+  return (
+    <div className="bg-white rounded-xl border border-[#E5E7EB] p-6">
+      <h2 className="font-semibold mb-4">Order Summary</h2>
+
+      <div className="space-y-4 mb-6">
+        {items.map((item) => {
+          const itemPrice = Number(item.price || 0);
+          const itemQuantity = Number(item.quantity || 1);
+          const itemTotalPrice = rate * (itemPrice * itemQuantity);
+
+          // Find row category target label rule definition
+          const matchingRule = taxRules.find(
+            (r) => r.category_id === item.category_id,
+          );
+          const ruleName = matchingRule
+            ? matchingRule.tax_name
+            : globalRule?.tax_name || "VAT";
+          const rulePercent = matchingRule
+            ? matchingRule.tax_rate
+            : globalRule?.tax_rate || "21";
+
+          return (
+            <div key={item.id} className="flex gap-4">
+              <div className="relative h-14 w-14 rounded-lg overflow-hidden">
+                <Image
+                  src={item.image || "/placeholder.jpg"}
+                  alt={item.title || "Item"}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <div className="flex-1">
+                <p className="text-sm font-medium">{item.title}</p>
+                <p className="text-xs text-gray-500 space-x-0.5">
+                  {symbol}
+                  {itemPrice.toFixed(2)} x {itemQuantity} = {symbol}
+                  {itemTotalPrice.toFixed(2)}
+                </p>
+                {/* 🌟 Row specific tax indicator feedback */}
+                <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-0.5">
+                  Includes {ruleName} ({Number(rulePercent).toFixed(0)}%)
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="space-y-2 text-sm py-5">
+        <div className="flex justify-between mt-3">
+          <span>Subtotal</span>
+          <span>
+            {symbol}
+            {Number(subtotal || 0).toFixed(2)}
+          </span>
+        </div>
+
+        <div className="flex justify-between mt-3">
+          <span>{shippingMethodName}</span>
+          <span className={hasFreeShipping ? "text-[#00A63E]" : ""}>
+            {hasFreeShipping
+              ? "FREE"
+              : `${symbol}${Number(shipping || 0).toFixed(2)}`}
+          </span>
+        </div>
+
+        {/* 🌟 Global Breakdown Clean Label (Since value is already baked into price total) */}
+        <div className="flex justify-between mt-3 text-gray-500 italic">
+          <span>Total Included Tax</span>
+          <span>
+            {symbol}
+            {Number(tax || 0).toFixed(2)}
+          </span>
+        </div>
+      </div>
+
+      <hr className="my-4" />
+
+      <div className="flex justify-between font-semibold text-lg">
+        <span>Total</span>
+        <span>
+          {symbol}
+          {Number(total || 0).toFixed(2)}
+        </span>
+      </div>
+
+      {/* ... keep billing codes layout CTA and fields remaining ... */}
+    </div>
+  );
+}
+
+/* export default function OrderSummary({
+  items,
+  shippingMethod,
+  subtotal,
+  tax,
+  shipping,
+  total,
+  shippingMethodName = "Shipping",
+  deliveryDaysText,
+}: Props) {
+  const { symbol, rate } = useCurrencyStore();
   const { taxRate, taxName } = useGlobalStore();
 
   const isValidShippingMethod = (method: any): method is ShippingMethod => {
@@ -80,7 +192,7 @@ export default function OrderSummary({
 
               <div className="flex-1">
                 <p className="text-sm font-medium">{item.title}</p>
-                {/* Fixed line below using safely converted numeric values */}
+               
                 <p className="text-xs text-gray-500 space-x-0.5">
                   {symbol}
                   {itemPrice.toFixed(2)} x {itemQuantity} = {symbol}
@@ -101,7 +213,7 @@ export default function OrderSummary({
           </span>
         </div>
 
-        {/* DYNAMIC SHIPPING LABEL */}
+
         <div className="flex justify-between mt-3">
           <span>{shippingMethodName}</span>
           <span className={hasFreeShipping ? "text-[#00A63E]" : ""}>
@@ -166,7 +278,7 @@ export default function OrderSummary({
         <p className="mt-2 text-xs text-gray-500">Try: SPICE20 or WELCOME10</p>
       </div>
 
-      {/* FREE SHIPPING CTA */}
+    
       {!hasFreeShipping && amountForFreeShipping > 0 && (
         <>
           <div className="px-5 py-4 rounded-xl mt-5">
@@ -188,7 +300,7 @@ export default function OrderSummary({
       )}
     </div>
   );
-}
+} */
 
 {
   /* {items.map((item) => (

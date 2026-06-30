@@ -11,6 +11,7 @@ export interface CartItem {
   image: string;
 
   slug?: string;
+  category_id?: string;
   category_slug?: string;
 }
 
@@ -108,6 +109,7 @@ export const useCartStore = create<CartState>()(
               price: Number(item.price),
               quantity: item.quantity,
               image: item.image || "",
+              category_id: item.category_id || "",
               category_slug: item.category_slug || "",
             })),
           });
