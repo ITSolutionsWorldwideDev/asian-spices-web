@@ -6,7 +6,7 @@ import FlashSale from "./Flash_Sale";
 
 const categories = [
   {
-    title: "Indian Spices XYZ",
+    title: "Indian Spices XYZ234",
     subtitle: "Aromatic and bold flavors",
     products: 45,
     image: "indian-spices.webp",
