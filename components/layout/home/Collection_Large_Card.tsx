@@ -9,6 +9,7 @@ interface CardProps {
     products: number;
     image: string;
     gradient: string;
+    slug: string;
   };
 }
 

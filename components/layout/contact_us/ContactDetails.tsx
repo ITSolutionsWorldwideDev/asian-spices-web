@@ -2,85 +2,72 @@ import React from "react";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import Link from "next/link";
 
+const contactCards = [
+  {
+    icon: Mail,
+    label: "CONTACT US",
+    value: "support@asianspices.com",
+    subtext: "Respond within 24 hours",
+    href: "mailto:support@asianspices.com",
+  },
+  {
+    icon: Phone,
+    label: "CALL US",
+    value: "+1 (555) 123-4567",
+    subtext: "Mon-Fri 10AM-5PM EST",
+    href: "tel:+15551234567",
+  },
+  {
+    icon: MapPin,
+    label: "VISIT US",
+    value: "123 Spice Street, NY 10001",
+    subtext: "By appointment only",
+  },
+  {
+    icon: Clock,
+    label: "BUSINESS HOURS",
+    value: "Mon – Fri: 10AM – 6PM",
+    subtext: "Weekend: Closed",
+  },
+];
+
 export default function ContactDetails() {
   return (
-    <div className=" bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center p-6">
-      <div className="container mx-auto w-full">
-        {/* Header */}
-        <div className=" mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
-            Get in Touch
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mt-10">
-            Have a question? We'd love to hear from you. Send us a message and
-            we'll respond as soon as possible.
-          </p>
-        </div>
+    <div className="relative z-20 -mt-20 md:-mt-24 container mx-auto px-4 sm:px-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+        {contactCards.map((card) => {
+          const Icon = card.icon;
 
-        {/* Contact Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Email Card */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
-              <Mail className="w-7 h-7 text-orange-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">
-              Email Us
-            </h3>
-            <Link
-              href="mailto:support@asianspices.com"
-              className=" hover:text-orange-700 font-medium mb-3 block break-all"
+          return (
+            <div
+              key={card.label}
+              className="bg-white rounded-t-2xl shadow-lg px-6 py-8 text-center border-t-4 border-orange-500"
             >
-              support@asianspices.com
-            </Link>
-            <p className="text-sm text-gray-500">Response within 24 hours</p>
-          </div>
+              <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-orange-100">
+                <Icon className="h-5 w-5 text-orange-500" />
+              </div>
 
-          {/* Call Card */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
-              <Phone className="w-7 h-7 text-orange-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">
-              Call Us
-            </h3>
-            <Link
-              href="tel:+15551234567"
-              className=" hover:text-orange-700 font-medium mb-3 block"
-            >
-              +1 (555) 123-4567
-            </Link>
-            <p className="text-sm text-gray-500">Mon-Fri, 9AM-8PM EST</p>
-          </div>
+              <p className="mb-2 text-xs font-bold tracking-wide text-orange-500">
+                {card.label}
+              </p>
 
-          {/* Visit Card */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
-              <MapPin className="w-7 h-7 text-orange-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">
-              Visit Us
-            </h3>
-            <p className="text-gray-700 font-medium mb-3">
-              123 Spice Street, New York, NY 10001
-            </p>
-            <p className="text-sm text-gray-500">By appointment only</p>
-          </div>
+              {card.href ? (
+                <Link
+                  href={card.href}
+                  className="mb-2 block text-base font-bold text-gray-900 hover:text-orange-600"
+                >
+                  {card.value}
+                </Link>
+              ) : (
+                <p className="mb-2 text-base font-bold text-gray-900">
+                  {card.value}
+                </p>
+              )}
 
-          {/* Business Hours Card */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
-              <Clock className="w-7 h-7 text-orange-600" />
+              <p className="text-sm text-gray-500">{card.subtext}</p>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">
-              Business Hours
-            </h3>
-            <p className="text-gray-700 font-medium mb-3">
-              Monday - Friday: 9AM - 6PM EST
-            </p>
-            <p className="text-sm text-gray-500">Weekend: Closed</p>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );
