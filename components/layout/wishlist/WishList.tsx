@@ -276,23 +276,12 @@ export default function WishList() {
                       href={`/${item.category_slug || "products"}/${item.slug || item.id}`}
                     >
                       <h3 className="font-semibold">{item.name}</h3>
-                    </Link>
+                    </Link> 
 
-                    {/* <div className="mt-4">
-                      <span className="text-3xl font-bold text-orange-500">
-                        {symbol}
-                        {(rate * item.price).toFixed(2)}
-                      </span>
-                    </div> */}
-
-                    <div className="mt-4  text-sm text-orange-500">
-                      {/* <p className="font-normal mb-2">
-                        {symbol}
-                        {(rate * item.price).toFixed(2)}
-                      </p> */}
+                    <div className="mt-4  text-sm text-orange-500"> 
                       <p className="font-normal">
                         Total: {symbol}
-                        {(rate * item.price).toFixed(2)}
+                        {(rate * Number(item.price || 0)).toFixed(2)}
                       </p>
                     </div>
                   </div>
@@ -309,7 +298,7 @@ export default function WishList() {
                             id: item.id,
                             title: item.name,
                             image: item.image,
-                            price: item.price,
+                            price: Number(item.price || 0),
                             slug: item.slug,
                             category_slug: item.category_slug,
                           },

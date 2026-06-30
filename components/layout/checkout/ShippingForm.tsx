@@ -402,7 +402,8 @@ export default function ShippingForm({
               // const convertedPrice = option.price * rate;
               const convertedPrice = isFreeStandardApplied
                 ? 0
-                : option.price * rate;
+                : Number(option.price || 0) * rate;
+              //option.price
 
               return (
                 <label

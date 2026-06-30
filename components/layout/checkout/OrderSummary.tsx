@@ -34,7 +34,6 @@ export default function OrderSummary({
   const { symbol, rate } = useCurrencyStore();
   const { taxRate, taxName } = useGlobalStore();
 
-  // const shippingOption = SHIPPING_OPTIONS[shippingMethod];
   const isValidShippingMethod = (method: any): method is ShippingMethod => {
     return method in SHIPPING_OPTIONS;
   };
@@ -46,43 +45,48 @@ export default function OrderSummary({
 
   const convertedThreshold = FREE_SHIPPING_THRESHOLD * (rate || 1);
 
-  // const shippingOption = SHIPPING_OPTIONS[safeMethod];
   const amountForFreeShipping =
     subtotal < FREE_SHIPPING_THRESHOLD
       ? convertedThreshold - subtotal
       : 0;
 
-  // const hasFreeShipping = shipping === 0;
   const hasFreeShipping = shipping <= 0;
-
-
-  // const shippingPrice = shippingOption?.price ?? 0;
 
   return (
     <div className="bg-white rounded-xl border border-[#E5E7EB] p-6">
       <h2 className="font-semibold mb-4">Order Summary</h2>
 
       <div className="space-y-4 mb-6">
-        {items.map((item) => (
-          <div key={item.id} className="flex gap-4">
-            <div className="relative h-14 w-14 rounded-lg overflow-hidden">
-              <Image
-                src={`/assets/home/premium_collection/268598abe4d4ba567742332ae571b20ea98ce9d9.jpg`}
-                alt={item.title}
-                fill
-                className="object-cover"
-              />
-            </div>
+        {items.map((item) => {
+          // Safe conversions to numbers to completely prevent formatting crashes
+          const itemPrice = Number(item.price || 0);
+          const itemQuantity = Number(item.quantity || 1);
+          const itemTotalPrice = rate * (itemPrice * itemQuantity);
 
-            <div className="flex-1">
-              <p className="text-sm font-medium">
-                {item.title} 
-              </p>
-              <p className="text-xs text-gray-500 space-x-0.5">{symbol}{(item.price)?.toFixed(2)} x {item.quantity} = {symbol}
-                      {(rate * (item.price * item.quantity)).toFixed(2)}</p>
+          return (
+            <div key={item.id} className="flex gap-4">
+              <div className="relative h-14 w-14 rounded-lg overflow-hidden">
+                <Image
+                  src={`/assets/home/premium_collection/268598abe4d4ba567742332ae571b20ea98ce9d9.jpg`}
+                  alt={item.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <div className="flex-1">
+                <p className="text-sm font-medium">
+                  {item.title} 
+                </p>
+                {/* Fixed line below using safely converted numeric values */}
+                <p className="text-xs text-gray-500 space-x-0.5">
+                  {symbol}{itemPrice.toFixed(2)} x {itemQuantity} = {symbol}{itemTotalPrice.toFixed(2)}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
+        
       </div>
 
       <div className="space-y-2 text-sm py-5">
@@ -90,19 +94,9 @@ export default function OrderSummary({
           <span>Subtotal</span>
           <span>
             {symbol}
-            {subtotal.toFixed(2)}
+            {Number(subtotal || 0).toFixed(2)}
           </span>
         </div>
-
-        {/* SHIPPING */}
-        {/* <div className="flex justify-between mt-3">
-          <span>Shipping ({shippingOption.label})</span>
-          <span className={hasFreeShipping ? "text-[#00A63E]" : ""}>
-            {hasFreeShipping
-              ? "FREE"
-              : `${symbol}${(rate * shipping).toFixed(2)}`}
-          </span>
-        </div> */}
 
         {/* DYNAMIC SHIPPING LABEL */}
         <div className="flex justify-between mt-3">
@@ -110,20 +104,13 @@ export default function OrderSummary({
           <span className={hasFreeShipping ? "text-[#00A63E]" : ""}>
             {hasFreeShipping
               ? "FREE"
-              : `${symbol}${shipping.toFixed(2)}`}
+              : `${symbol}${Number(shipping || 0).toFixed(2)}`}
           </span>
         </div>
 
-        {/* <div className="flex justify-between mt-3">
-          <span>Tax (21%)</span>
-          <span>
-            {symbol}
-            {tax.toFixed(2)}
-          </span>
-        </div> */}
         <div className="flex justify-between mt-3">
-          <span>{taxName} ({(taxRate * 100).toFixed(2)}%)</span>
-          <span>{symbol}{(rate * tax).toFixed(2)}</span>
+          <span>{taxName} ({(Number(taxRate || 0) * 100).toFixed(2)}%)</span>
+          <span>{symbol}{(rate * Number(tax || 0)).toFixed(2)}</span>
         </div>
       </div>
 
@@ -133,7 +120,7 @@ export default function OrderSummary({
         <span>Total</span>
         <span>
           {symbol}
-          {(rate * total).toFixed(2)}
+          {(rate * Number(total || 0)).toFixed(2)}
         </span>
       </div>
 
@@ -192,3 +179,24 @@ export default function OrderSummary({
   );
 }
 
+{/* {items.map((item) => (
+          
+          <div key={item.id} className="flex gap-4">
+            <div className="relative h-14 w-14 rounded-lg overflow-hidden">
+              <Image
+                src={`/assets/home/premium_collection/268598abe4d4ba567742332ae571b20ea98ce9d9.jpg`}
+                alt={item.title}
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            <div className="flex-1">
+              <p className="text-sm font-medium">
+                {item.title} 
+              </p>
+              <p className="text-xs text-gray-500 space-x-0.5">{symbol}{(item.price)?.toFixed(2)} x {item.quantity} = {symbol}
+                      {(rate * (item.price * item.quantity)).toFixed(2)}</p>
+            </div>
+          </div>
+        ))} */}
