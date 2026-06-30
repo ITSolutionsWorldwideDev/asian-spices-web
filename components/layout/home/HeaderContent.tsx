@@ -92,7 +92,7 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
         {/* CTA Buttons */}
         <div className="flex gap-4">
           <button className="flex justify-center items-center bg-white text-black px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
-            <MdOutlineShoppingBag className="mr-3" /> Shop Collection
+          <Link href="/recipes" className="flex justify-center items-center">  <MdOutlineShoppingBag className="mr-3" /> Shop Collection</Link>
           </button>
 
           <button className="flex justify-center items-center border border-white px-6 py-3 rounded-xl font-semibold hover:bg-white/20 transition space-x-3">
