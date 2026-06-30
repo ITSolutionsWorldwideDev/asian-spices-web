@@ -1,4 +1,5 @@
-import Link from "next/link";
+// components/ui/ProductPageHeader.tsx
+"use client";
 import Nav from "./Nav";
 interface TextandImage {
   heading: string;
@@ -10,13 +11,17 @@ const ProductPageHeader = ({ heading, text, videoLink }: TextandImage) => {
   return (
     <section className="relative w-full h-screen ">
       <video
-        preload="metadata"
+        // preload="metadata"
+        preload="auto"
         autoPlay
         muted
         loop
         playsInline
         controls={false}
-        className="w-full h-full absolute inset-0 object-cover"
+        className="w-full h-full absolute inset-0 object-cover opacity-0 transition-opacity duration-500"
+        onCanPlay={(e) => {
+          e.currentTarget.classList.remove('opacity-0');
+        }}
       >
         <source src={`/assets${videoLink}`} type="video/mp4" />
       </video>

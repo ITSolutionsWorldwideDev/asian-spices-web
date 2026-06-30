@@ -78,7 +78,7 @@ export default function OrderSummary({
               <p className="text-sm font-medium">
                 {item.title} 
               </p>
-              <p className="text-xs text-gray-500 space-x-0.5">{symbol}{item.price.toFixed(2)} x {item.quantity} = {symbol}
+              <p className="text-xs text-gray-500 space-x-0.5">{symbol}{(item.price)?.toFixed(2)} x {item.quantity} = {symbol}
                       {(rate * (item.price * item.quantity)).toFixed(2)}</p>
             </div>
           </div>

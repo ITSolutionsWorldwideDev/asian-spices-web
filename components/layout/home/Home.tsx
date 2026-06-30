@@ -1,6 +1,6 @@
 // apps/web/components/layout/home/Home.tsx
 
-import React from "react";
+import React, { Suspense } from "react";
 import Header from "./Header";
 import AnnouncementBar from "./Announcement_Bar";
 import HeroSection from "./Collections";
@@ -15,14 +15,19 @@ import Reviews from "@/components/ui/Reviews";
 import Footer from "@/components/ui/Footer";
 import RegisterOnAppModal from "@/components/ui/RegisterOnAppModal";
 
-// import dynamic from "next/dynamic";
-
-// const RegisterOnAppModal = dynamic(
-//   () => import("@/components/ui/RegisterOnAppModal"),
-//   {
-//     ssr: false,
-//   }
-// );
+function DynamicHomeContent() {
+  return (
+    <>
+      <HeroSection />
+      {/* <FlashSale />  */}
+      <Premium_Spice_Collection />
+      <Smart_Appliances />
+      <Story />
+      <Spicy_Story />
+      <WhyChooseUs />
+    </>
+  );
+}
 
 const Homei = () => {
   return (
@@ -31,14 +36,12 @@ const Homei = () => {
 
       <Header />
       <AnnouncementBar />
-      <HeroSection />
-      {/* <FlashSale />  */}
-      <Premium_Spice_Collection />
-      <Smart_Appliances />
-      <Story />
-      <Spicy_Story />
-      <WhyChooseUs />
-      {/* <RegisterOnApp /> */}
+
+      {/* Suspense fallback blocks deep backend queries from stalling the top video slider */}
+      <Suspense fallback={<div className="text-center py-20 text-gray-400">Loading collection options...</div>}>
+        <DynamicHomeContent />
+      </Suspense>
+
       <div className="bg-gray-100">
         <Reviews />
       </div>
@@ -49,6 +52,29 @@ const Homei = () => {
 
 export default Homei;
 
+
+// const Homei = () => {
+//   return (
+//     <div>
+//       <RegisterOnAppModal />
+
+//       <Header />
+//       <AnnouncementBar />
+//       <HeroSection />
+//       {/* <FlashSale />  */}
+//       <Premium_Spice_Collection />
+//       <Smart_Appliances />
+//       <Story />
+//       <Spicy_Story />
+//       <WhyChooseUs />
+//       {/* <RegisterOnApp /> */}
+//       <div className="bg-gray-100">
+//         <Reviews />
+//       </div>
+//       <Footer />
+//     </div>
+//   );
+// };
 // const menuData = {
 //   name: "Healthy Living",
 //   children: [
@@ -75,3 +101,12 @@ export default Homei;
 //     },
 //   ],
 // };
+
+// import dynamic from "next/dynamic";
+
+// const RegisterOnAppModal = dynamic(
+//   () => import("@/components/ui/RegisterOnAppModal"),
+//   {
+//     ssr: false,
+//   }
+// );
