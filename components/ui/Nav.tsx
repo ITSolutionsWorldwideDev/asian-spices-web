@@ -14,7 +14,7 @@ const Nav: React.FC = () => {
   return (
     <div className="relative inset-0 px-4 py-3 sm:p-6 z-50">
       <div>
-        <UpperSelection />
+        
       </div>
       {/* Navbar */}
       <nav className="flex items-center justify-between px-3 sm:px-6 container mx-auto text-xs sm:text-sm">

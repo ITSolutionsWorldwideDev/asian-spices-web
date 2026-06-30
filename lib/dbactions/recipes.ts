@@ -298,3 +298,23 @@ export async function getRecipeById(id: string) {
 
   return rows[0] || null;
 }
+
+export async function getHomeRecipes(limit = 8) {
+  const { rows } = await runQuery(
+    `
+    SELECT
+      r.id,
+      r.title,
+      r.slug,
+      r.short_description,
+      r.thumbnail_url
+    FROM recipes r
+    WHERE r.status = 'published'
+    ORDER BY r.is_featured DESC, r.created_at DESC
+    LIMIT $1
+    `,
+    [limit],
+  );
+
+  return rows;
+}

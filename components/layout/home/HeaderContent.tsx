@@ -7,6 +7,7 @@ import { MdOutlineShoppingBag } from "react-icons/md";
 import { FaTruckFast } from "react-icons/fa6";
 import { CiTrophy } from "react-icons/ci";
 import { LuSalad } from "react-icons/lu";
+import Link from "next/link";
 
 interface FrameStats {
   Curcumin_Content?: string;
@@ -95,7 +96,7 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
           </button>
 
           <button className="flex justify-center items-center border border-white px-6 py-3 rounded-xl font-semibold hover:bg-white/20 transition space-x-3">
-            <FaRegCirclePlay /> <span>Watch Story</span>
+            <FaRegCirclePlay /> <span><Link href="/about">Watch Story</Link></span>
           </button>
         </div>
 

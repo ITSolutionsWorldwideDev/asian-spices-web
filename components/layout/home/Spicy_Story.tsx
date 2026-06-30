@@ -3,55 +3,18 @@
 import { ArrowRight } from "lucide-react";
 import RecipesProductCard from "@/components/ui/RecipesProductCard";
 import Link from "next/link";
+import { getHomeRecipes } from "@/lib/dbactions/recipes";
 
-const recipes_product_data = [
-  {
-    title: "Chicken Biryani Recipe",
-    image: "0735f42afcaa80549c8b8ffa399da983921128e8.png",
-    description:
-      "Chicken Biryani is a fragrant South Asian dish made by layering aromatic basmati rice with tender, spiced chicken, caramelized onions, fresh herbs, and saffron. Slow-cooked using the traditional dum method, it blends rich flavors and textures, making it a festive favorite for family gatherings and celebrations.",
-  },
-  {
-    title: "Chicken Pizza Recipe",
-    image: "511d75edd299a537dadb2933ba8ea0178e2c3185.png",
-    description:
-      "A golden crust topped with tender chicken chunks, rich tomato sauce, and a generous layer of melted mozzarella and cheddar cheese. Seasoned with herbs and spices, this pizza blends savory chicken flavor with gooey, creamy cheese — a hearty favorite for casual meals, parties, and family gatherings.",
-  },
-  {
-    title: "Chicken Biryani Recipe",
-    image: "0735f42afcaa80549c8b8ffa399da983921128e8.png",
-    description:
-      "Chicken Biryani is a fragrant South Asian dish made by layering aromatic basmati rice with tender, spiced chicken, caramelized onions, fresh herbs, and saffron. Slow-cooked using the traditional dum method, it blends rich flavors and textures, making it a festive favorite for family gatherings and celebrations.",
-  },
-  {
-    title: "Chicken Pizza Recipe",
-    image: "511d75edd299a537dadb2933ba8ea0178e2c3185.png",
-    description:
-      "A golden crust topped with tender chicken chunks, rich tomato sauce, and a generous layer of melted mozzarella and cheddar cheese. Seasoned with herbs and spices, this pizza blends savory chicken flavor with gooey, creamy cheese — a hearty favorite for casual meals, parties, and family gatherings.",
-  },
-  {
-    title: "Chicken Biryani Recipe",
-    image: "0735f42afcaa80549c8b8ffa399da983921128e8.png",
-    description:
-      "Chicken Biryani is a fragrant South Asian dish made by layering aromatic basmati rice with tender, spiced chicken, caramelized onions, fresh herbs, and saffron. Slow-cooked using the traditional dum method, it blends rich flavors and textures, making it a festive favorite for family gatherings and celebrations.",
-  },
-  {
-    title: "Chicken Pizza Recipe",
-    image: "511d75edd299a537dadb2933ba8ea0178e2c3185.png",
-    description:
-      "A golden crust topped with tender chicken chunks, rich tomato sauce, and a generous layer of melted mozzarella and cheddar cheese. Seasoned with herbs and spices, this pizza blends savory chicken flavor with gooey, creamy cheese — a hearty favorite for casual meals, parties, and family gatherings.",
-  },
+export default async function Spicy_Story() {
+  const recipes = await getHomeRecipes(8);
 
-  {
-    title: "Fish",
-    image: "recipe-5.png",
+  const recipeCards = recipes.map((recipe) => ({
+    title: recipe.title,
+    slug: recipe.slug,
+    description: recipe.short_description || "",
+    thumbnail_url: recipe.thumbnail_url,
+  }));
 
-    description:
-      "A golden crust topped with tender chicken chunks, rich tomato sauce, and a generous layer of melted mozzarella and cheddar cheese. Seasoned with herbs and spices, this pizza blends savory chicken flavor with gooey, creamy cheese — a hearty favorite for casual meals, parties, and family gatherings.",
-  },
-];
-
-export default function Spicy_Story() {
   return (
     <section className="w-full overflow-hidden py-16">
       <div className="container mx-auto px-4">
@@ -60,31 +23,34 @@ export default function Spicy_Story() {
         </h2>
       </div>
 
- 
-      <div className="container mx-auto px-4 overflow-hidden lg:py-4">
- 
-        <div className="flex gap-10 w-max animate-marquee hover:[animation-play-state:paused]">
- 
-          {recipes_product_data.map((card, index) => (
-            <div
-              key={`orig-${index}`}
-              className="bg-white rounded-3xl shadow-xl w-[300px] md:w-[400px] flex-shrink-0"
-            >
-              <RecipesProductCard card={card} />
-            </div>
-          ))}
-     
-          {recipes_product_data.map((card, index) => (
-            <div
-              key={`clone-${index}`}
-              className="bg-white rounded-3xl shadow-xl w-[300px] md:w-[400px] flex-shrink-0"
-              aria-hidden="true"
-            >
-              <RecipesProductCard card={card} />
-            </div>
-          ))}
+      {recipeCards.length > 0 ? (
+        <div className="container mx-auto px-4 overflow-hidden lg:py-4">
+          <div className="flex gap-10 w-max animate-marquee hover:[animation-play-state:paused]">
+            {recipeCards.map((card) => (
+              <div
+                key={`orig-${card.slug}`}
+                className="bg-white rounded-3xl shadow-xl w-[300px] md:w-[400px] flex-shrink-0"
+              >
+                <RecipesProductCard card={card} />
+              </div>
+            ))}
+
+            {recipeCards.map((card) => (
+              <div
+                key={`clone-${card.slug}`}
+                className="bg-white rounded-3xl shadow-xl w-[300px] md:w-[400px] flex-shrink-0"
+                aria-hidden="true"
+              >
+                <RecipesProductCard card={card} />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <p className="text-center text-gray-500">
+          No recipes available yet. Check back soon!
+        </p>
+      )}
 
       <div className="flex justify-center mt-14 space-x-5">
         <button className="cursor-pointer relative px-6 py-3 font-bold text-white text-sm bg-black rounded-lg overflow-hidden group">

@@ -198,9 +198,8 @@ const ResponsiveNavigation = () => {
                   {activeLink === link.name && isMenuOpen && (
                     <div className="absolute top-full mt-5 z-50">
                       {link.name === "Healthy Living" ? (
-                        /* Changed from 'fixed' to 'absolute' and offset to align gracefully on screen */
-                        <div className="absolute top-full -left-48 xl:-left-64 z-50">
-                          <div className="w-[85vw] max-w-5xl bg-gray-100 rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                        <div className="fixed left-1/2 top-20 -translate-x-1/2 z-50 w-[85vw] max-w-5xl">
+                          <div className="bg-gray-100 rounded-xl shadow-md border border-gray-200 overflow-hidden">
                             {/* Top Section */}
                             <div className="grid grid-cols-4 gap-8 p-6">
                               {link.children.map((section, index) => (
