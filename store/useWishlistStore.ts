@@ -110,14 +110,27 @@ export const useWishlistStore = create<WishlistState>()(
       // isInWishlist: (id) => get().items.some((item) => item.id === id),
       isInWishlist: (id) =>
         get().items.some((item) => String(item.id) === String(id)),
-      // setWishlist: (items) => set({ items }),
-      setWishlist: (items) =>
+      
+      setWishlist: (items) => {
+        if (!Array.isArray(items)) return;
         set({
-          items: items.filter(
-            (item) =>
-              item && item.id && item.name && typeof item.price === "number",
-          ),
-        }),
+          items: items
+            .map((item) => ({
+              ...item,
+              name: item.name || "Product",
+              price: Number(item.price || 0), // ✅ Force converted to JavaScript number
+            }))
+            .filter((item) => item.id && item.name),
+        });
+      },
+
+      // setWishlist: (items) =>
+      //   set({
+      //     items: items.filter(
+      //       (item) =>
+      //         item && item.id && item.name && typeof item.price === "number",
+      //     ),
+      //   }),
       // clearWishlist: () => set({ items: [] }),
       clearWishlist: async (isLoggedIn) => {
         set({ items: [] }); // Clear local storage instantly

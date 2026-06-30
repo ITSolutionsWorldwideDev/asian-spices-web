@@ -26,6 +26,9 @@ export async function GET() {
 
     if (!cartRes.rowCount) return NextResponse.json([]);
 
+    // LEFT JOIN store_product_images pi ON pi.product_id = p.id AND pi.is_primary = true
+    // LEFT JOIN media md ON md.media_id = pi.url::int
+
     const items = await client.query(
       `
         SELECT 
@@ -33,11 +36,17 @@ export async function GET() {
           sci.quantity,
           p.name AS title,
           p.price::numeric AS price,
-          md.file_url AS image
+          img.file_url AS image 
         FROM store_cart_items sci
-        LEFT JOIN store_products p ON p.id = sci.product_id
-        LEFT JOIN store_product_images pi ON pi.product_id = p.id AND pi.is_primary = true
-        LEFT JOIN media md ON md.media_id = pi.url::int
+        LEFT JOIN store_products p ON p.id = sci.product_id        
+        LEFT JOIN (
+          SELECT DISTINCT ON (pi.product_id) 
+            pi.product_id, 
+            md.file_url
+          FROM store_product_images pi
+          LEFT JOIN media md ON md.media_id = pi.url::int
+          ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
+        ) img ON img.product_id = p.id
         WHERE sci.cart_id = $1
       `,
       [cartRes.rows[0].id],

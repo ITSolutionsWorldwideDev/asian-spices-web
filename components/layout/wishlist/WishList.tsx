@@ -30,11 +30,9 @@ export default function WishList() {
 
   // const isLoggedIn = !!session?.user;
 
-  const { symbol, rate } = useCurrencyStore();
+  const { symbol, rate = 1 } = useCurrencyStore();
   const { addToCart } = useCartStore();
-
   const [isHydrated, setIsHydrated] = useState(false);
-  // const isHydrated = useWishlistStore((state) => state._hasHydrated);
 
   const {
     items: wishlist,
@@ -43,20 +41,16 @@ export default function WishList() {
     setWishlist,
   } = useWishlistStore();
 
-  // useEffect(() => {
-  //   setIsHydrated(true);
-  // }, []);
-
   useEffect(() => {
-    // Check if it's already hydrated, otherwise wait for it
     if (useWishlistStore.persist?.hasHydrated()) {
       setIsHydrated(true);
     } else {
-      const unsub = useWishlistStore.persist.onHydrate(() => setIsHydrated(true));
+      const unsub = useWishlistStore.persist.onHydrate(() =>
+        setIsHydrated(true),
+      );
       return () => unsub();
     }
   }, []);
-
 
   useEffect(() => {
     if (status === "loading") return;
@@ -75,36 +69,15 @@ export default function WishList() {
       };
       fetchDatabaseWishlist();
     }
-    // Fix: Removed the naked global `else { clearWishlist() }` which was 
-    // accidentally wiping guest user stores on page initialize.
   }, [isLoggedIn, status, setWishlist]);
 
-  /* const handleClearAll = async () => {
-    clearWishlist(); // Instantly flushes local storage state
-    
-    if (isLoggedIn) {
-      try {
-        // Optimistically clear all elements on backend if authenticated
-        await fetch("/api/wishlist", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ product_id: "all" }), // Or your bulk API clear parameter
-        });
-      } catch (err) {
-        console.error("Failed to clear database wishlist items", err);
-      }
-    }
-  }; */
-
-  // Handle loading or hydration states cleanly
   if (!isHydrated || status === "loading") {
-    return <div className="py-20 text-center text-gray-500">Loading your selections...</div>;
+    return (
+      <div className="py-20 text-center text-gray-500">
+        Loading your selections...
+      </div>
+    );
   }
-
-  // Handle loading or hydration states cleanly
-  // if (!isHydrated || status === "loading") {
-  //   return <div className="py-20 text-center text-gray-500">Loading your selections...</div>;
-  // }
 
   if (wishlist.length === 0) {
     return <EmptyWishList />;
@@ -114,15 +87,6 @@ export default function WishList() {
     (acc, item) => acc + Number(item.price || 0),
     0,
   );
-
-  // const totalValue = wishlist.reduce(
-  //   (acc, item) => acc + Number(item.price || 0),
-  //   0,
-  // );
-
-  // if (wishlist.length === 0) {
-  //   return <EmptyWishList />;
-  // }
 
   return (
     <section className="py-10">
@@ -237,102 +201,94 @@ export default function WishList() {
         ========================================================= */}
 
         <div className="mt-10 space-y-5">
-          {wishlist.map((item, index) => (
-            <div
-              key={`${item.id}-${index}`}
-              className="bg-white rounded-3xl border border-gray-100 p-5 shadow-sm hover:shadow-xl transition"
-            >
-              <div className="flex flex-col lg:flex-row gap-6">
-                {/* IMAGE */}
+          {wishlist.map((item, index) => {
+            // ✅ Defensive fallback strategy for names coming from different API interfaces
+            const itemTitle = item.name || "Product item";
+            const itemCategorySlug = item.category_slug || "products";
+            const itemProductSlug = item.slug || item.id;
 
-                <Link
-                  href={`/${item.category_slug}/${item.slug}`}
-                  className="shrink-0"
-                >
-                  <div className="relative w-full lg:w-36 h-36 overflow-hidden rounded-2xl bg-gray-100">
-                    <Image
-                      src={item.image || "/images/placeholder.png"}
-                      alt={item.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </Link>
-
-                {/* CONTENT */}
-
-                <div className="flex-1 flex flex-col lg:flex-row justify-between gap-6">
-                  {/* LEFT */}
-
-                  <div className="flex-1">
-                    {/* <Link
-                      href={`/${item.category_slug}/${item.slug}`}
-                    >
-                      <h3 className="text-2xl font-bold text-gray-900 hover:text-orange-500 transition">
-                        {item.name}
-                      </h3>
-                    </Link> */}
-                    <Link
-                      href={`/${item.category_slug || "products"}/${item.slug || item.id}`}
-                    >
-                      <h3 className="font-semibold">{item.name}</h3>
-                    </Link> 
-
-                    <div className="mt-4  text-sm text-orange-500"> 
-                      <p className="font-normal">
-                        Total: {symbol}
-                        {(rate * Number(item.price || 0)).toFixed(2)}
-                      </p>
+            return (
+              <div
+                key={`${item.id}-${index}`}
+                className="bg-white rounded-3xl border border-gray-100 p-5 shadow-sm hover:shadow-xl transition"
+              >
+                <div className="flex flex-col lg:flex-row gap-6">
+                  {/* IMAGE */}
+                  <Link
+                    href={`/${itemCategorySlug}/${itemProductSlug}`}
+                    className="shrink-0"
+                  >
+                    <div className="relative w-full lg:w-36 h-36 overflow-hidden rounded-2xl bg-gray-100">
+                      <Image
+                        src={item.image || "/images/placeholder.png"}
+                        alt={itemTitle}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
-                  </div>
+                  </Link>
 
-                  {/* ACTIONS */}
+                  {/* CONTENT */}
+                  <div className="flex-1 flex flex-col lg:flex-row justify-between gap-6">
+                    <div className="flex-1">
+                      <Link href={`/${itemCategorySlug}/${itemProductSlug}`}>
+                        <h3 className="font-semibold text-xl text-gray-900 hover:text-orange-500 transition">
+                          {itemTitle}
+                        </h3>
+                      </Link>
 
-                  <div className="flex flex-col gap-3 min-w-[220px]">
-                    {/* ADD TO CART */}
+                      <div className="mt-4 text-sm text-orange-500">
+                        <p className="font-semibold">
+                          Price: {symbol}
+                          {(rate * Number(item.price || 0)).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
 
-                    <button
-                      onClick={() => {
-                        addToCart(
-                          {
-                            id: item.id,
-                            title: item.name,
-                            image: item.image,
-                            price: Number(item.price || 0),
-                            slug: item.slug,
-                            category_slug: item.category_slug,
-                          },
-                          isLoggedIn,
-                        );
-                      }}
-                      className="bg-orange-500 hover:bg-orange-600 transition text-white rounded-xl py-3 px-5 font-semibold flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <ShoppingCart size={18} />
-                      Add To Cart
-                    </button>
-
-                    {/* VIEW */}
-
-                    <Link href={`/${item.category_slug}/${item.slug}`}>
-                      <button className="w-full border border-gray-300 hover:bg-gray-50 transition rounded-xl py-3 px-5 font-medium cursor-pointer">
-                        View Details
+                    {/* ACTIONS */}
+                    <div className="flex flex-col gap-3 min-w-[220px]">
+                      {/* ADD TO CART */}
+                      <button
+                        onClick={() => {
+                          addToCart(
+                            {
+                              id: item.id,
+                              title: itemTitle, // ✅ Syncing fixed title parameter
+                              image: item.image,
+                              price: Number(item.price || 0),
+                              slug: item.slug,
+                              category_slug: itemCategorySlug,
+                            },
+                            isLoggedIn,
+                          );
+                        }}
+                        className="bg-orange-500 hover:bg-orange-600 transition text-white rounded-xl py-3 px-5 font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <ShoppingCart size={18} />
+                        Add To Cart
                       </button>
-                    </Link>
 
-                    {/* REMOVE */}
+                      {/* VIEW DETAILS */}
+                      <Link href={`/${itemCategorySlug}/${itemProductSlug}`}>
+                        <button className="w-full border border-gray-300 hover:bg-gray-50 transition rounded-xl py-3 px-5 font-medium cursor-pointer">
+                          View Details
+                        </button>
+                      </Link>
 
-                    <button
-                      onClick={() => removeFromWishlist(item.id, isLoggedIn)}
-                      className="border border-red-200 text-red-500 hover:bg-red-50 transition rounded-xl py-3 px-5 font-medium flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <Trash2 size={18} />
-                      Remove
-                    </button>
+                      {/* REMOVE */}
+                      <button
+                        onClick={() => removeFromWishlist(item.id, isLoggedIn)}
+                        className="border border-red-200 text-red-500 hover:bg-red-50 transition rounded-xl py-3 px-5 font-medium flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <Trash2 size={18} />
+                        Remove
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* =========================================================
@@ -374,3 +330,94 @@ export default function WishList() {
     </section>
   );
 }
+/* <div className="mt-10 space-y-5">
+          {wishlist.map((item, index) => (
+            <div
+              key={`${item.id}-${index}`}
+              className="bg-white rounded-3xl border border-gray-100 p-5 shadow-sm hover:shadow-xl transition"
+            >
+              <div className="flex flex-col lg:flex-row gap-6">
+               
+
+                <Link
+                  href={`/${item.category_slug}/${item.slug}`}
+                  className="shrink-0"
+                >
+                  <div className="relative w-full lg:w-36 h-36 overflow-hidden rounded-2xl bg-gray-100">
+                    <Image
+                      src={item.image || "/images/placeholder.png"}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </Link>
+
+              
+
+                <div className="flex-1 flex flex-col lg:flex-row justify-between gap-6">
+             
+
+                  <div className="flex-1">
+ 
+                    <Link
+                      href={`/${item.category_slug || "products"}/${item.slug || item.id}`}
+                    >
+                      <h3 className="font-semibold">{item.name}</h3>
+                    </Link> 
+
+                    <div className="mt-4  text-sm text-orange-500"> 
+                      <p className="font-normal">
+                        Total: {symbol}
+                        {(rate * Number(item.price || 0)).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+ 
+
+                  <div className="flex flex-col gap-3 min-w-[220px]">
+              
+
+                    <button
+                      onClick={() => {
+                        addToCart(
+                          {
+                            id: item.id,
+                            title: item.name,
+                            image: item.image,
+                            price: Number(item.price || 0),
+                            slug: item.slug,
+                            category_slug: item.category_slug,
+                          },
+                          isLoggedIn,
+                        );
+                      }}
+                      className="bg-orange-500 hover:bg-orange-600 transition text-white rounded-xl py-3 px-5 font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <ShoppingCart size={18} />
+                      Add To Cart
+                    </button>
+
+ 
+
+                    <Link href={`/${item.category_slug}/${item.slug}`}>
+                      <button className="w-full border border-gray-300 hover:bg-gray-50 transition rounded-xl py-3 px-5 font-medium cursor-pointer">
+                        View Details
+                      </button>
+                    </Link>
+
+     
+
+                    <button
+                      onClick={() => removeFromWishlist(item.id, isLoggedIn)}
+                      className="border border-red-200 text-red-500 hover:bg-red-50 transition rounded-xl py-3 px-5 font-medium flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <Trash2 size={18} />
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div> */

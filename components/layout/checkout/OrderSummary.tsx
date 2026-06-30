@@ -7,7 +7,11 @@ import Link from "next/link";
 import { CartItem } from "@/store/useCartStore";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
-import { SHIPPING_OPTIONS, ShippingMethod, FREE_SHIPPING_THRESHOLD } from "@/lib/pricing";
+import {
+  SHIPPING_OPTIONS,
+  ShippingMethod,
+  FREE_SHIPPING_THRESHOLD,
+} from "@/lib/pricing";
 
 interface Props {
   items: CartItem[];
@@ -42,13 +46,10 @@ export default function OrderSummary({
     ? shippingMethod
     : "standard";
 
-
   const convertedThreshold = FREE_SHIPPING_THRESHOLD * (rate || 1);
 
   const amountForFreeShipping =
-    subtotal < FREE_SHIPPING_THRESHOLD
-      ? convertedThreshold - subtotal
-      : 0;
+    subtotal < FREE_SHIPPING_THRESHOLD ? convertedThreshold - subtotal : 0;
 
   const hasFreeShipping = shipping <= 0;
 
@@ -67,26 +68,28 @@ export default function OrderSummary({
             <div key={item.id} className="flex gap-4">
               <div className="relative h-14 w-14 rounded-lg overflow-hidden">
                 <Image
-                  src={`/assets/home/premium_collection/268598abe4d4ba567742332ae571b20ea98ce9d9.jpg`}
-                  alt={item.title}
+                  src={
+                    item.image ||
+                    "/assets/home/premium_collection/268598abe4d4ba567742332ae571b20ea98ce9d9.jpg"
+                  }
+                  alt={item.title || "Product item"}
                   fill
                   className="object-cover"
                 />
               </div>
 
               <div className="flex-1">
-                <p className="text-sm font-medium">
-                  {item.title} 
-                </p>
+                <p className="text-sm font-medium">{item.title}</p>
                 {/* Fixed line below using safely converted numeric values */}
                 <p className="text-xs text-gray-500 space-x-0.5">
-                  {symbol}{itemPrice.toFixed(2)} x {itemQuantity} = {symbol}{itemTotalPrice.toFixed(2)}
+                  {symbol}
+                  {itemPrice.toFixed(2)} x {itemQuantity} = {symbol}
+                  {itemTotalPrice.toFixed(2)}
                 </p>
               </div>
             </div>
           );
         })}
-        
       </div>
 
       <div className="space-y-2 text-sm py-5">
@@ -109,8 +112,13 @@ export default function OrderSummary({
         </div>
 
         <div className="flex justify-between mt-3">
-          <span>{taxName} ({(Number(taxRate || 0) * 100).toFixed(2)}%)</span>
-          <span>{symbol}{(rate * Number(tax || 0)).toFixed(2)}</span>
+          <span>
+            {taxName} ({(Number(taxRate || 0) * 100).toFixed(2)}%)
+          </span>
+          <span>
+            {symbol}
+            {(rate * Number(tax || 0)).toFixed(2)}
+          </span>
         </div>
       </div>
 
@@ -147,7 +155,10 @@ export default function OrderSummary({
             className="w-full sm:flex-1 px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
           />
 
-          <button disabled className="w-full sm:w-auto px-6 py-2.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+          <button
+            disabled
+            className="w-full sm:w-auto px-6 py-2.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          >
             Apply
           </button>
         </div>
@@ -179,7 +190,8 @@ export default function OrderSummary({
   );
 }
 
-{/* {items.map((item) => (
+{
+  /* {items.map((item) => (
           
           <div key={item.id} className="flex gap-4">
             <div className="relative h-14 w-14 rounded-lg overflow-hidden">
@@ -199,4 +211,5 @@ export default function OrderSummary({
                       {(rate * (item.price * item.quantity)).toFixed(2)}</p>
             </div>
           </div>
-        ))} */}
+        ))} */
+}
