@@ -2,26 +2,40 @@ import React from "react";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+
 interface RecipeCard {
   title: string;
-  image: string;
+  slug?: string;
   description: string;
+  thumbnail_url?: string | null;
+  image?: string;
 }
+
 interface RecipesProductCardProps {
   card: RecipeCard;
 }
 
 const RecipesProductCard = ({ card }: RecipesProductCardProps) => {
-  const navigationLink = card.title.toLowerCase().replace(/\s+/g, "");
+  const imageSrc =
+    card.thumbnail_url ||
+    (card.image ? `/assets/recipes/${card.image}` : "/placeholder-food.jpg");
+
+  const recipeSlug =
+    card.slug ||
+    card.title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
 
   return (
     <div className="h-auto cursor-pointer overflow-hidden">
-      <div className="relative  h-64 rounded-2xl overflow-hidden m-5">
+      <div className="relative h-64 rounded-2xl overflow-hidden m-5">
         <Image
-          src={`/assets/recipes/${card.image}`}
-          alt="food"
+          src={imageSrc}
+          alt={card.title}
           fill
-          className=" object-cover"
+          className="object-cover"
         />
       </div>
       <div className="px-7 pb-7 overflow-hidden">
@@ -31,17 +45,10 @@ const RecipesProductCard = ({ card }: RecipesProductCardProps) => {
           {card.description}
         </p>
 
-        <button className="w-full flex items-center justify-end  gap-2 text-sm font-semibold text-black  transition cursor-pointer">
+        <button className="w-full flex items-center justify-end gap-2 text-sm font-semibold text-black transition cursor-pointer">
           <Link
-            href={{
-              pathname: `/recipes/${navigationLink}`,
-              query: {
-                title: card.title,
-                description: card.description,
-                image: card.image,
-              },
-            }}
-            className="flex items-center justify-center "
+            href={`/recipes/${recipeSlug}`}
+            className="flex items-center justify-center"
           >
             Explore{" "}
             <ArrowRight size={16} className="hover:translate-x-20 mt-1 ml-1" />

@@ -30,7 +30,7 @@ export default function UpperSelection() {
     <nav className="flex items-center justify-between px-6 container mx-auto">
       <div></div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-2">
         {/* COUNTRY disabled*/}
         <select
           value={selectedCountry}

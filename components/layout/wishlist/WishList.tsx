@@ -115,6 +115,8 @@ export default function WishList() {
     0,
   );
 
+
+
   // const totalValue = wishlist.reduce(
   //   (acc, item) => acc + Number(item.price || 0),
   //   0,
@@ -291,7 +293,7 @@ export default function WishList() {
                         {(rate * item.price).toFixed(2)}
                       </p> */}
                       <p className="font-normal">
-                        Total: {symbol}
+                        Price: {symbol}
                         {(rate * item.price).toFixed(2)}
                       </p>
                     </div>

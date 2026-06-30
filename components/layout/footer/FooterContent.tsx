@@ -26,7 +26,7 @@ const FooterContent = () => {
           className="mb-6"
         />
 
-        <div className="flex items-center gap-4 text-xl mt-20  ">
+        {/* <div className="flex items-center gap-4 text-xl mt-20  ">
           <div className="rounded-full p-1  bg-white/40">
             <FaFacebookF className=" text-black cursor-pointer hover:scale-110 duration-150    " />
           </div>
@@ -44,9 +44,9 @@ const FooterContent = () => {
           </div>
           <div className="rounded-full p-1  bg-white/40">
             {/* <FaLinkedinIn className="cursor-pointer hover:scale-110 duration-150 " /> */}
-            <FaTiktok className="cursor-pointer hover:scale-110 duration-150 " />
-          </div>
-        </div>
+            {/* <FaTiktok className="cursor-pointer hover:scale-110 duration-150 " /> */}
+          {/* </div> */}
+        {/* </div> */} 
       </div>
 
       {/* Menu */}
@@ -65,7 +65,7 @@ const FooterContent = () => {
             </Link>
           </li>
           <li>
-            <Link href="about" className="hover:underline">
+            <Link href="/about" className="hover:underline">
               About
             </Link>
           </li>
@@ -76,7 +76,7 @@ const FooterContent = () => {
           </li>
           {/* { name: "Partner Platform", hreflink: "partnerplatform" }, */}
           <li>
-            <Link href="#" className="hover:underline">
+            <Link href="contactus" className="hover:underline">
               Contact Us
             </Link>
           </li>
