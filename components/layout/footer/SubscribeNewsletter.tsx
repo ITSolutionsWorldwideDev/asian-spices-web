@@ -1,66 +1,102 @@
 "use client";
-import React from "react";
-import { AiOutlineMail } from "react-icons/ai";
-import { useState } from "react";
-const SubscribeNewsletter = () => {
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleSubscribe = async () => {
-    if (!email) return alert("Please enter email");
+import React, { useState } from "react";
+import { AiOutlineMail } from "react-icons/ai";
+import { useZodForm } from "@/hooks/useZodForm";
+import {
+  newsletterSchema,
+  type NewsletterFormData,
+} from "@/lib/validation/newsletter";
+import { getErrorMessage } from "@/lib/form/getErrorMessage";
+
+const SubscribeNewsletter = () => {
+  const [status, setStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useZodForm(newsletterSchema, { email: "" });
+
+  const onSubmit = async (data: NewsletterFormData) => {
+    setStatus(null);
 
     try {
-      setLoading(true);
-
       const res = await fetch("/api/newsletter_subscriber", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify(data),
       });
 
-      const data = await res.json();
+      const result = await res.json();
 
-      if (data.success) {
-        alert("Subscribed successfully Thanks for Subscribing 🎉");
-        setEmail("");
-      } else {
-        alert(data.message);
+      if (result.success) {
+        setStatus({
+          type: "success",
+          message: "Subscribed successfully. Thanks for subscribing!",
+        });
+        reset();
+        return;
       }
-    } catch (error) {
-      alert("Something went wrong Please try again later");
-    } finally {
-      setLoading(false);
+
+      setStatus({
+        type: "error",
+        message: result.message || "Unable to subscribe. Please try again.",
+      });
+    } catch {
+      setStatus({
+        type: "error",
+        message: "Something went wrong. Please try again later.",
+      });
     }
   };
 
   return (
-    <div className="flex flex-col lg:flex-row bg-white rounded-xl overflow-hidden shadow-md w-full justify-between">
-      {/* Icon */}
-      <div className="flex items-center justify-center px-3 py-2 text-gray-400 sm:py-0">
-        <AiOutlineMail size={20} />
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+      <div className="flex flex-col lg:flex-row bg-white rounded-xl overflow-hidden shadow-md w-full justify-between">
+        <div className="flex items-center flex-1 px-3 py-2 text-gray-400 sm:py-0">
+          <AiOutlineMail size={20} />
 
-        {/* Input */}
-        <input
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          type="email"
-          placeholder="Enter your email address"
-          className="w-full outline-none py-3 px-3 text-sm"
-        />
+          <input
+            {...register("email")}
+            type="email"
+            placeholder="Enter your email address"
+            className="w-full outline-none py-3 px-3 text-sm text-gray-900"
+            disabled={isSubmitting}
+          />
+        </div>
+
+        <button
+          className="bg-black text-white px-6 py-3 text-sm hover:bg-gray-800 duration-150 sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
+          type="submit"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Subscribing..." : "Subscribe"}
+        </button>
       </div>
-      {/* Button */}
-      <button
-        className="bg-black text-white px-6 py-3 text-sm hover:bg-gray-800 duration-150 sm:w-auto"
-        type="submit"
-        onClick={handleSubscribe}
-      >
-        {loading ? "Subscribing..." : "Subscribe"}
-      </button>
-    </div>
+
+      {errors.email && (
+        <p className="mt-2 text-xs text-red-500">
+          {getErrorMessage(errors.email)}
+        </p>
+      )}
+
+      {status && (
+        <p
+          className={`mt-2 text-xs ${
+            status.type === "success" ? "text-green-600" : "text-red-500"
+          }`}
+        >
+          {status.message}
+        </p>
+      )}
+    </form>
   );
 };
 
