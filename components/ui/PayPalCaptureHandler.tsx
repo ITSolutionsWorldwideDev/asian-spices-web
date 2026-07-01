@@ -17,10 +17,12 @@ export default function PayPalCaptureHandler({
   const clearCart = useCartStore((s) => s.clearCart);
   const hasRun = useRef(false);
   const { show, hide } = useLoaderStore();
+  
   const { status } = useSession(); // 🚀 Get session status
   const isLoggedIn = status === "authenticated";
 
   useEffect(() => {
+    if (status === "loading") return;
     if (!orderId || !token) return;
     if (hasRun.current) return;
 
