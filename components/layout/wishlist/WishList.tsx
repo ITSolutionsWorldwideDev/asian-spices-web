@@ -84,7 +84,7 @@ export default function WishList() {
   }
 
   const totalValue = wishlist.reduce(
-    (acc, item) => acc + Number(item.price || 0),
+    (acc, item) => acc + Number(item.base_price || 0),
     0,
   );
 
@@ -240,7 +240,7 @@ export default function WishList() {
                       <div className="mt-4 text-sm text-orange-500">
                         <p className="font-semibold">
                           Price: {symbol}
-                          {(rate * Number(item.price || 0)).toFixed(2)}
+                          {(rate * Number(item.base_price || 0)).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -255,7 +255,7 @@ export default function WishList() {
                               id: item.id,
                               title: itemTitle, // ✅ Syncing fixed title parameter
                               image: item.image,
-                              price: Number(item.price || 0),
+                              base_price: Number(item.base_price || 0),
                               slug: item.slug,
                               category_slug: itemCategorySlug,
                             },
@@ -330,94 +330,3 @@ export default function WishList() {
     </section>
   );
 }
-/* <div className="mt-10 space-y-5">
-          {wishlist.map((item, index) => (
-            <div
-              key={`${item.id}-${index}`}
-              className="bg-white rounded-3xl border border-gray-100 p-5 shadow-sm hover:shadow-xl transition"
-            >
-              <div className="flex flex-col lg:flex-row gap-6">
-               
-
-                <Link
-                  href={`/${item.category_slug}/${item.slug}`}
-                  className="shrink-0"
-                >
-                  <div className="relative w-full lg:w-36 h-36 overflow-hidden rounded-2xl bg-gray-100">
-                    <Image
-                      src={item.image || "/images/placeholder.png"}
-                      alt={item.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </Link>
-
-              
-
-                <div className="flex-1 flex flex-col lg:flex-row justify-between gap-6">
-             
-
-                  <div className="flex-1">
- 
-                    <Link
-                      href={`/${item.category_slug || "products"}/${item.slug || item.id}`}
-                    >
-                      <h3 className="font-semibold">{item.name}</h3>
-                    </Link> 
-
-                    <div className="mt-4  text-sm text-orange-500"> 
-                      <p className="font-normal">
-                        Total: {symbol}
-                        {(rate * Number(item.price || 0)).toFixed(2)}
-                      </p>
-                    </div>
-                  </div>
- 
-
-                  <div className="flex flex-col gap-3 min-w-[220px]">
-              
-
-                    <button
-                      onClick={() => {
-                        addToCart(
-                          {
-                            id: item.id,
-                            title: item.name,
-                            image: item.image,
-                            price: Number(item.price || 0),
-                            slug: item.slug,
-                            category_slug: item.category_slug,
-                          },
-                          isLoggedIn,
-                        );
-                      }}
-                      className="bg-orange-500 hover:bg-orange-600 transition text-white rounded-xl py-3 px-5 font-semibold flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <ShoppingCart size={18} />
-                      Add To Cart
-                    </button>
-
- 
-
-                    <Link href={`/${item.category_slug}/${item.slug}`}>
-                      <button className="w-full border border-gray-300 hover:bg-gray-50 transition rounded-xl py-3 px-5 font-medium cursor-pointer">
-                        View Details
-                      </button>
-                    </Link>
-
-     
-
-                    <button
-                      onClick={() => removeFromWishlist(item.id, isLoggedIn)}
-                      className="border border-red-200 text-red-500 hover:bg-red-50 transition rounded-xl py-3 px-5 font-medium flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <Trash2 size={18} />
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div> */

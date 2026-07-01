@@ -7,7 +7,7 @@ export interface Product {
   slug: string;
   description?: string;
 
-  price: number;
+  base_price: number;
   quantity: number;
 
   category_id: string;

@@ -50,7 +50,8 @@ export default function Checkout() {
   const { cart, clearCart } = useCartStore();
   const { rate, selectedCurrency } = useCurrencyStore();
 
-  const { taxRate, setSelectedCountry, fetchInitialData } = useGlobalStore();
+  // const { taxRate, setSelectedCountry, fetchInitialData } = useGlobalStore();
+  const { taxRules, setSelectedCountry, fetchInitialData } = useGlobalStore();
 
   const [addresses, setAddresses] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
@@ -102,18 +103,23 @@ export default function Checkout() {
       opt.code?.toLowerCase() === shippingMethod.toLowerCase(),
   );
 
-  const isStandardOption = 
-    selectedOption?.code?.toLowerCase() === "standard" || 
+  const isStandardOption =
+    selectedOption?.code?.toLowerCase() === "standard" ||
     selectedOption?.name?.toLowerCase().includes("standard") ||
     shippingMethod === "standard";
 
-  const baseSubtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-  
+  const baseSubtotal = cart.reduce(
+    (acc, item) => acc + item.base_price * item.quantity,
+    0,
+  );
+
   const FREE_SHIPPING_THRESHOLD = 50;
   const qualifiesForFreeStandard = baseSubtotal >= FREE_SHIPPING_THRESHOLD;
 
-  const currentShippingPrice = selectedOption 
-    ? (qualifiesForFreeStandard && isStandardOption ? 0 : selectedOption.price)
+  const currentShippingPrice = selectedOption
+    ? qualifiesForFreeStandard && isStandardOption
+      ? 0
+      : selectedOption.price
     : 5.99;
 
   useEffect(() => {
@@ -138,13 +144,20 @@ export default function Checkout() {
         );
       }
     }
-  }, [availableShippingOptions, shippingMethod]); 
- 
+  }, [availableShippingOptions, shippingMethod]);
+
   // const totals = calculateTotals(cart, currentShippingPrice, taxRate);
+  // const totals = calculateTotals(
+  //   cart,
+  //   currentShippingPrice,
+  //   taxRate,
+  //   selectedOption?.name || selectedOption?.code || shippingMethod,
+  // );
+
   const totals = calculateTotals(
     cart,
     currentShippingPrice,
-    taxRate,
+    taxRules, // 🌟 Updated parameter link
     selectedOption?.name || selectedOption?.code || shippingMethod,
   );
   const convertedTotals = convertTotals(totals, rate || 1, selectedCurrency);

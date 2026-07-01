@@ -9,7 +9,7 @@ type ProductLinkCardProps = {
 type ProductPreview = {
   title: string | null;
   description: string | null;
-  price: string | null;
+  base_price: string | null;
   imageUrl: string | null;
   productUrl: string;
 };
@@ -76,7 +76,7 @@ export function ProductLinkCard({ productUrl }: ProductLinkCardProps) {
 
   const title = preview?.title ?? slugToTitle(productUrl);
   const description = preview?.description ?? null;
-  const price = preview?.price ?? null;
+  const base_price = preview?.base_price ?? null;
   const imageUrl = preview?.imageUrl ?? null;
 
   return (
@@ -101,9 +101,9 @@ export function ProductLinkCard({ productUrl }: ProductLinkCardProps) {
               {title}
             </h3>
           </div>
-          {price ? (
+          {base_price ? (
             <span className="shrink-0 rounded-full bg-[rgba(189,94,66,0.12)] px-3.5 py-1.5 text-sm font-semibold text-[var(--paprika)]">
-              {price}
+              {base_price}
             </span>
           ) : null}
         </div>

@@ -17,8 +17,8 @@ export const getProducts = async (filters: any) => {
   let values: any[] = [];
   let index = 0;
 
-  console.log("Filters:", filters);
-  console.log("Subcategories:", subcategories);
+  // console.log("Filters:", filters);
+  // console.log("Subcategories:", subcategories);
 
   let rankField = "0 as rank";
   if (search) {
@@ -70,13 +70,13 @@ export const getProducts = async (filters: any) => {
   // 🔹 Price (GLOBAL BASE PRICE or fallback logic later)
   if (minPrice) {
     index++;
-    query += ` AND p.price >= $${index}`;
+    query += ` AND p.base_price >= $${index}`;
     values.push(minPrice);
   }
 
   if (maxPrice) {
     index++;
-    query += ` AND p.price <= $${index}`;
+    query += ` AND p.base_price <= $${index}`;
     values.push(maxPrice);
   }
   if (search) {
@@ -89,11 +89,11 @@ export const getProducts = async (filters: any) => {
   const currentRankPlaceholder = search ? "$1" : "0";
   switch (sort) {
     case "price_asc":
-      query += ` ORDER BY p.price ASC, p.id DESC`;
+      query += ` ORDER BY p.base_price ASC, p.id DESC`;
       break;
 
     case "price_desc":
-      query += ` ORDER BY p.price DESC, p.id DESC`;
+      query += ` ORDER BY p.base_price DESC, p.id DESC`;
       break;
 
     case "popular":
@@ -179,7 +179,7 @@ export const getRelatedProducts = async (category_id: string) => {
       p.id,
       p.name,
       p.slug,
-      p.price,
+      p.base_price,
       p.category_id,
       c.slug AS category_slug,
       md.file_url AS image
@@ -265,13 +265,13 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
   // 🔹 Price Range Constraints
   if (minPrice) {
     index++;
-    productConditions += ` AND p.price >= $${index}`;
+    productConditions += ` AND p.base_price >= $${index}`;
     values.push(minPrice);
   }
 
   if (maxPrice) {
     index++;
-    productConditions += ` AND p.price <= $${index}`;
+    productConditions += ` AND p.base_price <= $${index}`;
     values.push(maxPrice);
   }
 
@@ -301,8 +301,8 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
   `;
 
   // console.log("productConditions ==== ", productConditions);
-  console.log("query ==== ", query);
-  console.log("values ==== ", values);
+  // console.log("query ==== ", query);
+  // console.log("values ==== ", values);
 
   const result = await pool.query(query, values);
   return result.rows;
@@ -333,7 +333,7 @@ export const getBrands = async (category: string, filters: any = {}) => {
 
   if (maxPrice !== undefined && maxPrice !== "") {
     index++;
-    productConditions += ` AND p.price <= $${index}`;
+    productConditions += ` AND p.base_price <= $${index}`;
     values.push(maxPrice);
   }
 
