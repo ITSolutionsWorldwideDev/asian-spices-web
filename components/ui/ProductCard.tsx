@@ -21,7 +21,7 @@ type Product = {
   category_slug: string;
   slug: string;
   image: string;
-  price: number;
+  base_price: number;
   oldPrice: number | null;
   tag: string;
   off: string;
@@ -96,7 +96,7 @@ export default function ProductCard({
                       id: product.id,
                       name: product.name,
                       image: product.image,
-                      price: product.price,
+                      base_price: product.base_price,
                       slug: product.slug,
                       category_slug: product.category_slug,
                     },
@@ -148,7 +148,7 @@ export default function ProductCard({
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-orange-400 font-bold text-xl">
                   {symbol}
-                  {Number(product.price * rate).toFixed(2)}
+                  {Number(product.base_price * rate).toFixed(2)}
                 </span>
               </div>
 
@@ -191,7 +191,7 @@ export default function ProductCard({
                       {
                         id: product.id,
                         title: product.name,
-                        price: product.price,
+                        base_price: product.base_price,
                         image: product.image || "/images/placeholder.png",
                         slug: product.slug,
                         category_slug: product.category_slug,

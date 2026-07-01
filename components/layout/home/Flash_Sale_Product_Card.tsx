@@ -8,7 +8,7 @@ interface FlashSaleProduct {
   id: number;
   title: string;
   image: string;
-  price: number;
+  base_price: number;
   oldPrice: number;
   off: string;
   left: number;
@@ -26,7 +26,7 @@ const FlashSaleProductCard = () => {
       id: 1,
       title: "Premium Saffron",
       image: "6a6c5e09b8f76078ff74a389fb2e9d49eb1a02b9.jpg",
-      price: 39.99,
+      base_price: 39.99,
       oldPrice: 69.99,
       off: "43% OFF",
       left: 12,
@@ -48,7 +48,7 @@ const FlashSaleProductCard = () => {
       id: 2,
       title: "Organic Garam Masala",
       image: "083782e31e411838bf8aa3bec2c2d18932e8e7c8.jpg",
-      price: 14.99,
+      base_price: 14.99,
       oldPrice: 24.99,
       off: "43% OFF",
       left: 12,
@@ -70,7 +70,7 @@ const FlashSaleProductCard = () => {
       id: 3,
       title: "Star Anise Whole",
       image: "6618d6869cf24a597449d4b814eba26459cdc371.jpg",
-      price: 11.99,
+      base_price: 11.99,
       oldPrice: 19.99,
       off: "43% OFF",
       left: 12,
@@ -123,7 +123,7 @@ const FlashSaleProductCard = () => {
 
           <div className="mt-2 flex items-center gap-2">
             <span className="text-orange-500 text-xl font-bold">
-              €{item.price}
+              €{item.base_price}
             </span>
             <span className="text-gray-400 line-through text-sm">
               €{item.oldPrice}

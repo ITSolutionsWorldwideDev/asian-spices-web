@@ -98,7 +98,7 @@ export default function Cart() {
       <div className="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8 bg-white">
         <div className="lg:col-span-2 space-y-6">
           {cart.map((item) => {
-            const cleanPrice = Number(item.price || 0);
+            const cleanPrice = Number(item.base_price || 0);
             const cleanQuantity = Number(item.quantity || 1);
             const singleItemTotal = rate * cleanPrice;
             const lineCombinedTotal = rate * (cleanPrice * cleanQuantity);

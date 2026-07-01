@@ -4,7 +4,7 @@ interface FlashSaleProduct {
   id: number;
   title: string;
   image: string;
-  price: number;
+  base_price: number;
   oldPrice: number;
   off: string;
   left: number;
@@ -45,7 +45,7 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({
       className="max-w-lg mx-auto bg-white shadow-xl rounded-xl p-4 border border-gray-100   hover-card"
       onMouseLeave={() => setHoveredId(null)}
     >
-      {/* Header: Image, Title, Price, Rating */}
+      {/* Header: Image, Title, base_price, Rating */}
       <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <div className="w-28  shrink-0">
           <img
@@ -63,7 +63,7 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({
 
           <div className="flex items-baseline space-x-2 mb-3">
             <span className="text-4xl font-bold text-orange-500">
-              {item.price}
+              {item.base_price}
             </span>
             <span className="text-xl text-gray-400 line-through">
               {item.oldPrice}

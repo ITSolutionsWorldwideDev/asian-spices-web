@@ -33,7 +33,7 @@ export const useCartSync = () => {
           const formattedCart = dbCart.map((item: any) => ({
             id: item.product_id,
             title: item.title || "Product",
-            price: Number(item.price),
+            base_price: Number(item.base_price),
             quantity: item.quantity,
             image: item.image || "",
             category_slug: item.category_slug || "",
@@ -76,7 +76,7 @@ export const useCartSync = () => {
 //     id: item.id || item.product_id,
 //     name: item.name || "Product",
 //     image: item.image || "",
-//     price: Number(item.price),
+//     base_price: Number(item.base_price),
 //     slug: item.slug || "",
 //     category_slug: item.category_slug || "",
 //   }));

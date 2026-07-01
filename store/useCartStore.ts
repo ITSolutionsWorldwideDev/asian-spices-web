@@ -6,7 +6,7 @@ import { persist } from "zustand/middleware";
 export interface CartItem {
   id: string;
   title: string;
-  price: number;
+  base_price: number;
   quantity: number;
   image: string;
 
@@ -35,7 +35,6 @@ export const useCartStore = create<CartState>()(
       cart: [],
 
       addToCart: async (item, isLoggedIn) => {
-        // const existing = get().cart.find((i) => i.id === item.id);
 
         const normalizeId = (id: string | number) =>
           id.toString().toLowerCase().trim();
@@ -56,8 +55,7 @@ export const useCartStore = create<CartState>()(
         }
 
         set({ cart: updatedCart });
-
-        // ✅ Only sync if logged in
+        
         if (!isLoggedIn) return;
 
         try {
@@ -66,7 +64,7 @@ export const useCartStore = create<CartState>()(
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               product_id: item.id,
-              // price: item.price,
+              // base_price: item.base_price,
               quantity: 1,
             }),
           });
@@ -106,7 +104,7 @@ export const useCartStore = create<CartState>()(
             cart: dbCart.map((item: any) => ({
               id: item.product_id,
               title: item.title || "Product",
-              price: Number(item.price),
+              base_price: Number(item.base_price),
               quantity: item.quantity,
               image: item.image || "",
               category_id: item.category_id || "",
@@ -118,11 +116,6 @@ export const useCartStore = create<CartState>()(
 
       /* ---------------- INCREASE ---------------- */
       increaseQty: async (id, isLoggedIn) => {
-        // set({
-        //   cart: get().cart.map((i) =>
-        //     i.id === id ? { ...i, quantity: i.quantity + 1 } : i,
-        //   ),
-        // });
 
         const targetId = id.toString();
         set({
@@ -151,7 +144,6 @@ export const useCartStore = create<CartState>()(
 
       /* ---------------- DECREASE ---------------- */
       decreaseQty: async (id, isLoggedIn) => {
-        // const item = get().cart.find((i) => i.id === id);
 
         const targetId = id.toString();
         const item = get().cart.find((i) => i.id.toString() === targetId);
@@ -170,12 +162,6 @@ export const useCartStore = create<CartState>()(
           ),
         });
 
-        // set({
-        //   cart: get().cart.map((i) =>
-        //     i.id === id ? { ...i, quantity: i.quantity - 1 } : i,
-        //   ),
-        // });
-
         if (!isLoggedIn) return;
 
         try {
@@ -193,7 +179,6 @@ export const useCartStore = create<CartState>()(
       },
 
       setQty: async (id, quantity, isLoggedIn) => {
-        // prevent invalid values
         const qty = Math.max(1, quantity);
 
         const targetId = id.toString();
@@ -203,12 +188,6 @@ export const useCartStore = create<CartState>()(
             i.id.toString() === targetId ? { ...i, quantity: qty } : i,
           ),
         });
-
-        // set({
-        //   cart: get().cart.map((i) =>
-        //     i.id === id ? { ...i, quantity: qty } : i,
-        //   ),
-        // });
 
         if (!isLoggedIn) return;
 
@@ -231,6 +210,7 @@ export const useCartStore = create<CartState>()(
       setCart: (items) => set({ cart: items }),
 
       clearCart: async (isLoggedIn = false) => {
+
         set({ cart: [] });
 
         if (typeof window !== "undefined") {
@@ -246,25 +226,13 @@ export const useCartStore = create<CartState>()(
         } catch (err) {
           console.error("Failed to clear DB cart:", err);
         }
-
-        // try {
-        //   await fetch("/api/cart/clear", { // Ensure this endpoint executes your DELETE or TRUNCATE logic
-        //     method: "DELETE",
-        //     headers: { "Content-Type": "application/json" },
-        //   });
-        // } catch (err) {
-        //   console.error("Failed to clear DB cart during checkout sync:", err);
-        // }
       },
-
-      // clearCart: () => set({ cart: [] }),
     }),
     {
       name: "cart-storage",
       version: 1,
       migrate: (state: any): CartState => {
         return {
-          // cart: state?.cart || [],
           cart: (state?.cart || []).map((i: any) => ({
             ...i,
             id: i.id?.toString(),

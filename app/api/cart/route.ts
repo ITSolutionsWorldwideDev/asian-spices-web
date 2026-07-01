@@ -35,7 +35,7 @@ export async function GET() {
           sci.product_id,
           sci.quantity,
           p.name AS title,
-          p.price::numeric AS price,
+          p.base_price::numeric AS base_price,
           img.file_url AS image 
         FROM store_cart_items sci
         LEFT JOIN store_products p ON p.id = sci.product_id        
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
 
   const productRes = await client.query(
     `
-    SELECT price 
+    SELECT base_price 
     FROM store_products 
     WHERE id = $1
     `,
@@ -84,7 +84,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Product not found" }, { status: 404 });
   }
 
-  const price = productRes.rows[0].price;
+  const base_price = productRes.rows[0].base_price;
 
   try {
     const customerId = await getOrCreateCustomer(client, session.user);
@@ -115,7 +115,7 @@ export async function POST(req: Request) {
        ON CONFLICT (cart_id, product_id)
        DO UPDATE SET quantity = store_cart_items.quantity + EXCLUDED.quantity
        RETURNING *`,
-      [cartId, product_id, quantity, price],
+      [cartId, product_id, quantity, base_price],
     );
 
     return NextResponse.json(result.rows[0]);
@@ -126,6 +126,8 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   const session = await getServerSession(webAuthOptions);
+
+  console.log('Empty Cart Operation session?.user?.id === ',session?.user?.id);
 
   if (!session?.user?.id) {
     return NextResponse.json({}, { status: 401 });
@@ -138,6 +140,8 @@ export async function DELETE(req: Request) {
   } catch {
     product_id = undefined;
   }
+
+  console.log('Empty Cart Operation product_id === ',product_id);
 
   // const { product_id } = await req.json();
 
@@ -161,10 +165,14 @@ export async function DELETE(req: Request) {
   try {
     const customerId = await getOrCreateCustomer(client, session.user);
 
+    console.log('Empty Cart Operation customerId === ',customerId);
+
     const cartRes = await client.query(
       `SELECT id FROM store_carts WHERE global_customer_id = $1 LIMIT 1`,
       [customerId],
     );
+
+    console.log('Empty Cart Operation cartRes.rowCount === ',cartRes.rowCount);
 
     if (!cartRes.rowCount) {
       return NextResponse.json({ success: true });

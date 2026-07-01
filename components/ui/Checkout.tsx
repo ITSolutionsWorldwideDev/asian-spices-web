@@ -109,7 +109,7 @@ export default function Checkout() {
     shippingMethod === "standard";
 
   const baseSubtotal = cart.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+    (acc, item) => acc + item.base_price * item.quantity,
     0,
   );
 

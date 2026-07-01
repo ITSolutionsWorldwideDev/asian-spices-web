@@ -28,18 +28,18 @@ export async function GET(
         json_agg(
           json_build_object(
             'title', p.name,
-            'price', oi.price,
+            'base_price', oi.base_price,
             'quantity', oi.quantity
           )
         ) AS cart_items,
-		json_agg(
+        json_agg(
           json_build_object(
             'company_name', c.company_name,
-			'customer_name', c.first_name || ' ' || c.last_name,
-			'email', c.email,
-			'phone', c.phone,
-			'city', c.city,
-			'postcode', c.postcode
+            'customer_name', c.first_name || ' ' || c.last_name,
+            'email', c.email,
+            'phone', c.phone,
+            'city', c.city,
+            'postcode', c.postcode
           )
         ) AS customer_info
       FROM store_orders o
@@ -166,8 +166,8 @@ export async function GET(
       // Draw truncated title lines smoothly
       doc.text(item.title.substring(0, 42), 60, currentY);
       doc.text(item.quantity.toString(), 345, currentY);
-      doc.text(`€${Number(item.price).toFixed(2)}`, 400, currentY);
-      doc.text(`€ ${(item.price * item.quantity).toFixed(2)}`, 490, currentY);
+      doc.text(`€${Number(item.base_price).toFixed(2)}`, 400, currentY);
+      doc.text(`€ ${(item.base_price * item.quantity).toFixed(2)}`, 490, currentY);
 
       // Horizontal separation borders
       doc.setDrawColor(229, 231, 235);

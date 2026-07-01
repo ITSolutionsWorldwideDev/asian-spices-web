@@ -21,7 +21,7 @@ interface Order {
   cart_items: {
     id: string;
     title: string;
-    price: number;
+    base_price: number;
     quantity: number;
     image: string;
   }[];

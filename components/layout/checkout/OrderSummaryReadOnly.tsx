@@ -67,7 +67,7 @@ export default function OrderSummaryReadOnly({
 
       <div className="space-y-4 mb-6">
         {items.map((item: any) => {
-          const itemPrice = safeNumber(item?.price);
+          const itemPrice = safeNumber(item?.base_price);
           const itemQuantity = safeNumber(item?.quantity || 1);
           const itemLineTotalConverted = rate * (itemPrice * itemQuantity);
 
@@ -185,7 +185,7 @@ export default function OrderSummaryReadOnly({
 
         {items.map((item: any) => {
           // 🚀 Parse the specific item variables defensively to prevent runtime crashes
-          const itemPrice = safeNumber(item?.price);
+          const itemPrice = safeNumber(item?.base_price);
           const itemQuantity = safeNumber(item?.quantity || 1);
           const itemLineTotalConverted = rate * (itemPrice * itemQuantity);
 
@@ -263,7 +263,7 @@ export default function OrderSummaryReadOnly({
   overnight: { label: "Overnight Shipping", price: 24.99 },
 } as const; */
 // const subtotal = items.reduce(
-//   (acc, item) => acc + item.price * item.quantity,
+//   (acc, item) => acc + item.base_price * item.quantity,
 //   0
 // );
 
@@ -293,8 +293,8 @@ export default function OrderSummaryReadOnly({
 
               <p className="text-xs text-gray-500 space-x-0.5">
                 {symbol}
-                {item.price.toFixed(2)} x {item.quantity} = {symbol}
-                {(rate * (item.price * item.quantity)).toFixed(2)}
+                {item.base_price.toFixed(2)} x {item.quantity} = {symbol}
+                {(rate * (item.base_price * item.quantity)).toFixed(2)}
               </p>
             </div>
           </div>

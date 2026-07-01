@@ -26,9 +26,9 @@ export function calculateTotals(
   const globalRate = globalRule ? parseFloat(globalRule.tax_rate) / 100 : 0.21;
 
   const subtotal = cart.reduce((acc, item) => {
-    const price = Number(item.price || 0);
+    const base_price = Number(item.base_price || 0);
     const quantity = Number(item.quantity || 1);
-    const itemGrossTotal = price * quantity;
+    const itemGrossTotal = base_price * quantity;
 
     // 2️⃣ Find item category specific rule match
     // Make sure your item schema includes 'category_id'

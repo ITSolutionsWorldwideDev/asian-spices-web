@@ -65,11 +65,11 @@ export async function POST(req: Request) {
 
     for (const item of items) {
       let productRes = await client.query(
-        `SELECT price FROM store_products WHERE id = $1`,
+        `SELECT base_price FROM store_products WHERE id = $1`,
         [item.id],
       );
 
-      let price = productRes.rows[0].price;
+      let base_price = productRes.rows[0].base_price;
 
       await client.query(
         `
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
         ON CONFLICT (cart_id, product_id)
         DO UPDATE SET quantity = store_cart_items.quantity + EXCLUDED.quantity
         `,
-        [cartId, item.id, item.quantity, price],
+        [cartId, item.id, item.quantity, base_price],
       );
     }
 

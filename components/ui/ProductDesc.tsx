@@ -107,7 +107,7 @@ export default function ProductDesc({ product }: { product: Product }) {
           <div className="flex items-center gap-4">
             <span className="text-4xl font-bold text-orange-500">
               {symbol}
-              {product.price}
+              {product.base_price}
             </span>
             {/* <span className="line-through text-gray-400 text-xl">
               {symbol}{product.oldPrice}
@@ -180,7 +180,7 @@ export default function ProductDesc({ product }: { product: Product }) {
                   {
                     id: product.id,
                     title: product.name,
-                    price: product.price,
+                    base_price: product.base_price,
                     image: images[0] || "/images/placeholder.png",
                   },
                   isLoggedIn,
@@ -200,7 +200,7 @@ export default function ProductDesc({ product }: { product: Product }) {
                   id: product.id,
                   name: product.name,
                   image: images[0],
-                  price: product.price,
+                  base_price: product.base_price,
                   slug: product.slug,
                   category_slug: product.category_slug,
                 },
