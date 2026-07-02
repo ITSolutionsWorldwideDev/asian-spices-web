@@ -45,12 +45,6 @@ export default function FlashSaleProductCard() {
             offBadge = `€${p.discount_value} OFF`;
           }
 
-          // let offBadge = "SALE";
-          // if (p.discount_type === "percentage")
-          //   offBadge = `${p.discount_value}% OFF`;
-          // if (p.discount_type === "fixed")
-          //   offBadge = `€${p.discount_value} OFF`;
-
           return {
             id: p.id,
             title: p.name,
@@ -170,11 +164,6 @@ export default function FlashSaleProductCard() {
                 You save {item.save}
               </p>
 
-              {/* <button className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition cursor-pointer text-sm">
-              Grab This Deal
-            </button> */}
-
-              {/* 3️⃣ Dynamic Button Block */}
               {cartItem ? (
                 <div className="mt-4 flex items-center justify-between border border-gray-200 rounded-xl overflow-hidden h-[44px]">
                   <button
@@ -235,18 +224,6 @@ export default function FlashSaleProductCard() {
                   />
                 </div>
               )}
-
-              {/* {hoveredId === item.id && (
-              <div
-                className="absolute top-0 left-0 w-full min-h-full bg-white rounded-2xl z-50 shadow-2xl animate-in fade-in duration-200"
-                onMouseLeave={() => setHoveredId(null)}
-              >
-                <Flash_Sale_Hover_product_Card
-                  item={item}
-                  setHoveredId={setHoveredId}
-                />
-              </div>
-            )} */}
             </div>
           );
         })}
