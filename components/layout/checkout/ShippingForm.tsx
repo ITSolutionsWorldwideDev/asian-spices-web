@@ -84,7 +84,7 @@ export default function ShippingForm({
     const fetchCountries = async () => {
       try {
         show("Loading Countries...");
-        const res = await fetch("/api/countries");
+        const res = await fetch("/api/countries?shippable=true");
         const data = await res.json();
         setCountries(data);
       } catch (err) {

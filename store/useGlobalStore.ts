@@ -48,7 +48,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     if (countries.length > 0) return;
 
     try {
-      const countryRes = await fetch("/api/countries", { cache: "no-store" });
+      const countryRes = await fetch("/api/countries?shippable=true", { cache: "no-store" });
       let countriesList = [];
       if (countryRes.ok) countriesList = await countryRes.json();
 
@@ -86,7 +86,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     if (countries.length > 0) return;
 
     try {
-      const countryRes = await fetch("/api/countries", {
+      const countryRes = await fetch("/api/countries?shippable=true", {
         cache: "no-store",
       });
 
