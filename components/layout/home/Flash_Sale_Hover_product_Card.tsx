@@ -1,7 +1,7 @@
 import React from "react";
 
 interface FlashSaleProduct {
-  id: number;
+  id: string | number;
   title: string;
   image: string;
   base_price: number;
@@ -34,7 +34,73 @@ const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
   </svg>
 );
 
-const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({
+const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
+  const stars = [1, 2, 3, 4, 5].map((i) => i <= 4); // default structural rating score
+
+  return (
+    <div className="w-full bg-white text-left">
+      {/* Header Info Block */}
+      <div className="flex gap-4 mb-3 relative">
+        {/* Badge Inside Popup */}
+        <span className="absolute top-1 left-1 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase z-10">
+          {item.off}
+        </span>
+
+        <div className="w-24 h-24 relative shrink-0 border border-gray-100 rounded-lg overflow-hidden">
+          <img
+            src={item.image.startsWith("http") ? item.image : `/assets/home/hot_sale/${item.image}`}
+            alt={item.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        <div className="flex flex-col justify-between py-1 min-w-0">
+          <h2 className="text-base font-semibold text-gray-800 leading-tight line-clamp-2">
+            {item.title}
+          </h2>
+
+          <div className="flex items-baseline space-x-1.5 my-1">
+            <span className="text-2xl font-black text-orange-500">
+              €{item.base_price.toFixed(2)}
+            </span>
+            <span className="text-sm text-gray-400 line-through">
+              €{item.oldPrice.toFixed(2)}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <div className="flex">
+              {stars.map((filled, index) => (
+                <StarIcon key={index} filled={filled} />
+              ))}
+            </div>
+            <span className="text-xs text-gray-500 font-medium">(324)</span>
+          </div>
+        </div>
+      </div>
+
+      <hr className="border-gray-100 my-3" />
+
+      {/* Feature Tags Container */}
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {item.qualities.flatMap(q => q.split(',')).slice(0, 4).map((tag, index) => (
+          <span
+            key={index}
+            className="px-2.5 py-0.5 text-[11px] font-medium text-gray-600 rounded-md bg-gray-100 border border-gray-200 truncate max-w-[150px]"
+          >
+            {tag.trim()}
+          </span>
+        ))}
+      </div>
+
+      {/* Shortened Description Blocks */}
+      <p className="text-gray-500 text-xs leading-relaxed line-clamp-4">
+        {item.description}
+      </p>
+    </div>
+  );
+};
+/* const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({
   item,
   setHoveredId,
 }) => {
@@ -45,16 +111,21 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({
       className="max-w-lg mx-auto bg-white shadow-xl rounded-xl p-4 border border-gray-100   hover-card"
       onMouseLeave={() => setHoveredId(null)}
     >
-      {/* Header: Image, Title, base_price, Rating */}
+      
       <div className="flex flex-col sm:flex-row gap-4 mb-4">
-        <div className="w-28  shrink-0">
+        <div className="w-28 h-28 relative shrink-0">
           <img
-            src={`/assets/home/hot_sale/${item.image}`}
-            alt="Premium Saffron"
-            className="  object-cover rounded-lg border border-gray-200"
-            style={{ aspectRatio: "1/1" }}
+            src={
+              item.image.startsWith("http")
+                ? item.image
+                : `/assets/home/hot_sale/${item.image}`
+            }
+            alt={item.title}
+            className="w-full h-full object-cover rounded-lg border border-gray-200"
           />
         </div>
+
+         
 
         <div className="grow">
           <h2 className="text-xl font-serif font-semibold text-gray-800 ">
@@ -81,7 +152,7 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({
 
       <hr className="  " />
 
-      {/* Feature Tags */}
+  
       <div className="flex flex-wrap gap-2 mb-3">
         {item.qualities.map((tag, index) => (
           <span
@@ -93,12 +164,11 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({
         ))}
       </div>
 
-      {/* Description */}
       <p className="text-gray-600 text-sm leading-relaxed ">
         {item.description}
       </p>
     </div>
   );
 };
-
+ */
 export default Flash_Sale_Hover_product_Card;

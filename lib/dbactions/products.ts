@@ -12,13 +12,12 @@ export const getProducts = async (filters: any) => {
     search,
     sort = "newest",
     page = 1,
+    saleOnly = false,
+    limit = 20,
   } = filters;
 
   let values: any[] = [];
   let index = 0;
-
-  // console.log("Filters:", filters);
-  // console.log("Subcategories:", subcategories);
 
   let rankField = "0 as rank";
   if (search) {
@@ -47,8 +46,15 @@ export const getProducts = async (filters: any) => {
     WHERE 1=1
   `;
 
+  if (saleOnly) {
+    query += ` AND (
+    (p.discount_type IS NOT NULL AND p.discount_value::text != 'NaN' AND p.discount_value > 0)
+    OR (p.sale_price IS NOT NULL AND p.sale_price < p.base_price)
+  ) AND (p.promo_code IS NULL OR p.promo_code = '')`;
+  }
+
   // 🔹 Category
-  if (category) {
+  if (category && !saleOnly) {
     index++;
     query += ` AND c.slug = $${index}`;
     values.push(category);
@@ -87,6 +93,7 @@ export const getProducts = async (filters: any) => {
 
   // 🔥 Sorting
   const currentRankPlaceholder = search ? "$1" : "0";
+
   switch (sort) {
     case "price_asc":
       query += ` ORDER BY p.base_price ASC, p.id DESC`;
@@ -109,7 +116,7 @@ export const getProducts = async (filters: any) => {
   }
 
   // 🔥 Pagination
-  const limit = 20;
+  // const limit = 20;
   const offset = (page - 1) * limit;
 
   index++;
@@ -120,11 +127,10 @@ export const getProducts = async (filters: any) => {
   query += ` OFFSET $${index}`;
   values.push(offset);
 
+  // console.log("query ====", query);
+  // console.log("values ====", values);
+
   const result = await pool.query(query, values);
-
-  // console.log("products list query ====", query);
-  // console.log("products list values ====", values);
-
   return result.rows;
 };
 

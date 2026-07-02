@@ -3,21 +3,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getProducts } from "@/lib/dbactions/products";
 
-// 🔥 Clean helper (ARRAY SAFE)
 const cleanArray = (arr: string[] = []) =>
   arr.filter((v) => v && v !== "" && v !== "null" && v !== "undefined");
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
-  // 🔥 Parse arrays CORRECTLY
   const subcategories = cleanArray(
     searchParams.get("subcategories")?.split(",") || [],
   );
 
   const brands = cleanArray(searchParams.get("brands")?.split(",") || []);
 
-  // 🔥 Build filters
   const filters = {
     category: searchParams.get("category") || "spices",
     subcategories,
@@ -27,11 +24,11 @@ export async function GET(req: NextRequest) {
     search: searchParams.get("search"),
     sort: searchParams.get("sort") || "newest",
     page: Number(searchParams.get("page") || "1"),
+    saleOnly: searchParams.get("sale_only") === "true",
+    limit: Number(searchParams.get("limit") || "20"),
   };
 
   try {
-
-    // console.log('filters ====',filters);
     const products = await getProducts(filters);
 
     return NextResponse.json({
