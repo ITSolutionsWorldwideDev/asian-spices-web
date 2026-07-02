@@ -30,7 +30,7 @@ const FlashSaleProductCard = () => {
       oldPrice: 69.99,
       off: "43% OFF",
       left: 12,
-      save: "$30.00",
+      save: "€30.00",
       description:
         "Premium saffron, known as the “king of spices” or “red gold,” is a rare and valuable spice harvested from the Crocus sativus flower requiring about 75,000 blossoms for just one pound. Its rich aroma and vibrant color make it a prized ingredient in gourmet dishes, traditional remedies for mood and digestion, and luxury skincare for its soothing and brightening effects.",
       qualities: [
@@ -52,7 +52,7 @@ const FlashSaleProductCard = () => {
       oldPrice: 24.99,
       off: "43% OFF",
       left: 12,
-      save: "$10.00",
+      save: "€10.00",
       description:
         "Premium saffron, known as the “king of spices” or “red gold,” is a rare and valuable spice harvested from the Crocus sativus flower requiring about 75,000 blossoms for just one pound. Its rich aroma and vibrant color make it a prized ingredient in gourmet dishes, traditional remedies for mood and digestion, and luxury skincare for its soothing and brightening effects.",
       qualities: [
@@ -74,7 +74,7 @@ const FlashSaleProductCard = () => {
       oldPrice: 19.99,
       off: "43% OFF",
       left: 12,
-      save: "$8.00",
+      save: "€8.00",
       description:
         "Premium saffron, known as the “king of spices” or “red gold,” is a rare and valuable spice harvested from the Crocus sativus flower requiring about 75,000 blossoms for just one pound. Its rich aroma and vibrant color make it a prized ingredient in gourmet dishes, traditional remedies for mood and digestion, and luxury skincare for its soothing and brightening effects.",
       qualities: [

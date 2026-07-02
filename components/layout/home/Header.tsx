@@ -26,11 +26,11 @@ const frames = [
     subtitle: "Exotic Selection",
     quality: "Discover True Flavors",
     description: `Explore our curated collection of rare Asian spices. From fragrant cardamom to fiery chili peppers, experience the authentic taste of Asia in every dish.`,
-    stats: {
-      varieties: "200+",
-      countries: "15+",
-      organic: "100%",
-    },
+    // stats: {
+    //   varieties: "200+",
+    //   countries: "15+",
+    //   organic: "100%",
+    // },
   },
   {
     id: 3,
