@@ -7,12 +7,16 @@ export interface CartItem {
   id: string;
   title: string;
   base_price: number;
+  oldPrice?: number;
   quantity: number;
   image: string;
 
   slug?: string;
   category_id?: string;
   category_slug?: string;
+
+  discount_type?: string;
+  discount_value?: number;
 }
 
 interface CartState {

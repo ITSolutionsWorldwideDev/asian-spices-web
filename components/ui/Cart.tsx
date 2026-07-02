@@ -71,7 +71,7 @@ export default function Cart() {
   }
 
   // Find country global backup if map fails to catch a local line assignment
-  const globalRule = taxRules.find(r => r.category_id === null);
+  const globalRule = taxRules.find((r) => r.category_id === null);
 
   return (
     <div className="bg-white p-8">
@@ -100,13 +100,49 @@ export default function Cart() {
           {cart.map((item) => {
             const cleanPrice = Number(item.base_price || 0);
             const cleanQuantity = Number(item.quantity || 1);
+
+            // 1️⃣ Safe Discount & Price Calculation Logic matching design specifications
+            // If oldPrice was passed to cart, we calculate the savings badge from it.
+            const originalPrice = item.oldPrice ? Number(item.oldPrice) : null;
+            const discountNum = Number(item.discount_value);
+            const rawSave =
+              originalPrice && originalPrice > cleanPrice
+                ? originalPrice - cleanPrice
+                : 0;
+
+            let activeBadge = "";
+            if (originalPrice && originalPrice > cleanPrice) {
+              if (
+                item.discount_type === "percentage" ||
+                item.discount_type === "Bulk"
+              ) {
+                activeBadge =
+                  item.discount_value && !isNaN(discountNum)
+                    ? `${item.discount_value}% OFF`
+                    : `${Math.round((rawSave / originalPrice) * 100)}% OFF`;
+              } else if (item.discount_type === "fixed") {
+                activeBadge =
+                  item.discount_value && !isNaN(discountNum)
+                    ? `€${item.discount_value} OFF`
+                    : `€${rawSave.toFixed(2)} OFF`;
+              } else {
+                activeBadge = `${Math.round((rawSave / originalPrice) * 100)}% OFF`;
+              }
+            }
+
             const singleItemTotal = rate * cleanPrice;
             const lineCombinedTotal = rate * (cleanPrice * cleanQuantity);
 
             // 🌟 Locate specific row category identifier matching rule configurations
-            const matchingRule = taxRules.find(r => r.category_id === item.category_id);
-            const ruleName = matchingRule ? matchingRule.tax_name : (globalRule?.tax_name || "VAT");
-            const rulePercent = matchingRule ? matchingRule.tax_rate : (globalRule?.tax_rate || "21");
+            const matchingRule = taxRules.find(
+              (r) => r.category_id === item.category_id,
+            );
+            const ruleName = matchingRule
+              ? matchingRule.tax_name
+              : globalRule?.tax_name || "VAT";
+            const rulePercent = matchingRule
+              ? matchingRule.tax_rate
+              : globalRule?.tax_rate || "21";
 
             return (
               <div
@@ -137,19 +173,32 @@ export default function Cart() {
                           {item.title}
                         </h3>
                       </Link>
-                      <span className="inline-block mt-1 text-xs px-2 py-1 rounded-full bg-green-100 text-green-600">
+                      {/*  <span className="inline-block mt-1 text-xs px-2 py-1 rounded-full bg-green-100 text-green-600">
                         In Stock
-                      </span>
-                      
+                      </span> */}
+                      <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                        <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-600 font-medium">
+                          In Stock
+                        </span>
+
+                        {/* 2️⃣ Render Active Discount Badges inside the line wrapper */}
+                        {activeBadge && (
+                          <span className="inline-block text-[10px] px-2 py-0.5 rounded-full bg-red-100 text-red-600 font-bold uppercase tracking-wide">
+                            {activeBadge}
+                          </span>
+                        )}
+                      </div>
+
                       {/* 🌟 Dynamic tag highlighting the item's custom category tax rate */}
                       <div className="mt-2">
                         <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-2 py-0.5 font-medium">
-                          Includes {ruleName} ({Number(rulePercent).toFixed(0)}%)
+                          Includes {ruleName} ({Number(rulePercent).toFixed(0)}
+                          %)
                         </span>
                       </div>
                     </div>
 
-                    <div className="sm:text-right text-sm">
+                    {/* <div className="sm:text-right text-sm">
                       <p className="font-normal mb-2">
                         {symbol}
                         {singleItemTotal.toFixed(2)} x {cleanQuantity}
@@ -158,6 +207,41 @@ export default function Cart() {
                         Total <span className="text-xs font-thin">(Incl. Tax)</span>: {symbol}
                         {lineCombinedTotal.toFixed(2)}
                       </p>
+                    </div> */}
+
+                    <div className="sm:text-right text-sm">
+                      <div className="flex items-center gap-2 sm:justify-end flex-wrap mb-1">
+                        {/* 3️⃣ Display Cross-out line price metrics alongside the active currency row */}
+                        {originalPrice && originalPrice > cleanPrice && (
+                          <span className="line-through text-gray-400 text-xs font-normal">
+                            {symbol}
+                            {(rate * originalPrice).toFixed(2)}
+                          </span>
+                        )}
+                        <p className="font-medium text-gray-900">
+                          {symbol}
+                          {singleItemTotal.toFixed(2)}{" "}
+                          <span className="text-xs text-gray-500 font-normal">
+                            x {cleanQuantity}
+                          </span>
+                        </p>
+                      </div>
+
+                      <p className="font-semibold text-gray-900 mt-1">
+                        Total{" "}
+                        <span className="text-xs font-thin text-gray-500">
+                          (Incl. Tax)
+                        </span>
+                        : {symbol}
+                        {lineCombinedTotal.toFixed(2)}
+                      </p>
+
+                      {rawSave > 0 && (
+                        <p className="text-xs text-green-600 font-medium mt-0.5">
+                          Saved: {symbol}
+                          {(rate * rawSave * cleanQuantity).toFixed(2)}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -208,9 +292,12 @@ export default function Cart() {
 
         <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 h-fit space-y-4">
           <h2 className="font-semibold text-lg pt-2">Summary</h2>
-          
+
           <div className="flex justify-between text-sm">
-            <span>Subtotal <span className="text-xs text-gray-400">(Incl. Tax)</span></span>
+            <span>
+              Subtotal{" "}
+              <span className="text-xs text-gray-400">(Incl. Tax)</span>
+            </span>
             <span>
               {symbol}
               {(rate * Number(subtotal || 0)).toFixed(2)}
@@ -257,7 +344,8 @@ export default function Cart() {
             </div>
             <div className="flex items-center gap-2">
               <Truck size={16} className="text-orange-500" />
-              Free Shipping on orders over {symbol}{(rate * 50).toFixed(2)} on Standard Delivery
+              Free Shipping on orders over {symbol}
+              {(rate * 50).toFixed(2)} on Standard Delivery
             </div>
           </div>
         </div>
