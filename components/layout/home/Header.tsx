@@ -14,11 +14,11 @@ const frames = [
     quality: "Organic & Pure",
     description: `Hand-picked organic turmeric from the highlands of India. Rich in curcumin with powerful anti-inflammatory properties and 
                   authentic earthy flavor.`,
-    stats: {
-      Curcumin_Content: "95%",
-      Customer_Rating: "4.9/5",
-      Origin: "Kerala, India",
-    },
+    // stats: {
+    //   Curcumin_Content: "95%",
+    //   Customer_Rating: "4.9/5",
+    //   Origin: "Kerala, India",
+    // },
   },
   {
     id: 2,
@@ -26,11 +26,11 @@ const frames = [
     subtitle: "Exotic Selection",
     quality: "Discover True Flavors",
     description: `Explore our curated collection of rare Asian spices. From fragrant cardamom to fiery chili peppers, experience the authentic taste of Asia in every dish.`,
-    stats: {
-      varieties: "200+",
-      countries: "15+",
-      organic: "100%",
-    },
+    // stats: {
+    //   varieties: "200+",
+    //   countries: "15+",
+    //   organic: "100%",
+    // },
   },
   {
     id: 3,
@@ -38,11 +38,11 @@ const frames = [
     subtitle: "Heritage Quality",
     quality: "Farm To Table",
     description: `Experience the vibrant traditions of Asian spice markets. Premium quality spices sourced directly from trusted farmers who practice sustainable agriculture.`,
-    stats: {
-      partnerfarms: "500+",
-      fairtrades: "Yes",
-      since: "2010",
-    },
+    // stats: {
+    //   partnerfarms: "500+",
+    //   fairtrades: "Yes",
+    //   since: "2010",
+    // },
   },
 ];
 

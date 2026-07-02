@@ -80,11 +80,11 @@ const FooterContent = () => {
               Contact Us
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="#" className="hover:underline">
               Careers
             </Link>
-          </li>
+          </li> */}
         </ul>
       </div>
 

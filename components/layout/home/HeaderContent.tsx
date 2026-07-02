@@ -27,7 +27,7 @@ interface SpiceFrame {
   subtitle: string;
   quality: string;
   description: string;
-  stats: FrameStats;
+  // stats: FrameStats;
 }
 
 interface SpiceFrameProps {
@@ -56,7 +56,7 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
         </p>
 
         {/* Stats */}
-        <div className="flex gap-12 mb-8 min-h-[4.5rem]">
+        {/* <div className="flex gap-12 mb-8 min-h-[4.5rem]">
           <div>
             <p className="text-3xl font-semibold">
               {current.stats.varieties || current.stats.Curcumin_Content || current.stats.partnerfarms}
@@ -87,7 +87,7 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
               {current.stats.organic && "Organic"}
             </p>
           </div>
-        </div>
+        </div> */}
 
         {/* CTA Buttons */}
         <div className="flex gap-4">
@@ -95,9 +95,9 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
           <Link href="/recipes" className="flex justify-center items-center">  <MdOutlineShoppingBag className="mr-3" /> Shop Collection</Link>
           </button>
 
-          <button className="flex justify-center items-center border border-white px-6 py-3 rounded-xl font-semibold hover:bg-white/20 transition space-x-3">
+          {/* <button className="flex justify-center items-center border border-white px-6 py-3 rounded-xl font-semibold hover:bg-white/20 transition space-x-3">
             <FaRegCirclePlay /> <span><Link href="/about">Watch Story</Link></span>
-          </button>
+          </button> */}
         </div>
 
         {/* Features Row */}
