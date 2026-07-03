@@ -61,6 +61,8 @@ export default function OrderSummaryReadOnly({
   // Global backup defaults if map fails to catch localized row constraints
   const globalRule = taxRules.find((r) => r.category_id === null);
 
+  let totalOrderSavings = 0;
+
   return (
     <div className="bg-white rounded-xl border p-6">
       <h2 className="font-semibold mb-4">Order Summary</h2>
@@ -70,6 +72,30 @@ export default function OrderSummaryReadOnly({
           const itemPrice = safeNumber(item?.base_price);
           const itemQuantity = safeNumber(item?.quantity || 1);
           const itemLineTotalConverted = rate * (itemPrice * itemQuantity);
+
+          // 1️⃣ Safe Discount & Cross-out Price Calculation Logic
+          const originalPrice = item?.oldPrice ? safeNumber(item.oldPrice) : null;
+          const discountNum = safeNumber(item?.discount_value);
+          const rawSave = originalPrice && originalPrice > itemPrice ? originalPrice - itemPrice : 0;
+
+          if (rawSave > 0) {
+            totalOrderSavings += (rawSave * itemQuantity);
+          }
+
+          let activeBadge = "";
+          if (originalPrice && originalPrice > itemPrice) {
+            if (item?.discount_type === "percentage" || item?.discount_type === "Bulk") {
+              activeBadge = item?.discount_value && !isNaN(discountNum)
+                ? `${item.discount_value}% OFF`
+                : `${Math.round((rawSave / originalPrice) * 100)}% OFF`;
+            } else if (item?.discount_type === "fixed") {
+              activeBadge = item?.discount_value && !isNaN(discountNum)
+                ? `€${item.discount_value} OFF`
+                : `€${rawSave.toFixed(2)} OFF`;
+            } else {
+              activeBadge = `${Math.round((rawSave / originalPrice) * 100)}% OFF`;
+            }
+          }
 
           // 🌟 Match row item against its respective category tax parameters
           const matchingRule = taxRules.find(
@@ -93,17 +119,33 @@ export default function OrderSummaryReadOnly({
                 />
               </div>
 
-              <div className="flex-1">
-                <p className="text-sm font-medium">{item.title}</p>
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between items-start gap-2">
+                  <p className="text-sm font-medium text-gray-900 truncate">{item.title}</p>
+                  
+                  {/* 2️⃣ Render dynamic item badge inside summary line */}
+                  {activeBadge && (
+                    <span className="text-[9px] bg-red-100 text-red-600 rounded px-1 py-0.5 font-bold uppercase shrink-0">
+                      {activeBadge}
+                    </span>
+                  )}
+                </div>
 
-                <p className="text-xs text-gray-500 space-x-0.5">
-                  {symbol}
-                  {itemPrice.toFixed(2)} x {itemQuantity} = {symbol}
-                  {itemLineTotalConverted.toFixed(2)}
-                </p>
+                <div className="text-xs text-gray-500 mt-0.5 flex flex-wrap items-center gap-x-1">
+                  {originalPrice && originalPrice > itemPrice && (
+                    <span className="line-through text-gray-400">
+                      {symbol}{(rate * originalPrice).toFixed(2)}
+                    </span>
+                  )}
+                  <span>
+                    {symbol}{itemPrice.toFixed(2)} x {itemQuantity} = 
+                  </span>
+                  <span className="font-medium text-gray-900">
+                    {symbol}{itemLineTotalConverted.toFixed(2)}
+                  </span>
+                </div>
 
-                {/* 🌟 Specific sub-label for clarity on tax inclusions */}
-                <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-0.5">
+                <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-1">
                   Includes {ruleName} ({Number(rulePercent).toFixed(0)}%)
                 </span>
               </div>
@@ -129,6 +171,15 @@ export default function OrderSummaryReadOnly({
               : `${symbol}${shippingConverted.toFixed(2)}`}
           </span>
         </div>
+
+        {totalOrderSavings > 0 && (
+          <div className="flex justify-between text-green-600 font-medium">
+            <span>Discounts Saved</span>
+            <span>
+              -{symbol}{(totalOrderSavings * rate).toFixed(2)}
+            </span>
+          </div>
+        )}
 
         {/* 🌟 Consolidated label for multi-item embedded pricing structures */}
         <div className="flex justify-between text-gray-500 italic">
