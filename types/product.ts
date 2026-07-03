@@ -21,6 +21,7 @@ export interface Product {
 
   discount_type?: string;
   discount_value?: number;
+  promo_code?: string;
 
   savings?: number;
 

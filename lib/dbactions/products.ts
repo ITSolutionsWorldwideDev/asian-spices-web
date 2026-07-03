@@ -48,9 +48,9 @@ export const getProducts = async (filters: any) => {
 
   if (saleOnly) {
     query += ` AND (
-    (p.discount_type IS NOT NULL AND p.discount_value::text != 'NaN' AND p.discount_value > 0)
-    OR (p.sale_price IS NOT NULL AND p.sale_price < p.base_price)
-  ) AND (p.promo_code IS NULL OR p.promo_code = '')`;
+      (p.discount_type IS NOT NULL AND p.discount_value::text != 'NaN' AND p.discount_value > 0)
+      OR (p.sale_price IS NOT NULL AND p.sale_price < p.base_price)
+    ) AND (p.promo_code IS NULL OR p.promo_code = '')`;
   }
 
   // 🔹 Category

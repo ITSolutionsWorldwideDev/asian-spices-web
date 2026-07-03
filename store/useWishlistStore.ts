@@ -16,6 +16,7 @@ export interface WishlistItem {
 
   discount_type?: string;
   discount_value?: number;
+  promo_code?: string;
 }
 
 interface WishlistState {

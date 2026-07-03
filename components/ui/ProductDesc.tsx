@@ -223,7 +223,8 @@ export default function ProductDesc({ product }: { product: Product }) {
                     image: images[0] || "/images/placeholder.png",
                     slug: product.slug,
                     category_slug: product.category_slug,
-                    category_id: product.category_id, 
+                    category_id: product.category_id,
+                    promo_code: product.promo_code,                    
                   },
                   isLoggedIn,
                 )

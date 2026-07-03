@@ -33,6 +33,7 @@ type Product = {
   weight?: string;
   discount_value?: string;
   discount_type?: string;
+  promo_code?: string;
 };
 
 interface ProductCardProps {
@@ -249,6 +250,7 @@ export default function ProductCard({
                           slug: product.slug,
                           category_slug: product.category_slug,
                           category_id: product.category_id,
+                          promo_code: product.promo_code,
                         },
                         isLoggedIn,
                       );
