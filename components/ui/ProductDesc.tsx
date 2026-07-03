@@ -216,7 +216,10 @@ export default function ProductDesc({ product }: { product: Product }) {
                   {
                     id: product.id,
                     title: product.name,
-                    base_price: currentPrice, // Passes calculated active deal cost
+                    base_price: Number(currentPrice || 0),
+                    oldPrice: Number(originalPrice || 0),
+                    discount_value: Number(product.discount_value || 0),
+                    discount_type: product.discount_type,
                     image: images[0] || "/images/placeholder.png",
                     slug: product.slug,
                     category_slug: product.category_slug,

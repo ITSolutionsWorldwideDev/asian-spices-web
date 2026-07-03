@@ -36,6 +36,10 @@ export async function GET() {
           sci.quantity,
           p.name AS title,
           p.base_price::numeric AS base_price,
+          p.discount_type,
+          p.discount_value,
+          p.sale_price,
+          p.promo_code,
           img.file_url AS image 
         FROM store_cart_items sci
         LEFT JOIN store_products p ON p.id = sci.product_id        

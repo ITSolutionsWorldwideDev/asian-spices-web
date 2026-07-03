@@ -202,7 +202,9 @@ export default function ProductCard({
               </div>
 
               {/* Dynamic Action Buttons Bottom Control Block */}
+              
               <div className="mt-4">
+                
                 {cartItem ? (
                   <div className="flex items-center justify-between border border-gray-200 rounded-xl overflow-hidden h-[40px]">
                     <button
@@ -230,6 +232,7 @@ export default function ProductCard({
                     </button>
                   </div>
                 ) : (
+                  
                   <button
                     className="cursor-pointer w-full h-[40px] bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white rounded-xl text-sm font-bold flex items-center justify-center transition shadow-sm active:scale-[0.99]"
                     onClick={() => {
@@ -237,7 +240,10 @@ export default function ProductCard({
                         {
                           id: product.id,
                           title: product.name,
-                          base_price: currentPrice,
+                          base_price: Number(currentPrice || 0),
+                          oldPrice: Number(originalPrice || 0),
+                          discount_value: Number(product.discount_value || 0),
+                          discount_type: product.discount_type,
                           image: product.image || "/images/placeholder.png",
                           slug: product.slug,
                           category_slug: product.category_slug,

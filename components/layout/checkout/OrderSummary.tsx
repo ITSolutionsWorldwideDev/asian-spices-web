@@ -35,15 +35,35 @@ export default function OrderSummary({
   shippingMethodName = "Shipping",
   deliveryDaysText,
 }: Props) {
+  // const { taxRate, taxName } = useGlobalStore();
+
+  const isValidShippingMethod = (method: any): method is ShippingMethod => {
+    return method in SHIPPING_OPTIONS;
+  };
+
+  const safeMethod: ShippingMethod = isValidShippingMethod(shippingMethod)
+    ? shippingMethod
+    : "standard";
+
   const { symbol, rate } = useCurrencyStore();
   const { taxRules } = useGlobalStore(); // 🌟 Grab full rules reference to lookup per row labels
+  {
+    taxRules;
+  }
 
   const globalRule = taxRules.find((r) => r.category_id === null);
   const globalRateLabel = globalRule
     ? `${globalRule.tax_name} (${globalRule.tax_rate}%)`
     : "VAT (21%)";
 
+  const convertedThreshold = FREE_SHIPPING_THRESHOLD * (rate || 1);
+
+  const amountForFreeShipping =
+    subtotal < FREE_SHIPPING_THRESHOLD ? convertedThreshold - subtotal : 0;
+
   const hasFreeShipping = shipping <= 0;
+
+  let totalOrderSavings = 0;
 
   return (
     <div className="bg-white rounded-xl border border-[#E5E7EB] p-6">
@@ -54,6 +74,30 @@ export default function OrderSummary({
           const itemPrice = Number(item.base_price || 0);
           const itemQuantity = Number(item.quantity || 1);
           const itemTotalPrice = rate * (itemPrice * itemQuantity);
+
+          // 1️⃣ Safe Discount & Cross-out Price Calculation Logic
+          const originalPrice = item.oldPrice ? Number(item.oldPrice) : null;
+          const discountNum = Number(item.discount_value);
+          const rawSave = originalPrice && originalPrice > itemPrice ? originalPrice - itemPrice : 0;
+          
+          if (rawSave > 0) {
+            totalOrderSavings += (rawSave * itemQuantity);
+          }
+
+          let activeBadge = "";
+          if (originalPrice && originalPrice > itemPrice) {
+            if (item.discount_type === "percentage" || item.discount_type === "Bulk") {
+              activeBadge = item.discount_value && !isNaN(discountNum)
+                ? `${item.discount_value}% OFF`
+                : `${Math.round((rawSave / originalPrice) * 100)}% OFF`;
+            } else if (item.discount_type === "fixed") {
+              activeBadge = item.discount_value && !isNaN(discountNum)
+                ? `€${item.discount_value} OFF`
+                : `€${rawSave.toFixed(2)} OFF`;
+            } else {
+              activeBadge = `${Math.round((rawSave / originalPrice) * 100)}% OFF`;
+            }
+          }
 
           // Find row category target label rule definition
           const matchingRule = taxRules.find(
@@ -77,18 +121,49 @@ export default function OrderSummary({
                 />
               </div>
 
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between items-start gap-2">
+                  <p className="text-sm font-medium text-gray-900 truncate">{item.title}</p>
+                  
+                  {/* 2️⃣ Render small line-item discount badges if active */}
+                  {activeBadge && (
+                    <span className="text-[9px] bg-red-100 text-red-600 rounded px-1 py-0.5 font-bold uppercase shrink-0">
+                      {activeBadge}
+                    </span>
+                  )}
+                </div>
+
+                <div className="text-xs text-gray-500 mt-0.5 flex flex-wrap items-center gap-x-1">
+                  {originalPrice && originalPrice > itemPrice && (
+                    <span className="line-through text-gray-400">
+                      {symbol}{(rate * originalPrice).toFixed(2)}
+                    </span>
+                  )}
+                  <span>
+                    {symbol}{itemPrice.toFixed(2)} x {itemQuantity} = 
+                  </span>
+                  <span className="font-medium text-gray-900">
+                    {symbol}{itemTotalPrice.toFixed(2)}
+                  </span>
+                </div>
+
+                <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-1">
+                  Includes {ruleName} ({Number(rulePercent).toFixed(0)}%)
+                </span>
+              </div>
+
+              {/* <div className="flex-1">
                 <p className="text-sm font-medium">{item.title}</p>
                 <p className="text-xs text-gray-500 space-x-0.5">
                   {symbol}
                   {itemPrice.toFixed(2)} x {itemQuantity} = {symbol}
                   {itemTotalPrice.toFixed(2)}
                 </p>
-                {/* 🌟 Row specific tax indicator feedback */}
+        
                 <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-0.5">
                   Includes {ruleName} ({Number(rulePercent).toFixed(0)}%)
                 </span>
-              </div>
+              </div> */}
             </div>
           );
         })}
@@ -112,9 +187,19 @@ export default function OrderSummary({
           </span>
         </div>
 
+        {/* 3️⃣ Display total item discounts saved inside summary values */}
+        {totalOrderSavings > 0 && (
+          <div className="flex justify-between mt-2 text-green-600 font-medium">
+            <span>Discounts Saved</span>
+            <span>
+              -{symbol}{(totalOrderSavings * rate).toFixed(2)}
+            </span>
+          </div>
+        )}
+
         {/* 🌟 Global Breakdown Clean Label (Since value is already baked into price total) */}
         <div className="flex justify-between mt-3 text-gray-500 italic">
-          <span>Total Included Tax</span>
+          <span>Total Tax</span>
           <span>
             {symbol}
             {Number(tax || 0).toFixed(2)}
@@ -132,7 +217,59 @@ export default function OrderSummary({
         </span>
       </div>
 
-      {/* ... keep billing codes layout CTA and fields remaining ... */}
+      <p className="text-xs text-gray-500">
+        {shippingMethod === "standard" && "Delivery in 5-7 days"}
+        {shippingMethod === "express" && "Delivery in 2-3 days"}
+        {shippingMethod === "overnight" && "Next day delivery"}
+      </p>
+
+      <div className="bg-white border-gray-200 py-5 border-b mb-6">
+        <label
+          htmlFor="promo-code"
+          className="block text-sm font-medium text-gray-700 mb-3"
+        >
+          Promo Code
+        </label>
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <input
+            id="promo-code"
+            type="text"
+            placeholder="Enter code"
+            readOnly
+            className="w-full sm:flex-1 px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          />
+
+          <button
+            disabled
+            className="w-full sm:w-auto px-6 py-2.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          >
+            Apply
+          </button>
+        </div>
+
+        <p className="mt-2 text-xs text-gray-500">Try: SPICE20 or WELCOME10</p>
+      </div>
+
+      {!hasFreeShipping && amountForFreeShipping > 0 && (
+        <>
+          <div className="px-5 py-4 rounded-xl mt-5">
+            <div className="text-[#F83600] flex items-center justify-center w-full">
+              <ShoppingCart className="mr-3" />
+              Add {symbol}
+              {(rate * amountForFreeShipping).toFixed(2)} more for free shipping
+            </div>
+          </div>
+
+          <div className="bg-linear-to-r from-[#FE8C00] to-[#F83600] px-5 py-4 rounded-xl mt-5">
+            <Link href="/">
+              <button className="cursor-pointer text-white flex items-center justify-center w-full">
+                Continue Shopping
+              </button>
+            </Link>
+          </div>
+        </>
+      )}
     </div>
   );
 }

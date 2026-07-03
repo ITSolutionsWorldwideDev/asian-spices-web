@@ -8,8 +8,14 @@ export interface WishlistItem {
   name: string;
   image: string;
   base_price: number;
+  oldPrice?: number;
+
   slug?: string;
+  category_id?: string;
   category_slug?: string;
+
+  discount_type?: string;
+  discount_value?: number;
 }
 
 interface WishlistState {

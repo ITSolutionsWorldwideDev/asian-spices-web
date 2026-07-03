@@ -256,6 +256,9 @@ export default function WishList() {
                               title: itemTitle, // ✅ Syncing fixed title parameter
                               image: item.image,
                               base_price: Number(item.base_price || 0),
+                              oldPrice: Number(item.base_price || 0),
+                              discount_value: Number(item.discount_value || 0),
+                              discount_type: item.discount_type,
                               slug: item.slug,
                               category_slug: itemCategorySlug,
                             },

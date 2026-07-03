@@ -197,7 +197,10 @@ export default function FlashSaleProductCard() {
                       {
                         id: item.id,
                         title: item.title,
-                        base_price: item.base_price, // maps the valid discounted value
+                        base_price: Number(item.base_price || 0), // maps the valid discounted value
+                        oldPrice: Number(item.base_price || 0),
+                        discount_value: Number(item.oldPrice || 0),
+                        discount_type: item.discount_type,
                         image: item.image,
                         slug: item.slug,
                         category_slug: item.category_slug,
