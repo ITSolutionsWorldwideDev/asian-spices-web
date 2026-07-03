@@ -204,6 +204,7 @@ export default function FlashSaleProductCard() {
                         image: item.image,
                         slug: item.slug,
                         category_slug: item.category_slug,
+                        category_id: item.category_id,
                       },
                       isLoggedIn,
                     );

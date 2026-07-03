@@ -18,6 +18,7 @@ type Product = {
   id: string;
   quantity: number;
   name: string;
+  category_id: string;
   category_slug: string;
   slug: string;
   image: string;
@@ -247,6 +248,7 @@ export default function ProductCard({
                           image: product.image || "/images/placeholder.png",
                           slug: product.slug,
                           category_slug: product.category_slug,
+                          category_id: product.category_id,
                         },
                         isLoggedIn,
                       );

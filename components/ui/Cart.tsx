@@ -137,6 +137,7 @@ export default function Cart() {
             const matchingRule = taxRules.find(
               (r) => r.category_id === item.category_id,
             );
+
             const ruleName = matchingRule
               ? matchingRule.tax_name
               : globalRule?.tax_name || "VAT";

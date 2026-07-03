@@ -261,6 +261,7 @@ export default function WishList() {
                               discount_type: item.discount_type,
                               slug: item.slug,
                               category_slug: itemCategorySlug,
+                              category_id: item.category_id,
                             },
                             isLoggedIn,
                           );
