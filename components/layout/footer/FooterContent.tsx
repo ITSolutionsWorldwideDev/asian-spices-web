@@ -55,7 +55,7 @@ const FooterContent = () => {
 
         <ul className="space-y-3">
           <li>
-            <Link href="#" className="hover:underline">
+            <Link href="/terms" className="hover:underline">
               Terms & Conditions
             </Link>
           </li>
