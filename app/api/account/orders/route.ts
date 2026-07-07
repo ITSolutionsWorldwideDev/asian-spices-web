@@ -41,6 +41,7 @@ export async function GET(req: NextRequest) {
           json_build_object(
             'id', oi.product_id,
             'title', p.name,
+            'category_id', p.category_id,
             'price', oi.price,
             'quantity', oi.quantity,
             'image', md.file_url
