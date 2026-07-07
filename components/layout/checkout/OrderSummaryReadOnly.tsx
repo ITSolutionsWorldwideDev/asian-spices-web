@@ -69,7 +69,7 @@ export default function OrderSummaryReadOnly({
 
       <div className="space-y-4 mb-6">
         {items.map((item: any) => {
-          const itemPrice = safeNumber(item?.base_price);
+          const itemPrice = safeNumber(item?.price);
           const itemQuantity = safeNumber(item?.quantity || 1);
           const itemLineTotalConverted = rate * (itemPrice * itemQuantity);
 
