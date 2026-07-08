@@ -15,6 +15,7 @@ export const getProducts = async (filters: any) => {
     saleOnly = false,
     limit = 20,
     countryCode = "NL",
+    showUnavailable = false,
   } = filters;
 
   let values: any[] = [];
@@ -51,6 +52,39 @@ export const getProducts = async (filters: any) => {
   //   WHERE 1=1
   // `;
 
+  // let query = `
+  //   SELECT 
+  //     p.*, 
+  //     c.slug as category_slug,
+  //     img.file_url AS image,
+  //     cat.min_offered_price,
+  //     cat.total_available_stock,
+  //     ${rankField}
+  //   FROM store_products p
+  //   INNER JOIN (
+  //     SELECT 
+  //       spc.product_id,
+  //       MIN(spc.price) as min_offered_price,
+  //       SUM(spc.quantity) as total_available_stock
+  //     FROM public.store_product_catalog spc
+  //     INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
+  //     WHERE ss.country_code = $${countryParamIndex} AND spc.status = 1
+  //     GROUP BY spc.product_id
+  //   ) cat ON cat.product_id = p.id
+  //   LEFT JOIN store_categories c ON c.id = p.category_id
+  //   LEFT JOIN (
+  //     SELECT DISTINCT ON (pi.product_id) 
+  //       pi.product_id, 
+  //       md.file_url
+  //     FROM store_product_images pi
+  //     LEFT JOIN media md ON md.media_id = pi.url::int
+  //     ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
+  //   ) img ON img.product_id = p.id
+  //   WHERE 1=1
+  // `;
+
+  const joinType = showUnavailable ? "LEFT JOIN" : "INNER JOIN";
+
   let query = `
     SELECT 
       p.*, 
@@ -60,7 +94,7 @@ export const getProducts = async (filters: any) => {
       cat.total_available_stock,
       ${rankField}
     FROM store_products p
-    INNER JOIN (
+    ${joinType} (
       SELECT 
         spc.product_id,
         MIN(spc.price) as min_offered_price,
@@ -188,7 +222,7 @@ export const getProductBySlug = async (slug: string, countryCode: string = "NL")
         '[]'
       ) AS images
     FROM store_products p
-    INNER JOIN (
+    LEFT JOIN (
       SELECT 
         spc.product_id,
         MIN(spc.price) as min_offered_price,
@@ -234,7 +268,7 @@ export const getRelatedProducts = async (category_id: string, countryCode: strin
       c.slug AS category_slug,
       md.file_url AS image
     FROM store_products p
-    INNER JOIN (
+    LEFT JOIN (
       SELECT 
         spc.product_id,
         MIN(spc.price) as min_offered_price
