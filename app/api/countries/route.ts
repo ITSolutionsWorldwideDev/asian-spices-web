@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
       query += ` WHERE is_shippable = true`;
     }
 
-    query += ` ORDER BY country_name ASC`;
+    query += ` ORDER BY country_code ASC`;
 
     const result = await pool.query(query, values);
 

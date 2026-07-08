@@ -4,12 +4,6 @@ import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";
 import { getProductBySlug, getRelatedProducts } from "@/lib/dbactions/products";
 
-// interface PageProps {
-//   params: Promise<{
-//     slug: string;
-//   }>;
-// }
-
 interface PageProps {
   params: Promise<{
     slug: string;

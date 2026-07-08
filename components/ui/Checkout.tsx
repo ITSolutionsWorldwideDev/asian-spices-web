@@ -96,26 +96,29 @@ export default function Checkout() {
     }
   }, [session]);
 
-  const handleAddressChange = useCallback(async (address: any) => {
-    if (!address) return;
-    setSelectedAddress(address);
-    const activeCountry = address?.country || "NL";
-    
-    setFormData((prev) => ({
-      ...prev,
-      phone: address.phone || "",
-      firstName: address.first_name || address.firstName || "",
-      lastName: address.last_name || address.lastName || "",
-      address: address.address_line1 || address.address || "",
-      appartment: address.address_line2 || address.appartment || "",
-      city: address.city || "",
-      state: address.state || "",
-      zip: address.postal_code || address.zip || "",
-      country: activeCountry,
-    }));
+  const handleAddressChange = useCallback(
+    async (address: any) => {
+      if (!address) return;
+      setSelectedAddress(address);
+      const activeCountry = address?.country || "NL";
 
-    await setSelectedCountry(activeCountry); 
-  }, [setSelectedCountry]);
+      setFormData((prev) => ({
+        ...prev,
+        phone: address.phone || "",
+        firstName: address.first_name || address.firstName || "",
+        lastName: address.last_name || address.lastName || "",
+        address: address.address_line1 || address.address || "",
+        appartment: address.address_line2 || address.appartment || "",
+        city: address.city || "",
+        state: address.state || "",
+        zip: address.postal_code || address.zip || "",
+        country: activeCountry,
+      }));
+
+      await setSelectedCountry(activeCountry);
+    },
+    [setSelectedCountry],
+  );
 
   const selectedOption = availableShippingOptions.find(
     (opt: any) =>
@@ -185,12 +188,14 @@ export default function Checkout() {
         show("Loading Addresses...");
 
         const res = await fetch("/api/account/addresses");
-        const data = await res.json();
+
+        const rawData = await res.json();
+        const data = JSON.parse(JSON.stringify(rawData));
 
         const addressList = data.addresses || [];
         setAddresses(addressList);
 
-        const defaultAddr = data.addresses?.find((a: any) => a.is_default);
+        const defaultAddr = addressList?.find((a: any) => a.is_default);
 
         if (defaultAddr) {
           // Pass execution context directly through the updater callback pipeline
@@ -224,7 +229,7 @@ export default function Checkout() {
     };
 
     loadAddresses();
-    }, [session, handleAddressChange]);
+  }, [session, handleAddressChange]);
   // }, [session]);
 
   // useEffect(() => {
@@ -238,7 +243,6 @@ export default function Checkout() {
       setSelectedCountry(formData.country);
     }
   }, [formData.country, setSelectedCountry]);
-
 
   const isFormValid = checkoutSchema.safeParse(formData).success;
 

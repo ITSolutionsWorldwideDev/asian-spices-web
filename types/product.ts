@@ -8,6 +8,7 @@ export interface Product {
   description?: string;
 
   base_price: number;
+  min_offered_price?: number;
   sale_price?: number;
   quantity: number;
 
