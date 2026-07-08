@@ -9,10 +9,12 @@ export default function RetryPaymentButton({
   orderId,
   amount,
   email,
+  paymentMethod = "paynl",
 }: {
   orderId: string;
   amount: number;
   email: string;
+  paymentMethod?: "paynl" | "paypal";
 }) {
   const [loading, setLoading] = useState(false);
   const { show, hide } = useLoaderStore();
@@ -32,7 +34,7 @@ export default function RetryPaymentButton({
           orderId,
           amount,
           customerEmail: email,
-          paymentMethod: "paynl",
+          paymentMethod,
         }),
       });
 

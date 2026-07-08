@@ -45,14 +45,17 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
 
     const fetchOrder = async () => {
       try {
-        show("Checking payment status...");
+        if (isInitialFetch.current) {
+          show("Checking payment status...");
+        }
+
         const res = await fetch(`/api/get-order?orderId=${orderId}`);
         const data = await res.json();
 
         if (data.success && data.order) {
           setOrder(data.order);
 
-          // ✅ STOP polling when payment is done
+          // Stop polling when payment is no longer pending
           if (data.order.payment_status !== "pending") {
             clearInterval(interval);
           }
@@ -61,6 +64,7 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
         console.error(err);
       } finally {
         if (isInitialFetch.current) {
+          isInitialFetch.current = false;
           setLoading(false);
           hide();
         }

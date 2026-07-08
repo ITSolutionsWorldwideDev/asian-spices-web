@@ -84,6 +84,33 @@ export async function POST(req: NextRequest) {
     const captureData = await captureRes.json();
 
     if (!captureRes.ok) {
+      const alreadyCaptured = captureData?.details?.some?.(
+        (detail: { issue?: string }) => detail.issue === "ORDER_ALREADY_CAPTURED",
+      );
+
+      if (alreadyCaptured) {
+        const orderDetailsRes = await fetch(
+          `${PAYPAL_API}/v2/checkout/orders/${paypalOrderId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+
+        const orderDetails = await orderDetailsRes.json();
+
+        if (orderDetails?.status === "COMPLETED") {
+          await markPayPalOrderPaid(orderId, paypalOrderId);
+          return NextResponse.json({
+            success: true,
+            status: "COMPLETED",
+            alreadyPaid: true,
+          });
+        }
+      }
+
       console.error("PayPal capture error:", captureData);
 
       return NextResponse.json(
@@ -92,64 +119,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4️⃣ Extract capture info safely
+    // Extract capture info safely
     const captureId =
       captureData?.purchase_units?.[0]?.payments?.captures?.[0]?.id;
 
     const status = captureData?.status;
 
-    // 3️⃣ Update Database and trigger Store Routing only if COMPLETED
     if (status === "COMPLETED") {
-      const client = await pool.connect();
-      let shouldSendEmail = false;
-
-      try {
-        await client.query("BEGIN");
-
-        // Set state to 'pending' to protect the shipping pipeline state integrity
-        const updateResult: any = await client.query(
-          `UPDATE store_orders
-           SET payment_status = 'paid',
-               order_status = 'pending', 
-               transaction_id = $1,
-               updated_at = NOW()
-           WHERE id = $2 AND payment_method = 'paypal' AND payment_status != 'paid'
-           RETURNING id`,
-          [paypalOrderId, orderId],
-        );
-
-        if (updateResult?.rowCount > 0) {
-          shouldSendEmail = true;
-
-          // Log payment collection completion event
-          await logOrderEvent(client, {
-            orderId: orderId,
-            eventType: ORDER_EVENTS.ASSIGNED,
-            message: `PayPal capture successful. Captured Reference ID: ${captureId}. Order created and routing started`,
-            metadata: { captureId },
-          });
-
-          // ⚡ RUN CRITICAL STORE SELECTION PIPELINE ⚡
-          console.log(
-            `Executing decentralized routing for Order ID: ${orderId}`,
-          );
-          await assignNextStore(client, orderId);
-        }
-
-        await client.query("COMMIT");
-      } catch (txError) {
-        await client.query("ROLLBACK");
-        throw txError; // Bubbles up to outer catch block handler
-      } finally {
-        client.release();
-      }
-
-      if (shouldSendEmail) {
-        // Run un-awaited to optimize response latency to the payment processor callback
-        sendOrderConfirmationEmail(orderId).catch((err) =>
-          console.error("[Email Trigger Error Background Execution]:", err),
-        );
-      }
+      await markPayPalOrderPaid(orderId, paypalOrderId, captureId);
     }
 
     return NextResponse.json({
@@ -163,6 +140,57 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { success: false, error: "Server error" },
       { status: 500 },
+    );
+  }
+}
+
+async function markPayPalOrderPaid(
+  orderId: string,
+  paypalOrderId: string,
+  captureId?: string,
+) {
+  const client = await pool.connect();
+  let shouldSendEmail = false;
+
+  try {
+    await client.query("BEGIN");
+
+    const updateResult: any = await client.query(
+      `UPDATE store_orders
+       SET payment_status = 'paid',
+           order_status = 'pending',
+           transaction_id = $1,
+           updated_at = NOW()
+       WHERE id = $2 AND payment_method = 'paypal' AND payment_status != 'paid'
+       RETURNING id`,
+      [paypalOrderId, orderId],
+    );
+
+    if (updateResult?.rowCount > 0) {
+      shouldSendEmail = true;
+
+      await logOrderEvent(client, {
+        orderId: orderId,
+        eventType: ORDER_EVENTS.ASSIGNED,
+        message: `PayPal capture successful. Captured Reference ID: ${captureId ?? paypalOrderId}. Order created and routing started`,
+        metadata: { captureId: captureId ?? paypalOrderId },
+      });
+
+      console.log(`Executing decentralized routing for Order ID: ${orderId}`);
+      await assignNextStore(client, orderId);
+    }
+
+    await client.query("COMMIT");
+  } catch (txError) {
+    await client.query("ROLLBACK");
+    throw txError;
+  } finally {
+    client.release();
+  }
+
+  if (shouldSendEmail) {
+    sendOrderConfirmationEmail(orderId).catch((err) =>
+      console.error("[Email Trigger Error Background Execution]:", err),
     );
   }
 }

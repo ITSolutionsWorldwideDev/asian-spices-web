@@ -151,6 +151,13 @@ export async function POST(req: NextRequest) {
     }
 
     if (paymentMethod === "paypal") {
+      if (!PAYPAL_CLIENT_ID || !PAYPAL_SECRET) {
+        return NextResponse.json(
+          { error: "PayPal is not configured on the server" },
+          { status: 503 },
+        );
+      }
+
       const returnUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?orderId=${order.id}`;
       const cancelUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/cancel?orderId=${order.id}`;
 
@@ -237,8 +244,16 @@ async function createPayPalOrder(
   });
 
   const orderData = await orderRes.json();
-  const approveLink = orderData.links.find(
-    (link: any) => link.rel === "approve",
+
+  if (!orderRes.ok) {
+    console.error("PayPal order creation failed:", orderData);
+    throw new Error(
+      orderData?.message || "Failed to create PayPal checkout order",
+    );
+  }
+
+  const approveLink = orderData.links?.find(
+    (link: { rel?: string; href?: string }) => link.rel === "approve",
   )?.href;
 
   return { orderData, approveLink };
