@@ -5,13 +5,19 @@
 import { useEffect, useRef, useState } from "react";
 import ProductCard from "@/components/ui/ProductCard";
 import { useLoaderStore } from "@/store/useLoaderStore";
+import { useGlobalStore } from "@/store/useGlobalStore";
 
 export default function InfiniteProducts({ initialProducts, filters }: any) {
+
+  const { selectedCountry } = useGlobalStore();
+
   const mapProductData = (items: any[]) => {
     return (items || []).map((p: any) => {
-      const basePrice = Number(p.base_price || 0);
+
+      const basePrice = Number(p.min_offered_price || p.base_price || 0);
       const salePrice = Number(p.sale_price || basePrice);
       const rawSave = basePrice - salePrice;
+      
 
       let offBadge = "";
       if (rawSave > 0) {
@@ -54,7 +60,8 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
   const isFetchingRef = useRef(false);
   const limit = 20;
 
-  const serializedFilters = JSON.stringify(filters);
+  // const serializedFilters = JSON.stringify(filters);
+  const serializedFilters = JSON.stringify({ ...filters, country: selectedCountry });
 
   const buildParams = (filters: any, page: number) => {
     const params = new URLSearchParams();
@@ -70,6 +77,8 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
         params.set(key, String(value));
       }
     });
+
+    params.set("country", selectedCountry);
     params.set("page", String(page));
     return params.toString();
   };
@@ -96,13 +105,6 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
 
       // Map incoming batch items through the transformation schema
       const newProducts = mapProductData(rawNewProducts);
-
-      // const newProducts = data.data || [];
-
-      // if (newProducts.length === 0) {
-      //   setHasMore(false);
-      //   return;
-      // }
 
       setProducts((prev: any) => {
         const map = new Map();

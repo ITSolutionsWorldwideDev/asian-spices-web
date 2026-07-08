@@ -13,6 +13,7 @@ import { Heart } from "lucide-react";
 import Link from "next/link";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useSession } from "next-auth/react";
+import { useGlobalStore } from "@/store/useGlobalStore";
 
 type Product = {
   id: string;
@@ -24,6 +25,7 @@ type Product = {
   image: string;
   base_price: number;
   oldPrice: number | null;
+  min_offered_price: number | null;
   tag: string;
   off: string;
   rating: number;
@@ -46,6 +48,8 @@ export default function ProductCard({
   disableSlicing = false,
 }: ProductCardProps) {
   const { symbol, rate } = useCurrencyStore();
+  const { selectedCountry } = useGlobalStore();
+  
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
 
@@ -73,7 +77,9 @@ export default function ProductCard({
           );
 
           // 1️⃣ Safe Numeric Extractions & Conversions
-          const currentPrice = Number(product.base_price || 0);
+          // const currentPrice = Number(product.base_price || 0);
+          
+          const currentPrice = Number(product.min_offered_price || product.base_price || 0);
           const originalPrice = product.oldPrice
             ? Number(product.oldPrice)
             : null;
@@ -165,7 +171,7 @@ export default function ProductCard({
 
                 {/* Routing Anchors */}
                 <Link
-                  href={`/${product.category_slug || "spices"}/${product.slug}`.replace(
+                  href={`/${product.category_slug || "spices"}/${product.slug}?country=${selectedCountry}`.replace(
                     /\/+/g,
                     "/",
                   )}

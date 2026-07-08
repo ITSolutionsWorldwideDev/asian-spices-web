@@ -50,11 +50,11 @@ export async function GET(req: NextRequest) {
       console.log('isLocalhost ==== ',isLocalhost);
 
     if (!geoCountry && isLocalhost) {
-      // Feel free to change this to "DE", "DK", etc. to verify your frontend code switches countries reactively!
-      geoCountry = "DE";
-      console.log(
-        `[Dev Cache Mode] Localhost environment spotted. Injecting mocked country: ${geoCountry}`,
-      );
+      geoCountry = "DE"; // Set this to any shippable test country you want to test locally
+      return NextResponse.json({
+        country: geoCountry.toUpperCase(),
+        source: "localhost-mock",
+      });
     }
 
     if (geoCountry && geoCountry.length === 2) {
@@ -64,7 +64,25 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // 3. Fallback flag signaling frontend client to look up country via third-party service
+    // 3. SERVER-SIDE THIRD PARTY FALLBACK: If headers are completely missing in production
+    try {
+      const ipApiResponse = await fetch("http://ip-api.com/json/", {
+        signal: AbortSignal.timeout(1500)
+      });
+      if (ipApiResponse.ok) {
+        const ipData = await ipApiResponse.json();
+        if (ipData?.countryCode && ipData.countryCode.length === 2) {
+          return NextResponse.json({
+            country: ipData.countryCode.toUpperCase(),
+            source: "server-ip-api"
+          });
+        }
+      }
+    } catch (ipErr) {
+      console.warn("Server-side third-party IP fallback failed:", ipErr);
+    }
+
+    // 4. Fallback flag signaling frontend client to look up country via third-party service
     return NextResponse.json({ country: defaultFallback, source: "fallback" });
   } catch (error) {
     console.error("Location resolution engine exception:", error);

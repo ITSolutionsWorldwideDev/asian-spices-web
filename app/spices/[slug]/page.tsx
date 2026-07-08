@@ -4,16 +4,25 @@ import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";
 import { getProductBySlug, getRelatedProducts } from "@/lib/dbactions/products";
 
+// interface PageProps {
+//   params: Promise<{
+//     slug: string;
+//   }>;
+// }
+
 interface PageProps {
   params: Promise<{
     slug: string;
   }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>; // 🟢 ADDED: Type definition for URL search queries
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const sParams = await searchParams;
+  const country = (sParams?.country as string) || "NL";
 
-  const product = await getProductBySlug(slug);
+  const product = await getProductBySlug(slug, country);
 
   if (!product || !product.id) {
     return {
@@ -27,9 +36,12 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-export default async function SpicesDetailPage({ params }: PageProps) {
+export default async function SpicesDetailPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const sParams = await searchParams;
+  const country = (sParams?.country as string) || "NL";
+
+  const product = await getProductBySlug(slug, country);
 
   if (!product || !product.id) {
     return (
@@ -39,23 +51,9 @@ export default async function SpicesDetailPage({ params }: PageProps) {
     );
   }
 
-  const relatedProducts = await getRelatedProducts(product.category_id);
+  const relatedProducts = await getRelatedProducts(product.category_id, country);
 
   return (
     <ProductDescrption product={product} relatedProducts={relatedProducts} />
   );
 }
-
-/* import SpicesProductDesc from "@/components/layout/productdescallpages/SpicesProductDesc";
-import React from "react";
-
-const spicesDetailPage = () => {
-  return (
-    <div>
-      <SpicesProductDesc />
-    </div>
-  );
-};
-
-export default spicesDetailPage;
- */
