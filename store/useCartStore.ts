@@ -32,6 +32,8 @@ interface CartState {
 
   setCart: (items: CartItem[]) => void;
   clearCart: (isLoggedIn?: boolean) => void;
+
+  refreshGuestPrices: (countryCode: string) => Promise<void>;
 }
 
 export const useCartStore = create<CartState>()(
@@ -232,6 +234,31 @@ export const useCartStore = create<CartState>()(
           console.error("Failed to clear DB cart:", err);
         }
       },
+
+      // 🟢 2. Implement the Guest Price Updates execution sequence
+      refreshGuestPrices: async (countryCode: string) => {
+        const currentItems = get().cart;
+        if (currentItems.length === 0) return;
+
+        try {
+          const ids = currentItems.map((i) => i.id).join(",");
+          // Fetches the regional prices for the localized guest items
+          const res = await fetch(`/api/products/batch-prices?ids=${ids}&country=${countryCode}`);
+          if (!res.ok) return;
+
+          const pricingMap = await res.json(); // Map layout structure: { [product_id]: price }
+
+          const updatedCart = currentItems.map((item) => ({
+            ...item,
+            // Replaces base price with localized price if available
+            base_price: pricingMap[item.id] !== undefined ? Number(pricingMap[item.id]) : item.base_price,
+          }));
+
+          set({ cart: updatedCart });
+        } catch (err) {
+          console.error("Failed to update guest prices context safely:", err);
+        }
+      },
     }),
     {
       name: "cart-storage",
@@ -249,6 +276,7 @@ export const useCartStore = create<CartState>()(
           setQty: () => {},
           setCart: () => {},
           clearCart: () => {},
+          refreshGuestPrices: async () => {},
         };
       },
     },

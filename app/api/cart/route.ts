@@ -6,12 +6,15 @@ import { getServerSession } from "next-auth";
 import { webAuthOptions } from "@/core/auth";
 
 // ✅ GET CART
-export async function GET() {
+export async function GET(req: Request) {
   const session = await getServerSession(webAuthOptions);
 
   if (!session?.user?.id) {
     return NextResponse.json([], { status: 200 });
   }
+
+  const { searchParams } = new URL(req.url);
+  const countryCode = (searchParams.get("country") || "NL").toUpperCase();
 
   const client = await pool.connect();
 
@@ -35,7 +38,7 @@ export async function GET() {
           sci.product_id,
           sci.quantity,
           p.name AS title,
-          p.base_price::numeric AS base_price,
+          COALESCE(cat.min_offered_price, p.base_price)::numeric AS base_price,
           p.discount_type,
           p.discount_value,
           p.sale_price,
@@ -43,6 +46,15 @@ export async function GET() {
           img.file_url AS image 
         FROM store_cart_items sci
         LEFT JOIN store_products p ON p.id = sci.product_id        
+        LEFT JOIN (
+          SELECT 
+            spc.product_id,
+            MIN(spc.price) as min_offered_price
+          FROM public.store_product_catalog spc
+          INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
+          WHERE ss.country_code = $2 AND spc.status = 1
+          GROUP BY spc.product_id
+        ) cat ON cat.product_id = p.id
         LEFT JOIN (
           SELECT DISTINCT ON (pi.product_id) 
             pi.product_id, 
@@ -53,8 +65,35 @@ export async function GET() {
         ) img ON img.product_id = p.id
         WHERE sci.cart_id = $1
       `,
-      [cartRes.rows[0].id],
+      [cartRes.rows[0].id, countryCode],
     );
+
+    // const items = await client.query(
+    //   `
+    //     SELECT 
+    //       sci.product_id,
+    //       sci.quantity,
+    //       p.name AS title,
+    //       p.base_price::numeric AS base_price,
+    //       p.discount_type,
+    //       p.discount_value,
+    //       p.sale_price,
+    //       p.promo_code,
+    //       img.file_url AS image 
+    //     FROM store_cart_items sci
+    //     LEFT JOIN store_products p ON p.id = sci.product_id        
+    //     LEFT JOIN (
+    //       SELECT DISTINCT ON (pi.product_id) 
+    //         pi.product_id, 
+    //         md.file_url
+    //       FROM store_product_images pi
+    //       LEFT JOIN media md ON md.media_id = pi.url::int
+    //       ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
+    //     ) img ON img.product_id = p.id
+    //     WHERE sci.cart_id = $1
+    //   `,
+    //   [cartRes.rows[0].id],
+    // );
 
     return NextResponse.json(items.rows);
   } finally {
@@ -147,20 +186,6 @@ export async function DELETE(req: Request) {
 
   console.log('Empty Cart Operation product_id === ',product_id);
 
-  // const { product_id } = await req.json();
-
-  /* ---------------- FIND CUSTOMER ---------------- */
-
-  /* const customerRes = await pool.query(
-    `SELECT id FROM store_customers WHERE user_id = $1 LIMIT 1`,
-    [session.user.id],
-  );
-
-  if (!customerRes.rowCount) {
-    return NextResponse.json({ success: true });
-  }
-
-  const customerId = customerRes.rows[0].id; */
 
   /* ---------------- FIND CART ---------------- */
 
@@ -201,13 +226,6 @@ export async function DELETE(req: Request) {
       );
     }
 
-    /* ---------------- DELETE ITEM ---------------- */
-
-    // await client.query(
-    //   `DELETE FROM store_cart_items
-    //  WHERE cart_id = $1 AND product_id = $2`,
-    //   [cartId, product_id],
-    // );
 
     return NextResponse.json({ success: true });
   } finally {
@@ -237,26 +255,3 @@ async function getOrCreateCustomer(client: any, user: any) {
 
   return created.rows[0].id;
 }
-
-/* async function getOrCreateCustomer(client: any, user: any) {
-  const email = user.email;
-
-  const existing = await client.query(
-    `SELECT id FROM customers WHERE user_id = $1 LIMIT 1`,
-    [user.id],
-  );
-
-  if (existing.rowCount) {
-    return existing.rows[0].id;
-  }
-
-  const created = await client.query(
-    `INSERT INTO customers (user_id, email)
-     VALUES ($1,$2)
-     RETURNING id`,
-    [user.id, email],
-  );
-
-  return created.rows[0].id;
-}
- */

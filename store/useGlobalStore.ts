@@ -55,32 +55,6 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
 
       // 2. Run the fallback sequence via our location endpoint
       let targetCountry = DEFAULT_COUNTRY;
-      
-      // try {
-      //   const locationRes = await fetch("/api/init-location");
-      //   if (locationRes.ok) {
-      //     const locData = await locationRes.json();
-          
-      //     // 🟢 CLIENT SIDE FAILSAFE: If server can't identify the country, run a client-side API lookup
-      //     if (locData.source === "fallback" || locData.source === "error-fallback") {
-      //       try {
-      //         const clientGeoRes = await fetch("https://ipapi.co/json/", { signal: AbortSignal.timeout(2000) });
-      //         if (clientGeoRes.ok) {
-      //           const clientGeoData = await clientGeoRes.json();
-      //           if (clientGeoData.country_code) {
-      //             targetCountry = clientGeoData.country_code;
-      //           }
-      //         }
-      //       } catch (clientErr) {
-      //         console.error("Client IP API unreachable, relying on default", clientErr);
-      //       }
-      //     } else if (locData.country) {
-      //       targetCountry = locData.country;
-      //     }
-      //   }
-      // } catch (locErr) {
-      //   console.warn("Failed resolving location state completely, using absolute default.", locErr);
-      // }
 
       try {
         const locationRes = await fetch("/api/init-location");
@@ -128,6 +102,34 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     }
   },
 }));
+
+
+      
+      // try {
+      //   const locationRes = await fetch("/api/init-location");
+      //   if (locationRes.ok) {
+      //     const locData = await locationRes.json();
+          
+      //     // 🟢 CLIENT SIDE FAILSAFE: If server can't identify the country, run a client-side API lookup
+      //     if (locData.source === "fallback" || locData.source === "error-fallback") {
+      //       try {
+      //         const clientGeoRes = await fetch("https://ipapi.co/json/", { signal: AbortSignal.timeout(2000) });
+      //         if (clientGeoRes.ok) {
+      //           const clientGeoData = await clientGeoRes.json();
+      //           if (clientGeoData.country_code) {
+      //             targetCountry = clientGeoData.country_code;
+      //           }
+      //         }
+      //       } catch (clientErr) {
+      //         console.error("Client IP API unreachable, relying on default", clientErr);
+      //       }
+      //     } else if (locData.country) {
+      //       targetCountry = locData.country;
+      //     }
+      //   }
+      // } catch (locErr) {
+      //   console.warn("Failed resolving location state completely, using absolute default.", locErr);
+      // }
 
 /* export const useGlobalStore = create<GlobalState>((set, get) => ({
   countries: [],
