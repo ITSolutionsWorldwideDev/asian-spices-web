@@ -65,7 +65,7 @@ export async function sendOrderConfirmationEmail(orderId: string) {
     // 3️⃣ Dispatch
     await sendEmail({
       to: order.customer_email,
-      cc: ["cheila.lopes@itsolutionshub2010.com", "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com"],
+      cc: ["sales@asianspices.online", "order@asianspices.online", "cheila.lopes@itsolutionshub2010.com", "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com"],
       subject: `Order Confirmed! 🎉 (Ref: ${order.order_number})`,
       html: emailHtml,
       fromAccount: "order",
