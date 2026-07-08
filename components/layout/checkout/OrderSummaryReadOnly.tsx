@@ -108,6 +108,12 @@ export default function OrderSummaryReadOnly({
             ? matchingRule.tax_rate
             : globalRule?.tax_rate || "21";
 
+            console.log('item?.category_id === ',item?.category_id);
+            console.log('matchingRule === ',matchingRule);
+            console.log('ruleName === ',ruleName);
+            console.log('rulePercent === ',rulePercent);
+            console.log('taxRules === ',taxRules);
+
           return (
             <div key={item.id} className="flex gap-4">
               <div className="relative h-14 w-14 rounded-lg overflow-hidden">
