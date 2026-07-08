@@ -59,6 +59,7 @@ export async function GET(
         json_agg(
           json_build_object(
             'title', p.name,
+            'category_id', p.category_id,
             'price', oi.price,
             'quantity', oi.quantity
           )

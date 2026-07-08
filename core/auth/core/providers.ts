@@ -11,11 +11,6 @@ interface StoreRole {
   slug: string;
 }
 
-// interface StoreRole {
-//   role: (typeof AUTH_ROLES)[keyof typeof AUTH_ROLES] | string;
-//   storeId?: string;
-// }
-
 export function credentialsProvider(app: AppType) {
   return CredentialsProvider({
     name: "Credentials",
@@ -50,31 +45,10 @@ export function credentialsProvider(app: AppType) {
           throw new Error("Not authorized for admin access");
         }
       }
-      // if (app === "admin") {
-      //   const isAdmin =
-      //     user.isPlatformAdmin === true ||
-      //     user.storeRoles?.some((r) =>
-      //       [AUTH_ROLES.ADMIN, AUTH_ROLES.MANAGER, AUTH_ROLES.EDITOR].includes(
-      //         r.role,
-      //       ),
-      //     );
-
-      //   if (!isAdmin) {
-      //     throw new Error("Not authorized for admin access");
-      //   }
-      // }
 
       // 🛍️ WEB APP ACCESS RULES
       if (app === "web") {
         return user;
-        /* const isCustomer =
-          user.storeRoles?.some(
-            r => r.role === AUTH_ROLES.CUSTOMER
-          );
-
-        if (!isCustomer) {
-          throw new Error("Customer access only");
-        } */
       }
 
       return user as any;

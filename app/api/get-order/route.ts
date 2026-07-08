@@ -31,7 +31,8 @@ export async function GET(req: NextRequest) {
         json_agg(
           json_build_object(
             'id', i.product_id,
-            'title', p.name,
+            'title', p.name,            
+            'category_id', p.category_id,
             'price', i.price,
             'quantity', i.quantity,
             'image', md.file_url

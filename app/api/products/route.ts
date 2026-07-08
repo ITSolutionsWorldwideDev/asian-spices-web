@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
     page: Number(searchParams.get("page") || "1"),
     saleOnly: searchParams.get("sale_only") === "true",
     limit: Number(searchParams.get("limit") || "20"),
+    countryCode: searchParams.get("country") || "NL",
   };
 
   try {

@@ -14,10 +14,15 @@ export const getProducts = async (filters: any) => {
     page = 1,
     saleOnly = false,
     limit = 20,
+    countryCode = "NL",
   } = filters;
 
   let values: any[] = [];
   let index = 0;
+
+  index++;
+  values.push(countryCode.toUpperCase());
+  const countryParamIndex = index;
 
   let rankField = "0 as rank";
   if (search) {
@@ -27,13 +32,44 @@ export const getProducts = async (filters: any) => {
   }
 
   // 2️⃣ Use a DISTINCT ON subquery on store_product_images to force a single row match per product
+  // let query = `
+  //   SELECT 
+  //     p.*, 
+  //     c.slug as category_slug,
+  //     img.file_url AS image,
+  //     ${rankField}
+  //   FROM store_products p
+  //   LEFT JOIN store_categories c ON c.id = p.category_id
+  //   LEFT JOIN (
+  //     SELECT DISTINCT ON (pi.product_id) 
+  //       pi.product_id, 
+  //       md.file_url
+  //     FROM store_product_images pi
+  //     LEFT JOIN media md ON md.media_id = pi.url::int
+  //     ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
+  //   ) img ON img.product_id = p.id
+  //   WHERE 1=1
+  // `;
+
   let query = `
     SELECT 
       p.*, 
       c.slug as category_slug,
       img.file_url AS image,
+      cat.min_offered_price,
+      cat.total_available_stock,
       ${rankField}
     FROM store_products p
+    INNER JOIN (
+      SELECT 
+        spc.product_id,
+        MIN(spc.price) as min_offered_price,
+        SUM(spc.quantity) as total_available_stock
+      FROM public.store_product_catalog spc
+      INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
+      WHERE ss.country_code = $${countryParamIndex} AND spc.status = 1
+      GROUP BY spc.product_id
+    ) cat ON cat.product_id = p.id
     LEFT JOIN store_categories c ON c.id = p.category_id
     LEFT JOIN (
       SELECT DISTINCT ON (pi.product_id) 
@@ -134,12 +170,13 @@ export const getProducts = async (filters: any) => {
   return result.rows;
 };
 
-export const getProductBySlug = async (slug: string) => {
+export const getProductBySlug = async (slug: string, countryCode: string = "NL") => {
   const query = `
     SELECT 
       p.*,
       c.name AS category_name,
-
+      cat.min_offered_price,
+      cat.total_available_stock,
       COALESCE(
         json_agg(
           DISTINCT jsonb_build_object(
@@ -150,24 +187,30 @@ export const getProductBySlug = async (slug: string) => {
         ) FILTER (WHERE pi.id IS NOT NULL),
         '[]'
       ) AS images
-
     FROM store_products p
+    INNER JOIN (
+      SELECT 
+        spc.product_id,
+        MIN(spc.price) as min_offered_price,
+        SUM(spc.quantity) as total_available_stock
+      FROM public.store_product_catalog spc
+      INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
+      WHERE ss.country_code = $2 AND spc.status = 1
+      GROUP BY spc.product_id
+    ) cat ON cat.product_id = p.id
     LEFT JOIN store_categories c 
       ON p.category_id = c.id
-
     LEFT JOIN store_product_images pi 
       ON pi.product_id = p.id
-
     LEFT JOIN media m 
       ON m.media_id = pi.url::int
-
     WHERE p.slug = $1
-    GROUP BY p.id, c.name
+    GROUP BY p.id, c.name, cat.min_offered_price, cat.total_available_stock
     LIMIT 1
   `;
 
-  const result = await pool.query(query, [slug]);
-
+  // Pass both the slug ($1) and countryCode ($2)
+  const result = await pool.query(query, [slug, countryCode.toUpperCase()]);
   const row = result.rows[0];
 
   if (!row) return null;
@@ -179,17 +222,27 @@ export const getProductBySlug = async (slug: string) => {
   };
 };
 
-export const getRelatedProducts = async (category_id: string) => {
+export const getRelatedProducts = async (category_id: string, countryCode: string = "NL") => {
   const query = `
     SELECT 
       p.id,
       p.name,
       p.slug,
       p.base_price,
+      cat.min_offered_price,
       p.category_id,
       c.slug AS category_slug,
       md.file_url AS image
     FROM store_products p
+    INNER JOIN (
+      SELECT 
+        spc.product_id,
+        MIN(spc.price) as min_offered_price
+      FROM public.store_product_catalog spc
+      INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
+      WHERE ss.country_code = $2 AND spc.status = 1
+      GROUP BY spc.product_id
+    ) cat ON cat.product_id = p.id
     LEFT JOIN store_categories c ON c.id = p.category_id
     LEFT JOIN store_product_images pi 
       ON pi.product_id = p.id AND pi.is_primary = true
@@ -199,7 +252,8 @@ export const getRelatedProducts = async (category_id: string) => {
     LIMIT 12
   `;
 
-  const result = await pool.query(query, [category_id]);
+  // Pass both the category_id ($1) and countryCode ($2)
+  const result = await pool.query(query, [category_id, countryCode.toUpperCase()]);
   return result.rows;
 };
 
@@ -382,174 +436,74 @@ export const getBrands = async (category: string, filters: any = {}) => {
   return result.rows;
 };
 
-/* export const getBrands = async (category: string, filters: any = {}) => {
 
-
-  let values: any[] = [category];
-
-  const query = `
-    SELECT
-        b.brand_id,
-        b.name,
-        COUNT(DISTINCT p.id) AS product_count
-    FROM store_brands b
-    LEFT JOIN store_products p
-        ON p.brand_id = b.brand_id
-        AND p.status = 1
-    LEFT JOIN store_categories c
-        ON c.id = p.category_id
-    WHERE c.slug = $1
-    GROUP BY b.brand_id, b.name
-    ORDER BY b.name;
-  `;
-
-  console.log("query ==== ", query);
-
-  const result = await pool.query(query);
-  return result.rows;
-}; */
-
-// console.log('query ==== ',query);
-// const query = `
-//   SELECT
-//     b.brand_id,
-//     b.name,
-//     COUNT(p.id) AS product_count
-//   FROM store_brands b
-//   LEFT JOIN store_products p
-//     ON p.brand_id = b.brand_id
-//     AND p.status = 1
-//   GROUP BY b.brand_id, b.name
-//   ORDER BY b.name;
-// `;
-
-// if (search) {
-//   values.push(search);
-//   index = values.length;
-// }
-// let query = `
-//   SELECT
-//     p.*,
-//     c.slug as category_slug,
-//     md.file_url AS image,
-//     ${
-//       search
-//         ? "ts_rank(p.search_vector, plainto_tsquery($1)) AS rank"
-//         : "0 as rank"
-//     }
-//   FROM store_products p
-//   LEFT JOIN store_categories c ON c.id = p.category_id
-//   LEFT JOIN store_product_images pi
-//     ON pi.product_id = p.id AND pi.is_primary = true
-//   LEFT JOIN media md ON md.media_id = pi.url::int
-//   WHERE 1=1
-// `;
-
-/* export const getSubcategories = async (category: string) => {
+/* 
+export const getProductBySlug = async (slug: string) => {
   const query = `
     SELECT 
-      sc.id,
-      sc.name,
-      COUNT(p.id) AS product_count
-    FROM store_subcategories sc
-    INNER JOIN store_categories c 
-      ON sc.category_id = c.id
-    LEFT JOIN store_products p 
-      ON p.subcategory_id = sc.id
-      AND p.status = 1
-    WHERE c.slug = $1
-    GROUP BY sc.id, sc.name
-    ORDER BY sc.name;
-  `;
+      p.*,
+      c.name AS category_name,
 
-  const result = await pool.query(query, [category]);
-  return result.rows;
-}; */
-/* 
+      COALESCE(
+        json_agg(
+          DISTINCT jsonb_build_object(
+            'id', pi.id,
+            'url', m.file_url,
+            'is_primary', pi.is_primary
+          )
+        ) FILTER (WHERE pi.id IS NOT NULL),
+        '[]'
+      ) AS images
 
-
-    // 🔹 Subcategories
-  if (subcategories?.length) {
-    index++;
-    query += ` AND p.subcategory_id = ANY($${index})`;
-    values.push(subcategories);
-  }
-
-  // 🔹 Brands
-  if (brands?.length) {
-    index++;
-    query += ` AND p.brand_id = ANY($${index})`;
-    values.push(brands);
-  }
-
-
-  // 🔥 Full text search (correct position fix)
-  // if (search) {
-  //   index++;
-  //   query += ` AND p.search_vector @@ plainto_tsquery($1)`;
-  // }
-
-const getProducts = async (category: string, categoryParam: string[] = []) => {
-  try {
-    let query = `
-     SELECT sp.* 
-      FROM store_products sp
-      INNER JOIN store_categories c 
-      ON sp.category_id = c.id
-      WHERE c.slug = $1
-    `;
-    const values: any[] = [category];
-
-    if (categoryParam.length > 0) {
-      query += ` AND sp.subcategory_id = ANY($2)`;
-      values.push(categoryParam);
-    }
-
-    const result = await pool.query(query, values);
-
-    return result.rows;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    throw new Error("Failed to fetch categories");
-  }
-};
-
-export { getProducts };
- */
-
-/* export const getProductBySlug = async (slug: string) => {
-  const query = `
-    SELECT p.*, c.name as category_name
     FROM store_products p
-    LEFT JOIN store_categories c ON p.category_id = c.id
+    LEFT JOIN store_categories c 
+      ON p.category_id = c.id
+
     LEFT JOIN store_product_images pi 
       ON pi.product_id = p.id
-    WHERE p.slug = $1
-    Limit 1
-  `;
 
-  console.log("query ==== ", query);
-  console.log("slug ==== ", slug);
+    LEFT JOIN media m 
+      ON m.media_id = pi.url::int
+
+    WHERE p.slug = $1
+    GROUP BY p.id, c.name
+    LIMIT 1
+  `;
 
   const result = await pool.query(query, [slug]);
 
-  return {
-    ...result.rows[0],
-    images: result.rows[0]?.images || [], // fallback
-    highlights: result.rows[0]?.highlights || [],
-  };
-}; */
+  const row = result.rows[0];
 
-/* export const getRelatedProducts = async (category_id: string) => {
+  if (!row) return null;
+
+  return {
+    ...row,
+    images: row.images || [],
+    highlights: row.highlights || [],
+  };
+};
+
+export const getRelatedProducts = async (category_id: string) => {
   const query = `
-    SELECT *
-    FROM store_products
-    WHERE category_id = $1
-    ORDER BY created_at DESC
-    LIMIT 8
+    SELECT 
+      p.id,
+      p.name,
+      p.slug,
+      p.base_price,
+      p.category_id,
+      c.slug AS category_slug,
+      md.file_url AS image
+    FROM store_products p
+    LEFT JOIN store_categories c ON c.id = p.category_id
+    LEFT JOIN store_product_images pi 
+      ON pi.product_id = p.id AND pi.is_primary = true
+    LEFT JOIN media md ON md.media_id = pi.url::int
+    WHERE p.category_id = $1
+    ORDER BY p.created_at DESC
+    LIMIT 12
   `;
 
   const result = await pool.query(query, [category_id]);
-
   return result.rows;
-}; */
+};
+*/

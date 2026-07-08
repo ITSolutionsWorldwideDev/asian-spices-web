@@ -69,7 +69,7 @@ export default function OrderSummaryReadOnly({
 
       <div className="space-y-4 mb-6">
         {items.map((item: any) => {
-          const itemPrice = safeNumber(item?.base_price);
+          const itemPrice = safeNumber(item?.price);
           const itemQuantity = safeNumber(item?.quantity || 1);
           const itemLineTotalConverted = rate * (itemPrice * itemQuantity);
 
@@ -107,6 +107,12 @@ export default function OrderSummaryReadOnly({
           const rulePercent = matchingRule
             ? matchingRule.tax_rate
             : globalRule?.tax_rate || "21";
+
+            console.log('item?.category_id === ',item?.category_id);
+            console.log('matchingRule === ',matchingRule);
+            console.log('ruleName === ',ruleName);
+            console.log('rulePercent === ',rulePercent);
+            console.log('taxRules === ',taxRules);
 
           return (
             <div key={item.id} className="flex gap-4">
