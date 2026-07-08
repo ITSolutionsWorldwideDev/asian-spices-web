@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
     saleOnly: searchParams.get("sale_only") === "true",
     limit: Number(searchParams.get("limit") || "20"),
     countryCode: searchParams.get("country") || "NL",
+    showUnavailable: true,
   };
 
   try {

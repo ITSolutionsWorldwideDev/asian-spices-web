@@ -58,12 +58,15 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
   const { show, hide } = useLoaderStore();
   const observerRef = useRef<HTMLDivElement | null>(null);
   const isFetchingRef = useRef(false);
+  const isInitialMount = useRef(true);
   const limit = 20;
 
   // const serializedFilters = JSON.stringify(filters);
   const serializedFilters = JSON.stringify({ ...filters, country: selectedCountry });
 
-  const buildParams = (filters: any, page: number) => {
+  // console.log(' serializedFilters -==== ',serializedFilters);
+
+  const buildParams = (filters: any, targetPage: number) => {
     const params = new URLSearchParams();
 
     Object.entries(filters).forEach(([key, value]) => {
@@ -79,12 +82,13 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
     });
 
     params.set("country", selectedCountry);
-    params.set("page", String(page));
+    params.set("page", String(targetPage));
     return params.toString();
   };
 
-  const fetchMore = async () => {
-    if (loading || !hasMore || isFetchingRef.current) return;
+  const fetchMore = async (fetchPage = page, clearExisting = false) => {
+    // if (loading || !hasMore || isFetchingRef.current) return;
+    if (loading || isFetchingRef.current || (!hasMore && !clearExisting)) return;
 
     isFetchingRef.current = true;
     setLoading(true);
@@ -92,13 +96,16 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
     try {
       show("Loading Products...");
 
-      const query = buildParams(filters, page);
+      const query = buildParams(filters, fetchPage);
+
+      // console.log(' InfiniteProducts query -==== ',query);
       const res = await fetch(`/api/products?${query}`);
       const data = await res.json();
 
       const rawNewProducts = data.data || [];
 
       if (rawNewProducts.length === 0) {
+        if (clearExisting) setProducts([]);
         setHasMore(false);
         return;
       }
@@ -107,17 +114,29 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
       const newProducts = mapProductData(rawNewProducts);
 
       setProducts((prev: any) => {
+        
+        const baseItems = clearExisting ? [] : prev;
         const map = new Map();
-        [...prev, ...newProducts].forEach((p) => {
+        [...baseItems, ...newProducts].forEach((p) => {
           if (p && p.id) map.set(p.id.toString(), p);
         });
         return Array.from(map.values());
       });
 
+      // setProducts((prev: any) => {
+      //   const map = new Map();
+      //   [...prev, ...newProducts].forEach((p) => {
+      //     if (p && p.id) map.set(p.id.toString(), p);
+      //   });
+      //   return Array.from(map.values());
+      // });
+
       if (newProducts.length < limit) {
         setHasMore(false);
       } else {
-        setPage((prev) => prev + 1);
+        // setPage((prev) => prev + 1);
+        setHasMore(true);
+        setPage(fetchPage + 1);
       }
     } catch (err) {
       console.error("Failed fetching paginated product listing items:", err);
@@ -129,14 +148,18 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
   };
 
   useEffect(() => {
-    setProducts(mapProductData(initialProducts));
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    // Explicitly wipe state and fetch refreshed records matching the chosen country setting
     setPage(2);
-    setHasMore((initialProducts || []).length >= limit);
-    isFetchingRef.current = false;
-  }, [serializedFilters, initialProducts]);
+    fetchMore(1, true);
+  }, [serializedFilters]);
 
   // useEffect(() => {
-  //   setProducts(initialProducts || []);
+  //   setProducts(mapProductData(initialProducts));
   //   setPage(2);
   //   setHasMore((initialProducts || []).length >= limit);
   //   isFetchingRef.current = false;
