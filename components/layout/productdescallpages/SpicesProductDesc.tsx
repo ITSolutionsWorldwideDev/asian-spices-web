@@ -1,6 +1,6 @@
 // apps/web/components/layout/productdescallpages/SpicesProductDesc.tsx
 
-import ProductDesc from "@/components/ui/ProductDesc";
+/* import ProductDesc from "@/components/ui/ProductDesc";
 import Footer from "@/components/ui/Footer";
 import Nav from "@/components/ui/Nav";
 import ProductCard from "@/components/ui/ProductCard";
@@ -31,3 +31,4 @@ const SpicesProductDesc = ({ product, relatedProducts }: Props) => {
 };
 
 export default SpicesProductDesc;
+ */
