@@ -50,7 +50,7 @@ export default function Checkout() {
   const { cart, clearCart } = useCartStore();
   const { rate, selectedCurrency } = useCurrencyStore();
 
-  const { taxRules, setSelectedCountry, fetchInitialData } = useGlobalStore();
+  const { taxRules, selectedCountry, setSelectedCountry, fetchInitialData } = useGlobalStore();
 
   const [addresses, setAddresses] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
@@ -74,7 +74,7 @@ export default function Checkout() {
     city: "",
     state: "",
     zip: "",
-    country: "NL",
+    country: selectedCountry || "NL",
 
     latitude: 0,
     longitude: 0,
@@ -82,6 +82,12 @@ export default function Checkout() {
     cardNumber: "",
     expiry: "",
   });
+
+  useEffect(() => {
+    if (selectedCountry) {
+      setFormData((prev) => ({ ...prev, country: selectedCountry }));
+    }
+  }, [selectedCountry]);
 
   useEffect(() => {
     fetchInitialData();

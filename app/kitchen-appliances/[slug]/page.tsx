@@ -42,7 +42,10 @@ export default async function SpicesDetailPage({ params }: PageProps) {
   const relatedProducts = await getRelatedProducts(product.category_id);
 
   return (
-    <ProductDescrption product={product} relatedProducts={relatedProducts} />
+    <ProductDescrption
+      product={product}
+      relatedProducts={relatedProducts}
+      category="Kitchen Appliances"
+    />
   );
 }
-

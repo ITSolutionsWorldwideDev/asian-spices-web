@@ -54,6 +54,10 @@ export default async function FoodAndBeveragesDetailPage({
   );
 
   return (
-    <ProductDescrption product={product} relatedProducts={relatedProducts} />
+    <ProductDescrption
+      product={product}
+      relatedProducts={relatedProducts}
+      category="Foods & Beverages"
+    />
   );
 }

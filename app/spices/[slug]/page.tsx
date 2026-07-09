@@ -8,7 +8,7 @@ interface PageProps {
   params: Promise<{
     slug: string;
   }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>; // 🟢 ADDED: Type definition for URL search queries
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateMetadata({ params, searchParams }: PageProps) {
@@ -30,7 +30,10 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
   };
 }
 
-export default async function SpicesDetailPage({ params, searchParams }: PageProps) {
+export default async function SpicesDetailPage({
+  params,
+  searchParams,
+}: PageProps) {
   const { slug } = await params;
   const sParams = await searchParams;
   const country = (sParams?.country as string) || "NL";
@@ -45,9 +48,16 @@ export default async function SpicesDetailPage({ params, searchParams }: PagePro
     );
   }
 
-  const relatedProducts = await getRelatedProducts(product.category_id, country);
+  const relatedProducts = await getRelatedProducts(
+    product.category_id,
+    country,
+  );
 
   return (
-    <ProductDescrption product={product} relatedProducts={relatedProducts} />
+    <ProductDescrption
+      product={product}
+      relatedProducts={relatedProducts}
+      category="Spices"
+    />
   );
 }

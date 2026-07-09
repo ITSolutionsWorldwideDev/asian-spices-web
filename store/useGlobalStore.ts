@@ -32,11 +32,9 @@ interface GlobalState {
 
   fetchInitialData: () => Promise<void>;
   setSelectedCountry: (code: string) => void;
-  // setSelectedCurrency: (code: string) => void;
 }
 
 const DEFAULT_COUNTRY = "NL";
-// const DEFAULT_CURRENCY = "EUR";
 
 export const useGlobalStore = create<GlobalState>((set, get) => ({
   countries: [],
@@ -49,37 +47,48 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
 
     try {
       // 1. Fetch shippable countries list
-      const countryRes = await fetch("/api/countries?shippable=true", { cache: "no-store" });
+      const countryRes = await fetch("/api/countries?shippable=true", {
+        cache: "no-store",
+      });
       let countriesList: Country[] = [];
       if (countryRes.ok) countriesList = await countryRes.json();
 
-      // 2. Run the fallback sequence via our location endpoint
-      let targetCountry = DEFAULT_COUNTRY;
-
-      try {
-        const locationRes = await fetch("/api/init-location");
-        if (locationRes.ok) {
-          const locData = await locationRes.json();
-          if (locData.country) {
-            targetCountry = locData.country;
-          }
-          console.log(`Location successfully resolved via [${locData.source}]: ${targetCountry}`);
-        }
-      } catch (locErr) {
-        console.warn("Failed resolving location state completely, using absolute default.", locErr);
+      //  2. 🟢 Check localStorage first before querying third-party IP lookups
+      let targetCountry = "";
+      if (typeof window !== "undefined") {
+        targetCountry = localStorage.getItem("selected_country") || "";
       }
 
-      // 3. Verify the country code exists in your shippable countries list
+      // 3. Fallback to location endpoint if no custom choice was cached locally
+      if (!targetCountry) {
+        try {
+          const locationRes = await fetch("/api/init-location");
+          if (locationRes.ok) {
+            const locData = await locationRes.json();
+            if (locData.country) {
+              targetCountry = locData.country;
+            }
+          }
+        } catch (locErr) {
+          console.warn(
+            "Failed resolving location state completely, using absolute default.",
+            locErr,
+          );
+        }
+      }
+
+      if (!targetCountry) targetCountry = DEFAULT_COUNTRY;
+
+      // 4. Verify the finalized code selection exists within available regional limits
       const countryExists = countriesList.some(
-        (c) => c.iso2.toUpperCase() === targetCountry.toUpperCase()
+        (c) => c.iso2.toUpperCase() === targetCountry.toUpperCase(),
       );
 
-      console.log('targetCountry === ',targetCountry);
-      
-      const finalSelection = countryExists ? targetCountry.toUpperCase() : DEFAULT_COUNTRY;
-      console.log('finalSelection === ',finalSelection);
+      const finalSelection = countryExists
+        ? targetCountry.toUpperCase()
+        : DEFAULT_COUNTRY;
 
-      // 4. Update the store state
+      // 5. Update the store state
       set({ countries: countriesList ?? [], selectedCountry: finalSelection });
       await get().setSelectedCountry(finalSelection);
 
@@ -90,7 +99,16 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
   },
 
   setSelectedCountry: async (code) => {
-    set({ selectedCountry: code });
+
+    const cleanCode = code.toUpperCase();
+    
+    // 🟢 Save choice persistently across tab route updates
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selected_country", cleanCode);
+    }
+
+    set({ selectedCountry: cleanCode });
+
     try {
       const taxRes = await fetch(`/api/tax-rules?country_code=${code}`);
       if (taxRes.ok) {
@@ -98,38 +116,39 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
         set({ taxRules: taxData.rules || [] });
       }
     } catch (err) {
-      console.error("Failed adjusting dynamic tax rates on context layer:", err);
+      console.error(
+        "Failed adjusting dynamic tax rates on context layer:",
+        err,
+      );
     }
   },
 }));
 
+// try {
+//   const locationRes = await fetch("/api/init-location");
+//   if (locationRes.ok) {
+//     const locData = await locationRes.json();
 
-      
-      // try {
-      //   const locationRes = await fetch("/api/init-location");
-      //   if (locationRes.ok) {
-      //     const locData = await locationRes.json();
-          
-      //     // 🟢 CLIENT SIDE FAILSAFE: If server can't identify the country, run a client-side API lookup
-      //     if (locData.source === "fallback" || locData.source === "error-fallback") {
-      //       try {
-      //         const clientGeoRes = await fetch("https://ipapi.co/json/", { signal: AbortSignal.timeout(2000) });
-      //         if (clientGeoRes.ok) {
-      //           const clientGeoData = await clientGeoRes.json();
-      //           if (clientGeoData.country_code) {
-      //             targetCountry = clientGeoData.country_code;
-      //           }
-      //         }
-      //       } catch (clientErr) {
-      //         console.error("Client IP API unreachable, relying on default", clientErr);
-      //       }
-      //     } else if (locData.country) {
-      //       targetCountry = locData.country;
-      //     }
-      //   }
-      // } catch (locErr) {
-      //   console.warn("Failed resolving location state completely, using absolute default.", locErr);
-      // }
+//     // 🟢 CLIENT SIDE FAILSAFE: If server can't identify the country, run a client-side API lookup
+//     if (locData.source === "fallback" || locData.source === "error-fallback") {
+//       try {
+//         const clientGeoRes = await fetch("https://ipapi.co/json/", { signal: AbortSignal.timeout(2000) });
+//         if (clientGeoRes.ok) {
+//           const clientGeoData = await clientGeoRes.json();
+//           if (clientGeoData.country_code) {
+//             targetCountry = clientGeoData.country_code;
+//           }
+//         }
+//       } catch (clientErr) {
+//         console.error("Client IP API unreachable, relying on default", clientErr);
+//       }
+//     } else if (locData.country) {
+//       targetCountry = locData.country;
+//     }
+//   }
+// } catch (locErr) {
+//   console.warn("Failed resolving location state completely, using absolute default.", locErr);
+// }
 
 /* export const useGlobalStore = create<GlobalState>((set, get) => ({
   countries: [],

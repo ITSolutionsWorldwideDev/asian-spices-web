@@ -356,7 +356,7 @@ export default function ShippingForm({
                   name="country"
                   className="w-full bg-[#F3F3F5] rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   value={data.country}
-                  disabled
+                  // disabled
                   onChange={(e) => handleChange("country", e.target.value)}
                 >
                   <option value="">Select country</option>

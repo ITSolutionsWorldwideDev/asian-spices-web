@@ -49,7 +49,7 @@ export default function ProductCard({
 }: ProductCardProps) {
   const { symbol, rate } = useCurrencyStore();
   const { selectedCountry } = useGlobalStore();
-  
+
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
 
@@ -78,17 +78,69 @@ export default function ProductCard({
 
           // 1️⃣ Safe Numeric Extractions & Conversions
           // const currentPrice = Number(product.base_price || 0);
-          
-          const currentPrice = Number(product.min_offered_price || product.base_price || 0);
-          const originalPrice = product.oldPrice
-            ? Number(product.oldPrice)
-            : null;
+
+          const currentPrice = Number(
+            product.min_offered_price || product.base_price || 0,
+          );
+
+          let originalPrice: number | null = null;
+
+          const discountValue = Number(product.discount_value);
+
+          if (
+            currentPrice > 0 &&
+            product.discount_value &&
+            !isNaN(discountValue) &&
+            discountValue > 0
+          ) {
+            switch ((product.discount_type || "").toLowerCase()) {
+              case "percentage":
+              case "bulk":
+                // Current price is discounted. Recover original price.
+                originalPrice = currentPrice / (1 - discountValue / 100);
+                break;
+
+              case "fixed":
+                // Fixed amount discount.
+                originalPrice = currentPrice + discountValue;
+                break;
+
+              default:
+                originalPrice = null;
+            }
+
+            if (originalPrice !== null) {
+              originalPrice = Number(originalPrice.toFixed(2));
+            }
+          }
+          // const originalPrice = product.oldPrice
+          //   ? Number(product.oldPrice)
+          //   : null;
+
+          // if(product.id === 'eafdb67e-3323-49cb-887b-201695df0c3c'){
+
+          //   console.log('currentPrice === ',currentPrice);
+          //   console.log('originalPrice === ',originalPrice);
+          //   console.log('product.discount_value === ',product.discount_value);
+          //   console.log('product.discount_type === ',product.discount_type);
+          // }
 
           // 2️⃣ Dynamic Discount/Savings Math Engine with NaN Guards
-          let discountBadgeText = null;
+          // let discountBadgeText = null;
+          let discountBadgeText: string | null = null;
           let calculatedSavings = 0;
 
           if (originalPrice && originalPrice > currentPrice) {
+            calculatedSavings = originalPrice - currentPrice;
+
+            if (product.discount_type?.toLowerCase() === "fixed") {
+              discountBadgeText = `${symbol}${(discountValue * rate).toFixed(2)} OFF`;
+            } else {
+              discountBadgeText = `${discountValue}% OFF`;
+            }
+          }
+
+          /* if (originalPrice && originalPrice > currentPrice) {
             calculatedSavings = originalPrice - currentPrice;
 
             if (product.off && !product.off.includes("NaN")) {
@@ -105,7 +157,7 @@ export default function ProductCard({
               );
               discountBadgeText = rawPct > 0 ? `${rawPct}% OFF` : "SALE";
             }
-          }
+          } */
 
           return (
             <div
@@ -210,9 +262,8 @@ export default function ProductCard({
               </div>
 
               {/* Dynamic Action Buttons Bottom Control Block */}
-              
+
               <div className="mt-4">
-                
                 {cartItem ? (
                   <div className="flex items-center justify-between border border-gray-200 rounded-xl overflow-hidden h-[40px]">
                     <button
@@ -240,7 +291,6 @@ export default function ProductCard({
                     </button>
                   </div>
                 ) : (
-                  
                   <button
                     className="cursor-pointer w-full h-[40px] bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white rounded-xl text-sm font-bold flex items-center justify-center transition shadow-sm active:scale-[0.99]"
                     onClick={() => {
