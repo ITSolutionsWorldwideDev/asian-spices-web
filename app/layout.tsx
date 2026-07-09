@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Providers from "./providers";
 import GlobalLoader from "@/components/ui/GlobalLoader";
 import GoogleTagManager from "@/components/GoogleTagManager";
+import CountryChangeModal from "@/components/ui/CountryChangeModal";
 import "./globals.css";
 
 /* export const metadata: Metadata = {
@@ -86,6 +87,8 @@ export default function RootLayout({
         <Providers>
           <GlobalLoader />
           {children}
+
+          <CountryChangeModal />
         </Providers>
       </body>
     </html>

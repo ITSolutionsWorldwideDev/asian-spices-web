@@ -16,22 +16,36 @@ interface TaxRule {
   category_id: string | null;
 }
 
-interface Currency {
-  id: number;
-  code: string;
-  symbol: string;
-}
+// interface Currency {
+//   id: number;
+//   code: string;
+//   symbol: string;
+// }
+
+// interface GlobalState {
+//   countries: Country[];
+//   selectedCountry: string;
+
+//   // taxRate: number;
+//   // taxName: string;
+//   taxRules: TaxRule[];
+
+//   fetchInitialData: () => Promise<void>;
+//   setSelectedCountry: (code: string) => void;
+// }
 
 interface GlobalState {
   countries: Country[];
   selectedCountry: string;
-
-  // taxRate: number;
-  // taxName: string;
   taxRules: TaxRule[];
+  
+  // 🟢 State fields for custom modal handler
+  pendingCountryChange: string | null; 
+  setPendingCountryChange: (code: string | null) => void;
+  confirmCountryChange: () => Promise<void>;
 
   fetchInitialData: () => Promise<void>;
-  setSelectedCountry: (code: string) => void;
+  setSelectedCountry: (code: string) => Promise<void>;
 }
 
 const DEFAULT_COUNTRY = "NL";
@@ -41,9 +55,13 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
   selectedCountry: DEFAULT_COUNTRY,
   taxRules: [],
 
+  // 🟢 Modal initial states
+  pendingCountryChange: null,
+  setPendingCountryChange: (code) => set({ pendingCountryChange: code }),
+
   fetchInitialData: async () => {
-    const { countries } = get();
-    if (countries.length > 0) return;
+    // const { countries } = get();
+    // if (countries.length > 0) return;
 
     try {
       // 1. Fetch shippable countries list
@@ -90,38 +108,79 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
 
       // 5. Update the store state
       set({ countries: countriesList ?? [], selectedCountry: finalSelection });
-      await get().setSelectedCountry(finalSelection);
+      // await get().setSelectedCountry(finalSelection);
+
+      const taxRes = await fetch(`/api/tax-rules?country_code=${finalSelection}`);
+      if (taxRes.ok) {
+        const taxData = await taxRes.json();
+        set({ taxRules: taxData.rules || [] });
+      }
 
     } catch (error) {
       console.error("Countries initialization pipeline broken:", error);
-      set({ countries: [], selectedCountry: DEFAULT_COUNTRY, taxRules: [] });
+      // set({ countries: [], selectedCountry: DEFAULT_COUNTRY, taxRules: [] });
     }
   },
 
-  setSelectedCountry: async (code) => {
+  // setSelectedCountry: async (code) => {
 
-    const cleanCode = code.toUpperCase();
+  //   const cleanCode = code.toUpperCase();
     
-    // 🟢 Save choice persistently across tab route updates
+  //   // 🟢 Save choice persistently across tab route updates
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("selected_country", cleanCode);
+  //   }
+
+  //   set({ selectedCountry: cleanCode });
+
+  //   try {
+  //     const taxRes = await fetch(`/api/tax-rules?country_code=${code}`);
+  //     if (taxRes.ok) {
+  //       const taxData = await taxRes.json();
+  //       set({ taxRules: taxData.rules || [] });
+  //     }
+  //   } catch (err) {
+  //     console.error(
+  //       "Failed adjusting dynamic tax rates on context layer:",
+  //       err,
+  //     );
+  //   }
+  // },
+
+  // 🟢 Triggered when dropdown selection changes
+  setSelectedCountry: async (code) => {
+    const cleanCode = code.toUpperCase();
+    const currentCountry = get().selectedCountry;
+
+    if (currentCountry === cleanCode) return;
+
+    // Set pending code state to automatically mount our custom modal UI overlay
+    set({ pendingCountryChange: cleanCode });
+  },
+
+  // 🟢 Triggered when user clicks "Confirm/OK" inside the custom modal component
+  confirmCountryChange: async () => {
+    const cleanCode = get().pendingCountryChange;
+    if (!cleanCode) return;
+
     if (typeof window !== "undefined") {
       localStorage.setItem("selected_country", cleanCode);
     }
 
-    set({ selectedCountry: cleanCode });
-
+    set({ selectedCountry: cleanCode, pendingCountryChange: null });
+    
     try {
-      const taxRes = await fetch(`/api/tax-rules?country_code=${code}`);
+      const taxRes = await fetch(`/api/tax-rules?country_code=${cleanCode}`);
       if (taxRes.ok) {
         const taxData = await taxRes.json();
         set({ taxRules: taxData.rules || [] });
       }
     } catch (err) {
-      console.error(
-        "Failed adjusting dynamic tax rates on context layer:",
-        err,
-      );
+      console.error("Failed adjusting dynamic tax rates:", err);
     }
   },
+
+  
 }));
 
 // try {
