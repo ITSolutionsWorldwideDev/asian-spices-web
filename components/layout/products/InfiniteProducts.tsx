@@ -87,6 +87,8 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
   };
 
   const fetchMore = async (fetchPage = page, clearExisting = false) => {
+
+    console.log("fetchMore  == ", fetchPage);
     // if (loading || !hasMore || isFetchingRef.current) return;
     if (loading || isFetchingRef.current || (!hasMore && !clearExisting)) return;
 

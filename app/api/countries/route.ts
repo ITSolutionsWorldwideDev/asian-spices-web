@@ -29,11 +29,6 @@ export async function GET(req: NextRequest) {
 
     const result = await pool.query(query, values);
 
-    // const result = await pool.query(
-    //   `SELECT country_id as id, country_name as  name, country_code as iso2 FROM countries 
-    //    ORDER BY name ASC`,
-    // );
-
     if (!result.rows.length) {
       return NextResponse.json(
         { error: "Category not found" },

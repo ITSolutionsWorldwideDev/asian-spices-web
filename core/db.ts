@@ -18,6 +18,18 @@ export const pool =
     connectionTimeoutMillis: 10000, // Raised to 10s to gracefully survive sudden server lag spikes
   });
 
+// pool.on("connect", () => {
+//   console.log("New DB connection");
+// });
+
+// pool.on("acquire", () => {
+//   console.log("Acquire");
+// });
+
+// pool.on("remove", () => {
+//   console.log("Remove");
+// });
+
 if (process.env.NODE_ENV !== "production") {
   globalThis.varGlobalPool = pool;
 }

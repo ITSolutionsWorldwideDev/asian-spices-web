@@ -8,6 +8,8 @@ export async function GET(req: Request) {
   const idsParam = searchParams.get("ids");
   const countryCode = (searchParams.get("country") || "NL").toUpperCase();
 
+  console.log('idsParam ==== ',idsParam);
+
   if (!idsParam) {
     return NextResponse.json({});
   }
