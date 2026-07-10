@@ -96,15 +96,16 @@ export const getProducts = async (filters: any) => {
   // 🔹 Price (GLOBAL BASE PRICE or fallback logic later)
   if (minPrice) {
     index++;
-    query += ` AND p.base_price >= $${index}`;
+    query += ` AND COALESCE(cat.min_offered_price, p.base_price) >= $${index}`;
     values.push(minPrice);
   }
 
   if (maxPrice) {
     index++;
-    query += ` AND p.base_price <= $${index}`;
+    query += ` AND COALESCE(cat.min_offered_price, p.base_price) <= $${index}`;
     values.push(maxPrice);
   }
+
   if (search) {
     index++;
     query += ` AND p.search_vector @@ plainto_tsquery($${index})`;
@@ -116,24 +117,45 @@ export const getProducts = async (filters: any) => {
 
   switch (sort) {
     case "price_asc":
-      query += ` ORDER BY p.base_price ASC, p.id DESC`;
+      query += ` ORDER BY COALESCE(cat.min_offered_price, p.base_price) ASC, p.id DESC`;
       break;
 
     case "price_desc":
-      query += ` ORDER BY p.base_price DESC, p.id DESC`;
+      query += ` ORDER BY COALESCE(cat.min_offered_price, p.base_price) DESC, p.id DESC`;
       break;
 
     case "popular":
-      query += ` ORDER BY p.created_at DESC, p.id DESC`; // later replace with sales
+      query += ` ORDER BY p.created_at DESC, p.id DESC`;
       break;
 
-    case "relevance":
-      query += ` ORDER BY rank DESC, p.id DESC`;
+    case "relevance":      
+      query += ` ORDER BY ts_rank(p.search_vector, plainto_tsquery($${search ? values.indexOf(search) + 1 : 1})) DESC, p.id DESC`;
       break;
 
     default:
       query += ` ORDER BY p.created_at DESC, p.id DESC`;
   }
+
+  // switch (sort) {
+  //   case "price_asc":
+  //     query += ` ORDER BY p.base_price ASC, p.id DESC`;
+  //     break;
+
+  //   case "price_desc":
+  //     query += ` ORDER BY p.base_price DESC, p.id DESC`;
+  //     break;
+
+  //   case "popular":
+  //     query += ` ORDER BY p.created_at DESC, p.id DESC`; // later replace with sales
+  //     break;
+
+  //   case "relevance":
+  //     query += ` ORDER BY rank DESC, p.id DESC`;
+  //     break;
+
+  //   default:
+  //     query += ` ORDER BY p.created_at DESC, p.id DESC`;
+  // }
 
   // 🔥 Pagination
   // const limit = 20;

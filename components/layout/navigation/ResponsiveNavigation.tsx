@@ -443,7 +443,7 @@ const ResponsiveNavigation = () => {
               <div className=" bg-white rounded-full   ">
                 <div className=" px-6 py-3 rounded-full flex justify-center">
                   <button className="  font-bold   hover:shadow-xl transform cursor-pointer hover:scale-105 transition duration-300 focus:outline-none focus:ring-4 ">
-                    <Link href="/contactus">Contact Us</Link>
+                    <Link href="/contact-us">Contact Us</Link>
                   </button>
                 </div>
               </div>

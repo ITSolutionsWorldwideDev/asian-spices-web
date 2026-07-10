@@ -36,136 +36,136 @@ const Faqs = () => {
       answer:
         "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
     },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
-    {
-      question: "How should I store my spices?",
-      answer:
-        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
-    },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
+    // {
+    //   question: "How should I store my spices?",
+    //   answer:
+    //     "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    // },
     
     
     

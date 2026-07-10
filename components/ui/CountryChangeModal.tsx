@@ -34,7 +34,7 @@ export default function CountryChangeModal() {
         {/* Content Body Context */}
         <div className="space-y-3">
           <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            You are switching your delivery destination parameters to{" "}
+            You are switching your delivery location to&nbsp;
             <span className="font-semibold text-zinc-900 dark:text-white underline decoration-orange-500 underline-offset-4">
               {targetCountryName}
             </span>.
@@ -43,7 +43,8 @@ export default function CountryChangeModal() {
           <div className="flex gap-2.5 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800/80 p-3 rounded-lg">
             <AlertTriangle className="h-5 w-5 text-orange-500 shrink-0 mt-0.5" />
             <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-normal">
-              This choice clears stale cached pricing records. Your active shopping cart item listing values will refresh to match structural dynamic logistics frameworks.
+                We'll update prices, available products, and your cart based on this location.
+              {/* This choice clears stale cached pricing records. Your active shopping cart item listing values will refresh to match structural dynamic logistics frameworks. */}
             </p>
           </div>
         </div>
@@ -63,7 +64,7 @@ export default function CountryChangeModal() {
             onClick={confirmCountryChange}
             className="px-4 py-2 text-sm font-medium bg-black text-white dark:bg-white dark:text-black hover:bg-zinc-800 dark:hover:bg-zinc-100 rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
           >
-            Update Catalog
+            Change Location
           </button>
         </div>
 

@@ -24,7 +24,7 @@ export default function Redirect() {
           </Link>
 
           <Link
-            href="/contactus"
+            href="/contact-us"
             className="rounded-lg border border-white bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-gray-200"
           >
             Contact Us

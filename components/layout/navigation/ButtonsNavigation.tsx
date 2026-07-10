@@ -74,7 +74,7 @@ const ButtonsNavigation = () => {
 
       <div className="hover:rotate-10 bg-white rounded-full hover:text-white">
         <div className="hover:bg-black hover:-rotate-10 px-6 py-3 rounded-full">
-          <Link href="/contactus" className="font-bold whitespace-nowrap">
+          <Link href="/contact-us" className="font-bold whitespace-nowrap">
             Contact Us
           </Link>
         </div>
