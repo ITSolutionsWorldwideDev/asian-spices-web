@@ -118,27 +118,6 @@ export default function ProductDesc({
     }
   }
 
-  // let activeBadge = product.badge || "";
-  // if (isPriceAvailable && originalPrice && originalPrice > currentPrice) {
-  //   const discountNum = Number(product.discount_value);
-  //   if (
-  //     product.discount_type === "percentage" ||
-  //     product.discount_type === "Bulk"
-  //   ) {
-  //     activeBadge =
-  //       product.discount_value && !isNaN(discountNum)
-  //         ? `${product.discount_value}% OFF`
-  //         : `${Math.round((rawSave / originalPrice) * 100)}% OFF`;
-  //   } else if (product.discount_type === "fixed") {
-  //     activeBadge =
-  //       product.discount_value && !isNaN(discountNum)
-  //         ? `€${product.discount_value} OFF`
-  //         : `€${rawSave.toFixed(2)} OFF`;
-  //   } else if (!activeBadge) {
-  //     activeBadge = `${Math.round((rawSave / originalPrice) * 100)}% OFF`;
-  //   }
-  // }
-
   const features = [
     { icon: Truck, title: "Free Shipping on €50+" },
     { icon: RotateCcw, title: "30- Day Returns" },
@@ -383,6 +362,30 @@ export default function ProductDesc({
     </div>
   );
 }
+
+
+
+
+  // let activeBadge = product.badge || "";
+  // if (isPriceAvailable && originalPrice && originalPrice > currentPrice) {
+  //   const discountNum = Number(product.discount_value);
+  //   if (
+  //     product.discount_type === "percentage" ||
+  //     product.discount_type === "Bulk"
+  //   ) {
+  //     activeBadge =
+  //       product.discount_value && !isNaN(discountNum)
+  //         ? `${product.discount_value}% OFF`
+  //         : `${Math.round((rawSave / originalPrice) * 100)}% OFF`;
+  //   } else if (product.discount_type === "fixed") {
+  //     activeBadge =
+  //       product.discount_value && !isNaN(discountNum)
+  //         ? `€${product.discount_value} OFF`
+  //         : `€${rawSave.toFixed(2)} OFF`;
+  //   } else if (!activeBadge) {
+  //     activeBadge = `${Math.round((rawSave / originalPrice) * 100)}% OFF`;
+  //   }
+  // }
 
 /* "use client";
 

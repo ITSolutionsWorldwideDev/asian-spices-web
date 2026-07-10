@@ -32,7 +32,6 @@ export const getProducts = async (filters: any) => {
     rankField = `ts_rank(p.search_vector, plainto_tsquery($${index})) AS rank`;
   }
 
-
   const joinType = showUnavailable ? "LEFT JOIN" : "INNER JOIN";
 
   let query = `
@@ -128,8 +127,12 @@ export const getProducts = async (filters: any) => {
       query += ` ORDER BY p.created_at DESC, p.id DESC`;
       break;
 
-    case "relevance":      
+    case "relevance":
       query += ` ORDER BY ts_rank(p.search_vector, plainto_tsquery($${search ? values.indexOf(search) + 1 : 1})) DESC, p.id DESC`;
+      break;
+
+    case "newest":
+      query += ` ORDER BY p.created_at DESC, p.id DESC`;
       break;
 
     default:
@@ -176,11 +179,32 @@ export const getProducts = async (filters: any) => {
   return result.rows;
 };
 
-export const getProductBySlug = async (slug: string, countryCode: string = "NL") => {
+// apps/web/lib/dbactions/products.ts
+
+export const getProductBySlug = async (
+  slug: string,
+  countryCode: string = "NL",
+) => {
   const query = `
     SELECT 
-      p.*,
+      p.id,
+      p.name,
+      p.slug,
+      p.base_price,
+      p.sale_price,
+      p.discount_type,
+      p.discount_value,
+      p.promo_code,
+      p.description,
+      p.country_of_origin,
+      p.category_id,
+      p.subcategory_id,
+      p.brand_id,
+      p.created_at,
+      p.updated_at,
+      p.search_vector,
       c.name AS category_name,
+      c.slug AS category_slug,
       cat.min_offered_price,
       cat.total_available_stock,
       COALESCE(
@@ -211,11 +235,30 @@ export const getProductBySlug = async (slug: string, countryCode: string = "NL")
     LEFT JOIN media m 
       ON m.media_id = pi.url::int
     WHERE p.slug = $1
-    GROUP BY p.id, c.name, cat.min_offered_price, cat.total_available_stock
+    GROUP BY 
+      p.id, 
+      p.name, 
+      p.slug, 
+      p.base_price, 
+      p.sale_price, 
+      p.discount_type, 
+      p.discount_value, 
+      p.promo_code, 
+      p.description,
+      p.country_of_origin, 
+      p.category_id, 
+      p.subcategory_id, 
+      p.brand_id, 
+      p.created_at, 
+      p.updated_at, 
+      p.search_vector,
+      c.name, 
+      c.slug,
+      cat.min_offered_price, 
+      cat.total_available_stock
     LIMIT 1
   `;
 
-  // Pass both the slug ($1) and countryCode ($2)
   const result = await pool.query(query, [slug, countryCode.toUpperCase()]);
   const row = result.rows[0];
 
@@ -224,11 +267,14 @@ export const getProductBySlug = async (slug: string, countryCode: string = "NL")
   return {
     ...row,
     images: row.images || [],
-    highlights: row.highlights || [],
+    highlights: row.highlights || [], // Safely fall back if column doesn't exist
   };
 };
 
-export const getRelatedProducts = async (category_id: string, countryCode: string = "NL") => {
+export const getRelatedProducts = async (
+  category_id: string,
+  countryCode: string = "NL",
+) => {
   const query = `
     SELECT 
       p.id,
@@ -259,7 +305,10 @@ export const getRelatedProducts = async (category_id: string, countryCode: strin
   `;
 
   // Pass both the category_id ($1) and countryCode ($2)
-  const result = await pool.query(query, [category_id, countryCode.toUpperCase()]);
+  const result = await pool.query(query, [
+    category_id,
+    countryCode.toUpperCase(),
+  ]);
   return result.rows;
 };
 
@@ -442,59 +491,110 @@ export const getBrands = async (category: string, filters: any = {}) => {
   return result.rows;
 };
 
+/* 
+export const getProductBySlug = async (slug: string, countryCode: string = "NL") => {
+  const query = `
+    SELECT 
+      p.*,
+      c.name AS category_name,
+      cat.min_offered_price,
+      cat.total_available_stock,
+      COALESCE(
+        json_agg(
+          DISTINCT jsonb_build_object(
+            'id', pi.id,
+            'url', m.file_url,
+            'is_primary', pi.is_primary
+          )
+        ) FILTER (WHERE pi.id IS NOT NULL),
+        '[]'
+      ) AS images
+    FROM store_products p
+    LEFT JOIN (
+      SELECT 
+        spc.product_id,
+        MIN(spc.price) as min_offered_price,
+        SUM(spc.quantity) as total_available_stock
+      FROM public.store_product_catalog spc
+      INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
+      WHERE ss.country_code = $2 AND spc.status = 1
+      GROUP BY spc.product_id
+    ) cat ON cat.product_id = p.id
+    LEFT JOIN store_categories c 
+      ON p.category_id = c.id
+    LEFT JOIN store_product_images pi 
+      ON pi.product_id = p.id
+    LEFT JOIN media m 
+      ON m.media_id = pi.url::int
+    WHERE p.slug = $1
+    GROUP BY p.id, c.name, cat.min_offered_price, cat.total_available_stock
+    LIMIT 1
+  `;
 
+  // Pass both the slug ($1) and countryCode ($2)
+  const result = await pool.query(query, [slug, countryCode.toUpperCase()]);
+  const row = result.rows[0];
 
+  if (!row) return null;
 
-  // 2️⃣ Use a DISTINCT ON subquery on store_product_images to force a single row match per product
-  // let query = `
-  //   SELECT 
-  //     p.*, 
-  //     c.slug as category_slug,
-  //     img.file_url AS image,
-  //     ${rankField}
-  //   FROM store_products p
-  //   LEFT JOIN store_categories c ON c.id = p.category_id
-  //   LEFT JOIN (
-  //     SELECT DISTINCT ON (pi.product_id) 
-  //       pi.product_id, 
-  //       md.file_url
-  //     FROM store_product_images pi
-  //     LEFT JOIN media md ON md.media_id = pi.url::int
-  //     ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
-  //   ) img ON img.product_id = p.id
-  //   WHERE 1=1
-  // `;
+  return {
+    ...row,
+    images: row.images || [],
+    highlights: row.highlights || [],
+  };
+};
+*/
 
-  // let query = `
-  //   SELECT 
-  //     p.*, 
-  //     c.slug as category_slug,
-  //     img.file_url AS image,
-  //     cat.min_offered_price,
-  //     cat.total_available_stock,
-  //     ${rankField}
-  //   FROM store_products p
-  //   INNER JOIN (
-  //     SELECT 
-  //       spc.product_id,
-  //       MIN(spc.price) as min_offered_price,
-  //       SUM(spc.quantity) as total_available_stock
-  //     FROM public.store_product_catalog spc
-  //     INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
-  //     WHERE ss.country_code = $${countryParamIndex} AND spc.status = 1
-  //     GROUP BY spc.product_id
-  //   ) cat ON cat.product_id = p.id
-  //   LEFT JOIN store_categories c ON c.id = p.category_id
-  //   LEFT JOIN (
-  //     SELECT DISTINCT ON (pi.product_id) 
-  //       pi.product_id, 
-  //       md.file_url
-  //     FROM store_product_images pi
-  //     LEFT JOIN media md ON md.media_id = pi.url::int
-  //     ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
-  //   ) img ON img.product_id = p.id
-  //   WHERE 1=1
-  // `;
+// 2️⃣ Use a DISTINCT ON subquery on store_product_images to force a single row match per product
+// let query = `
+//   SELECT
+//     p.*,
+//     c.slug as category_slug,
+//     img.file_url AS image,
+//     ${rankField}
+//   FROM store_products p
+//   LEFT JOIN store_categories c ON c.id = p.category_id
+//   LEFT JOIN (
+//     SELECT DISTINCT ON (pi.product_id)
+//       pi.product_id,
+//       md.file_url
+//     FROM store_product_images pi
+//     LEFT JOIN media md ON md.media_id = pi.url::int
+//     ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
+//   ) img ON img.product_id = p.id
+//   WHERE 1=1
+// `;
+
+// let query = `
+//   SELECT
+//     p.*,
+//     c.slug as category_slug,
+//     img.file_url AS image,
+//     cat.min_offered_price,
+//     cat.total_available_stock,
+//     ${rankField}
+//   FROM store_products p
+//   INNER JOIN (
+//     SELECT
+//       spc.product_id,
+//       MIN(spc.price) as min_offered_price,
+//       SUM(spc.quantity) as total_available_stock
+//     FROM public.store_product_catalog spc
+//     INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
+//     WHERE ss.country_code = $${countryParamIndex} AND spc.status = 1
+//     GROUP BY spc.product_id
+//   ) cat ON cat.product_id = p.id
+//   LEFT JOIN store_categories c ON c.id = p.category_id
+//   LEFT JOIN (
+//     SELECT DISTINCT ON (pi.product_id)
+//       pi.product_id,
+//       md.file_url
+//     FROM store_product_images pi
+//     LEFT JOIN media md ON md.media_id = pi.url::int
+//     ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
+//   ) img ON img.product_id = p.id
+//   WHERE 1=1
+// `;
 /* 
 export const getProductBySlug = async (slug: string) => {
   const query = `
