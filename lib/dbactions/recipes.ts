@@ -224,6 +224,29 @@ export async function getRecipeCategories() {
   return rows;
 }
 
+export async function getLatestRecipeCategories(limit = 4) {
+  const { rows } = await runQuery(
+    `
+    SELECT
+      c.id,
+      c.name,
+      c.slug,
+      COUNT(DISTINCT r.id)::int AS recipe_count,
+      MAX(r.created_at) AS latest_recipe_at
+    FROM recipe_categories c
+    INNER JOIN recipes r
+      ON r.category_id = c.id
+      AND r.status = 'published'
+    GROUP BY c.id
+    ORDER BY latest_recipe_at DESC
+    LIMIT $1
+    `,
+    [limit],
+  );
+
+  return rows;
+}
+
 export async function getRecipeTags() {
   const { rows } = await runQuery(`
     SELECT

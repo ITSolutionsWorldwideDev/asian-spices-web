@@ -51,6 +51,7 @@ async function ProductSection({ filters }: { filters: Filters & { sort: string }
     <div className="grid lg:grid-cols-[260px_1fr] gap-6 container mx-auto p-5">
       <FilterSidebar subcategories={subcategories} brands={brands} />
       <div>
+        
         <SortDropdown />
         <InfiniteProducts initialProducts={products} filters={filters} />
       </div>
@@ -99,68 +100,8 @@ export default async function SpicesPage({ searchParams }: PageProps) {
         <ProductSection filters={filters} />
       </Suspense>
 
-      <Reviews />
+      {/* <Reviews /> */}
       <Footer />
     </div>
   );
 }
-
-/* export default async function SpicesPage({ searchParams }: PageProps) {
-  const params = await searchParams;
-
-  const cleanArray = (val?: string) => {
-    if (!val) return [];
-
-    return val
-      .split(",")
-      .map((v) => v.trim())
-      .filter((v) => v !== "" && v !== "null" && v !== "undefined");
-  };
-
-  const filters: Filters & { sort: string } = {
-    category: "spices",
-    subcategories: cleanArray(params.subcategories),
-    brands: cleanArray(params.brands),
-    minPrice: params.min,
-    maxPrice: params.max,
-    search: params.search,
-    sort: params.sort || "newest", // 🚀 Forwarded to InfiniteProducts
-    page: Number(params.page || 1),
-  };
-
-  // const subcategories = await getSubcategories("spices");
-  const subcategories = await getSubcategories("spices", filters);
-  const brands = await getBrands("spices", filters);
-
-  const products = await getProducts(filters);
-
-  return (
-    <div className="category-animation">
-      <ProductPageHeader
-        heading="Every Grain, A Burst of Taste"
-        text="Handpicked, pure spices"
-        videoLink="/spices/Comp 1_10.mp4"
-      />
-
-      <HeadingDescription
-        heading="Explore Our Collection"
-        text="Shop By All Spices"
-        description="Discover authentic spices"
-      />
-
-      <div className="grid lg:grid-cols-[260px_1fr] gap-6 container mx-auto p-5">
-        <FilterSidebar subcategories={subcategories} brands={brands} />
-
-        <div>
-          <SortDropdown />
-
-          <InfiniteProducts initialProducts={products} filters={filters} />
-        </div>
-      </div>
-
-      
-      <Reviews />
-      <Footer />
-    </div>
-  );
-} */

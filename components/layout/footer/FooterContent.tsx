@@ -55,7 +55,7 @@ const FooterContent = () => {
 
         <ul className="space-y-3">
           <li>
-            <Link href="#" className="hover:underline">
+            <Link href="/terms" className="hover:underline">
               Terms & Conditions
             </Link>
           </li>
@@ -80,11 +80,11 @@ const FooterContent = () => {
               Contact Us
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="#" className="hover:underline">
               Careers
             </Link>
-          </li>
+          </li> */}
         </ul>
       </div>
 

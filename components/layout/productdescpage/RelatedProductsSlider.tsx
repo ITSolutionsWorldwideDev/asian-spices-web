@@ -70,7 +70,7 @@ export default function RelatedProductsSlider({ products }: any) {
                 </h3>
 
                 <p className="text-orange-500 font-bold text-sm mt-1">
-                  {symbol}{product.price}
+                  {symbol}{product.base_price}
                 </p>
               </div>
             </Link>

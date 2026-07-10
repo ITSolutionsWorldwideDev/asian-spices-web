@@ -5,6 +5,7 @@
 import { SessionProvider } from "next-auth/react";
 import CartSyncProvider from "./CartSyncProvider";
 import GlobalDataProvider from "./GlobalDataProvider";
+import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
 
 import dynamic from "next/dynamic";
 // import { BibiChatWidget } from "@/components/chatbot/BibiChatWidget";
@@ -20,6 +21,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <CartSyncProvider>
           {children}
           <BibiChatWidget />
+          <CookieConsentBanner />
         </CartSyncProvider>
       </GlobalDataProvider>
     </SessionProvider>

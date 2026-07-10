@@ -334,7 +334,7 @@ export async function POST(req: NextRequest) {
     // ====================================================
 
     for (const item of cartItems) {
-      // lowest available price
+      // lowest available base_price
       /* const availableProducts =
         productCatalog.rows
           .filter(
@@ -343,8 +343,8 @@ export async function POST(req: NextRequest) {
           )
           .sort(
             (a: any, b: any) =>
-              Number(a.price) -
-              Number(b.price),
+              Number(a.base_price) -
+              Number(b.base_price),
           );
 
       if (!availableProducts.length) {
@@ -373,8 +373,8 @@ export async function POST(req: NextRequest) {
           order_id,
           item.id,
           item.quantity,
-          // Number(selectedProduct.price),
-          Number(item.price),
+          // Number(selectedProduct.base_price),
+          Number(item.base_price),
         ],
       );
     }
@@ -787,7 +787,7 @@ const selectBestStore = (stores: any[], cartItems: any[], catalog: any[]) => {
         valid = false;
         break;
       }
-      total += Number(product.price) * item.quantity;
+      total += Number(product.base_price) * item.quantity;
     }
 
     if (!valid) continue;

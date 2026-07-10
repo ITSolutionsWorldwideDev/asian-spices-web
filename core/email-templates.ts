@@ -65,7 +65,7 @@ export async function sendOrderConfirmationEmail(orderId: string) {
     // 3️⃣ Dispatch
     await sendEmail({
       to: order.customer_email,
-      cc: ["sales@asianspices.online", "order@asianspices.online"],
+      cc: ["sales@asianspices.online", "order@asianspices.online", "cheila.lopes@itsolutionshub2010.com", "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com"],
       subject: `Order Confirmed! 🎉 (Ref: ${order.order_number})`,
       html: emailHtml,
       fromAccount: "order",
@@ -120,7 +120,7 @@ export async function sendPartnerRegistrationEmail({
 
     await sendEmail({
       to: email,
-      cc: ["partners@asianspices.online"],
+      cc: [ "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com"],
       subject: `Your Asian Spices Partner Application - ${applicationId}`,
       html: emailHtml,
       fromAccount: "partners",
@@ -377,8 +377,58 @@ export async function sendPasswordResetEmail({ email, token }: PasswordResetEmai
     });
 
     return { success: true };
-  } catch (error) {
+    // return { success: false, error };
+  } catch (error){
     console.error(`[Forgot Password Email Fail] Target recipient: ${email}`, error);
+    return { success: false, error };
+  }
+}
+
+export async function sendNewsletterWelcomeEmail(email: string) {
+  try {
+    // const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3002";
+    const siteUrl ="https://www.asianspices.online/";
+
+    const emailHtml = `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <span style="background-color: #ea580c15; color: #ea580c; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 14px; display: inline-block; border-radius: 9999px; border: 1px solid #ea580c30;">
+            Newsletter
+          </span>
+        </div>
+
+        <h2 style="color: #111827; text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
+          Thanks for Subscribing!
+        </h2>
+
+        <p>Hello,</p>
+        <p>You have successfully subscribed to the <strong>Asian Spices</strong> newsletter. Thank you for joining our community!</p>
+        <p>You'll now receive exclusive recipes, spice tips, special offers, and updates delivered straight to your inbox.</p>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${siteUrl}" style="background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: 600; border-radius: 8px; display: inline-block;">
+            Visit Asian Spices
+          </a>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
+        <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
+          © 2026 Asian Spices Online. All rights reserved.<br>
+          Need help? Contact us at support@asianspices.online
+        </p>
+      </div>
+    `;
+
+    await sendEmail({
+      to: email,
+      subject: "You subscribed to our newsletter — thank you! 🎉",
+      html: emailHtml,
+      fromAccount: "support",
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error(`[Newsletter Welcome Email Fail] Target recipient: ${email}`, error);
     return { success: false, error };
   }
 }

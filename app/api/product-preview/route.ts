@@ -11,7 +11,7 @@ const ALLOWED_HOSTS = new Set([
 type EmbeddedProductData = {
   title: string | null;
   description: string | null;
-  price: string | null;
+  base_price: string | null;
 };
 
 function decodeHtml(value: string) {
@@ -70,7 +70,7 @@ function extractEmbeddedProductData(html: string, slug: string): EmbeddedProduct
     return {
       title: null,
       description: null,
-      price: null,
+      base_price: null,
     };
   }
 
@@ -82,7 +82,7 @@ function extractEmbeddedProductData(html: string, slug: string): EmbeddedProduct
   return {
     title: extractMatch(chunk, /"name":"([^"]+)"/i),
     description: extractMatch(chunk, /"description":"([^"]+)"/i),
-    price:
+    base_price:
       extractMatch(chunk, /"price":"([^"]+)"/i) ??
       extractMatch(chunk, /"price":([0-9]+(?:\.[0-9]{1,2})?)/i),
   };
@@ -90,8 +90,8 @@ function extractEmbeddedProductData(html: string, slug: string): EmbeddedProduct
 
 function extractRawPrice(html: string, slug: string) {
   const embedded = extractEmbeddedProductData(html, slug);
-  if (embedded.price) {
-    return embedded.price;
+  if (embedded.base_price) {
+    return embedded.base_price;
   }
 
   return (

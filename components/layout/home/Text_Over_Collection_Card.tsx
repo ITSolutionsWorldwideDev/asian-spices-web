@@ -1,4 +1,6 @@
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+
 interface CardProps {
   item: {
     title: string;
@@ -6,6 +8,7 @@ interface CardProps {
     products: number;
     image: string;
     gradient: string;
+    slug: string;
   };
 }
 
@@ -22,13 +25,16 @@ const TextOverCollectionCard = ({ item }: CardProps) => {
           <span
             className={`px-3 py-1 rounded-md text-black  text-xs   bg-${item.gradient}`}
           >
-            {item.products} products
+            {item.products} recipes
           </span>
         </div>
       </div>
-      <div className="flex absolute right-10 bottom-6 text-white items-center justify-center  gap-2 text-sm ml-auto font-bold hover:scale-123 overflow-hidden">
-        Explore <ArrowRight size={16} className="  hover:translate-x-10" />
-      </div>
+      <Link
+        href={`/recipes?category=${item.slug}`}
+        className="flex absolute right-10 bottom-6 text-white items-center justify-center gap-2 text-sm ml-auto font-bold hover:scale-123 overflow-hidden"
+      >
+        Explore <ArrowRight size={16} className="hover:translate-x-10" />
+      </Link>
     </>
   );
 };

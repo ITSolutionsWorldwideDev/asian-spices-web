@@ -30,7 +30,7 @@ export default function FlashSale() {
         </h2>
 
         {/* Timer */}
-        <FlashSaleTimer startDate="2025-11-24" endDate="2024-11-15" />
+        <FlashSaleTimer startDate="2025-11-24" endDate="2026-11-15" />
       </div>
 
       {/* Products */}

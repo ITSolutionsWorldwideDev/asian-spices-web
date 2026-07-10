@@ -68,24 +68,17 @@ const Story = () => {
         <div className="space-y-8">
           <div className="space-y-4">
             <h2 className="text-3xl font-bold text-gray-900">
-              From Farm to Your Kitchen
+              Bringing Authentic Asian Flavors to Every Home
             </h2>
             <p className="text-gray-600">
-              Since 2010, Spice Vault has been on a mission to bring the finest
-              Asian spices directly to your kitchen. We work closely with over
-              500 trusted farmers across Asia, ensuring sustainable practices
-              and fair trade.
+              Founded in 2026, Asian Spices is a modern online marketplace dedicated to bringing the rich and diverse flavors of Asia directly to your doorstep. We make it easy for home cooks, food enthusiasts, and professional chefs to discover premium spices, authentic ingredients, kitchen essentials, and traditional recipes—all in one convenient destination.
             </p>
             <p className="text-gray-600">
-              Every spice in our collection is hand-selected, quality tested,
-              and packaged with care to preserve its authentic flavor and aroma.
-              We believe that great cooking starts with great ingredients.
+            Our mission is to preserve the authenticity of Asian cuisine while making high-quality products accessible to everyone. Every product in our collection is carefully selected to ensure freshness, quality, and the genuine taste that makes every dish memorable.
             </p>
             <p className="text-gray-600">
-              Our commitment to quality has earned us the trust of home cooks
-              and professional chefs alike. Join our community and experience
-              the difference that authentic, premium spices can make in your
-              cooking.
+            Beyond shopping, Asian Spices is a growing community where cooking meets culture. Through our recipe library, healthy living tips, and expert cooking inspiration, we help you create delicious meals with confidence.
+            Whether you're preparing a cherished family recipe or experimenting with new flavors, Asian Spices is your trusted partner for authentic ingredients and an exceptional online shopping experience.
             </p>
           </div>
 
@@ -168,7 +161,7 @@ const Story = () => {
               Learn More <FaArrowRight className="ml-4" />
             </span>
             <span className="absolute inset-0 bg-linear-to-r  from-orange-500 to-amber-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-center"></span>
-            
+
           </button>
         </div>
       </section>

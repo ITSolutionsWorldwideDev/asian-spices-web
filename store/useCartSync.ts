@@ -1,4 +1,4 @@
-// apps/web/store/useCartSync.ts
+// store/useCartSync.ts
 
 "use client";
 
@@ -7,14 +7,55 @@ import { useSession } from "next-auth/react";
 
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
+import { useGlobalStore } from "@/store/useGlobalStore";
 
 export const useCartSync = () => {
   const { data: session, status } = useSession();
+  const { selectedCountry } = useGlobalStore();
 
-  const { cart, clearCart, setCart } = useCartStore();
+  // const { cart, clearCart, setCart } = useCartStore();
+  const { cart, setCart, refreshGuestPrices } = useCartStore();
   const { items: wishlist, clearWishlist, setWishlist } = useWishlistStore();
 
   const hasSynced = useRef(false);
+
+  const currentCountryCode = selectedCountry || "NL";
+
+  useEffect(() => {
+    // 🟢 CASE 1: If user is logged in, fetch matched DB row items using country param query context
+    if (status === "authenticated") {
+      const syncCart = async () => {
+        try {
+          const cartRes = await fetch(`/api/cart?country=${currentCountryCode}`);
+          if (cartRes.ok) {
+            const dbCart = await cartRes.json();
+            const formattedCart = dbCart.map((item: any) => ({
+              id: item.product_id,
+              title: item.title || "Product",
+              base_price: Number(item.base_price),
+              quantity: item.quantity,
+              image: item.image || "",
+              category_slug: item.category_slug || "",
+            }));
+            setCart(formattedCart);
+          }
+        } catch (err) {
+          console.error("Cart sync failed", err);
+        }
+      };
+
+      const t = setTimeout(syncCart, 150);
+      return () => clearTimeout(t);
+    }
+
+    // 🟢 CASE 2: If guest session, update the local memory array items directly from DB pricing mappings
+    if (status === "unauthenticated") {
+      const t = setTimeout(() => {
+        refreshGuestPrices(currentCountryCode);
+      }, 150);
+      return () => clearTimeout(t);
+    }
+  }, [status, currentCountryCode]);
 
   useEffect(() => {
     if (status !== "authenticated" || hasSynced.current) return;
@@ -25,7 +66,7 @@ export const useCartSync = () => {
         //    CART SYNC
         // =========================================================
 
-        const cartRes = await fetch("/api/cart");
+        const cartRes = await fetch(`/api/cart?country=${currentCountryCode}`);
 
         if (cartRes.ok) {
           const dbCart = await cartRes.json();
@@ -33,17 +74,19 @@ export const useCartSync = () => {
           const formattedCart = dbCart.map((item: any) => ({
             id: item.product_id,
             title: item.title || "Product",
-            price: Number(item.price),
+            base_price: Number(item.base_price),
             quantity: item.quantity,
             image: item.image || "",
             category_slug: item.category_slug || "",
           }));
 
-          const localCart = useCartStore.getState().cart;
+          // const localCart = useCartStore.getState().cart;
 
-          if (localCart.length === 0 || formattedCart.length > 0) {
-            setCart(formattedCart);
-          }
+          // if (localCart.length === 0 || formattedCart.length > 0) {
+          //   setCart(formattedCart);
+          // }
+
+          setCart(formattedCart);
         }
 
         hasSynced.current = true;
@@ -57,7 +100,7 @@ export const useCartSync = () => {
     }, 300); // let localStorage settle
 
     return () => clearTimeout(t);
-  }, [status]);
+  }, [status, currentCountryCode]);
 };
 
 // =========================================================
@@ -76,7 +119,7 @@ export const useCartSync = () => {
 //     id: item.id || item.product_id,
 //     name: item.name || "Product",
 //     image: item.image || "",
-//     price: Number(item.price),
+//     base_price: Number(item.base_price),
 //     slug: item.slug || "",
 //     category_slug: item.category_slug || "",
 //   }));

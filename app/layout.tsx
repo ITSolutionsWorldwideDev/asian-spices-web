@@ -3,6 +3,8 @@
 import type { Metadata } from "next";
 import Providers from "./providers";
 import GlobalLoader from "@/components/ui/GlobalLoader";
+import GoogleTagManager from "@/components/GoogleTagManager";
+import CountryChangeModal from "@/components/ui/CountryChangeModal";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -62,12 +64,29 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const GTM_ID = "GTM-5R64F7P4";
+  // const GTM_ID = "G-87ZL47CPL4";
+
   return (
     <html lang="en">
-      <body className="">
+      <head>
+        <GoogleTagManager />
+      </head>
+      <body>
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+
         <Providers>
           <GlobalLoader />
           {children}
+
+          <CountryChangeModal />
         </Providers>
       </body>
     </html>

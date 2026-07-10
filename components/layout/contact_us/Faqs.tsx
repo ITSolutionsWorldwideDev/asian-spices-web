@@ -1,13 +1,20 @@
-import React from "react";
-import { HelpCircle } from "lucide-react";
+"use client";
+
+import React, { useState } from "react";
+import { ChevronDown, ChevronUp, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+const FAQ_PAGE_SIZE = 6;
+
 const Faqs = () => {
+  const [openIndex, setOpenIndex] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(FAQ_PAGE_SIZE);
+
   const faqs = [
     {
       question: "How do I track my order?",
       answer:
-        "You can track your order by logging into your account and viewing your order history. You'll also receive tracking information via email once your order ships.",
+        "You can track your order by logging into your account and viewing your order history. You'll also receive tracking info via email.",
     },
     {
       question: "What is your return policy?",
@@ -29,36 +36,220 @@ const Faqs = () => {
       answer:
         "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
     },
-  ];
-  return (
-    <div className="bg-white rounded-2xl shadow-sm p-8">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-          <HelpCircle className="w-6 h-6 text-orange-600" />
-        </div>
-        <h2 className="text-2xl font-bold text-gray-900">
-          Frequently Asked Questions
-        </h2>
-      </div>
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    {
+      question: "How should I store my spices?",
+      answer:
+        "Store spices in airtight containers in a cool, dry place away from direct sunlight. Whole spices can last 2-3 years, while ground spices maintain peak flavor for 1-2 years.",
+    },
+    
+    
+    
+    
 
-      <div className="space-y-6">
-        {faqs.map((faq, index) => (
-          <div
-            key={index}
-            className="border-b border-gray-100 pb-6 last:border-b-0 last:pb-0"
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">
-              {faq.question}
-            </h3>
-            <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+  ];
+
+  const visibleFaqs = faqs.slice(0, visibleCount);
+  const allVisible = visibleCount >= faqs.length;
+  const canShowLess = allVisible && faqs.length > FAQ_PAGE_SIZE;
+
+  const handleShowMore = () => {
+    setVisibleCount((prev) => Math.min(prev + FAQ_PAGE_SIZE, faqs.length));
+  };
+
+  const handleShowLess = () => {
+    setVisibleCount(FAQ_PAGE_SIZE);
+    setOpenIndex(0);
+  };
+
+  return (
+    <div>
+      <h2 className="text-2xl md:text-3xl font-bold text-[#1b0d07] font-serif">
+        Frequently Asked Questions
+      </h2>
+      <div className="mt-3 mb-6 h-1 w-12 bg-orange-500 rounded-full" />
+
+      <div className="divide-y divide-gray-200">
+        {visibleFaqs.map((faq, index) => (
+          <div key={index}>
+            <button
+              onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
+              className="w-full flex items-center justify-between gap-3 text-left py-4 cursor-pointer"
+            >
+              <h3 className="text-sm md:text-base font-bold text-gray-900">
+                {faq.question}
+              </h3>
+
+              {openIndex === index ? (
+                <ChevronUp className="w-4 h-4 text-orange-500 shrink-0" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-orange-500 shrink-0" />
+              )}
+            </button>
+
+            {openIndex === index && (
+              <p className="pb-4 text-sm text-gray-600 leading-relaxed">
+                {faq.answer}
+              </p>
+            )}
           </div>
         ))}
       </div>
 
-      {/* Browse Products Button */}
-      <button className="w-full mt-8 bg-white border-2 border-gray-200 hover:border-orange-600 hover:text-orange-600 text-gray-700 font-semibold py-4 rounded-lg transition-all duration-200 cursor-pointer">
-        <Link href="/">Browse Products</Link>
-      </button>
+      {(allVisible ? canShowLess : true) && (
+        <div className="mt-4">
+          {allVisible ? (
+            <button
+              type="button"
+              onClick={handleShowLess}
+              className="text-sm font-semibold text-orange-500 hover:underline cursor-pointer"
+            >
+              Show Less
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleShowMore}
+              className="text-sm font-semibold text-orange-500 hover:underline cursor-pointer"
+            >
+              Show More
+            </button>
+          )}
+        </div>
+      )}
+
+      <div className="mt-6">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-orange-500 text-sm font-semibold hover:underline"
+        >
+          Browse Products <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
     </div>
   );
 };

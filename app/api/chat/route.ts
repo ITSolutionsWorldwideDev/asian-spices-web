@@ -3,8 +3,11 @@ import type { ChatRequest } from "@/types/chat";
 
 export const runtime = "nodejs";
 
+// const DEFAULT_N8N_WEBHOOK_URL =
+//   "https://n8n.srv1133883.hstgr.cloud/webhook/asiantest";
+
 const DEFAULT_N8N_WEBHOOK_URL =
-  "https://n8n.srv1133883.hstgr.cloud/webhook/asiantest";
+  "https://n8n-b8rr.srv1769324.hstgr.cloud/webhook/asiantest";
 
 const N8N_WEBHOOK_URL =
   process.env.BIBI_N8N_WEBHOOK_URL?.trim() ??

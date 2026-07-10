@@ -14,32 +14,13 @@ export async function GET() {
 
   const client = await pool.connect();
   try {
-    // const items = await client.query(
-    //   `
-    //     SELECT 
-    //         p.id,
-    //         p.name,
-    //         p.price::numeric AS price,
-    //         p.slug,
-    //         c.slug as category_slug,
-    //         md.file_url AS image
-    //     FROM wishlists w
-    //     LEFT JOIN store_products p ON p.id = w.product_id
-    //     LEFT JOIN store_categories c ON c.id = p.category_id
-    //     LEFT JOIN store_product_images pi ON pi.product_id = p.id AND pi.is_primary = true
-    //     LEFT JOIN media md ON md.media_id = pi.url::int
-    //     WHERE w.user_id = $1
-    //     ORDER BY w.created_at DESC
-    // `,
-    //   [session.user.id],
-    // );
 
     const items = await client.query(
       `
         SELECT 
             p.id,
             p.name,
-            p.price::numeric AS price,
+            p.base_price::numeric AS base_price,
             p.slug,
             c.slug as category_slug,
             img.file_url AS image

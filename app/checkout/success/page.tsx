@@ -47,9 +47,9 @@ export default async function Page({ searchParams }: Props) {
           </div>
         ) : (
         <div className="space-y-6">
-            {token && <PayPalCaptureHandler orderId={orderId} token={token} />}
-
-            {statusAction ? (
+            {token ? (
+              <PayPalCaptureHandler orderId={orderId} token={token} />
+            ) : statusAction ? (
               <PaynlReturnHandler
                 orderId={orderId}
                 transactionId={id}

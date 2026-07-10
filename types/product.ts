@@ -7,7 +7,9 @@ export interface Product {
   slug: string;
   description?: string;
 
-  price: number;
+  base_price: number;
+  min_offered_price?: number;
+  sale_price?: number;
   quantity: number;
 
   category_id: string;
@@ -20,6 +22,7 @@ export interface Product {
 
   discount_type?: string;
   discount_value?: number;
+  promo_code?: string;
 
   savings?: number;
 

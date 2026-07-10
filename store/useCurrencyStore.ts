@@ -23,7 +23,7 @@ interface CurrencyStore {
 
 export const useCurrencyStore = create<CurrencyStore>((set, get) => ({
   currencies: [],
-  selectedCurrency: "EUR", // ✅ default
+  selectedCurrency: "EUR",
   baseCurrency: "EUR",
   rate: 1,
   symbol: "€",

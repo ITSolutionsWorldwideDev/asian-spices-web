@@ -10,7 +10,7 @@ import PaymentForm from "../layout/checkout/PaymentForm";
 import Nav from "./Nav";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import { useSession } from "next-auth/react";
 
@@ -50,7 +50,7 @@ export default function Checkout() {
   const { cart, clearCart } = useCartStore();
   const { rate, selectedCurrency } = useCurrencyStore();
 
-  const { taxRate, setSelectedCountry, fetchInitialData } = useGlobalStore();
+  const { taxRules, selectedCountry, setSelectedCountry, fetchInitialData } = useGlobalStore();
 
   const [addresses, setAddresses] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
@@ -74,7 +74,7 @@ export default function Checkout() {
     city: "",
     state: "",
     zip: "",
-    country: "NL",
+    country: selectedCountry || "NL",
 
     latitude: 0,
     longitude: 0,
@@ -82,6 +82,12 @@ export default function Checkout() {
     cardNumber: "",
     expiry: "",
   });
+
+  useEffect(() => {
+    if (selectedCountry) {
+      setFormData((prev) => ({ ...prev, country: selectedCountry }));
+    }
+  }, [selectedCountry]);
 
   useEffect(() => {
     fetchInitialData();
@@ -96,24 +102,53 @@ export default function Checkout() {
     }
   }, [session]);
 
+  const handleAddressChange = useCallback(
+    async (address: any) => {
+      if (!address) return;
+      setSelectedAddress(address);
+      const activeCountry = address?.country || "NL";
+
+      setFormData((prev) => ({
+        ...prev,
+        phone: address.phone || "",
+        firstName: address.first_name || address.firstName || "",
+        lastName: address.last_name || address.lastName || "",
+        address: address.address_line1 || address.address || "",
+        appartment: address.address_line2 || address.appartment || "",
+        city: address.city || "",
+        state: address.state || "",
+        zip: address.postal_code || address.zip || "",
+        country: activeCountry,
+      }));
+
+      await setSelectedCountry(activeCountry);
+    },
+    [setSelectedCountry],
+  );
+
   const selectedOption = availableShippingOptions.find(
     (opt: any) =>
       String(opt.id) === String(shippingMethod) ||
       opt.code?.toLowerCase() === shippingMethod.toLowerCase(),
   );
 
-  const isStandardOption = 
-    selectedOption?.code?.toLowerCase() === "standard" || 
+  const isStandardOption =
+    selectedOption?.code?.toLowerCase() === "standard" ||
     selectedOption?.name?.toLowerCase().includes("standard") ||
     shippingMethod === "standard";
 
-  const baseSubtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-  
+  const baseSubtotal = cart.reduce(
+    (acc, item) => acc + item.base_price * item.quantity,
+    0,
+  );
+
   const FREE_SHIPPING_THRESHOLD = 50;
   const qualifiesForFreeStandard = baseSubtotal >= FREE_SHIPPING_THRESHOLD;
 
-  const currentShippingPrice = selectedOption 
-    ? (qualifiesForFreeStandard && isStandardOption ? 0 : selectedOption.price)
+  const currentShippingPrice = selectedOption
+    ? qualifiesForFreeStandard && isStandardOption
+      ? 0
+      : selectedOption.price
     : 5.99;
 
   useEffect(() => {
@@ -138,15 +173,15 @@ export default function Checkout() {
         );
       }
     }
-  }, [availableShippingOptions, shippingMethod]); 
- 
-  // const totals = calculateTotals(cart, currentShippingPrice, taxRate);
+  }, [availableShippingOptions, shippingMethod]);
+
   const totals = calculateTotals(
     cart,
     currentShippingPrice,
-    taxRate,
+    taxRules,
     selectedOption?.name || selectedOption?.code || shippingMethod,
   );
+
   const convertedTotals = convertTotals(totals, rate || 1, selectedCurrency);
 
   // const totals = calculateTotals(cart, shippingMethod);
@@ -159,31 +194,39 @@ export default function Checkout() {
         show("Loading Addresses...");
 
         const res = await fetch("/api/account/addresses");
-        const data = await res.json();
 
-        setAddresses(data.addresses || []);
+        const rawData = await res.json();
+        const data = JSON.parse(JSON.stringify(rawData));
 
-        const defaultAddr = data.addresses?.find((a: any) => a.is_default);
+        const addressList = data.addresses || [];
+        setAddresses(addressList);
+
+        const defaultAddr = addressList?.find((a: any) => a.is_default);
 
         if (defaultAddr) {
-          setSelectedAddress(defaultAddr);
-          const activeCountry = defaultAddr.country || "NL";
-
-          setFormData((prev) => ({
-            ...prev,
-            phone: defaultAddr.phone || "",
-            firstName: defaultAddr.first_name || "",
-            lastName: defaultAddr.last_name || "",
-            address: defaultAddr.address_line1 || "",
-            appartment: defaultAddr.address_line2 || "",
-            city: defaultAddr.city || "",
-            state: defaultAddr.state || "",
-            zip: defaultAddr.postal_code || "",
-            country: defaultAddr.country || "NL",
-          }));
-
-          await setSelectedCountry(activeCountry);
+          // Pass execution context directly through the updater callback pipeline
+          await handleAddressChange(defaultAddr);
         }
+
+        // if (defaultAddr) {
+        //   setSelectedAddress(defaultAddr);
+        //   const activeCountry = defaultAddr.country || "NL";
+
+        //   setFormData((prev) => ({
+        //     ...prev,
+        //     phone: defaultAddr.phone || "",
+        //     firstName: defaultAddr.first_name || "",
+        //     lastName: defaultAddr.last_name || "",
+        //     address: defaultAddr.address_line1 || "",
+        //     appartment: defaultAddr.address_line2 || "",
+        //     city: defaultAddr.city || "",
+        //     state: defaultAddr.state || "",
+        //     zip: defaultAddr.postal_code || "",
+        //     country: defaultAddr.country || "NL",
+        //   }));
+
+        //   await setSelectedCountry(activeCountry);
+        // }
       } catch (err) {
         console.error("Failed to load addresses", err);
       } finally {
@@ -192,13 +235,20 @@ export default function Checkout() {
     };
 
     loadAddresses();
-  }, [session]);
+  }, [session, handleAddressChange]);
+  // }, [session]);
+
+  // useEffect(() => {
+  //   if (formData.country) {
+  //     setSelectedCountry(formData.country);
+  //   }
+  // }, [formData.country]);
 
   useEffect(() => {
     if (formData.country) {
       setSelectedCountry(formData.country);
     }
-  }, [formData.country]);
+  }, [formData.country, setSelectedCountry]);
 
   const isFormValid = checkoutSchema.safeParse(formData).success;
 
@@ -461,7 +511,8 @@ export default function Checkout() {
               errors={errors}
               addresses={addresses}
               selectedAddress={selectedAddress}
-              setSelectedAddress={setSelectedAddress}
+              // setSelectedAddress={setSelectedAddress}
+              setSelectedAddress={handleAddressChange}
               onShippingOptionsFetched={(options) =>
                 setAvailableShippingOptions(options)
               }

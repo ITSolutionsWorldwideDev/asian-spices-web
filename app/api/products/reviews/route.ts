@@ -36,23 +36,6 @@ export async function GET(req: NextRequest) {
   }
 }
 
-/* export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-
-  const productId = searchParams.get("productId");
-  const page = Number(searchParams.get("page") || 1);
-
-  if (!productId) {
-    return NextResponse.json({ error: "Missing productId" }, { status: 400 });
-  }
-
-  const data = await getProductReviews(productId, page);
-
-  return NextResponse.json(data);
-} */
-
-// ✅ POST REVIEW
-
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
@@ -76,3 +59,20 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ success: true });
 }
  
+
+/* export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+
+  const productId = searchParams.get("productId");
+  const page = Number(searchParams.get("page") || 1);
+
+  if (!productId) {
+    return NextResponse.json({ error: "Missing productId" }, { status: 400 });
+  }
+
+  const data = await getProductReviews(productId, page);
+
+  return NextResponse.json(data);
+} */
+
+// ✅ POST REVIEW

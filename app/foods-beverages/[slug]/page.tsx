@@ -8,12 +8,15 @@ interface PageProps {
   params: Promise<{
     slug: string;
   }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const sParams = await searchParams;
+  const country = (sParams?.country as string) || "NL";
 
-  const product = await getProductBySlug(slug);
+  const product = await getProductBySlug(slug, country);
 
   if (!product || !product.id) {
     return {
@@ -29,9 +32,13 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function FoodAndBeveragesDetailPage({
   params,
+  searchParams,
 }: PageProps) {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const sParams = await searchParams;
+  const country = (sParams?.country as string) || "NL";
+
+  const product = await getProductBySlug(slug, country);
 
   if (!product || !product.id) {
     return (
@@ -41,24 +48,16 @@ export default async function FoodAndBeveragesDetailPage({
     );
   }
 
-  const relatedProducts = await getRelatedProducts(product.category_id);
+  const relatedProducts = await getRelatedProducts(
+    product.category_id,
+    country,
+  );
 
   return (
-    <ProductDescrption product={product} relatedProducts={relatedProducts} />
+    <ProductDescrption
+      product={product}
+      relatedProducts={relatedProducts}
+      category="Foods & Beverages"
+    />
   );
 }
-
-/* import FoodAndBeverages from "@/components/layout/FoodAndBeverages/FoodAndBeverages";
-import FoodAndBeveragesProductDesc from "@/components/layout/productdescallpages/FoodAndBeveragesProductDesc";
-import React from "react";
-
-const page = () => {
-  return (
-    <div>
-      <FoodAndBeveragesProductDesc />
-    </div>
-  );
-};
-
-export default page;
- */

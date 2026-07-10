@@ -157,7 +157,7 @@ export default async function HealthyLivingProductpage({
         </div>
       </div>
 
-      <Reviews />
+      {/* <Reviews /> */}
       <Footer />
     </div>
   );

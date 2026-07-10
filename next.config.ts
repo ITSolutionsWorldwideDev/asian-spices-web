@@ -1,3 +1,4 @@
+// next.config.ts
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -12,7 +13,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "nm60drcq00.ufs.sh",
+        hostname: "luyetxymax.ufs.sh",
       },
       {
         protocol: "https",

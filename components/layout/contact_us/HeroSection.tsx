@@ -3,13 +3,10 @@ import Faqs from "./Faqs";
 
 export default function HeroSection() {
   return (
-    <div className=" bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-[#f5f0ea] py-12 md:py-16 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          {/* Contact Form */}
-
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-start">
           <ContactUsForm />
-          {/* FAQ Section */}
           <Faqs />
         </div>
       </div>
