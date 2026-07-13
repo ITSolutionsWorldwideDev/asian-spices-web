@@ -45,7 +45,7 @@ export async function GET(req: Request) {
           p.promo_code,
           img.file_url AS image 
         FROM store_cart_items sci
-        LEFT JOIN store_products p ON p.id = sci.product_id        
+        INNER JOIN store_products p ON p.id = sci.product_id        
         LEFT JOIN (
           SELECT 
             spc.product_id,
