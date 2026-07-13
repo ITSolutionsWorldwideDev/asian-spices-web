@@ -18,9 +18,10 @@ export const getCategoryWithSubcategories = async (slug: string) => {
 
     // 🔹 Step 2: Get subcategories
     const subCategoryResult = await pool.query(
-      `SELECT id,name 
+      `SELECT id, name 
        FROM store_subcategories 
-       WHERE category_id = $1`,
+       WHERE category_id = $1
+       ORDER BY name ASC`,
       [category.id],
     );
 

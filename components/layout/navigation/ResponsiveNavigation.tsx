@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ChevronDown, Menu, Heart, Home } from "lucide-react";
 import { RxCross1 } from "react-icons/rx";
@@ -11,12 +11,17 @@ import { FaL } from "react-icons/fa6";
 import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/useCartStore";
 
+interface NavCategoryItem {
+  name: string;
+  href: string;
+}
+
 interface NavChildren {
   name?: string;
   image?: string;
   href?: string;
   heading?: string;
-  category?: { name: string; href: string }[];
+  category?: NavCategoryItem[];
 }
 
 interface NavLink {
@@ -24,11 +29,41 @@ interface NavLink {
   hreflink?: string | undefined;
   children?: NavChildren[];
 }
+
+const SHOP_CATEGORIES = [
+  {
+    heading: "Asian Spices & Seasonings",
+    slug: "spices",
+  },
+  {
+    heading: "Kitchen Appliances & Cooking Tools",
+    slug: "kitchen-appliances",
+  },
+  {
+    heading: "Asian Foods & Beverages",
+    slug: "foods-beverages",
+  },
+] as const;
+
+type SubcategoryRow = {
+  id: string;
+  name: string;
+};
+
 const ResponsiveNavigation = () => {
   const [activeLink, setActiveLink] = useState<string>("");
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [mobileMenu, setMobileMenu] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [shopCategoryChildren, setShopCategoryChildren] = useState<
+    NavChildren[]
+  >(
+    SHOP_CATEGORIES.map((cat) => ({
+      heading: cat.heading,
+      category: [{ name: "View all", href: cat.slug }],
+    })),
+  );
+  const [shopCategoriesLoading, setShopCategoriesLoading] = useState(false);
 
   const handleClick = (name: string) => {
     setActiveLink(name);
@@ -45,84 +80,121 @@ const ResponsiveNavigation = () => {
     document.body.style.overflow = mobileMenu ? "hidden" : "auto";
   }, [mobileMenu]);
 
-  const navLinks: NavLink[] = [
-    {
-      name: "Shop by Category",
-      hreflink: "#",
-      children: [
-        {
-          name: "Asian Spices & Seasonings",
-          image: "spices.png",
-          href: "spices",
-        },
-        {
-          name: "Kitchen Appliances & Cooking Tools",
-          image: "kitchen-appliances.png",
-          href: "kitchen-appliances",
-        },
-        {
-          name: "Asian Foods & Beverages",
-          image: "foods-beverages.png",
-          href: "foods-beverages",
-        },
-      ],
-    },
+  useEffect(() => {
+    let cancelled = false;
 
-    {
-      name: "Healthy Living",
-      hreflink: "#",
-      children: [
-        {
-          heading: "Health Benefits of Herbs",
-          category: [
-            {
-              name: "Supports Immunity",
-              href: "healthyliving/supports-immunity",
-            },
-            {
-              name: "Aids Digestion",
-              href: "healthyliving/aids-digestion",
-            },
-            {
-              name: "Promotes Relaxation",
-              href: "healthyliving/promotes-relaxation",
-            },
-            {
-              name: "Enhances Energy Levels",
-              href: "healthyliving/enhances-energy-levels",
-            },
-          ],
-        },
-        {
-          heading: "Herbal Food Supplements",
-          category: [
-            { name: "Capsules", href: "healthyliving/capsules" },
-            { name: "Powders", href: "healthyliving/powders" },
-            { name: "Teas", href: "healthyliving/teas" },
-          ],
-        },
-        {
-          heading: "Herbal Skin Products",
-          category: [
-            { name: "Face oils", href: "healthyliving/face-oils" },
-            { name: "Creams", href: "healthyliving/creams" },
-            { name: "Cleansers", href: "healthyliving/cleansers" },
-          ],
-        },
-        {
-          heading: "Herbal Hair Products",
-          category: [
-            { name: "Hair oils", href: "healthyliving/hair-oils" },
-            { name: "Shampoos", href: "healthyliving/shampoos" },
-            { name: "Hair masks", href: "healthyliving/hair-masks" },
-          ],
-        },
-      ],
-    },
-    { name: "Authentic Asian Recipes", hreflink: "recipes" },
-    // { name: "Partner Platform", hreflink: "partnerplatform" },
-  ];
+    const loadShopSubcategories = async () => {
+      setShopCategoriesLoading(true);
 
+      try {
+        const results = await Promise.all(
+          SHOP_CATEGORIES.map(async (cat) => {
+            const res = await fetch(`/api/category/${cat.slug}`);
+            const json = await res.json();
+
+            const subcategories: SubcategoryRow[] = Array.isArray(
+              json?.subcategories,
+            )
+              ? json.subcategories
+              : [];
+
+            const categoryLinks: NavCategoryItem[] = [
+              { name: "View all", href: cat.slug },
+              ...subcategories.map((sub) => ({
+                name: sub.name,
+                href: `${cat.slug}?subcategories=${sub.id}`,
+              })),
+            ];
+
+            return {
+              heading: cat.heading,
+              category: categoryLinks,
+            } satisfies NavChildren;
+          }),
+        );
+
+        if (!cancelled) {
+          setShopCategoryChildren(results);
+        }
+      } catch (error) {
+        console.error("Failed to load shop subcategories:", error);
+      } finally {
+        if (!cancelled) {
+          setShopCategoriesLoading(false);
+        }
+      }
+    };
+
+    loadShopSubcategories();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const navLinks: NavLink[] = useMemo(
+    () => [
+      {
+        name: "Shop by Category",
+        hreflink: "#",
+        children: shopCategoryChildren,
+      },
+
+      {
+        name: "Healthy Living",
+        hreflink: "#",
+        children: [
+          {
+            heading: "Health Benefits of Herbs",
+            category: [
+              {
+                name: "Supports Immunity",
+                href: "healthyliving/supports-immunity",
+              },
+              {
+                name: "Aids Digestion",
+                href: "healthyliving/aids-digestion",
+              },
+              {
+                name: "Promotes Relaxation",
+                href: "healthyliving/promotes-relaxation",
+              },
+              {
+                name: "Enhances Energy Levels",
+                href: "healthyliving/enhances-energy-levels",
+              },
+            ],
+          },
+          {
+            heading: "Herbal Food Supplements",
+            category: [
+              { name: "Capsules", href: "healthyliving/capsules" },
+              { name: "Powders", href: "healthyliving/powders" },
+              { name: "Teas", href: "healthyliving/teas" },
+            ],
+          },
+          {
+            heading: "Herbal Skin Products",
+            category: [
+              { name: "Face oils", href: "healthyliving/face-oils" },
+              { name: "Creams", href: "healthyliving/creams" },
+              { name: "Cleansers", href: "healthyliving/cleansers" },
+            ],
+          },
+          {
+            heading: "Herbal Hair Products",
+            category: [
+              { name: "Hair oils", href: "healthyliving/hair-oils" },
+              { name: "Shampoos", href: "healthyliving/shampoos" },
+              { name: "Hair masks", href: "healthyliving/hair-masks" },
+            ],
+          },
+        ],
+      },
+      { name: "Authentic Asian Recipes", hreflink: "recipes" },
+    ],
+    [shopCategoryChildren],
+  );
   const [isCartOpen, setCartOpen] = useState<boolean>(false);
   return (
     <>
@@ -194,15 +266,25 @@ const ResponsiveNavigation = () => {
                     )}
                   </button>
 
-                  {/* DROPDOWN MENU */}
+                  {/* DROPDOWN MENU — same mega-menu for Shop by Category & Healthy Living */}
                   {activeLink === link.name && isMenuOpen && (
                     <div className="absolute top-full mt-5 z-50">
-                      {link.name === "Healthy Living" ? (
-                        <div className="fixed left-1/2 top-20 -translate-x-1/2 z-50 w-[85vw] max-w-5xl">
-                          <div className="bg-gray-100 rounded-xl shadow-md border border-gray-200 overflow-hidden">
-                            {/* Top Section */}
-                            <div className="grid grid-cols-4 gap-8 p-6">
-                              {link.children.map((section, index) => (
+                      <div className="fixed left-1/2 top-20 -translate-x-1/2 z-50 w-[85vw] max-w-5xl">
+                        <div className="bg-gray-100 rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                          <div
+                            className={`grid gap-8 p-6 ${
+                              link.children.length >= 4
+                                ? "grid-cols-4"
+                                : "grid-cols-3"
+                            }`}
+                          >
+                            {link.name === "Shop by Category" &&
+                            shopCategoriesLoading ? (
+                              <p className="col-span-full text-sm text-gray-500">
+                                Loading categories...
+                              </p>
+                            ) : (
+                              link.children.map((section, index) => (
                                 <div key={index}>
                                   <h3
                                     className={`font-semibold text-gray-800 mb-3 ${
@@ -214,53 +296,41 @@ const ResponsiveNavigation = () => {
                                     {section.heading}
                                   </h3>
 
-                                  <ul className="space-y-2 text-gray-600 text-sm">
+                                  <ul className="space-y-2 text-gray-600 text-sm max-h-64 overflow-y-auto">
                                     {section.category?.map((item, i) => (
                                       <li
-                                        key={i}
+                                        key={`${item.href}-${i}`}
                                         className="hover:text-black cursor-pointer transition-colors"
                                       >
-                                        <Link href={`/${item.href}`}>
+                                        <Link
+                                          href={`/${item.href}`}
+                                          onClick={() => setIsMenuOpen(false)}
+                                        >
                                           {item.name}
                                         </Link>
                                       </li>
                                     ))}
                                   </ul>
                                 </div>
-                              ))}
-                            </div>
+                              ))
+                            )}
+                          </div>
 
-                            <div className="bg-orange-100 px-6 py-4 rounded-b-xl">
-                              <button className="text-orange-600 font-medium hover:underline">
-                                View All {link.name} Products →
-                              </button>
-                            </div>
+                          <div className="bg-orange-100 px-6 py-4 rounded-b-xl">
+                            <Link
+                              href={
+                                link.name === "Shop by Category"
+                                  ? "/spices"
+                                  : "/healthyliving/supports-immunity"
+                              }
+                              onClick={() => setIsMenuOpen(false)}
+                              className="text-orange-600 font-medium hover:underline"
+                            >
+                              View All {link.name} Products →
+                            </Link>
                           </div>
                         </div>
-                      ) : (
-                        <ul className="bg-white text-black shadow-lg rounded-lg w-64">
-                          {link.children.map((child) => (
-                            <li key={child.name}>
-                              <Link
-                                href={`/${child.href}`}
-                                className="flex items-center px-4 py-2 hover:bg-amber-800 hover:text-white transition-colors"
-                                onClick={() => setIsMenuOpen(false)}
-                              >
-                                {child.image && (
-                                  <img
-                                    src={`/assets/navbar/${child.image}`}
-                                    alt={child.name}
-                                    className="w-12 h-7 object-cover rounded-md"
-                                  />
-                                )}
-                                <span className="ml-5 font-bold">
-                                  {child.name}
-                                </span>
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
+                      </div>
                     </div>
                   )}
                 </>
@@ -326,65 +396,59 @@ const ResponsiveNavigation = () => {
                       <div className="bg-amber-800/60">
                         {link.children.map((child, ind) => (
                           <div key={ind}>
-                            {link.name === "Category" ? (
+                            {child.category ? (
+                              <div>
+                                <button
+                                  onClick={() =>
+                                    setActiveSection(
+                                      activeSection === child.heading
+                                        ? null
+                                        : (child.heading ?? null),
+                                    )
+                                  }
+                                  className="w-full flex justify-between items-center px-6 py-3 text-sm font-bold text-gray-300 uppercase"
+                                >
+                                  {child.heading}
+
+                                  <ChevronDown
+                                    className={`transition-transform duration-300 ${
+                                      activeSection === child.heading
+                                        ? "rotate-180"
+                                        : ""
+                                    }`}
+                                  />
+                                </button>
+
+                                {activeSection === child.heading &&
+                                  child.category.map((item) => (
+                                    <Link
+                                      key={item.name}
+                                      href={`/${item.href}`}
+                                      onClick={() => setMobileMenu(false)}
+                                      className="flex items-center ml-4 gap-4 px-6 py-3 text-white/90 hover:bg-amber-700 transition-colors"
+                                    >
+                                      <span>{item.name}</span>
+                                    </Link>
+                                  ))}
+                              </div>
+                            ) : (
                               <Link
                                 href={`/${child.href}`}
                                 onClick={() => setMobileMenu(false)}
                                 className="relative z-600 flex items-center gap-4 px-6 py-3 text-white/90 hover:bg-amber-700 transition-colors"
                               >
-                                <img
-                                  src={`/assets/navbar/${child.image}`}
-                                  alt={child.name}
-                                  className="w-12 h-7 object-cover rounded-md"
-                                />
+                                {child.image && (
+                                  <img
+                                    src={`/assets/navbar/${child.image}`}
+                                    alt={child.name}
+                                    className="w-12 h-7 object-cover rounded-md"
+                                  />
+                                )}
 
                                 <span className="font-semibold">
                                   {child.name}
                                 </span>
                               </Link>
-                            ) : (
-                              <div>
-                                <h3 className="px-6 py-2 text-sm font-bold text-gray-300 uppercase">
-                                  {child.name}
-                                </h3>
-
-                                {child.category && (
-                                  <div>
-                                    <button
-                                      onClick={() =>
-                                        setActiveSection(
-                                          activeSection === child.heading
-                                            ? null
-                                            : (child.heading ?? null),
-                                        )
-                                      }
-                                      className="w-full flex justify-between items-center px-6 py-3 text-sm font-bold text-gray-300 uppercase"
-                                    >
-                                      {child.heading}
-
-                                      <ChevronDown
-                                        className={`transition-transform duration-300 ${
-                                          activeSection === child.heading
-                                            ? "rotate-180"
-                                            : ""
-                                        }`}
-                                      />
-                                    </button>
-
-                                    {activeSection === child.heading &&
-                                      child.category.map((item) => (
-                                        <Link
-                                          key={item.name}
-                                          href={`/${item.href}`}
-                                          onClick={() => setMobileMenu(false)}
-                                          className="flex items-center ml-4 gap-4 px-6 py-3 text-white/90 hover:bg-amber-700 transition-colors"
-                                        >
-                                          <span className="">{item.name}</span>
-                                        </Link>
-                                      ))}
-                                  </div>
-                                )}
-                              </div>
                             )}
                           </div>
                         ))}
