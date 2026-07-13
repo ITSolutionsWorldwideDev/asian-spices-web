@@ -437,6 +437,12 @@ export default function Checkout() {
         );
       }
 
+      if (err.code === "INVALID_PRODUCTS") {
+        setApiError(
+          "Some products in your cart are outdated. Please clear your cart and add them again.",
+        );
+      }
+
       if (err.code === "NO_NEARBY_STORES") {
         setApiError("We currently don’t deliver to your area.");
       }

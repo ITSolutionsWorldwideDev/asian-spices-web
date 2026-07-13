@@ -211,41 +211,38 @@ export async function POST(req: NextRequest) {
     );
 
     // ====================================================
-    // 3️⃣ VALIDATE PRODUCTS EXIST
+    // 3️⃣ VALIDATE PRODUCTS EXIST (before creating order)
     // ====================================================
 
-    /* const productIds = cartItems.map(
-      (item: any) => item.id,
+    const normalizedItems = cartItems.map((item: any) => ({
+      ...item,
+      id: item.id || item.product_id,
+    }));
+
+    const productIds = normalizedItems
+      .map((item: any) => item.id)
+      .filter(Boolean);
+
+    const existing = await client.query(
+      `SELECT id::text AS id FROM store_products WHERE id = ANY($1::uuid[])`,
+      [productIds],
     );
 
-    const productCatalog = await client.query(
-      `
-      SELECT
-        spc.store_id,
-        spc.product_id,
-        spc.price,
-        spc.quantity,
-        spc.status
-
-      FROM store_product_catalog spc
-
-      JOIN store_addresses sa
-        ON sa.store_id = spc.store_id
-
-      WHERE spc.product_id = ANY($1)
-        AND sa.country = $2
-        AND spc.status = 1
-        AND spc.quantity > 0
-    `,
-      [productIds, country],
+    const existingIds = new Set(
+      existing.rows.map((r: { id: string }) => r.id.toLowerCase()),
     );
 
-    if (!productCatalog.rowCount) {
+    const missing = normalizedItems.filter(
+      (item: any) => !existingIds.has(String(item.id).toLowerCase()),
+    );
+
+    if (missing.length) {
+      await client.query("ROLLBACK");
       return errorResponse(
-        "No stores available for your location.",
-        "NO_STORE_AVAILABLE",
+        "Some products in your cart are outdated. Please clear your cart and add them again.",
+        "INVALID_PRODUCTS",
       );
-    } */
+    }
 
     // ====================================================
     // 4️⃣ CREATE ORDER
@@ -333,20 +330,7 @@ export async function POST(req: NextRequest) {
     // 5️⃣ CREATE ORDER ITEMS
     // ====================================================
 
-    for (const item of cartItems) {
-      const exists = await client.query(
-        `SELECT 1 FROM store_products WHERE id = $1 LIMIT 1`,
-        [item.id],
-      );
-
-      if (!exists.rowCount) {
-        await client.query("ROLLBACK");
-        return errorResponse(
-          "Some products in your cart are outdated. Please clear your cart and add them again.",
-          "INVALID_PRODUCTS",
-        );
-      }
-
+    for (const item of normalizedItems) {
       await client.query(
         `
         INSERT INTO store_order_items
