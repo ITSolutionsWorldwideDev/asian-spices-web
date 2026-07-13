@@ -334,27 +334,18 @@ export async function POST(req: NextRequest) {
     // ====================================================
 
     for (const item of cartItems) {
-      // lowest available base_price
-      /* const availableProducts =
-        productCatalog.rows
-          .filter(
-            (p: any) =>
-              p.product_id === item.id,
-          )
-          .sort(
-            (a: any, b: any) =>
-              Number(a.base_price) -
-              Number(b.base_price),
-          );
+      const exists = await client.query(
+        `SELECT 1 FROM store_products WHERE id = $1 LIMIT 1`,
+        [item.id],
+      );
 
-      if (!availableProducts.length) {
-        throw new Error(
-          `${item.title} is unavailable`,
+      if (!exists.rowCount) {
+        await client.query("ROLLBACK");
+        return errorResponse(
+          "Some products in your cart are outdated. Please clear your cart and add them again.",
+          "INVALID_PRODUCTS",
         );
       }
-
-      const selectedProduct =
-        availableProducts[0]; */
 
       await client.query(
         `
@@ -373,7 +364,6 @@ export async function POST(req: NextRequest) {
           order_id,
           item.id,
           item.quantity,
-          // Number(selectedProduct.base_price),
           Number(item.base_price),
         ],
       );
