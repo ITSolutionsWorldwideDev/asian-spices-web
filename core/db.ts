@@ -8,10 +8,23 @@ declare global {
   var varGlobalPool: Pool | undefined;
 }
 
+/**
+ * pg treats sslmode=require/prefer/verify-ca as verify-full today, but warns that
+ * semantics will change. Pin verify-full to keep current behavior and silence the warning.
+ */
+function normalizeDatabaseUrl(url: string | undefined): string | undefined {
+  if (!url) return url;
+
+  return url.replace(
+    /([?&])sslmode=(?:require|prefer|verify-ca)(?=&|$)/i,
+    "$1sslmode=verify-full",
+  );
+}
+
 export const pool =
   globalThis.varGlobalPool ??
   new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: normalizeDatabaseUrl(process.env.DATABASE_URL),
     // 🟢 OPTIMIZED: Scaled settings tailored to prevent serverless pool exhaustion
     max: 3,// 20
     idleTimeoutMillis: 5000,// 30000,
