@@ -104,11 +104,11 @@ export async function GET(request: Request) {
   // Normalize every allowed host to production
   const PRODUCTION_HOST = "www.asianspices.online";
 
-  if (parsedUrl.hostname !== PRODUCTION_HOST) {
+  // if (parsedUrl.hostname !== PRODUCTION_HOST) {
     parsedUrl.hostname = PRODUCTION_HOST;
     parsedUrl.protocol = "https:";
     parsedUrl.port = "";
-  }
+  // }
 
   try {
     const response = await fetch(parsedUrl.toString(), {
