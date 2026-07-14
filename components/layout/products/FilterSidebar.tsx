@@ -116,7 +116,7 @@ export default function FilterSidebar({
   const selectedBrands = getArray("brands");
 
   return (
-    <div className="sticky top-24 h-fit rounded-2xl bg-white p-6 shadow-sm lg:shadow-xl border border-gray-100">
+    <aside className="self-start h-fit rounded-2xl bg-white p-6 shadow-sm lg:shadow-xl border border-gray-100 lg:sticky lg:top-24 lg:z-10">
       {/* =========================
           💰 PRICE FILTER
       ========================= */}
@@ -271,6 +271,6 @@ export default function FilterSidebar({
           Clear Brands
         </button>
       </Collapsible>
-    </div>
+    </aside>
   );
 }

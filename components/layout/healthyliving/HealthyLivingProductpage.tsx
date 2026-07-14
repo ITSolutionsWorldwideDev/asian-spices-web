@@ -150,7 +150,7 @@ export default async function HealthyLivingProductpage({
       <div className="grid lg:grid-cols-[260px_1fr] gap-6 container mx-auto p-5">
         <FilterSidebar subcategories={subcategories} brands={brands} />
 
-        <div>
+        <div className="relative z-20 min-w-0 bg-white">
           <SortDropdown />
 
           <InfiniteProducts initialProducts={products} filters={filters} />

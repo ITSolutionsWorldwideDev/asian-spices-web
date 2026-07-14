@@ -13,7 +13,7 @@ const contactCards = [
   {
     icon: Phone,
     label: "CALL US",
-    value: "+1 (555) 123-4567",
+    value: "+31 10 766 0786",
     subtext: "Mon-Fri 10AM-5PM EST",
     href: "tel:+15551234567",
   },

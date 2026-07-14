@@ -24,7 +24,7 @@ export default function RecipeSidebar({
   selectedTag,
 }: RecipeSidebarProps) {
   return (
-    <aside className="sticky top-24 space-y-6">
+    <aside className="self-start space-y-6 lg:sticky lg:top-24 lg:z-10">
       {/* CATEGORIES */}
       <div className="bg-white rounded-2xl border p-5">
         <h3 className="font-bold text-lg mb-4">
