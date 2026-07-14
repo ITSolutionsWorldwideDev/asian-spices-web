@@ -1,13 +1,9 @@
 // app/recipes/[slug]/page.tsx
 
 import Image from "next/image";
-
 import Link from "next/link";
-
 import { notFound } from "next/navigation";
-
 import { Calendar, Clock, Tag, Youtube } from "react-feather";
-
 import { getRecipeBySlug } from "@/lib/dbactions/recipes";
 import Footer from "@/components/ui/Footer";
 // import RegisterOnApp from "@/components/ui/RegisterOnApp";
@@ -48,6 +44,10 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
     notFound();
   }
 
+  const formattedDate = recipe.created_at
+    ? new Date(recipe.created_at).toLocaleDateString()
+    : new Date().toLocaleDateString();
+
   return (
     <div>
       <section className="relative">
@@ -87,10 +87,10 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
               <div className="flex flex-wrap items-center gap-6 text-white/90 mt-6">
                 <div className="flex items-center gap-2">
                   <Calendar size={16} />
-
-                  <span>
+                  <span>{formattedDate}</span>
+                  {/* <span>
                     {new Date(recipe.created_at).toLocaleDateString()}
-                  </span>
+                  </span> */}
                 </div>
 
                 {recipe.youtube_url && (
@@ -151,7 +151,7 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
             )}
 
             {/* TAGS */}
-            {recipe.tags?.length > 0 && (
+            {recipe.tags && recipe.tags.length > 0 && (
               <div className="bg-white rounded-2xl p-5 border shadow-sm">
                 <h3 className="text-lg font-bold mb-4">Recipe Tags</h3>
 

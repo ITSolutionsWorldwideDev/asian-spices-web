@@ -23,6 +23,7 @@ export default function CollectionLargeCard({ item }: CardProps) {
           //   width={300}
           //   height={300}
           fill
+          sizes="(max-width:768px) 100vw, 50vw"
           className="object-cover   w-full h-full transition-transform duration-800 ease-out group-hover:scale-125"
         />
 

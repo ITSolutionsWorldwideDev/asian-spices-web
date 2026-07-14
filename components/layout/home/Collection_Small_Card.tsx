@@ -21,6 +21,7 @@ export default function CollectionSmallCard({ item }: CardProps) {
           src={`/assets/home/collections/${item.image}`}
           alt={item.title}
           fill
+          sizes="(max-width:768px) 100vw, 50vw"
           className="object-cover transition-transform duration-800 ease-out group-hover:scale-125"
         />
 

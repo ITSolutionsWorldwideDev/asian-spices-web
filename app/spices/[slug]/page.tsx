@@ -53,11 +53,22 @@ export default async function SpicesDetailPage({
     country,
   );
 
+  const serializedProduct = JSON.parse(JSON.stringify(product));
+  const serializedRelatedProducts = JSON.parse(JSON.stringify(relatedProducts || []));
+
   return (
     <ProductDescrption
-      product={product}
-      relatedProducts={relatedProducts}
+      product={serializedProduct}
+      relatedProducts={serializedRelatedProducts}
       category="Spices"
     />
   );
+
+  // return (
+  //   <ProductDescrption
+  //     product={product}
+  //     relatedProducts={relatedProducts}
+  //     category="Spices"
+  //   />
+  // );
 }

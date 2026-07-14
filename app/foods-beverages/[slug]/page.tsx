@@ -53,11 +53,22 @@ export default async function FoodAndBeveragesDetailPage({
     country,
   );
 
+  const serializedProduct = JSON.parse(JSON.stringify(product));
+  const serializedRelatedProducts = JSON.parse(JSON.stringify(relatedProducts || []));
+
   return (
     <ProductDescrption
-      product={product}
-      relatedProducts={relatedProducts}
+      product={serializedProduct}
+      relatedProducts={serializedRelatedProducts}
       category="Foods & Beverages"
     />
   );
+
+  // return (
+  //   <ProductDescrption
+  //     product={product}
+  //     relatedProducts={relatedProducts}
+  //     category="Foods & Beverages"
+  //   />
+  // );
 }
