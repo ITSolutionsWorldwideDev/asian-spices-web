@@ -19,10 +19,16 @@ type MessageBubbleProps = {
 
 const YOUTUBE_URL_PATTERN =
   /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})[^\s)]*/gi;
+// const PRODUCT_URL_PATTERN =
+//   /https?:\/\/(?:www\.)?(?:asian-spices-web\.vercel\.app|asian-spices\.nl)\/spices\/[A-Za-z0-9-_%]+/gi;
+// const RECIPE_URL_PATTERN =
+// /https?:\/\/(?:www\.)?(?:asian-spices-web\.vercel\.app|asian-spices\.nl)\/recipes\/[A-Za-z0-9-_%]+/gi;
+
 const PRODUCT_URL_PATTERN =
-  /https?:\/\/(?:www\.)?(?:asian-spices-web\.vercel\.app|asian-spices\.nl)\/spices\/[A-Za-z0-9-_%]+/gi;
+  /https?:\/\/(?:www\.)?(?:asianspices\.online|asian-spices-web\.vercel\.app|asian-spices\.nl)\/spices\/[A-Za-z0-9-_%]+/gi;
+
 const RECIPE_URL_PATTERN =
-  /https?:\/\/(?:www\.)?(?:asian-spices-web\.vercel\.app|asian-spices\.nl)\/recipes\/[A-Za-z0-9-_%]+/gi;
+  /https?:\/\/(?:www\.)?(?:asianspices\.online|asian-spices-web\.vercel\.app|asian-spices\.nl)\/recipes\/[A-Za-z0-9-_%]+/gi;
 
 function formatTimestamp(timestamp: string) {
   if (!timestamp) {
@@ -38,33 +44,21 @@ function formatTimestamp(timestamp: string) {
 function extractProductUrls(content: string) {
   const matches = content.match(PRODUCT_URL_PATTERN) ?? [];
   return Array.from(
-    new Set(
-      matches.map((match) =>
-        match.replace(/[).,!?\]]+$/g, "").trim(),
-      ),
-    ),
+    new Set(matches.map((match) => match.replace(/[).,!?\]]+$/g, "").trim())),
   );
 }
 
 function extractYouTubeUrls(content: string) {
   const matches = content.match(YOUTUBE_URL_PATTERN) ?? [];
   return Array.from(
-    new Set(
-      matches.map((match) =>
-        match.replace(/[).,!?\]]+$/g, "").trim(),
-      ),
-    ),
+    new Set(matches.map((match) => match.replace(/[).,!?\]]+$/g, "").trim())),
   );
 }
 
 function extractRecipeUrls(content: string) {
   const matches = content.match(RECIPE_URL_PATTERN) ?? [];
   return Array.from(
-    new Set(
-      matches.map((match) =>
-        match.replace(/[).,!?\]]+$/g, "").trim(),
-      ),
-    ),
+    new Set(matches.map((match) => match.replace(/[).,!?\]]+$/g, "").trim())),
   );
 }
 
@@ -73,9 +67,18 @@ function sanitizeAssistantText(content: string) {
     .replace(YOUTUBE_URL_PATTERN, "")
     .replace(PRODUCT_URL_PATTERN, "")
     .replace(RECIPE_URL_PATTERN, "")
-    .replace(/^\s*(?:[*_]{0,2})?(?:link|full recipe & instructions|video tutorial|video)(?:[*_]{0,2})?\s*:\s*.*$/gim, "")
-    .replace(/(?:\*\*|__)(?:link|full recipe & instructions|video tutorial|video)(?:\*\*|__)\s*:\s*[^\n]*/gim, "")
-    .replace(/\b(?:link|full recipe & instructions|video tutorial|video)\b\s*:\s*[^\n]*/gim, "")
+    .replace(
+      /^\s*(?:[*_]{0,2})?(?:link|full recipe & instructions|video tutorial|video)(?:[*_]{0,2})?\s*:\s*.*$/gim,
+      "",
+    )
+    .replace(
+      /(?:\*\*|__)(?:link|full recipe & instructions|video tutorial|video)(?:\*\*|__)\s*:\s*[^\n]*/gim,
+      "",
+    )
+    .replace(
+      /\b(?:link|full recipe & instructions|video tutorial|video)\b\s*:\s*[^\n]*/gim,
+      "",
+    )
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
@@ -102,12 +105,14 @@ export function MessageBubble({ message }: MessageBubbleProps) {
   const isUser = message.role === "user";
   const assistantLogoSize = 88;
   const timestampLabel = formatTimestamp(message.timestamp);
-  const assistantText = isUser ? message.content : sanitizeAssistantText(message.content);
+  const assistantText = isUser
+    ? message.content
+    : sanitizeAssistantText(message.content);
   const youtubeUrls = isUser ? [] : extractYouTubeUrls(message.content);
   const productUrls = isUser ? [] : extractProductUrls(message.content);
   const recipeUrls = isUser ? [] : extractRecipeUrls(message.content);
-  const imageResults = isUser ? [] : message.images ?? [];
-  const videoResults = isUser ? [] : message.videos ?? [];
+  const imageResults = isUser ? [] : (message.images ?? []);
+  const videoResults = isUser ? [] : (message.videos ?? []);
   const showMetadata =
     Boolean(timestampLabel) ||
     message.status === "sending" ||
@@ -126,7 +131,9 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       transition={{ duration: 0.32, ease: "easeOut" }}
       className={`flex ${isUser ? "justify-end" : "justify-start"} ${isUser ? "" : "items-start gap-3"}`}
     >
-      {!isUser ? <LogoAvatar size={assistantLogoSize} rounded="rounded-full" ring /> : null}
+      {!isUser ? (
+        <LogoAvatar size={assistantLogoSize} rounded="rounded-full" ring />
+      ) : null}
       <div
         className={`space-y-3 ${isUser ? "max-w-[96%] items-end sm:max-w-[82%]" : "max-w-[calc(100%-5.25rem)] items-start sm:max-w-[calc(100%-6.25rem)]"}`}
       >
@@ -140,7 +147,11 @@ export function MessageBubble({ message }: MessageBubbleProps) {
             initial={
               prefersReducedMotion || isUser
                 ? undefined
-                : { opacity: 0, y: 10, clipPath: "inset(0 0 100% 0 round 24px)" }
+                : {
+                    opacity: 0,
+                    y: 10,
+                    clipPath: "inset(0 0 100% 0 round 24px)",
+                  }
             }
             animate={
               prefersReducedMotion || isUser

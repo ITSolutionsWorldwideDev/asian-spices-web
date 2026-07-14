@@ -1,9 +1,13 @@
+// app/api/recipe-preview/route.ts
+
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
 const ALLOWED_HOSTS = new Set([
   "asian-spices-web.vercel.app",
+  "asianspices.online",
+  "www.asianspices.online",
   "asian-spices.nl",
   "www.asian-spices.nl",
 ]);
@@ -57,10 +61,7 @@ function extractImageUrl(html: string, pageUrl: string) {
   }
 
   return absoluteUrl(
-    extractMatch(
-      html,
-      /<img[^>]+alt=["'][^"']+["'][^>]+src=["']([^"']+)["']/i,
-    ),
+    extractMatch(html, /<img[^>]+alt=["'][^"']+["'][^>]+src=["']([^"']+)["']/i),
     pageUrl,
   );
 }
@@ -70,11 +71,7 @@ function extractYouTubeUrl(html: string) {
     extractMatch(
       html,
       /(https?:\/\/(?:www\.)?youtube\.com\/(?:watch\?v=|shorts\/)[^"' <]+)/i,
-    ) ??
-    extractMatch(
-      html,
-      /(https?:\/\/youtu\.be\/[^"' <]+)/i,
-    )
+    ) ?? extractMatch(html, /(https?:\/\/youtu\.be\/[^"' <]+)/i)
   );
 }
 
@@ -83,7 +80,10 @@ export async function GET(request: Request) {
   const recipeUrl = searchParams.get("url")?.trim();
 
   if (!recipeUrl) {
-    return NextResponse.json({ error: "Missing `url` query parameter." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing `url` query parameter." },
+      { status: 400 },
+    );
   }
 
   let parsedUrl: URL;
@@ -95,14 +95,26 @@ export async function GET(request: Request) {
   }
 
   if (!ALLOWED_HOSTS.has(parsedUrl.hostname)) {
-    return NextResponse.json({ error: "Unsupported recipe URL host." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Unsupported recipe URL host." },
+      { status: 400 },
+    );
   }
+
+  // Normalize every allowed host to production
+  const PRODUCTION_HOST = "www.asianspices.online";
+
+  // if (parsedUrl.hostname !== PRODUCTION_HOST) {
+    parsedUrl.hostname = PRODUCTION_HOST;
+    parsedUrl.protocol = "https:";
+    parsedUrl.port = "";
+  // }
 
   try {
     const response = await fetch(parsedUrl.toString(), {
       cache: "no-store",
       headers: {
-        "User-Agent": "BibiChatbot/1.0 (+https://asian-spices-web.vercel.app)",
+        "User-Agent": "BibiChatbot/1.0 (+https://www.asianspices.online)",
       },
     });
 
@@ -118,8 +130,7 @@ export async function GET(request: Request) {
       extractMatch(
         html,
         /<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i,
-      ) ??
-      extractMatch(html, /<title>([^<]+)<\/title>/i);
+      ) ?? extractMatch(html, /<title>([^<]+)<\/title>/i);
     const description = extractMatch(
       html,
       /<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i,
