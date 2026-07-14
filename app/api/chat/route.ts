@@ -1,3 +1,5 @@
+// app/api/chat/route.ts
+
 import { NextResponse } from "next/server";
 import type { ChatRequest } from "@/types/chat";
 

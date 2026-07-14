@@ -1,9 +1,13 @@
+// app/api/recipe-preview/route.ts
+
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
 const ALLOWED_HOSTS = new Set([
   "asian-spices-web.vercel.app",
+  "asianspices.online",
+  "www.asianspices.online",
   "asian-spices.nl",
   "www.asian-spices.nl",
 ]);
@@ -102,7 +106,7 @@ export async function GET(request: Request) {
     const response = await fetch(parsedUrl.toString(), {
       cache: "no-store",
       headers: {
-        "User-Agent": "BibiChatbot/1.0 (+https://asian-spices-web.vercel.app)",
+        "User-Agent": "BibiChatbot/1.0 (+https://www.asianspices.online)",        
       },
     });
 
