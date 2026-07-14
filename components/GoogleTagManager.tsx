@@ -1,10 +1,13 @@
 // components/GoogleTagManager.tsx
 // GTM must be a plain <script> as high as possible in <head> for Search Console verification.
 // Do not use next/script strategy="afterInteractive" for GTM — Google rejects that location.
+// Note: Next.js still reorders head/body; proxy.ts re-places snippets for Google-Site-Verification.
 
 import Script from "next/script";
+import { GTM_ID } from "@/lib/gtm";
 
-export const GTM_ID = "GTM-5R64F7P4";
+export { GTM_ID };
+
 const GA_ID = "G-87ZL47CPL4";
 const CLARITY_ID = "xk4h2v3ha1";
 
