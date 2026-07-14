@@ -1,5 +1,6 @@
 // app/foods-beverages/[slug]/page.tsx
 
+import { cache } from "react";
 import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";
 import { getProductBySlug, getRelatedProducts } from "@/lib/dbactions/products";
@@ -11,12 +12,17 @@ interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
+const cachedGetProduct = cache(async (slug: string, country: string) => {
+  return getProductBySlug(slug, country);
+});
+
 export async function generateMetadata({ params, searchParams }: PageProps) {
   const { slug } = await params;
   const sParams = await searchParams;
   const country = (sParams?.country as string) || "NL";
 
-  const product = await getProductBySlug(slug, country);
+  // const product = await getProductBySlug(slug, country);
+  const product = await cachedGetProduct(slug, country);
 
   if (!product || !product.id) {
     return {
@@ -38,7 +44,8 @@ export default async function FoodAndBeveragesDetailPage({
   const sParams = await searchParams;
   const country = (sParams?.country as string) || "NL";
 
-  const product = await getProductBySlug(slug, country);
+  // const product = await getProductBySlug(slug, country);
+  const product = await cachedGetProduct(slug, country);
 
   if (!product || !product.id) {
     return (
@@ -63,6 +70,8 @@ export default async function FoodAndBeveragesDetailPage({
       category="Foods & Beverages"
     />
   );
+}
+
 
   // return (
   //   <ProductDescrption
@@ -71,4 +80,3 @@ export default async function FoodAndBeveragesDetailPage({
   //     category="Foods & Beverages"
   //   />
   // );
-}

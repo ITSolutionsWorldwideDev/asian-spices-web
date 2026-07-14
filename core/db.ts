@@ -13,9 +13,9 @@ export const pool =
   new Pool({
     connectionString: process.env.DATABASE_URL,
     // 🟢 OPTIMIZED: Scaled settings tailored to prevent serverless pool exhaustion
-    max: 20,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 10000, // Raised to 10s to gracefully survive sudden server lag spikes
+    max: 3,// 20
+    idleTimeoutMillis: 5000,// 30000,
+    connectionTimeoutMillis: 5000,//10000, // Raised to 10s to gracefully survive sudden server lag spikes
   });
 
 // pool.on("connect", () => {
