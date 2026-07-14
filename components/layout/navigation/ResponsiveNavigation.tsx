@@ -196,8 +196,109 @@ const ResponsiveNavigation = () => {
     [shopCategoryChildren],
   );
   const [isCartOpen, setCartOpen] = useState<boolean>(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeDropdownLink = navLinks.find(
+    (link) => link.children && activeLink === link.name && isMenuOpen,
+  );
+
+  const megaMenu =
+    mounted &&
+    activeDropdownLink?.children &&
+    createPortal(
+      <div className="fixed inset-0 z-[100] hidden lg:block" role="presentation">
+        {/* Click-outside overlay */}
+        <div
+          className="absolute inset-0"
+          onClick={() => {
+            setIsMenuOpen(false);
+            setActiveLink("");
+          }}
+        />
+
+        {/* Centered mega menu — viewport based, never clipped by nav blur */}
+        <div className="pointer-events-none absolute inset-x-0 top-24 flex justify-center px-4 sm:px-6">
+          <div className="pointer-events-auto w-full max-w-5xl">
+            <div className="bg-gray-100 rounded-xl shadow-md border border-gray-200 overflow-hidden">
+              <div
+                className={`grid gap-8 p-6 ${
+                  activeDropdownLink.children.length >= 4
+                    ? "grid-cols-4"
+                    : "grid-cols-3"
+                }`}
+              >
+                {activeDropdownLink.name === "Shop by Category" &&
+                shopCategoriesLoading ? (
+                  <p className="col-span-full text-sm text-gray-500">
+                    Loading categories...
+                  </p>
+                ) : (
+                  activeDropdownLink.children.map((section, index) => (
+                    <div key={index}>
+                      <h3
+                        className={`font-semibold text-gray-800 mb-3 ${
+                          index === 0
+                            ? "border-b-2 border-blue-400 inline-block"
+                            : ""
+                        }`}
+                      >
+                        {section.heading}
+                      </h3>
+
+                      <ul className="space-y-2 text-gray-600 text-sm max-h-64 overflow-y-auto">
+                        {section.category?.map((item, i) => (
+                          <li
+                            key={`${item.href}-${i}`}
+                            className="hover:text-black cursor-pointer transition-colors"
+                          >
+                            <Link
+                              href={`/${item.href}`}
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                setActiveLink("");
+                              }}
+                            >
+                              {item.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <div className="bg-orange-100 px-6 py-4 rounded-b-xl">
+                <Link
+                  href={
+                    activeDropdownLink.name === "Shop by Category"
+                      ? "/spices"
+                      : "/healthyliving/supports-immunity"
+                  }
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setActiveLink("");
+                  }}
+                  className="text-orange-600 font-medium hover:underline"
+                >
+                  View All {activeDropdownLink.name} Products →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>,
+      document.body,
+    );
+
   return (
     <>
+      {megaMenu}
+
       {/* mobilemenubtn */}
       <div className="lg:hidden">
         <button
@@ -265,74 +366,6 @@ const ResponsiveNavigation = () => {
                       <span className="absolute left-0 right-0 bottom-0 h-1 bg-amber-400 w-3/4 mx-auto rounded-full"></span>
                     )}
                   </button>
-
-                  {/* DROPDOWN MENU — same mega-menu for Shop by Category & Healthy Living */}
-                  {activeLink === link.name && isMenuOpen && (
-                    <div className="absolute top-full mt-5 z-50">
-                      <div className="fixed left-1/2 top-20 -translate-x-1/2 z-50 w-[85vw] max-w-5xl">
-                        <div className="bg-gray-100 rounded-xl shadow-md border border-gray-200 overflow-hidden">
-                          <div
-                            className={`grid gap-8 p-6 ${
-                              link.children.length >= 4
-                                ? "grid-cols-4"
-                                : "grid-cols-3"
-                            }`}
-                          >
-                            {link.name === "Shop by Category" &&
-                            shopCategoriesLoading ? (
-                              <p className="col-span-full text-sm text-gray-500">
-                                Loading categories...
-                              </p>
-                            ) : (
-                              link.children.map((section, index) => (
-                                <div key={index}>
-                                  <h3
-                                    className={`font-semibold text-gray-800 mb-3 ${
-                                      index === 0
-                                        ? "border-b-2 border-blue-400 inline-block"
-                                        : ""
-                                    }`}
-                                  >
-                                    {section.heading}
-                                  </h3>
-
-                                  <ul className="space-y-2 text-gray-600 text-sm max-h-64 overflow-y-auto">
-                                    {section.category?.map((item, i) => (
-                                      <li
-                                        key={`${item.href}-${i}`}
-                                        className="hover:text-black cursor-pointer transition-colors"
-                                      >
-                                        <Link
-                                          href={`/${item.href}`}
-                                          onClick={() => setIsMenuOpen(false)}
-                                        >
-                                          {item.name}
-                                        </Link>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              ))
-                            )}
-                          </div>
-
-                          <div className="bg-orange-100 px-6 py-4 rounded-b-xl">
-                            <Link
-                              href={
-                                link.name === "Shop by Category"
-                                  ? "/spices"
-                                  : "/healthyliving/supports-immunity"
-                              }
-                              onClick={() => setIsMenuOpen(false)}
-                              className="text-orange-600 font-medium hover:underline"
-                            >
-                              View All {link.name} Products →
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </>
               )}
             </li>
@@ -360,7 +393,7 @@ const ResponsiveNavigation = () => {
                     href={
                       link.name.toLowerCase() === "home"
                         ? "/"
-                        : `/${link.name
+                        : `/${(link.hreflink || link.name)
                             .toLowerCase()
                             .replace(/[^a-z0-9\s-]/g, "")
                             .trim()
@@ -368,7 +401,7 @@ const ResponsiveNavigation = () => {
                     }
                     onClick={() => {
                       handleClick(link.name);
-                      setMobileMenu(!mobileMenu);
+                      setMobileMenu(false);
                     }}
                     className={`block px-4 py-3 text-lg transition-colors duration-200 ${
                       activeLink === link.name
@@ -394,10 +427,34 @@ const ResponsiveNavigation = () => {
 
                     {activeLink === link.name && (
                       <div className="bg-amber-800/60">
-                        {link.children.map((child, ind) => (
-                          <div key={ind}>
-                            {child.category ? (
-                              <div>
+                        {link.children.map((child, ind) => {
+                          // Shop by Category: go to category page (no subcategory accordion)
+                          if (link.name === "Shop by Category") {
+                            const categoryHref =
+                              child.category?.find(
+                                (item) => item.name === "View all",
+                              )?.href ||
+                              SHOP_CATEGORIES.find(
+                                (cat) => cat.heading === child.heading,
+                              )?.slug ||
+                              child.href;
+
+                            return (
+                              <Link
+                                key={ind}
+                                href={`/${categoryHref}`}
+                                onClick={() => setMobileMenu(false)}
+                                className="flex items-center justify-between px-6 py-3 text-sm font-bold text-white/90 uppercase hover:bg-amber-700 transition-colors"
+                              >
+                                {child.heading}
+                              </Link>
+                            );
+                          }
+
+                          // Healthy Living: keep expandable sections
+                          if (child.category) {
+                            return (
+                              <div key={ind}>
                                 <button
                                   onClick={() =>
                                     setActiveSection(
@@ -431,27 +488,30 @@ const ResponsiveNavigation = () => {
                                     </Link>
                                   ))}
                               </div>
-                            ) : (
-                              <Link
-                                href={`/${child.href}`}
-                                onClick={() => setMobileMenu(false)}
-                                className="relative z-600 flex items-center gap-4 px-6 py-3 text-white/90 hover:bg-amber-700 transition-colors"
-                              >
-                                {child.image && (
-                                  <img
-                                    src={`/assets/navbar/${child.image}`}
-                                    alt={child.name}
-                                    className="w-12 h-7 object-cover rounded-md"
-                                  />
-                                )}
+                            );
+                          }
 
-                                <span className="font-semibold">
-                                  {child.name}
-                                </span>
-                              </Link>
-                            )}
-                          </div>
-                        ))}
+                          return (
+                            <Link
+                              key={ind}
+                              href={`/${child.href}`}
+                              onClick={() => setMobileMenu(false)}
+                              className="relative z-600 flex items-center gap-4 px-6 py-3 text-white/90 hover:bg-amber-700 transition-colors"
+                            >
+                              {child.image && (
+                                <img
+                                  src={`/assets/navbar/${child.image}`}
+                                  alt={child.name}
+                                  className="w-12 h-7 object-cover rounded-md"
+                                />
+                              )}
+
+                              <span className="font-semibold">
+                                {child.name}
+                              </span>
+                            </Link>
+                          );
+                        })}
                       </div>
                     )}
                   </>

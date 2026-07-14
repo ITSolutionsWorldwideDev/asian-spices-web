@@ -1,15 +1,46 @@
 // components/GoogleTagManager.tsx
+// GTM must be a plain <script> as high as possible in <head> for Search Console verification.
+// Do not use next/script strategy="afterInteractive" for GTM — Google rejects that location.
 
 import Script from "next/script";
 
-export default function GoogleTagManager() {
-  const GTM_ID = "GTM-5R64F7P4";
-  const GA_ID = "G-87ZL47CPL4";
-  const CLARITY_ID = "xk4h2v3ha1";
+export const GTM_ID = "GTM-5R64F7P4";
+const GA_ID = "G-87ZL47CPL4";
+const CLARITY_ID = "xk4h2v3ha1";
 
+/** Place this as the first child of <head>. */
+export function GoogleTagManagerHead() {
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM_ID}');`,
+      }}
+    />
+  );
+}
+
+/** Place this as the first child of <body>. */
+export function GoogleTagManagerBody() {
+  return (
+    <noscript>
+      <iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+        height="0"
+        width="0"
+        style={{ display: "none", visibility: "hidden" }}
+      />
+    </noscript>
+  );
+}
+
+/** Extra analytics (not required for Search Console GTM verification). */
+export default function GoogleTagManager() {
   return (
     <>
-      {/* Microsoft Clarity */}
       <Script
         id="microsoft-clarity"
         strategy="afterInteractive"
@@ -24,22 +55,6 @@ export default function GoogleTagManager() {
         }}
       />
 
-      {/* Google Tag Manager */}
-      <Script
-        id="gtm-script"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','${GTM_ID}');
-          `,
-        }}
-      />
-
-      {/* Google Analytics (gtag.js) */}
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
         strategy="afterInteractive"

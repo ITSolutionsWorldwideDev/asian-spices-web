@@ -5,6 +5,7 @@ import RecipeGrid from "@/components/layout/recipes/RecipeGrid";
 import RecipePagination from "@/components/layout/recipes/RecipePagination";
 import RecipeSearchBar from "@/components/layout/recipes/RecipeSearchBar";
 import RecipeSidebar from "@/components/layout/recipes/RecipeSidebar";
+import ScrollToRecipesResults from "@/components/layout/recipes/ScrollToRecipesResults";
 import HeadingDescription from "@/components/ui/HeadingDescription";
 
 import ProductPageHeader from "@/components/ui/ProductPageHeader";
@@ -56,7 +57,7 @@ async function RecipesContent({ params }: { params: any }) {
       />
 
       {/* RIGHT CONTENT */}
-      <div className="space-y-8">
+      <div className="relative z-20 min-w-0 space-y-8 bg-white">
         {/* RESULTS INFO */}
         <div className="flex items-center justify-between">
           <div>
@@ -98,14 +99,27 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         description="Diverse Collection But Taste So Yummy...!"
       />
 
-      <div className="container mx-auto px-4 py-10">
-        {/* SEARCH BAR (Kept layout synchronous for responsive display) */}
+      <div
+        id="recipes-results"
+        className="scroll-mt-28 container mx-auto px-4 py-10"
+      >
+        <Suspense fallback={null}>
+          <ScrollToRecipesResults />
+        </Suspense>
+
+        {/* SEARCH BAR */}
         <div className="mb-8">
           <RecipeSearchBar defaultSearch={params.search || ""} />
         </div>
 
-        {/* 2. Wrapped data-driven logic inside Suspense boundary */}
-        <Suspense fallback={<div className="text-center py-20 text-gray-500 font-medium">Gathering recipes...</div>}>
+        {/* Results */}
+        <Suspense
+          fallback={
+            <div className="text-center py-20 text-gray-500 font-medium">
+              Gathering recipes...
+            </div>
+          }
+        >
           <RecipesContent params={params} />
         </Suspense>
       </div>
