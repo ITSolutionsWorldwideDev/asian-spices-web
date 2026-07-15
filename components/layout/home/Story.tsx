@@ -29,7 +29,7 @@ const Story = () => {
               <div
                 className="absolute right-0 z-100"
                 style={{
-                  clipPath: "inset(0 0 100px 0)",
+                  clipPath: "inset(0 0 96px 0)",
                 }}
               >
                 {/*  59373efab59c6414e276ddc24d0285cf62ee6194-min.webp */}
