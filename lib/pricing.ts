@@ -3,6 +3,8 @@
 import { CartItem } from "@/store/useCartStore";
 
 export const FREE_SHIPPING_THRESHOLD = 50;
+/** Minimum cart merchandise subtotal (EUR, excl. shipping) required to place an order. */
+export const MIN_ORDER_AMOUNT_EUR = 10;
 export const BASE_CURRENCY = "EUR";
 
 export const SHIPPING_OPTIONS = {
