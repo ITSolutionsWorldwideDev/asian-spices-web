@@ -28,10 +28,14 @@ export async function GET(request: Request) {
       JOIN shipping_methods sm ON sr.method_id = sm.id
       WHERE sm.is_active = true
         AND sr.country = $1
-        AND (sr.city = $2 OR sr.city IS NULL OR sr.city = '')
+        AND (
+          LOWER(sr.city) = LOWER($2) OR
+          sr.city IS NULL OR 
+          sr.city = ''
+        )
         AND ($3 >= sr.min_weight OR sr.min_weight IS NULL)
         AND ($3 <= sr.max_weight OR sr.max_weight IS NULL)
-      ORDER BY (CASE WHEN sr.city = $2 THEN 1 ELSE 2 END), sr.price ASC
+      ORDER BY (CASE WHEN LOWER(sr.city) = LOWER($2) THEN 1 ELSE 2 END), sr.price ASC
     `;
 
     const { rows } = await pool.query(query, [country, city, totalWeight]);
