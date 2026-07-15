@@ -16,7 +16,7 @@ import { useSession } from "next-auth/react";
 
 import { checkoutSchema } from "@/lib/validation/checkout";
 import { useLoaderStore } from "@/store/useLoaderStore";
-import { calculateTotals, convertTotals } from "@/lib/pricing";
+import { calculateTotals, convertTotals, MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
 // import { SHIPPING_OPTIONS, ShippingMethod } from "@/lib/pricing";
 
 import { useCurrencyStore } from "@/store/useCurrencyStore";
@@ -251,8 +251,17 @@ export default function Checkout() {
   }, [formData.country, setSelectedCountry]);
 
   const isFormValid = checkoutSchema.safeParse(formData).success;
+  const meetsMinOrder = totals.subtotal >= MIN_ORDER_AMOUNT_EUR;
+  const minOrderRemaining = Math.max(0, MIN_ORDER_AMOUNT_EUR - totals.subtotal);
 
   const placeOrder = async (method: "paynl" | "paypal") => {
+    if (!meetsMinOrder) {
+      setApiError(
+        `Minimum order amount is €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}. Add €${minOrderRemaining.toFixed(2)} more to continue.`,
+      );
+      return;
+    }
+
     // Validate form
     const result = checkoutSchema.safeParse(formData);
 
@@ -523,7 +532,15 @@ export default function Checkout() {
                 setAvailableShippingOptions(options)
               }
             />
-            <PaymentForm placeOrder={placeOrder} disabled={!isFormValid} />
+            <PaymentForm
+              placeOrder={placeOrder}
+              disabled={!isFormValid || !meetsMinOrder}
+              minOrderMessage={
+                meetsMinOrder
+                  ? undefined
+                  : `Minimum order amount is €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}. Add €${minOrderRemaining.toFixed(2)} more to continue.`
+              }
+            />
           </div>
 
           <OrderSummary

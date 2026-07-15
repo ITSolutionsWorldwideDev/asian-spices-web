@@ -11,6 +11,7 @@ import {
   logOrderEvent,
   ORDER_EVENTS,
 } from "@/core/order-routing";
+import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
 
 export async function POST(req: NextRequest) {
   const client = await pool.connect();
@@ -27,6 +28,23 @@ export async function POST(req: NextRequest) {
 
     if (!cartItems?.length) {
       return errorResponse("Cart is empty", "EMPTY_CART");
+    }
+
+    // Enforce minimum order in base EUR (ignore converted client pricing)
+    const merchandiseSubtotalEur = cartItems.reduce(
+      (sum: number, item: { base_price?: number; price?: number; quantity?: number }) => {
+        const unit = Number(item.base_price ?? item.price ?? 0);
+        const qty = Number(item.quantity ?? 1);
+        return sum + unit * qty;
+      },
+      0,
+    );
+
+    if (merchandiseSubtotalEur < MIN_ORDER_AMOUNT_EUR) {
+      return errorResponse(
+        `Minimum order amount is €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}. Please add more items to your cart.`,
+        "MIN_ORDER_AMOUNT",
+      );
     }
 
     const email = userId ? userEmail : customer.email;

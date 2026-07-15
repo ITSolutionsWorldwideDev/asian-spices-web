@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 import { getServerSession } from "next-auth";
 import { webAuthOptions } from "@/core/auth";
 import { assignNextStore } from "@/core/order-routing";
+import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
 
 export async function POST(req: NextRequest) {
   // const store_id = randomUUID();
@@ -27,6 +28,36 @@ export async function POST(req: NextRequest) {
       pricing,
       // store_id,
     } = body;
+
+    if (!cartItems?.length) {
+      return NextResponse.json(
+        { success: false, error: "Cart is empty", code: "EMPTY_CART" },
+        { status: 400 },
+      );
+    }
+
+    const merchandiseSubtotalEur = cartItems.reduce(
+      (
+        sum: number,
+        item: { base_price?: number; price?: number; quantity?: number },
+      ) => {
+        const unit = Number(item.base_price ?? item.price ?? 0);
+        const qty = Number(item.quantity ?? 1);
+        return sum + unit * qty;
+      },
+      0,
+    );
+
+    if (merchandiseSubtotalEur < MIN_ORDER_AMOUNT_EUR) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Minimum order amount is €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}. Please add more items to your cart.`,
+          code: "MIN_ORDER_AMOUNT",
+        },
+        { status: 400 },
+      );
+    }
 
     const email = userId ? userEmail : customer.email;
 

@@ -17,6 +17,7 @@ import {
   calculateTotals,
   SHIPPING_OPTIONS,
   ShippingMethod,
+  MIN_ORDER_AMOUNT_EUR,
 } from "@/lib/pricing";
 
 const FALLBACK_IMAGE = "/images/placeholder.png";
@@ -58,8 +59,11 @@ export default function Cart() {
   );
 
   const itemInCart = cart.length;
+  const meetsMinOrder = subtotal >= MIN_ORDER_AMOUNT_EUR;
+  const minOrderRemaining = Math.max(0, MIN_ORDER_AMOUNT_EUR - subtotal);
 
   const handleCheckout = () => {
+    if (!meetsMinOrder) return;
     router.push("/checkout");
   };
 
@@ -323,12 +327,24 @@ export default function Cart() {
             </span>
           </div>
 
+          {!meetsMinOrder ? (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+              Minimum order amount is €{MIN_ORDER_AMOUNT_EUR.toFixed(2)}. Add €
+              {minOrderRemaining.toFixed(2)} more to checkout.
+            </div>
+          ) : null}
+
           <button
             onClick={handleCheckout}
-            className="cursor-pointer w-full mt-4 bg-linear-to-r from-[#FF6900] to-[#F83701] hover:bg-orange-600 text-white py-3 rounded-xl flex items-center justify-center font-medium"
+            disabled={!meetsMinOrder}
+            className={`w-full mt-4 py-3 rounded-xl flex items-center justify-center font-medium ${
+              meetsMinOrder
+                ? "cursor-pointer bg-linear-to-r from-[#FF6900] to-[#F83701] hover:bg-orange-600 text-white"
+                : "cursor-not-allowed bg-gray-300 text-gray-500"
+            }`}
           >
             Proceed to Checkout
-            <ArrowRight className="text-white ml-4 size-[20]" />
+            <ArrowRight className="text-inherit ml-4 size-[20]" />
           </button>
 
           <Link href={"/"}>
