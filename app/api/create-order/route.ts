@@ -117,70 +117,90 @@ export async function POST(req: NextRequest) {
       // GUEST CUSTOMER
       // ====================================================
 
-      const result = await client.query(
-        `
-          INSERT INTO store_customers
-          (
-            first_name,
-            last_name,
-            email,
-            phone,
-            city,
-            postcode
-          )
-          VALUES ($1,$2,$3,$4,$5,$6)
-          RETURNING id
-        `,
-        [
-          customer.firstName,
-          customer.lastName,
-          email,
-          customer.phone,
-          shippingAddress.city,
-          shippingAddress.postal_code,
-        ],
+      // Check if this email already exists in store_customers
+      const existingCustomer = await client.query(
+        `SELECT id, user_id FROM store_customers WHERE email = $1 LIMIT 1`,
+        [email]
       );
 
-      customer_id = result.rows[0].id;
-
-      // optional guest auto account creation
+      // Check if an auth user profile exists for this email
       const userCheck = await client.query(
-        `
-          SELECT id
-          FROM users
-          WHERE email = $1
-        `,
-        [email],
+        `SELECT id FROM users WHERE email = $1 LIMIT 1`,
+        [email]
       );
+      const linkedUserId = userCheck.rowCount ? userCheck.rows[0].id : null;
 
-      if (userCheck.rowCount === 0) {
-        const bcrypt = require("bcryptjs");
+      if (existingCustomer.rowCount) {
+        customer_id = existingCustomer.rows[0].id;
 
-        const tempPassword = Math.random().toString(36).slice(-8);
+        // If the profile found was missing its user_id link, bind it now
+        if (!existingCustomer.rows[0].user_id && linkedUserId) {
+          await client.query(
+            `UPDATE store_customers SET user_id = $1 WHERE id = $2`,
+            [linkedUserId, customer_id]
+          );
+        }
+      } else {
+        // Customer row doesn't exist yet. Create it.
+        if (linkedUserId) {
+          // Email belongs to a registered user checking out as guest
+          const result = await client.query(
+            `
+              INSERT INTO store_customers 
+              (user_id, first_name, last_name, email, phone, city, postcode)
+              VALUES ($1, $2, $3, $4, $5, $6, $7)
+              RETURNING id
+            `,
+            [
+              linkedUserId,
+              customer.firstName,
+              customer.lastName,
+              email,
+              customer.phone,
+              shippingAddress.city,
+              shippingAddress.postal_code,
+            ]
+          );
+          customer_id = result.rows[0].id;
+        } else {
+          // Absolute guest user: profile doesn't exist, auth record doesn't exist
+          const result = await client.query(
+            `
+              INSERT INTO store_customers 
+              (first_name, last_name, email, phone, city, postcode)
+              VALUES ($1, $2, $3, $4, $5, $6)
+              RETURNING id
+            `,
+            [
+              customer.firstName,
+              customer.lastName,
+              email,
+              customer.phone,
+              shippingAddress.city,
+              shippingAddress.postal_code,
+            ]
+          );
+          customer_id = result.rows[0].id;
 
-        const hash = await bcrypt.hash(tempPassword, 10);
+          // Execute your optional auto-account creation flow
+          const bcrypt = require("bcryptjs");
+          const tempPassword = Math.random().toString(36).slice(-8);
+          const hash = await bcrypt.hash(tempPassword, 10);
 
-        const newUser = await client.query(
-          `
-            INSERT INTO users
-            (email, password_hash)
-            VALUES ($1,$2)
-            RETURNING id
-          `,
-          [email, hash],
-        );
+          const newUser = await client.query(
+            `INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id`,
+            [email, hash]
+          );
+          const newUserId = newUser.rows[0].id;
 
-        const newUserId = newUser.rows[0].id;
-
-        await client.query(
-          `
-            UPDATE store_customers
-            SET user_id = $1
-            WHERE id = $2
-          `,
-          [newUserId, customer_id],
-        );
+          await client.query(
+            `UPDATE store_customers SET user_id = $1 WHERE id = $2`,
+            [newUserId, customer_id]
+          );
+        }
       }
+
+
     }
 
     // ====================================================
@@ -481,6 +501,71 @@ const errorResponse = (message: string, code: string, status = 400) => {
     { status },
   );
 };
+
+      /* const result = await client.query(
+        `
+          INSERT INTO store_customers
+          (
+            first_name,
+            last_name,
+            email,
+            phone,
+            city,
+            postcode
+          )
+          VALUES ($1,$2,$3,$4,$5,$6)
+          RETURNING id
+        `,
+        [
+          customer.firstName,
+          customer.lastName,
+          email,
+          customer.phone,
+          shippingAddress.city,
+          shippingAddress.postal_code,
+        ],
+      );
+
+      customer_id = result.rows[0].id;
+
+      // optional guest auto account creation
+      const userCheck = await client.query(
+        `
+          SELECT id
+          FROM users
+          WHERE email = $1
+        `,
+        [email],
+      );
+
+      if (userCheck.rowCount === 0) {
+        const bcrypt = require("bcryptjs");
+
+        const tempPassword = Math.random().toString(36).slice(-8);
+
+        const hash = await bcrypt.hash(tempPassword, 10);
+
+        const newUser = await client.query(
+          `
+            INSERT INTO users
+            (email, password_hash)
+            VALUES ($1,$2)
+            RETURNING id
+          `,
+          [email, hash],
+        );
+
+        const newUserId = newUser.rows[0].id;
+
+        await client.query(
+          `
+            UPDATE store_customers
+            SET user_id = $1
+            WHERE id = $2
+          `,
+          [newUserId, customer_id],
+        );
+      } */
 
 /* import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";

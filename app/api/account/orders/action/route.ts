@@ -93,7 +93,7 @@ export async function POST(request: Request) {
         UPDATE store_orders 
         SET 
           order_status = 'cancelled', 
-          payment_status = $2, -- Set to 'refunded' if paid, or leave as is
+          payment_status = $2,
           updated_at = now() 
         WHERE id = $1;
       `;
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
       // Record cancellation metadata/reasons in admin comments for system visibility
       const appendReasonQuery = `
         UPDATE store_orders
-        SET tracking_number = $2 -- We can repurpose fields or save reason directly in a comments field if added
+        SET tracking_number = $2
         WHERE id = $1;
       `;
       // Storing cancellation context securely in DB logs or temporary audit tables if needed
@@ -154,12 +154,45 @@ export async function POST(request: Request) {
 
     await client.query("BEGIN");
 
-    const orderInfoQuery = `SELECT customer_id FROM store_orders WHERE id = $1 LIMIT 1;`;
+    // 1. Core verification against policy workflow properties
+    const orderInfoQuery = `
+      SELECT customer_id, order_status, delivery_date 
+      FROM store_orders 
+      WHERE id = $1 
+      LIMIT 1;
+    `;
     const orderInfoRes = await client.query(orderInfoQuery, [orderId]);
+    
     if (orderInfoRes.rows.length === 0) {
       throw new Error("Parent order data record lookup returned empty.");
     }
-    const customerId = orderInfoRes.rows[0].customer_id;
+    
+    const { customer_id: customerId, order_status: orderStatus, delivery_date: deliveryDate } = orderInfoRes.rows[0];
+
+    // Check Eligibility Condition A: Must be 'delivered'
+    if (orderStatus?.toLowerCase() !== "delivered") {
+      throw new Error("Returns are strictly permitted for delivered orders only.");
+    }
+
+    // Check Eligibility Condition B: Return Window must be <= 7 days from execution date
+    if (!deliveryDate) {
+      throw new Error("Delivery timeline tracking information is missing from this order.");
+    }
+    
+    const deliveryTimestamp = new Date(deliveryDate).getTime();
+    const currentTimestamp = Date.now();
+    const ageInDays = Math.ceil((currentTimestamp - deliveryTimestamp) / (1000 * 60 * 60 * 24));
+
+    if (ageInDays > 7) {
+      throw new Error("Return window expired. Item returns must be requested within 7 days of delivery.");
+    }
+
+    // const orderInfoQuery = `SELECT customer_id FROM store_orders WHERE id = $1 LIMIT 1;`;
+    // const orderInfoRes = await client.query(orderInfoQuery, [orderId]);
+    // if (orderInfoRes.rows.length === 0) {
+    //   throw new Error("Parent order data record lookup returned empty.");
+    // }
+    // const customerId = orderInfoRes.rows[0].customer_id;
 
     const quantityCheckQuery = `
       SELECT 

@@ -7,7 +7,7 @@ const contactCards = [
     icon: Mail,
     label: "CONTACT US",
     value: "support@asianspices.com",
-    subtext: "Respond within 24 hours",
+    subtext: "Respond within 48 hours",
     href: "mailto:support@asianspices.com",
   },
   {
@@ -17,16 +17,16 @@ const contactCards = [
     subtext: "Mon-Fri 10AM-5PM EST",
     href: "tel:+15551234567",
   },
-  {
-    icon: MapPin,
-    label: "VISIT US",
-    value: "123 Spice Street, NY 10001",
-    subtext: "By appointment only",
-  },
+  // {
+  //   icon: MapPin,
+  //   label: "VISIT US",
+  //   value: "123 Spice Street, NY 10001",
+  //   subtext: "By appointment only",
+  // },
   {
     icon: Clock,
     label: "BUSINESS HOURS",
-    value: "Mon – Fri: 10AM – 6PM",
+    value: "Mon – Fri: 10AM – 5PM",
     subtext: "Weekend: Closed",
   },
 ];
@@ -34,7 +34,7 @@ const contactCards = [
 export default function ContactDetails() {
   return (
     <div className="relative z-20 -mt-20 md:-mt-24 container mx-auto px-4 sm:px-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-5">
         {contactCards.map((card) => {
           const Icon = card.icon;
 

@@ -11,11 +11,13 @@ import {
   X,
   AlertTriangle,
 } from "lucide-react";
+
+import { useCurrencyStore } from "@/store/useCurrencyStore";
 import OrderTimeline from "@/components/ui/OrderTimeline";
+
 import OrderSummaryReadOnly from "../../checkout/OrderSummaryReadOnly";
 import OrderActionWorkflow from "./OrderActionWorkflow";
 import CancellationWorkflow from "./CancellationWorkflow";
-import { useCurrencyStore } from "@/store/useCurrencyStore";
 
 export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
   const [downloading, setDownloading] = useState(false);
@@ -37,6 +39,21 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
   const canCancel = eligibleCancellationStatuses.includes(
     order.order_status?.toLowerCase(),
   );
+
+  // ALIGNED WITH B2C ORDER RETURNS FLOW POLICY ---
+  const isDelivered = order.order_status?.toLowerCase() === "delivered";
+  
+  // Calculate if the order is still within the strict 7-day return policy window
+  const isWithinReturnWindow = (() => {
+    if (!order.delivery_date) return false;
+    const deliveryDate = new Date(order.delivery_date);
+    const currentDate = new Date();
+    const diffTime = Math.abs(currentDate.getTime() - deliveryDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays <= 7;
+  })();
+
+  const canReturn = isDelivered && isWithinReturnWindow;
 
   const handleDownloadInvoice = async (e: React.MouseEvent) => {
     e.stopPropagation();
