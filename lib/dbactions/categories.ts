@@ -15,6 +15,7 @@ export const getCategoryWithSubcategories = async (slug: string) => {
     }
 
     const category = categoryResult.rows[0];
+    
 
     // 🔹 Step 2: Get subcategories
     const subCategoryResult = await pool.query(
