@@ -6,16 +6,16 @@ const contactCards = [
   {
     icon: Mail,
     label: "CONTACT US",
-    value: "support@asianspices.com",
-    subtext: "Respond within 48 hours",
-    href: "mailto:support@asianspices.com",
+    value: "support@asianspices.online",
+    subtext: "We will respond within 48 hours",
+    href: "mailto:support@asianspices.online",
   },
   {
     icon: Phone,
     label: "CALL US",
     value: "+31 10 766 0786",
     subtext: "Mon-Fri 10AM-5PM EST",
-    href: "tel:+15551234567",
+    href: "tel:+31107660786",
   },
   // {
   //   icon: MapPin,
