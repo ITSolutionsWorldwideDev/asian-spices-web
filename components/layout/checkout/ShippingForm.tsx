@@ -212,11 +212,6 @@ export default function ShippingForm({
                     <p className="text-sm leading-6 text-gray-600">
                       {addressParts.join(", ")}
                     </p>
-
-                    {/* <p className="font-medium">{addr.label}</p>
-                  <p className="text-sm text-gray-600">
-                    {addr.address_line1},{addr.city}, {addr.state}, {addr.country || "NL"}
-                  </p> */}
                   </div>
                 );
               })}

@@ -24,7 +24,8 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { customer, shippingAddress, cartItems, pricing, shippingMethod } = body;
+    const { customer, shippingAddress, cartItems, pricing, shippingMethod } =
+      body;
 
     if (!cartItems?.length) {
       return errorResponse("Cart is empty", "EMPTY_CART");
@@ -32,7 +33,10 @@ export async function POST(req: NextRequest) {
 
     // Enforce minimum order in base EUR (ignore converted client pricing)
     const merchandiseSubtotalEur = cartItems.reduce(
-      (sum: number, item: { base_price?: number; price?: number; quantity?: number }) => {
+      (
+        sum: number,
+        item: { base_price?: number; price?: number; quantity?: number },
+      ) => {
         const unit = Number(item.base_price ?? item.price ?? 0);
         const qty = Number(item.quantity ?? 1);
         return sum + unit * qty;
@@ -69,11 +73,11 @@ export async function POST(req: NextRequest) {
     if (userId) {
       const existing = await client.query(
         `
-        SELECT id
-        FROM store_customers
-        WHERE user_id = $1
-        LIMIT 1
-      `,
+          SELECT id
+          FROM store_customers
+          WHERE user_id = $1
+          LIMIT 1
+        `,
         [userId],
       );
 
@@ -82,19 +86,19 @@ export async function POST(req: NextRequest) {
       } else {
         const result = await client.query(
           `
-          INSERT INTO store_customers
-          (
-            user_id,
-            first_name,
-            last_name,
-            email,
-            phone,
-            city,
-            postcode
-          )
-          VALUES ($1,$2,$3,$4,$5,$6,$7)
-          RETURNING id
-        `,
+            INSERT INTO store_customers
+            (
+              user_id,
+              first_name,
+              last_name,
+              email,
+              phone,
+              city,
+              postcode
+            )
+            VALUES ($1,$2,$3,$4,$5,$6,$7)
+            RETURNING id
+          `,
           [
             userId,
             customer.firstName,
@@ -115,18 +119,18 @@ export async function POST(req: NextRequest) {
 
       const result = await client.query(
         `
-        INSERT INTO store_customers
-        (
-          first_name,
-          last_name,
-          email,
-          phone,
-          city,
-          postcode
-        )
-        VALUES ($1,$2,$3,$4,$5,$6)
-        RETURNING id
-      `,
+          INSERT INTO store_customers
+          (
+            first_name,
+            last_name,
+            email,
+            phone,
+            city,
+            postcode
+          )
+          VALUES ($1,$2,$3,$4,$5,$6)
+          RETURNING id
+        `,
         [
           customer.firstName,
           customer.lastName,
@@ -142,10 +146,10 @@ export async function POST(req: NextRequest) {
       // optional guest auto account creation
       const userCheck = await client.query(
         `
-        SELECT id
-        FROM users
-        WHERE email = $1
-      `,
+          SELECT id
+          FROM users
+          WHERE email = $1
+        `,
         [email],
       );
 
@@ -158,11 +162,11 @@ export async function POST(req: NextRequest) {
 
         const newUser = await client.query(
           `
-          INSERT INTO users
-          (email, password_hash)
-          VALUES ($1,$2)
-          RETURNING id
-        `,
+            INSERT INTO users
+            (email, password_hash)
+            VALUES ($1,$2)
+            RETURNING id
+          `,
           [email, hash],
         );
 
@@ -170,10 +174,10 @@ export async function POST(req: NextRequest) {
 
         await client.query(
           `
-          UPDATE store_customers
-          SET user_id = $1
-          WHERE id = $2
-        `,
+            UPDATE store_customers
+            SET user_id = $1
+            WHERE id = $2
+          `,
           [newUserId, customer_id],
         );
       }
@@ -185,35 +189,35 @@ export async function POST(req: NextRequest) {
 
     await client.query(
       `
-      INSERT INTO store_customer_addresses
-      (
-        customer_id,
-        label,
-        address_line1,
-        address_line2,
-        city,
-        state,
-        postal_code,
-        country,
-        latitude,
-        longitude
-      )
-      VALUES (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10
-      )
+        INSERT INTO store_customer_addresses
+        (
+          customer_id,
+          label,
+          address_line1,
+          address_line2,
+          city,
+          state,
+          postal_code,
+          country,
+          latitude,
+          longitude
+        )
+        VALUES (
+          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10
+        )
 
-      ON CONFLICT
-      (
-        customer_id,
-        address_line1,
-        address_line2,
-        city,
-        state,
-        postal_code,
-        country
-      )
-      DO NOTHING
-    `,
+        ON CONFLICT
+        (
+          customer_id,
+          address_line1,
+          address_line2,
+          city,
+          state,
+          postal_code,
+          country
+        )
+        DO NOTHING
+      `,
       [
         customer_id,
         "Home",
@@ -270,52 +274,52 @@ export async function POST(req: NextRequest) {
 
     const orderResult = await client.query(
       `
-      INSERT INTO store_orders
-      (
-        order_number,
-        customer_id,
-        customer_email,
+        INSERT INTO store_orders
+        (
+          order_number,
+          customer_id,
+          customer_email,
 
-        order_status,
-        routing_status,
-        fulfillment_status,
-        payment_status,
+          order_status,
+          routing_status,
+          fulfillment_status,
+          payment_status,
 
-        subtotal,
-        discount_amount,
-        shipping_amount,
-        tax_amount,
-        total_amount,
+          subtotal,
+          discount_amount,
+          shipping_amount,
+          tax_amount,
+          total_amount,
 
-        shipping_address_line1,
-        shipping_address_line2,
-        shipping_city,
-        shipping_state,
-        shipping_postal_code,
-        shipping_country,
+          shipping_address_line1,
+          shipping_address_line2,
+          shipping_city,
+          shipping_state,
+          shipping_postal_code,
+          shipping_country,
 
-        shipping_latitude,
-        shipping_longitude,
-        shipping_provider
-      )
+          shipping_latitude,
+          shipping_longitude,
+          shipping_provider
+        )
 
-      VALUES
-      (
-        $1,$2,$3,
-        'pending',
-        'pending',
-        'pending',
-        'pending',
+        VALUES
+        (
+          $1,$2,$3,
+          'pending',
+          'pending',
+          'pending',
+          'pending',
 
-        $4,$5,$6,$7,$8,
+          $4,$5,$6,$7,$8,
 
-        $9,$10,$11,$12,$13,$14,
+          $9,$10,$11,$12,$13,$14,
 
-        $15,$16,$17
-      )
+          $15,$16,$17
+        )
 
-      RETURNING *
-    `,
+        RETURNING *
+      `,
       [
         orderNumber,
         customer_id,
@@ -336,7 +340,7 @@ export async function POST(req: NextRequest) {
 
         latitude,
         longitude,
-        shippingMethod || "Standard Delivery"
+        shippingMethod || "Standard Delivery",
       ],
     );
 
@@ -362,12 +366,7 @@ export async function POST(req: NextRequest) {
         )
         VALUES ($1,$2,$3,0,$4,'pending')
       `,
-        [
-          order_id,
-          item.id,
-          item.quantity,
-          Number(item.base_price),
-        ],
+        [order_id, item.id, item.quantity, Number(item.base_price)],
       );
     }
 

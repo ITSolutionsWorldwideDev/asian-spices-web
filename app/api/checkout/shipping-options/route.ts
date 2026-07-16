@@ -1,4 +1,5 @@
-// 📁 app/api/checkout/shipping-options/route.ts
+// app/api/checkout/shipping-options/route.ts
+
 import { NextResponse } from "next/server";
 import { pool } from "@/core/db";
 

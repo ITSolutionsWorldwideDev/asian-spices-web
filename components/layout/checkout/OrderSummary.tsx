@@ -40,7 +40,6 @@ export default function OrderSummary({
 }: Props) {
   // const { taxRate, taxName } = useGlobalStore();
 
-  // State to manage entered promo code and active validation
   const [promoInput, setPromoInput] = useState("");
   const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
   const [promoError, setPromoError] = useState<string | null>(null);
@@ -136,14 +135,10 @@ export default function OrderSummary({
     };
   });
 
-  // Re-adjust running global numbers based on applied promo pricing configurations
   const finalSubtotal = appliedPromo ? derivedSubtotal : initialSubtotal;
   const finalTotal = finalSubtotal + Number(shipping || 0);
 
   const convertedThreshold = FREE_SHIPPING_THRESHOLD * (rate || 1);
-
-  // const amountForFreeShipping =
-  //   subtotal < FREE_SHIPPING_THRESHOLD ? convertedThreshold - subtotal : 0;
 
   const amountForFreeShipping =
     finalSubtotal < FREE_SHIPPING_THRESHOLD
@@ -241,7 +236,6 @@ export default function OrderSummary({
                     {item.title}
                   </p>
 
-                  {/* 2️⃣ Render small line-item discount badges if active */}
                   {activeBadge && (
                     <span className="text-[9px] bg-red-100 text-red-600 rounded px-1 py-0.5 font-bold uppercase shrink-0">
                       {activeBadge}
@@ -270,19 +264,6 @@ export default function OrderSummary({
                   Includes {ruleName} ({Number(rulePercent).toFixed(0)}%)
                 </span>
               </div>
-
-              {/* <div className="flex-1">
-                <p className="text-sm font-medium">{item.title}</p>
-                <p className="text-xs text-gray-500 space-x-0.5">
-                  {symbol}
-                  {itemPrice.toFixed(2)} x {itemQuantity} = {symbol}
-                  {itemTotalPrice.toFixed(2)}
-                </p>
-        
-                <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-0.5">
-                  Includes {ruleName} ({Number(rulePercent).toFixed(0)}%)
-                </span>
-              </div> */}
             </div>
           );
         })}
@@ -292,8 +273,8 @@ export default function OrderSummary({
         <div className="flex justify-between mt-3">
           <span>Subtotal</span>
           <span>
-            {symbol}{Number(finalSubtotal || 0).toFixed(2)}
-            {/* {Number(subtotal || 0).toFixed(2)} */}
+            {symbol}
+            {Number(finalSubtotal || 0).toFixed(2)}
           </span>
         </div>
 
@@ -321,8 +302,8 @@ export default function OrderSummary({
         <div className="flex justify-between mt-3 text-gray-500 italic">
           <span>Total Tax</span>
           <span>
-            {symbol}{Number(initialTax || 0).toFixed(2)}
-            {/* {Number(tax || 0).toFixed(2)} */}
+            {symbol}
+            {Number(initialTax || 0).toFixed(2)}
           </span>
         </div>
       </div>
@@ -332,8 +313,8 @@ export default function OrderSummary({
       <div className="flex justify-between font-semibold text-lg text-gray-900">
         <span>Total</span>
         <span>
-          {symbol}{Number(finalTotal || 0).toFixed(2)}
-          {/* {Number(total || 0).toFixed(2)} */}
+          {symbol}
+          {Number(finalTotal || 0).toFixed(2)}
         </span>
       </div>
 
@@ -369,29 +350,15 @@ export default function OrderSummary({
           </button>
         </div>
 
-        {promoError && <p className="mt-2 text-xs text-red-500 font-medium">{promoError}</p>}
+        {promoError && (
+          <p className="mt-2 text-xs text-red-500 font-medium">{promoError}</p>
+        )}
         {appliedPromo && (
           <p className="mt-2 text-xs text-green-600 font-medium flex items-center gap-1">
-            ✓ Code <span className="font-bold uppercase">"{appliedPromo}"</span> applied successfully!
+            ✓ Code <span className="font-bold uppercase">"{appliedPromo}"</span>{" "}
+            applied successfully!
           </p>
         )}
-
-        {/* <div className="flex flex-col sm:flex-row gap-3">
-          <input
-            id="promo-code"
-            type="text"
-            placeholder="Enter code"
-            readOnly
-            className="w-full sm:flex-1 px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-          />
-
-          <button
-            disabled
-            className="w-full sm:w-auto px-6 py-2.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-          >
-            Apply
-          </button>
-        </div> */}
 
         <p className="mt-2 text-xs text-gray-500">Try: SPICE20 or WELCOME10</p>
       </div>
@@ -583,27 +550,3 @@ export default function OrderSummary({
     </div>
   );
 } */
-
-{
-  /* {items.map((item) => (
-          
-          <div key={item.id} className="flex gap-4">
-            <div className="relative h-14 w-14 rounded-lg overflow-hidden">
-              <Image
-                src={`/assets/home/premium_collection/268598abe4d4ba567742332ae571b20ea98ce9d9.jpg`}
-                alt={item.title}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <div className="flex-1">
-              <p className="text-sm font-medium">
-                {item.title} 
-              </p>
-              <p className="text-xs text-gray-500 space-x-0.5">{symbol}{(item.base_price)?.toFixed(2)} x {item.quantity} = {symbol}
-                      {(rate * (item.base_price * item.quantity)).toFixed(2)}</p>
-            </div>
-          </div>
-        ))} */
-}

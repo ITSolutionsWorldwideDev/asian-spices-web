@@ -2,25 +2,28 @@
 
 "use client";
 
-import { useCartStore } from "@/store/useCartStore";
+import { useEffect, useState, useCallback } from "react";
+import { useSession } from "next-auth/react";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+
+import Nav from "./Nav";
 import OrderSummary from "../layout/checkout/OrderSummary";
 import ContactForm from "../layout/checkout/ContactForm";
 import ShippingForm from "../layout/checkout/ShippingForm";
 import PaymentForm from "../layout/checkout/PaymentForm";
-import Nav from "./Nav";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState, useCallback } from "react";
-
-import { useSession } from "next-auth/react";
 
 import { checkoutSchema } from "@/lib/validation/checkout";
 import { useLoaderStore } from "@/store/useLoaderStore";
-import { calculateTotals, convertTotals, MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
-// import { SHIPPING_OPTIONS, ShippingMethod } from "@/lib/pricing";
-
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
+import { useCartStore } from "@/store/useCartStore";
+
+import {
+  calculateTotals,
+  convertTotals,
+  MIN_ORDER_AMOUNT_EUR,
+} from "@/lib/pricing";
 
 export type CheckoutData = {
   email: string;
@@ -50,7 +53,8 @@ export default function Checkout() {
   const { cart, clearCart } = useCartStore();
   const { rate, selectedCurrency } = useCurrencyStore();
 
-  const { taxRules, selectedCountry, setSelectedCountry, fetchInitialData } = useGlobalStore();
+  const { taxRules, selectedCountry, setSelectedCountry, fetchInitialData } =
+    useGlobalStore();
 
   const [addresses, setAddresses] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
@@ -184,8 +188,6 @@ export default function Checkout() {
 
   const convertedTotals = convertTotals(totals, rate || 1, selectedCurrency);
 
-  // const totals = calculateTotals(cart, shippingMethod);
-
   useEffect(() => {
     const loadAddresses = async () => {
       if (!session?.user) return;
@@ -204,29 +206,8 @@ export default function Checkout() {
         const defaultAddr = addressList?.find((a: any) => a.is_default);
 
         if (defaultAddr) {
-          // Pass execution context directly through the updater callback pipeline
           await handleAddressChange(defaultAddr);
         }
-
-        // if (defaultAddr) {
-        //   setSelectedAddress(defaultAddr);
-        //   const activeCountry = defaultAddr.country || "NL";
-
-        //   setFormData((prev) => ({
-        //     ...prev,
-        //     phone: defaultAddr.phone || "",
-        //     firstName: defaultAddr.first_name || "",
-        //     lastName: defaultAddr.last_name || "",
-        //     address: defaultAddr.address_line1 || "",
-        //     appartment: defaultAddr.address_line2 || "",
-        //     city: defaultAddr.city || "",
-        //     state: defaultAddr.state || "",
-        //     zip: defaultAddr.postal_code || "",
-        //     country: defaultAddr.country || "NL",
-        //   }));
-
-        //   await setSelectedCountry(activeCountry);
-        // }
       } catch (err) {
         console.error("Failed to load addresses", err);
       } finally {
@@ -236,13 +217,6 @@ export default function Checkout() {
 
     loadAddresses();
   }, [session, handleAddressChange]);
-  // }, [session]);
-
-  // useEffect(() => {
-  //   if (formData.country) {
-  //     setSelectedCountry(formData.country);
-  //   }
-  // }, [formData.country]);
 
   useEffect(() => {
     if (formData.country) {
@@ -262,7 +236,6 @@ export default function Checkout() {
       return;
     }
 
-    // Validate form
     const result = checkoutSchema.safeParse(formData);
 
     if (!result.success) {
@@ -275,7 +248,6 @@ export default function Checkout() {
 
       setErrors(fieldErrors);
 
-      // Scroll + focus first error
       const firstField = result.error.issues[0]?.path[0] as string;
 
       if (firstField) {
@@ -294,7 +266,7 @@ export default function Checkout() {
     setErrors({});
 
     try {
-      show("Placing your order..."); // 🔥 START LOADER
+      show("Placing your order...");
       const geocodeAddress = async (address: string) => {
         try {
           const res = await fetch(
@@ -321,20 +293,15 @@ export default function Checkout() {
         }
       };
 
-      // Before calling placeOrder:
       let latitude = formData.latitude;
       let longitude = formData.longitude;
 
       if (!latitude || !longitude) {
-        // if (!formData.latitude || !formData.longitude) {
         const fullAddress = [formData.zip, formData.country]
           .filter(Boolean)
           .join(", ");
 
         const geo = await geocodeAddress(fullAddress);
-
-        // formData.latitude = geo.latitude;
-        // formData.longitude = geo.longitude;
 
         latitude = geo.latitude;
         longitude = geo.longitude;
@@ -345,7 +312,6 @@ export default function Checkout() {
           longitude,
         }));
       }
-      // Create Order
 
       if (!cart.length) {
         setApiError("Your cart is empty.");
@@ -374,8 +340,6 @@ export default function Checkout() {
 
             latitude,
             longitude,
-            // latitude: formData.latitude,
-            // longitude: formData.longitude,
           },
           cartItems: cart,
           pricing: {
@@ -385,7 +349,6 @@ export default function Checkout() {
             shipping: convertedTotals.shipping,
             total: convertedTotals.total,
           },
-          // shippingMethod,
           shippingMethod: selectedOption
             ? selectedOption.name
             : "Standard Delivery",
@@ -429,11 +392,8 @@ export default function Checkout() {
         window.location.href = data.redirectUrl;
       }
     } catch (err: any) {
-      // console.error("Checkout error:", err);
-
       setApiError(err.message || "Something went wrong");
 
-      // 🔥 special handling
       if (err.code === "NO_STORE_AVAILABLE") {
         setApiError(
           "Some items are not available together. Try removing a few items.",

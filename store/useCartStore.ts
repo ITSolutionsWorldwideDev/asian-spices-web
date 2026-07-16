@@ -80,7 +80,7 @@ export const useCartStore = create<CartState>()(
         }
       },
 
-      /* ---------------- REMOVE ---------------- */
+      // ---------------- REMOVE ----------------
 
       removeFromCart: async (id, isLoggedIn) => {
         const targetId = id.toString();
@@ -121,7 +121,7 @@ export const useCartStore = create<CartState>()(
         }
       },
 
-      /* ---------------- INCREASE ---------------- */
+      // ---------------- INCREASE ----------------
       increaseQty: async (id, isLoggedIn) => {
 
         const targetId = id.toString();
@@ -149,7 +149,7 @@ export const useCartStore = create<CartState>()(
         }
       },
 
-      /* ---------------- DECREASE ---------------- */
+      // ---------------- DECREASE ----------------
       decreaseQty: async (id, isLoggedIn) => {
 
         const targetId = id.toString();
