@@ -24,17 +24,17 @@ const METHODS = [
       height: 48,
     },
   },
-  {
-    id: "paypal" as const,
-    label: "PayPal",
-    description: "Pay with your PayPal account",
-    logo: {
-      src: "/assets/payment/paypal.svg",
-      alt: "PayPal",
-      width: 90,
-      height: 24,
-    },
-  },
+  // {
+  //   id: "paypal" as const,
+  //   label: "PayPal",
+  //   description: "Pay with your PayPal account",
+  //   logo: {
+  //     src: "/assets/payment/paypal.svg",
+  //     alt: "PayPal",
+  //     width: 90,
+  //     height: 24,
+  //   },
+  // },
 ];
 
 export default function PaymentForm({
