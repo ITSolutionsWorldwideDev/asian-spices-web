@@ -369,7 +369,35 @@ export async function POST(req: NextRequest) {
     // 5️⃣ CREATE ORDER ITEMS
     // ====================================================
 
+    // 🌟 Fetch tax rules directly on the backend to evaluate accurate item rates
+    const taxRulesResult = await client.query(
+      `SELECT category_id, tax_rate FROM platform_tax_rules`,
+    );
+    const taxRules = taxRulesResult.rows;
+
+    // Find Global Rule fallback if any (where category_id is null)
+    const globalRule = taxRules.find((r) => r.category_id === null);
+    const globalRate = globalRule
+      ? parseFloat(globalRule.tax_rate) / 100
+      : 0.21;
+
     for (const item of normalizedItems) {
+      const base_price = Number(item.base_price || 0);
+      const quantity = Number(item.quantity || 1);
+      const itemGrossTotal = base_price * quantity;
+
+      // Find item category specific rule match
+      const matchingRule = taxRules.find(
+        (r) => r.category_id === item.category_id,
+      );
+      const activeRate = matchingRule
+        ? parseFloat(matchingRule.tax_rate) / 100
+        : globalRate;
+
+      // Extract embedded tax amount from the gross price: Gross - (Gross / (1 + Rate))
+      const extractedTaxAmount =
+        itemGrossTotal - itemGrossTotal / (1 + activeRate);
+
       await client.query(
         `
         INSERT INTO store_order_items
@@ -384,16 +412,16 @@ export async function POST(req: NextRequest) {
           tax_rate,
           tax_amount
         )
-        VALUES ($1,$2,$3,0,$4,'pending', $5, $6, $7))
+        VALUES ($1,$2,$3,0,$4,'pending', $5, $6, $7)
       `,
         [
           order_id,
           item.id,
-          item.quantity,
-          Number(item.base_price),
+          quantity,
+          base_price,
           Number(item.exchange_rate ?? 1.0), // Default safely to 1.0 if missing
-          Number(item.tax_rate ?? 0.0),
-          Number(item.tax_amount ?? 0.0),
+          activeRate,
+          extractedTaxAmount,
         ],
       );
     }

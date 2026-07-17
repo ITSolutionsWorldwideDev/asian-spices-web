@@ -225,7 +225,31 @@ export async function POST(req: NextRequest) {
     const order_id = orderResult.rows[0].id;
 
     // 4️⃣ Insert Order Items
+
+    const taxRulesResult = await client.query(
+      `SELECT category_id, tax_rate FROM platform_tax_rules`,
+    );
+    const taxRules = taxRulesResult.rows;
+
+    const globalRule = taxRules.find((r) => r.category_id === null);
+    const globalRate = globalRule
+      ? parseFloat(globalRule.tax_rate) / 100
+      : 0.21;
+
     for (const item of cartItems) {
+      const base_price = Number(item.base_price || 0);
+      const quantity = Number(item.quantity || 1);
+      const itemGrossTotal = base_price * quantity;
+
+      const matchingRule = taxRules.find(
+        (r) => r.category_id === item.category_id,
+      );
+      const activeRate = matchingRule
+        ? parseFloat(matchingRule.tax_rate) / 100
+        : globalRate;
+      const extractedTaxAmount =
+        itemGrossTotal - itemGrossTotal / (1 + activeRate);
+
       await client.query(
         `
         INSERT INTO store_order_items
@@ -243,11 +267,11 @@ export async function POST(req: NextRequest) {
         [
           order_id,
           item.id,
-          item.quantity,
-          item.base_price,
+          quantity,
+          base_price,
           Number(item.exchange_rate ?? 1.0),
-          Number(item.tax_rate ?? 0.0),
-          Number(item.tax_amount ?? 0.0),
+          activeRate,
+          extractedTaxAmount,
         ],
       );
     }

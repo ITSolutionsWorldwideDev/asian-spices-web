@@ -194,14 +194,10 @@ export async function DELETE(req: Request) {
   try {
     const customerId = await getOrCreateCustomer(client, session.user);
 
-    console.log('Empty Cart Operation customerId === ',customerId);
-
     const cartRes = await client.query(
       `SELECT id FROM store_carts WHERE global_customer_id = $1 LIMIT 1`,
       [customerId],
     );
-
-    console.log('Empty Cart Operation cartRes.rowCount === ',cartRes.rowCount);
 
     if (!cartRes.rowCount) {
       return NextResponse.json({ success: true });
