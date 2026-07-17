@@ -120,13 +120,13 @@ export async function POST(req: NextRequest) {
       // Check if this email already exists in store_customers
       const existingCustomer = await client.query(
         `SELECT id, user_id FROM store_customers WHERE email = $1 LIMIT 1`,
-        [email]
+        [email],
       );
 
       // Check if an auth user profile exists for this email
       const userCheck = await client.query(
         `SELECT id FROM users WHERE email = $1 LIMIT 1`,
-        [email]
+        [email],
       );
       const linkedUserId = userCheck.rowCount ? userCheck.rows[0].id : null;
 
@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
         if (!existingCustomer.rows[0].user_id && linkedUserId) {
           await client.query(
             `UPDATE store_customers SET user_id = $1 WHERE id = $2`,
-            [linkedUserId, customer_id]
+            [linkedUserId, customer_id],
           );
         }
       } else {
@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
               customer.phone,
               shippingAddress.city,
               shippingAddress.postal_code,
-            ]
+            ],
           );
           customer_id = result.rows[0].id;
         } else {
@@ -178,7 +178,7 @@ export async function POST(req: NextRequest) {
               customer.phone,
               shippingAddress.city,
               shippingAddress.postal_code,
-            ]
+            ],
           );
           customer_id = result.rows[0].id;
 
@@ -189,18 +189,16 @@ export async function POST(req: NextRequest) {
 
           const newUser = await client.query(
             `INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id`,
-            [email, hash]
+            [email, hash],
           );
           const newUserId = newUser.rows[0].id;
 
           await client.query(
             `UPDATE store_customers SET user_id = $1 WHERE id = $2`,
-            [newUserId, customer_id]
+            [newUserId, customer_id],
           );
         }
       }
-
-
     }
 
     // ====================================================
@@ -348,7 +346,7 @@ export async function POST(req: NextRequest) {
         pricing.subtotal,
         pricing.discount,
         pricing.shipping,
-        pricing.tax_amount,
+        pricing.tax_amount || pricing.tax || 0,
         pricing.total,
 
         shippingAddress.address_line1,
@@ -365,7 +363,6 @@ export async function POST(req: NextRequest) {
     );
 
     const order = orderResult.rows[0];
-
     const order_id = order.id;
 
     // ====================================================
@@ -382,11 +379,22 @@ export async function POST(req: NextRequest) {
           quantity,
           fulfilled_quantity,
           price,
-          status
+          status,
+          exchange_rate,
+          tax_rate,
+          tax_amount
         )
-        VALUES ($1,$2,$3,0,$4,'pending')
+        VALUES ($1,$2,$3,0,$4,'pending', $5, $6, $7))
       `,
-        [order_id, item.id, item.quantity, Number(item.base_price)],
+        [
+          order_id,
+          item.id,
+          item.quantity,
+          Number(item.base_price),
+          Number(item.exchange_rate ?? 1.0), // Default safely to 1.0 if missing
+          Number(item.tax_rate ?? 0.0),
+          Number(item.tax_amount ?? 0.0),
+        ],
       );
     }
 
@@ -502,7 +510,7 @@ const errorResponse = (message: string, code: string, status = 400) => {
   );
 };
 
-      /* const result = await client.query(
+/* const result = await client.query(
         `
           INSERT INTO store_customers
           (

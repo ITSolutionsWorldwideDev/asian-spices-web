@@ -2,6 +2,9 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { useCurrencyStore } from "./useCurrencyStore";
+import { useGlobalStore } from "./useGlobalStore";
+import { calculateTotals } from "@/lib/pricing";
 
 export interface CartItem {
   id: string;
@@ -14,6 +17,10 @@ export interface CartItem {
   slug?: string;
   category_id?: string;
   category_slug?: string;
+
+  exchange_rate?: number;
+  tax_rate?: number;
+  tax_amount?: number;
 
   discount_type?: string;
   discount_value?: number;
@@ -42,7 +49,6 @@ export const useCartStore = create<CartState>()(
       cart: [],
 
       addToCart: async (item, isLoggedIn) => {
-
         const normalizeId = (id: string | number) =>
           id.toString().toLowerCase().trim();
 
@@ -62,8 +68,20 @@ export const useCartStore = create<CartState>()(
         }
 
         set({ cart: updatedCart });
-        
+
         if (!isLoggedIn) return;
+
+        const currentCurrencyState = useCurrencyStore.getState();
+        const currentGlobalState = useGlobalStore.getState();
+
+        // Calculate financials for this line item using your updated core utility
+        const { lineItems } = calculateTotals(
+          [{ ...item, quantity: 1 }],
+          0,
+          currentGlobalState.taxRules,
+        );
+
+        const stampedItem = lineItems[0];
 
         try {
           await fetch("/api/cart", {
@@ -73,6 +91,9 @@ export const useCartStore = create<CartState>()(
               product_id: item.id,
               // base_price: item.base_price,
               quantity: 1,
+              exchange_rate: currentCurrencyState.rate || 1.0,
+              tax_rate: stampedItem?.tax_rate || 0.0,
+              tax_amount: stampedItem?.tax_amount || 0.0,
             }),
           });
         } catch (err) {
@@ -123,7 +144,6 @@ export const useCartStore = create<CartState>()(
 
       // ---------------- INCREASE ----------------
       increaseQty: async (id, isLoggedIn) => {
-
         const targetId = id.toString();
         set({
           cart: get().cart.map((i) =>
@@ -151,7 +171,6 @@ export const useCartStore = create<CartState>()(
 
       // ---------------- DECREASE ----------------
       decreaseQty: async (id, isLoggedIn) => {
-
         const targetId = id.toString();
         const item = get().cart.find((i) => i.id.toString() === targetId);
 
@@ -217,7 +236,6 @@ export const useCartStore = create<CartState>()(
       setCart: (items) => set({ cart: items }),
 
       clearCart: async (isLoggedIn = false) => {
-
         set({ cart: [] });
 
         if (typeof window !== "undefined") {
@@ -243,7 +261,9 @@ export const useCartStore = create<CartState>()(
         try {
           const ids = currentItems.map((i) => i.id).join(",");
           // Fetches the regional prices for the localized guest items
-          const res = await fetch(`/api/products/batch-prices?ids=${ids}&country=${countryCode}`);
+          const res = await fetch(
+            `/api/products/batch-prices?ids=${ids}&country=${countryCode}`,
+          );
           if (!res.ok) return;
 
           const pricingMap = await res.json(); // Map layout structure: { [product_id]: price }
@@ -251,7 +271,10 @@ export const useCartStore = create<CartState>()(
           const updatedCart = currentItems.map((item) => ({
             ...item,
             // Replaces base price with localized price if available
-            base_price: pricingMap[item.id] !== undefined ? Number(pricingMap[item.id]) : item.base_price,
+            base_price:
+              pricingMap[item.id] !== undefined
+                ? Number(pricingMap[item.id])
+                : item.base_price,
           }));
 
           set({ cart: updatedCart });

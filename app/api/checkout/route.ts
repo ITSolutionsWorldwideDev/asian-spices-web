@@ -67,10 +67,9 @@ export async function POST(req: NextRequest) {
 
     // 1️⃣ If logged in → try to find existing customer
     if (userId) {
-
       const existingCustomer = await client.query(
         `SELECT id FROM customers WHERE user_id = $1 LIMIT 1`,
-        [userId]
+        [userId],
       );
 
       if (existingCustomer.rowCount) {
@@ -80,7 +79,13 @@ export async function POST(req: NextRequest) {
           `INSERT INTO customers (user_id, email, first_name, last_name, phone)
           VALUES ($1,$2,$3,$4,$5)
           RETURNING id`,
-          [userId, email, customer.firstName, customer.lastName, customer.phone]
+          [
+            userId,
+            email,
+            customer.firstName,
+            customer.lastName,
+            customer.phone,
+          ],
         );
 
         customer_id = result.rows[0].id;
@@ -190,7 +195,17 @@ export async function POST(req: NextRequest) {
     const orderResult = await client.query(
       `
       INSERT INTO store_orders
-      ( store_id, order_number, customer_id, customer_email, subtotal, discount_amount, shipping_amount, total_amount)
+      ( 
+        store_id,
+        order_number,
+        customer_id,
+        customer_email, 
+        subtotal,
+        discount_amount,
+        shipping_amount,
+        tax_amount,
+        total_amount
+       )
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
       RETURNING id
       `,
@@ -202,6 +217,7 @@ export async function POST(req: NextRequest) {
         pricing.subtotal,
         pricing.discount,
         pricing.shipping,
+        pricing.tax_amount || pricing.tax || 0,
         pricing.total,
       ],
     );
@@ -213,10 +229,26 @@ export async function POST(req: NextRequest) {
       await client.query(
         `
         INSERT INTO store_order_items
-        (order_id, product_id, quantity, price)
-        VALUES ($1,$2,$3,$4)
+        (
+          order_id, 
+          product_id, 
+          quantity, 
+          price,
+          exchange_rate,
+          tax_rate,
+          tax_amount
+        )
+        VALUES ($1,$2,$3,$4,$5,$6,$7)
         `,
-        [order_id, item.id, item.quantity, item.base_price],
+        [
+          order_id,
+          item.id,
+          item.quantity,
+          item.base_price,
+          Number(item.exchange_rate ?? 1.0),
+          Number(item.tax_rate ?? 0.0),
+          Number(item.tax_amount ?? 0.0),
+        ],
       );
     }
 
@@ -224,7 +256,7 @@ export async function POST(req: NextRequest) {
 
     const { rows } = await client.query(
       `SELECT current_store_id FROM store_orders WHERE id = $1`,
-      [order_id]
+      [order_id],
     );
 
     const new_store_id = rows[0].current_store_id;
@@ -246,7 +278,7 @@ export async function POST(req: NextRequest) {
         customer.phone,
         shippingAddress.city,
         shippingAddress.zip,
-      ]
+      ],
     );
 
     await client.query(
@@ -256,9 +288,8 @@ export async function POST(req: NextRequest) {
       WHERE key = 'customer'
       ON CONFLICT (store_id, user_id) DO NOTHING
       `,
-      [userId, new_store_id]
+      [userId, new_store_id],
     );
-
 
     await client.query("COMMIT");
 
@@ -279,33 +310,32 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// const existingCustomer: any = await client.query(
+//   `SELECT id FROM store_customers
+//     WHERE user_id = $1 LIMIT 1`,
+//   [userId],
+// );
 
-      // const existingCustomer: any = await client.query(
-      //   `SELECT id FROM store_customers 
-      //     WHERE user_id = $1 LIMIT 1`,
-      //   [userId],
-      // );
+// if (existingCustomer.rowCount > 0) {
+//   customer_id = existingCustomer.rows[0].id;
+// } else {
+//   // create new linked customer
+//   const result = await client.query(
+//     `INSERT INTO store_customers
+//     (store_id, user_id, first_name, last_name, email, phone, city, postcode)
+//     VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+//     RETURNING id`,
+//     [
+//       store_id,
+//       userId,
+//       customer.firstName,
+//       customer.lastName,
+//       email,
+//       customer.phone,
+//       shippingAddress.city,
+//       shippingAddress.zip,
+//     ],
+//   );
 
-      // if (existingCustomer.rowCount > 0) {
-      //   customer_id = existingCustomer.rows[0].id;
-      // } else {
-      //   // create new linked customer
-      //   const result = await client.query(
-      //     `INSERT INTO store_customers 
-      //     (store_id, user_id, first_name, last_name, email, phone, city, postcode)
-      //     VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
-      //     RETURNING id`,
-      //     [
-      //       store_id,
-      //       userId,
-      //       customer.firstName,
-      //       customer.lastName,
-      //       email,
-      //       customer.phone,
-      //       shippingAddress.city,
-      //       shippingAddress.zip,
-      //     ],
-      //   );
-
-      //   customer_id = result.rows[0].id;
-      // }
+//   customer_id = result.rows[0].id;
+// }

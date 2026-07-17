@@ -3,9 +3,15 @@
 import { CartItem } from "@/store/useCartStore";
 
 export const FREE_SHIPPING_THRESHOLD = 50;
-/** Minimum cart merchandise subtotal (EUR, excl. shipping) required to place an order. */
 export const MIN_ORDER_AMOUNT_EUR = 10;
 export const BASE_CURRENCY = "EUR";
+
+export interface LineItemFinancials {
+  id: string;
+  gross_subtotal: number;
+  tax_rate: number;
+  tax_amount: number;
+}
 
 export const SHIPPING_OPTIONS = {
   standard: { label: "Standard Shipping", price: 5.99 },
@@ -22,6 +28,7 @@ export function calculateTotals(
   shippingCodeOrName?: string,
 ) {
   let totalCalculatedTax = 0;
+  const lineItemFinancials: LineItemFinancials[] = [];
 
   // 1️⃣ Find Global Rule fallback if any (where category_id is null)
   const globalRule = taxRules.find((r) => r.category_id === null);
@@ -33,7 +40,6 @@ export function calculateTotals(
     const itemGrossTotal = base_price * quantity;
 
     // 2️⃣ Find item category specific rule match
-    // Make sure your item schema includes 'category_id'
     const matchingRule = taxRules.find(
       (r) => r.category_id === item.category_id,
     );
@@ -44,7 +50,15 @@ export function calculateTotals(
     // 3️⃣ Extract embedded tax amount from the gross price: Gross - (Gross / (1 + Rate))
     const extractedTaxAmount =
       itemGrossTotal - itemGrossTotal / (1 + activeRate);
+
     totalCalculatedTax += extractedTaxAmount;
+
+    lineItemFinancials.push({
+      id: item.id,
+      gross_subtotal: itemGrossTotal,
+      tax_rate: activeRate,
+      tax_amount: extractedTaxAmount,
+    });
 
     return acc + itemGrossTotal;
   }, 0);
@@ -59,7 +73,13 @@ export function calculateTotals(
   // Gross Total remains subtotal + shipping since prices already contain tax
   const total = subtotal + shipping;
 
-  return { subtotal, tax: totalCalculatedTax, shipping, total };
+  return {
+    subtotal,
+    tax: totalCalculatedTax,
+    shipping,
+    total,
+    lineItems: lineItemFinancials,
+  };
 }
 
 export function convertPrice(
