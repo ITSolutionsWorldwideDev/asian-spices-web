@@ -1,112 +1,104 @@
 // apps/web/components/layout/home/Home.tsx
 
 import React, { Suspense } from "react";
+import Image from "next/image";
 import Header from "./Header";
 import AnnouncementBar from "./Announcement_Bar";
-import HeroSection from "./Collections";
-// import FlashSale from "./Flash_Sale";
+import Collections from "./Collections";
+import FlashSale from "./Flash_Sale";
 import Premium_Spice_Collection from "./Premium_Spice_Collection";
 import Smart_Appliances from "./Smart_Appliances";
 import Story from "./Story";
 import Spicy_Story from "./Spicy_Story";
 import WhyChooseUs from "./WhyChooseUs";
-// import RegisterOnApp from "@/components/ui/RegisterOnApp";
 import Reviews from "@/components/ui/Reviews";
 import Footer from "@/components/ui/Footer";
 import RegisterOnAppModal from "@/components/ui/RegisterOnAppModal";
+import DeferredMount from "@/components/ui/DeferredMount";
+import HeadingDescription from "@/components/ui/HeadingDescription";
 
-function DynamicHomeContent() {
+function SectionSkeleton({ className = "h-64" }: { className?: string }) {
   return (
-    <>
-      <HeroSection />
-      {/* <FlashSale />  */}
-      <Premium_Spice_Collection />
-      <Smart_Appliances />
-      <Story />
-      <Spicy_Story />
-      <WhyChooseUs />
-    </>
+    <div
+      className={`container mx-auto my-10 animate-pulse rounded-2xl bg-gray-100 ${className}`}
+      aria-hidden
+    />
   );
 }
 
-const Homei = () => {
+export default function Homei() {
   return (
     <div>
-      <RegisterOnAppModal />
-
+      {/* Hero + nav paint first — nothing DB-related above the fold */}
       <Header />
       <AnnouncementBar />
 
-      {/* Suspense fallback blocks deep backend queries from stalling the top video slider */}
-      <Suspense fallback={<div className="text-center py-20 text-gray-400">Loading collection options...</div>}>
-        <DynamicHomeContent />
+      {/* Flash sale shell is static; product cards fetch client-side inside */}
+      <div className="relative overflow-hidden">
+        <Image
+          src="/assets/home/collections/collection-bg.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover opacity-90"
+          priority={false}
+        />
+        <div className="bg-white/80 relative py-20">
+          <div className="container mx-auto">
+            <HeadingDescription
+              heading="Explore Our Collection"
+              description="Discover authentic recipes from across Asia, each category carefully curated for quality and flavor."
+            />
+            <FlashSale />
+          </div>
+        </div>
+      </div>
+
+      {/* Category cards — own Suspense so they don't block sections below */}
+      <Suspense fallback={<SectionSkeleton className="h-96" />}>
+        <Collections />
       </Suspense>
 
+      {/* Mid-page: defer heavy product-card island until near viewport */}
+      <DeferredMount
+        rootMargin="250px"
+        fallback={<SectionSkeleton className="h-80" />}
+      >
+        <Premium_Spice_Collection />
+      </DeferredMount>
+
+      <DeferredMount
+        rootMargin="250px"
+        fallback={<SectionSkeleton className="h-[800px]" />}
+      >
+        <Smart_Appliances />
+      </DeferredMount>
+
+      <DeferredMount rootMargin="200px" fallback={<SectionSkeleton />}>
+        <Story />
+      </DeferredMount>
+
+      <Suspense fallback={<SectionSkeleton className="h-96" />}>
+        <Spicy_Story />
+      </Suspense>
+
+      <WhyChooseUs />
+
       <div className="bg-gray-100">
-        <Reviews />
+        <DeferredMount
+          rootMargin="300px"
+          fallback={<SectionSkeleton className="h-48" />}
+        >
+          <Reviews />
+        </DeferredMount>
       </div>
+
       <Footer />
+
+      {/* Modal after first paint — idle so empty sentinel still mounts */}
+      <DeferredMount strategy="idle" idleTimeoutMs={3000} fallback={null}>
+        <RegisterOnAppModal />
+      </DeferredMount>
     </div>
   );
-};
-
-export default Homei;
-
-
-// const Homei = () => {
-//   return (
-//     <div>
-//       <RegisterOnAppModal />
-
-//       <Header />
-//       <AnnouncementBar />
-//       <HeroSection />
-//       {/* <FlashSale />  */}
-//       <Premium_Spice_Collection />
-//       <Smart_Appliances />
-//       <Story />
-//       <Spicy_Story />
-//       <WhyChooseUs />
-//       {/* <RegisterOnApp /> */}
-//       <div className="bg-gray-100">
-//         <Reviews />
-//       </div>
-//       <Footer />
-//     </div>
-//   );
-// };
-// const menuData = {
-//   name: "Healthy Living",
-//   children: [
-//     {
-//       heading: "Health Benefits of Herbs",
-//       category: [
-//         "Supports Immunity",
-//         "Aids Digestion",
-//         "Promotes Relaxation",
-//         "Enhances Energy Levels",
-//       ],
-//     },
-//     {
-//       heading: "Herbal Food Supplements",
-//       category: ["Capsules", "Powders", "Teas"],
-//     },
-//     {
-//       heading: "Herbal Skin Products",
-//       category: ["Face oils", "Creams", "Cleansers"],
-//     },
-//     {
-//       heading: "Herbal Hair Products",
-//       category: ["Hair oils", "Shampoos", "Hair masks"],
-//     },
-//   ],
-// };
-
-// import dynamic from "next/dynamic";
-
-// const RegisterOnAppModal = dynamic(
-//   () => import("@/components/ui/RegisterOnAppModal"),
-//   {
-//     ssr: false,
-//   }
-// );
+}

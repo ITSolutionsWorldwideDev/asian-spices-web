@@ -41,6 +41,7 @@ export default function UpperSelection() {
         <div className="relative" ref={dropdownRef}>
           <button
             type="button"
+            aria-label="Select country"
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center gap-2 border px-3 py-1.5 text-xs font-semibold rounded-md bg-white hover:bg-gray-50 transition min-w-[70px] justify-between"
           >
@@ -85,10 +86,15 @@ export default function UpperSelection() {
           )}
         </div>
 
+        <label className="sr-only" htmlFor="currency-select">
+          Currency
+        </label>
         <select
+          id="currency-select"
           value={selectedCurrency}
           onChange={(e) => setSelectedCurrency(e.target.value)}
           className="border px-3 py-1 text-xs rounded-md bg-white cursor-pointer"
+          aria-label="Select currency"
         >
           {currencies.map((c) => (
             <option key={c.id} value={c.code}>

@@ -4,12 +4,9 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { BsCartPlus } from "react-icons/bs";
-import { FaArrowRight } from "react-icons/fa6";
-import { GoTag } from "react-icons/go";
+import { ArrowRight, Heart, ShoppingCart, Tag } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
-import { Heart } from "lucide-react";
 import Link from "next/link";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useSession } from "next-auth/react";
@@ -162,7 +159,7 @@ export default function ProductCard({
           return (
             <div
               key={`${product.id}-${index}`}
-              className="bg-white rounded-2xl shadow hover:shadow-2xl transition p-4 relative hover:scale-105 flex flex-col justify-between"
+              className="bg-white rounded-2xl shadow hover:shadow-2xl transition p-4 relative flex flex-col justify-between"
             >
               {/* Upper Section */}
               <div className="relative">
@@ -176,13 +173,19 @@ export default function ProductCard({
                 {/* Fixed Dynamic Discount Badge */}
                 {discountBadgeText && (
                   <span className="absolute top-4 left-4 bg-red-500 font-bold text-white text-xs px-2.5 py-1 rounded-full flex items-center z-10 shadow-sm animate-fade-in">
-                    <GoTag className="mr-1.5 w-3.5 h-3.5" />
+                    <Tag className="mr-1.5 w-3.5 h-3.5" />
                     {discountBadgeText}
                   </span>
                 )}
 
                 {/* Wishlist Heart Toggle */}
                 <button
+                  type="button"
+                  aria-label={
+                    mounted && isInWishlist(product.id)
+                      ? `Remove ${product.name} from wishlist`
+                      : `Add ${product.name} to wishlist`
+                  }
                   onClick={() =>
                     toggleWishlist(
                       {
@@ -218,6 +221,7 @@ export default function ProductCard({
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                     className="object-cover"
+                    priority={index < 4}
                   />
                 </div>
 
@@ -232,7 +236,7 @@ export default function ProductCard({
                   <h3 className="font-semibold text-gray-800 text-base line-clamp-1">
                     {product.name}
                   </h3>
-                  <p className="text-xs text-gray-400 mt-0.5 line-clamp-2 min-h-[32px]">
+                  <p className="text-xs text-gray-600 mt-0.5 line-clamp-2 min-h-[32px]">
                     {product.description || "No description available."}
                   </p>
                 </Link>
@@ -267,6 +271,8 @@ export default function ProductCard({
                 {cartItem ? (
                   <div className="flex items-center justify-between border border-gray-200 rounded-xl overflow-hidden h-[40px]">
                     <button
+                      type="button"
+                      aria-label={`Decrease quantity of ${product.name}`}
                       onClick={() => decreaseQty(product.id, isLoggedIn)}
                       className="px-4 h-full text-lg hover:bg-gray-50 active:bg-gray-100 transition select-none cursor-pointer"
                     >
@@ -275,6 +281,7 @@ export default function ProductCard({
                     <input
                       type="number"
                       min={1}
+                      aria-label={`Quantity of ${product.name}`}
                       value={cartItem.quantity}
                       onChange={(e) => {
                         const value = Number(e.target.value);
@@ -284,6 +291,8 @@ export default function ProductCard({
                       className="w-12 text-center text-sm font-semibold outline-none bg-transparent"
                     />
                     <button
+                      type="button"
+                      aria-label={`Increase quantity of ${product.name}`}
                       onClick={() => increaseQty(product.id, isLoggedIn)}
                       className="px-4 h-full text-lg hover:bg-gray-50 active:bg-gray-100 transition select-none cursor-pointer"
                     >
@@ -292,6 +301,8 @@ export default function ProductCard({
                   </div>
                 ) : (
                   <button
+                    type="button"
+                    aria-label={`Add ${product.name} to cart`}
                     className="cursor-pointer w-full h-[40px] bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white rounded-xl text-sm font-bold flex items-center justify-center transition shadow-sm active:scale-[0.99]"
                     onClick={() => {
                       addToCart(
@@ -312,7 +323,7 @@ export default function ProductCard({
                       );
                     }}
                   >
-                    <BsCartPlus className="w-4 h-4 mr-2" />
+                    <ShoppingCart className="w-4 h-4 mr-2" />
                     Add To Cart
                   </button>
                 )}
@@ -326,6 +337,7 @@ export default function ProductCard({
       {!disableSlicing && products.length > 20 && (
         <div className="flex justify-center mt-8 mb-10">
           <button
+            type="button"
             onClick={() => setShowAll(!showAll)}
             className="flex items-center justify-center px-10 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2 font-semibold rounded-lg transition cursor-pointer shadow"
           >
@@ -334,7 +346,7 @@ export default function ProductCard({
             ) : (
               <>
                 See More
-                <FaArrowRight className="ml-5" />
+                <ArrowRight className="ml-5 h-4 w-4" />
               </>
             )}
           </button>

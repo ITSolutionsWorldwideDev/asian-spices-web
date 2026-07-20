@@ -26,13 +26,15 @@ const Nav: React.FC = () => {
               alt="Asian Spices Logo"
               width={180}
               height={60}
+              priority
+              fetchPriority="high"
               className="h-8 sm:h-10 md:h-14 lg:h-16 w-auto object-contain"
             />
           </Link>
         </div>
 
-        {/* RIGHT: Actions + Hamburger */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        {/* RIGHT: Actions + Hamburger — fixed min height reduces CLS while auth/cart hydrate */}
+        <div className="flex items-center gap-2 sm:gap-4 min-h-10 sm:min-h-12">
           <ResponsiveNavigation />
           <CartandWhishBtn />
           <ButtonsNavigation />

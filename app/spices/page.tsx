@@ -82,7 +82,7 @@ export default async function SpicesPage({ searchParams }: PageProps) {
   };
 
   return (
-    <div className="category-animation"> 
+    <div>
       <ProductPageHeader
         heading="Every Grain, A Burst of Taste"
         text="Handpicked, pure spices"
@@ -95,12 +95,16 @@ export default async function SpicesPage({ searchParams }: PageProps) {
         description="Discover authentic spices"
       />
 
-      {/* 2. Wrap the database-driven component in Suspense */}
-      <Suspense fallback={<div className="text-center py-20">Loading products...</div>}>
+      <Suspense
+        fallback={
+          <div className="text-center py-20 text-gray-500">
+            Loading products...
+          </div>
+        }
+      >
         <ProductSection filters={filters} />
       </Suspense>
 
-      {/* <Reviews /> */}
       <Footer />
     </div>
   );

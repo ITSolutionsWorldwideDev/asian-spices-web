@@ -1,22 +1,16 @@
 // apps/web/components/layout/recipes/RecipeSidebar.tsx
-"use client";
 
 import Link from "next/link";
-
 import { ChevronDown } from "lucide-react";
-
-import * as Accordion from "@radix-ui/react-accordion";
 
 interface RecipeSidebarProps {
   categories: any[];
-
   tags: any[];
-
   selectedCategory?: string;
-
   selectedTag?: string;
 }
 
+/** Server Component — no Radix client bundle on first paint. */
 export default function RecipeSidebar({
   categories,
   tags,
@@ -25,62 +19,82 @@ export default function RecipeSidebar({
 }: RecipeSidebarProps) {
   return (
     <aside className="self-start space-y-6 lg:sticky lg:top-24 lg:z-10">
-      {/* CATEGORIES */}
       <div className="bg-white rounded-2xl border p-5">
-        <h3 className="font-bold text-lg mb-4">
-          Categories
-        </h3>
+        <h3 className="font-bold text-lg mb-4">Categories</h3>
 
-        <Accordion.Root
-          type="multiple"
-          className="space-y-2"
-        >
-          {categories.map((category) => (
-            <Accordion.Item
-              key={category.id}
-              value={category.id}
-              className="border rounded-xl overflow-hidden"
-            >
-              <Accordion.Trigger className="w-full flex items-center justify-between px-4 py-3 text-left font-medium hover:bg-gray-50">
+        <div className="space-y-2">
+          {categories.map((category) => {
+            const hasChildren = category.children?.length > 0;
+            const isSelected = selectedCategory === category.slug;
+
+            if (!hasChildren) {
+              return (
                 <Link
+                  key={category.id}
                   href={`/recipes?category=${category.slug}`}
-                  className={`flex-1 ${
-                    selectedCategory === category.slug
-                      ? "text-orange-600 font-bold"
+                  className={`block rounded-xl border px-4 py-3 font-medium hover:bg-gray-50 ${
+                    isSelected
+                      ? "text-orange-600 font-bold border-orange-200 bg-orange-50"
                       : "text-gray-700"
                   }`}
                 >
                   {category.name}
                 </Link>
+              );
+            }
 
-                <ChevronDown size={16} />
-              </Accordion.Trigger>
+            return (
+              <details
+                key={category.id}
+                className="group border rounded-xl overflow-hidden"
+                open={
+                  isSelected ||
+                  category.children?.some(
+                    (child: any) => child.slug === selectedCategory,
+                  )
+                }
+              >
+                <summary className="flex list-none items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-50 [&::-webkit-details-marker]:hidden">
+                  <Link
+                    href={`/recipes?category=${category.slug}`}
+                    className={`flex-1 font-medium ${
+                      isSelected
+                        ? "text-orange-600 font-bold"
+                        : "text-gray-700"
+                    }`}
+                  >
+                    {category.name}
+                  </Link>
+                  <ChevronDown
+                    size={16}
+                    className="text-gray-500 transition group-open:rotate-180 shrink-0"
+                    aria-hidden
+                  />
+                </summary>
 
-              {category.children?.length > 0 && (
-                <Accordion.Content className="px-4 pb-4">
-                  <div className="flex flex-col gap-2">
-                    {category.children.map((child: any) => (
-                      <Link
-                        key={child.id}
-                        href={`/recipes?category=${child.slug}`}
-                        className="text-sm text-gray-500 hover:text-orange-600"
-                      >
-                        {child.name}
-                      </Link>
-                    ))}
-                  </div>
-                </Accordion.Content>
-              )}
-            </Accordion.Item>
-          ))}
-        </Accordion.Root>
+                <div className="flex flex-col gap-2 px-4 pb-4">
+                  {category.children.map((child: any) => (
+                    <Link
+                      key={child.id}
+                      href={`/recipes?category=${child.slug}`}
+                      className={`text-sm hover:text-orange-600 ${
+                        selectedCategory === child.slug
+                          ? "text-orange-600 font-semibold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      {child.name}
+                    </Link>
+                  ))}
+                </div>
+              </details>
+            );
+          })}
+        </div>
       </div>
 
-      {/* TAGS */}
       <div className="bg-white rounded-2xl border p-5">
-        <h3 className="font-bold text-lg mb-4">
-          Popular Tags
-        </h3>
+        <h3 className="font-bold text-lg mb-4">Popular Tags</h3>
 
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
@@ -90,13 +104,11 @@ export default function RecipeSidebar({
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition ${
                 selectedTag === tag.slug
                   ? "text-white"
-                  : "bg-gray-100 text-gray-700 hover:text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
               style={{
                 background:
-                  selectedTag === tag.slug
-                    ? tag.color
-                    : undefined,
+                  selectedTag === tag.slug ? tag.color : undefined,
               }}
             >
               #{tag.name}

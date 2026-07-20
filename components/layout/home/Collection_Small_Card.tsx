@@ -23,6 +23,7 @@ export default function CollectionSmallCard({ item }: CardProps) {
           fill
           sizes="(max-width:768px) 100vw, 50vw"
           className="object-cover transition-transform duration-800 ease-out group-hover:scale-125"
+          loading="lazy"
         />
 
         <TextOverCollectionCard item={item} />

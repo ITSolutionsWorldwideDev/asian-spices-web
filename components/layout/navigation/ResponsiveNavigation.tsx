@@ -1,12 +1,9 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ChevronDown, Menu, Heart, Home } from "lucide-react";
-import { RxCross1 } from "react-icons/rx";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { ChevronDown, Menu, Heart, Home, ShoppingBag, X } from "lucide-react";
 import Cart from "@/components/ui/Cart";
 import { createPortal } from "react-dom";
-import { FaL } from "react-icons/fa6";
 
 import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/useCartStore";
@@ -306,7 +303,7 @@ const ResponsiveNavigation = () => {
           className="text-white p-0 m-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 transition"
         >
           {mobileMenu ? (
-            <RxCross1 className="h-6 w-6" />
+            <X className="h-6 w-6" />
           ) : (
             <Menu className="h-6 w-6" />
           )}
@@ -589,7 +586,7 @@ const ResponsiveNavigation = () => {
               <div className="bg-white rounded-full cursor-pointer relative">
                 <Link href={"/cart"}>
                   <button className="px-3 py-3 font-bold rounded-full shadow-lg hover:shadow-xl   focus:ring-4 focus:ring-white/50 cursor-pointer">
-                    <HiOutlineShoppingBag />
+                    <ShoppingBag className="h-5 w-5" />
                   </button>
                 </Link>
                 {itemInCart > 0 && (

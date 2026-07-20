@@ -6,13 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import CartSyncProvider from "./CartSyncProvider";
 import GlobalDataProvider from "./GlobalDataProvider";
 import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
-
-import dynamic from "next/dynamic";
-// import { BibiChatWidget } from "@/components/chatbot/BibiChatWidget";
-const BibiChatWidget = dynamic(
-  () => import("@/components/chatbot/BibiChatWidget").then((mod) => mod.BibiChatWidget),
-  { ssr: false }
-);
+import { DeferredBibiChatWidget } from "@/components/chatbot/DeferredBibiChatWidget";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -20,7 +14,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <GlobalDataProvider>
         <CartSyncProvider>
           {children}
-          <BibiChatWidget />
+          <DeferredBibiChatWidget />
           <CookieConsentBanner />
         </CartSyncProvider>
       </GlobalDataProvider>

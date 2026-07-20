@@ -12,12 +12,12 @@ const HeadingDescription = ({
 }: HeadingDescriptionProps) => {
   return (
     <div className="text-center max-w-2xl mx-auto my-10 px-4 ">
-      <h3
+      <h2
         className="py-4 font-bold text-2xl sm:text-3xl lg:text-4xl rounded-full 
-                     bg-linear-to-r from-orange-100 to-orange-200 text-red-500"
+                     bg-linear-to-r from-orange-100 to-orange-200 text-red-600"
       >
         {heading}
-      </h3>
+      </h2>
 
       <p className="mt-4 text-gray-600 text-base sm:text-lg tracking-wide">
         {text}

@@ -7,20 +7,25 @@ export default function FlashSale() {
     <section className="mt-20 relative w-full rounded-3xl bg-linear-to-r from-amber-500 to-amber-500 px-6 py-14  text-white container mx-auto">
       {/* Header */}
 
-      <div className="absolute right-0 top-1/7  h-screen w-250 opacity-20">
+      <div className="absolute right-0 top-1/7 h-screen w-250 opacity-20">
         <Image
           src={`/assets/home/hot_sale/8357fc982c16b069a3bee90343077e780562649f.png`}
-          alt={"Hot sale"}
+          alt=""
           fill
-          className=" object-cover "
+          sizes="(max-width: 768px) 0px, 600px"
+          className="object-cover"
+          loading="lazy"
         />
       </div>
 
       <div className="text-center mb-12">
-        <div className="inline-flex text-center justify-center items-center px-5 py-1 bg-black  rounded-full font-bold fire-icon-animated">
+        <div className="inline-flex text-center justify-center items-center px-5 py-1 bg-black rounded-full font-bold fire-icon-animated">
           <img
             className="h-15 w-20"
             src={`/assets/home/hot_sale/af61c09c418181db6f7977fb75c765cfd193908e.gif`}
+            alt=""
+            loading="lazy"
+            decoding="async"
           />{" "}
           Flash Sale
         </div>

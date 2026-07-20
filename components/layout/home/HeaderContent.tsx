@@ -1,12 +1,7 @@
 // components/layout/home/HeaderContent.tsx
 
 import React from "react";
-import { IoDiamondSharp } from "react-icons/io5";
-import { FaRegCirclePlay } from "react-icons/fa6";
-import { MdOutlineShoppingBag } from "react-icons/md";
-import { FaTruckFast } from "react-icons/fa6";
-import { CiTrophy } from "react-icons/ci";
-import { LuSalad } from "react-icons/lu";
+import { Gem, Leaf, ShoppingBag, Trophy, Truck } from "lucide-react";
 import Link from "next/link";
 
 interface FrameStats {
@@ -40,7 +35,7 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
       <div className="max-w-3xl text-white">
         <span className="bg-white/20 text-sm px-4 py-2 rounded-full inline-block border border-white/30">
           <span className="flex items-center justify-center">
-            <IoDiamondSharp className="mr-2" />
+            <Gem className="mr-2 h-4 w-4" />
             {current.subtitle}
           </span>
         </span>
@@ -92,7 +87,7 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
         {/* CTA Buttons */}
         <div className="flex gap-4">
           <button className="flex justify-center items-center bg-white text-black px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
-          <Link href="/spices" className="flex justify-center items-center">  <MdOutlineShoppingBag className="mr-3" /> Shop Collection</Link>
+          <Link href="/spices" className="flex justify-center items-center">  <ShoppingBag className="mr-3 h-5 w-5" /> Shop Collection</Link>
           </button>
 
           {/* <button className="flex justify-center items-center border border-white px-6 py-3 rounded-xl font-semibold hover:bg-white/20 transition space-x-3">
@@ -104,19 +99,19 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
         <div className="text-white flex mt-10 gap-5 flex-wrap">
           <p className="flex items-center gap-3 justify-center text-center">
             <span className="bg-green-500 rounded-full h-8 w-8 flex items-center justify-center">
-              <LuSalad className="w-5 h-5 text-white" />
+              <Leaf className="w-5 h-5 text-white" />
             </span>
             100% organic
           </p>
           <p className="flex items-center gap-3 justify-center text-center">
             <span className="bg-yellow-400 rounded-full h-8 w-8 flex items-center justify-center">
-              <CiTrophy className="w-5 h-5 text-white" />
+              <Trophy className="w-5 h-5 text-white" />
             </span>
             Premium Quality
           </p>
           <p className="flex items-center gap-3 justify-center text-center">
             <span className="bg-red-700 rounded-full h-8 w-8 flex items-center justify-center">
-              <FaTruckFast className="w-5 h-5 text-white" />
+              <Truck className="w-5 h-5 text-white" />
             </span>
             Free Shipping
           </p>

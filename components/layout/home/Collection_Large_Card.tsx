@@ -20,11 +20,10 @@ export default function CollectionLargeCard({ item }: CardProps) {
         <Image
           src={`/assets/home/collections/${item.image}`}
           alt={item.title}
-          //   width={300}
-          //   height={300}
           fill
           sizes="(max-width:768px) 100vw, 50vw"
-          className="object-cover   w-full h-full transition-transform duration-800 ease-out group-hover:scale-125"
+          className="object-cover w-full h-full transition-transform duration-800 ease-out group-hover:scale-125"
+          loading="lazy"
         />
 
         <TextOverCollectionCard item={item} />

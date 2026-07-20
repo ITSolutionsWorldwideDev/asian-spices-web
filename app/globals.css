@@ -133,19 +133,24 @@
 
 /* ////categories page slide */
 
-@keyframes slideCategoryDown {
+.category-animation {
+  /* Keep a light fade only — the old 1s translateY(-550px) + opacity:0 delayed LCP by seconds */
+  animation: categoryFadeIn 0.35s ease-out;
+}
+
+@keyframes categoryFadeIn {
   from {
-    opacity: 0;
-    transform: translateY(-550px);
+    opacity: 0.92;
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
-.category-animation {
-  animation: slideCategoryDown 1s ease-out;
+@media (prefers-reduced-motion: reduce) {
+  .category-animation {
+    animation: none;
+  }
 }
 
 /* @source "../../packages/ui*.{js,ts,jsx,tsx,mdx}"; */

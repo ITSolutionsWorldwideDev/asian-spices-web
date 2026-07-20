@@ -192,7 +192,7 @@ export default function FilterSidebar({
                 {item.name}
 
                 {item.product_count ? (
-                  <span className="ml-1 text-gray-400">
+                  <span className="ml-1 text-gray-600">
                     ({item.product_count})
                   </span>
                 ) : null}
@@ -203,7 +203,7 @@ export default function FilterSidebar({
 
         <button
           onClick={() => clearFilter("subcategories")}
-          className="text-sm text-orange-500 hover:text-orange-600 mt-2"
+          className="text-sm text-orange-700 hover:text-orange-800 mt-2"
         >
           Clear Categories
         </button>
@@ -255,7 +255,7 @@ export default function FilterSidebar({
                 {brand.name}
 
                 {brand.product_count ? (
-                  <span className="ml-1 text-gray-400">
+                  <span className="ml-1 text-gray-600">
                     ({brand.product_count})
                   </span>
                 ) : null}
@@ -266,7 +266,7 @@ export default function FilterSidebar({
 
         <button
           onClick={() => clearFilter("brands")}
-          className="text-sm text-orange-500 hover:text-orange-600 mt-2"
+          className="text-sm text-orange-700 hover:text-orange-800 mt-2"
         >
           Clear Brands
         </button>

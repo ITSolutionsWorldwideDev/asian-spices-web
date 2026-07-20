@@ -113,7 +113,7 @@ export default function FlashSaleProductCard() {
         className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory py-4 px-2"
         style={{ scrollbarWidth: "none" }}
       >
-        {products.map((item) => {
+        {products.map((item, index) => {
           // 2️⃣ Locate current product in cart state if active
           const cartItem = cart?.find((c) => c.id === item.id);
 
@@ -140,7 +140,9 @@ export default function FlashSaleProductCard() {
                     }
                     alt={item.title}
                     fill
+                    sizes="300px"
                     className="object-cover transition-transform duration-300 hover:scale-110"
+                    priority={index < 2}
                   />
                 </div>
               </div>

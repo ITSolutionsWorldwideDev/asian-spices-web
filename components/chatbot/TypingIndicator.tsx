@@ -44,7 +44,7 @@ export function TypingIndicator({ phase }: TypingIndicatorProps) {
               muted
               loop
               playsInline
-              preload="auto"
+              preload="none"
               aria-hidden="true"
             />
           </div>
