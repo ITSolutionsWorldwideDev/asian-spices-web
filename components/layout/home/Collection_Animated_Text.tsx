@@ -1,49 +1,34 @@
-import React, { FC } from "react";
+import { FC } from "react";
+
+/** White fill + black outline — matches the mock slogan */
+const outlineStyle = {
+  color: "#ffffff",
+  WebkitTextStroke: "2px #111111",
+  paintOrder: "stroke fill" as const,
+};
 
 const CollectionAnimatedText: FC = () => {
   return (
-    <div className="text-center md:text-left">
-      <h1 className=" leading-tight animate-color-cycle">
-        <span
-          className="text-6xl 2xl:text-[8rem]  font-black  text-transparent 
-                        [text-stroke:2px_black] [-webkit-text-stroke:2px_black] 
-                        mr-7"
-          style={{ color: "var(--color-one, #94a3b8)" }}
-        >
-          ONE
+    <div className="flex h-full w-full items-center text-left">
+      <h2 className="w-full font-black uppercase leading-[0.95] tracking-tight">
+        <span className="block">
+          <span className="text-5xl text-amber-500 sm:text-6xl xl:text-7xl 2xl:text-[5.5rem]">
+            One{" "}
+          </span>
+          <span
+            className="text-5xl sm:text-6xl xl:text-7xl 2xl:text-[5.5rem]"
+            style={outlineStyle}
+          >
+            Spice
+          </span>
         </span>
-        {/* //    */}
-
         <span
-          className="text-6xl 2xl:text-[8rem]  font-black text-transparent 
-                        [text-stroke:2px_black] [-webkit-text-stroke:2px_black] 
-                        text-shadow-outline"
-          style={{ color: "var(--color-two, #94a3b8)" }}
+          className="mt-1 block text-5xl sm:text-6xl xl:text-7xl 2xl:text-[5.5rem]"
+          style={outlineStyle}
         >
-          SPICE
+          At A Time.
         </span>
-        {/* //    */}
-
-        <br />
-        <span
-          className="text-6xl 2xl:text-[8rem]  font-black text-transparent 
-                        [text-stroke:2px_black] [-webkit-text-stroke:2px_black] 
-                        text-shadow-outline mr-7"
-          style={{ color: "var(--color-three, #94a3b8)" }}
-        >
-          AT A
-        </span>
-        {/* //    */}
-
-        <span
-          className="text-6xl 2xl:text-[8rem]  font-black text-transparent 
-                        [text-stroke:2px_black] [-webkit-text-stroke:2px_black] 
-                        text-shadow-outline"
-          style={{ color: "var(--color-four, #94a3b8)" }}
-        >
-          TIME
-        </span>
-      </h1>
+      </h2>
     </div>
   );
 };

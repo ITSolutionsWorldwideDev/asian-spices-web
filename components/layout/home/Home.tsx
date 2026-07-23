@@ -43,8 +43,8 @@ export default function Homei() {
           className="object-cover opacity-90"
           priority={false}
         />
-        <div className="bg-white/80 relative py-20">
-          <div className="container mx-auto">
+        <div className="relative bg-white/80 px-3 py-10 sm:px-4 sm:py-14 md:py-20">
+          <div className="container mx-auto max-w-full">
             <HeadingDescription
               heading="Explore Our Collection"
               description="Discover authentic recipes from across Asia, each category carefully curated for quality and flavor."
@@ -69,7 +69,7 @@ export default function Homei() {
 
       <DeferredMount
         rootMargin="250px"
-        fallback={<SectionSkeleton className="h-[800px]" />}
+        fallback={<SectionSkeleton className="h-[480px]" />}
       >
         <Smart_Appliances />
       </DeferredMount>

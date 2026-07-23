@@ -4,137 +4,116 @@ const features = [
   {
     title: "100% Organic",
     desc: "Certified organic and sustainably sourced from trusted farms across Asia.",
-    iconBg: "bg-green-500",
+    iconBg: "bg-linear-to-b from-green-400 to-green-600",
     icon: "Vector (1).png",
   },
   {
     title: "Premium Quality",
     desc: "Certified organic and sustainably sourced from trusted farms across Asia.",
-    iconBg: "bg-orange-400",
+    iconBg: "bg-linear-to-b from-amber-300 to-orange-500",
     icon: "fluent_premium-12-filled.png",
   },
   {
     title: "Fast Delivery",
     desc: "Certified organic and sustainably sourced from trusted farms across Asia.",
-    iconBg: "bg-blue-500",
+    iconBg: "bg-linear-to-b from-sky-400 to-blue-600",
     icon: "material-symbols_delivery-truck-speed-rounded.png",
   },
   {
     title: "Quality Guarantee",
     desc: "Certified organic and sustainably sourced from trusted farms across Asia.",
-    iconBg: "bg-purple-500",
+    iconBg: "bg-linear-to-b from-violet-400 to-purple-600",
     icon: "mingcute_medal-fill.png",
   },
   {
     title: "Fair Trade",
     desc: "Certified organic and sustainably sourced from trusted farms across Asia.",
-    iconBg: "bg-pink-500",
+    iconBg: "bg-linear-to-b from-pink-400 to-rose-500",
     icon: "hugeicons_trade-up.png",
   },
   {
     title: "Fresh & Potent",
     desc: "Certified organic and sustainably sourced from trusted farms across Asia.",
-    iconBg: "bg-orange-600",
+    iconBg: "bg-linear-to-b from-orange-500 to-red-600",
     icon: "mdi_thunder.png",
   },
 ];
 
 export default function WhyChooseUs() {
   return (
-    <section className=" container mx-auto overflow-hidden ">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-        {/* Left Section */}
-        <div className="grid sm:grid-cols-2 gap-6 lg:p-10">
-          {features.map((item, index) => (
-            <div
-              key={index}
-              className="flex justify-center items-center gap-4 bg-white p-6 rounded-2xl shadow-md hover:shadow-2xl transition hover:scale-110"
-            >
+    <section className="overflow-visible bg-[#f2f2f2] pt-10 pb-24 sm:pt-12 sm:pb-28 md:pt-14 md:pb-32">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
+          {/* Left — 2×3 feature cards */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4">
+            {features.map((item) => (
               <div
-                className={`w-50 h-20 ${item.iconBg} rounded-xl flex items-center justify-center text-white text-xl`}
+                key={item.title}
+                className="flex items-center gap-3.5 rounded-2xl bg-white px-4 py-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
               >
+                <div
+                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl sm:h-[52px] sm:w-[52px] ${item.iconBg}`}
+                >
+                  <Image
+                    src={`/assets/home/why_choose_us/${item.icon}`}
+                    alt=""
+                    width={24}
+                    height={24}
+                    className="h-6 w-6 object-contain brightness-0 invert"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <h4 className="text-[15px] font-bold leading-tight text-gray-900">
+                    {item.title}
+                  </h4>
+                  <p className="mt-1 text-xs leading-snug text-gray-500">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Right — matches left height; spices overflow below card only */}
+          <div className="relative mx-auto w-full max-w-[400px] lg:mx-0 lg:max-w-none">
+            {/* Amber plate behind */}
+            <div
+              aria-hidden
+              className="absolute inset-0 rounded-2xl bg-[#e8b86d] rotate-[7deg]"
+            />
+
+            {/* Black card — stretches with left column */}
+            <div className="relative z-10 flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl bg-neutral-950 shadow-xl lg:min-h-0">
+              <div className="pointer-events-none absolute inset-0 opacity-[0.12]">
                 <Image
-                  src={`/assets/home/why_choose_us/${item.icon}`}
-                  alt={item.title}
-                  width={40}
-                  height={60}
+                  src="/assets/home/collections/collection-bg.webp"
+                  alt=""
+                  fill
+                  sizes="400px"
+                  className="object-cover"
+                  loading="lazy"
                 />
               </div>
 
-              <div>
-                <h4 className="font-semibold text-gray-900 text-lg">
-                  {item.title}
-                </h4>
-                <p className="text-sm text-gray-500 mt-1 leading-relaxed">
-                  {item.desc}
-                </p>
+              <div className="relative z-10 px-5 pt-8 text-center sm:pt-10 lg:pt-12">
+                <h2 className="text-[1.75rem] font-bold leading-[1.15] sm:text-3xl lg:text-[2.15rem]">
+                  <span className="block text-orange-400">Why Choose</span>
+                  <span className="block text-white">Asian Spices</span>
+                </h2>
               </div>
-            </div>
-          ))}
-        </div>
 
-        {/* Right Section */}
-        <div
-          className="
-            relative
-             w-full
-            
-             min-h-[420px]
-            flex
-            justify-center
-            lg:justify-end
-            bg-amber-300
-            rounded-2xl
-            rotate-3
-            lg:rotate-5
-          "
-        >
-          <div
-            className="
-              relative
-              w-full
-              rounded-2xl
-              bg-black
-              -rotate-3
-              lg:-rotate-5
-              overflow-hidden
-            "
-          >
-            {/* Text */}
-            <div className="flex justify-center mt-8 lg:mt-10 px-4 text-center lg:text-left">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-                <span className="text-orange-400">Why Choose</span>
-                <br />
-                <span className="text-white">Asian Spices</span>
-              </h2>
+              <div className="flex-1" aria-hidden />
             </div>
 
-            {/* Image */}
-            <div
-              className="
-                absolute
-                -bottom-1/7
-                right-1/4
-                mt-8
-                flex
-                justify-center
-                lg:absolute
-                lg:-bottom-1/3
-                lg:left-0
-                lg:right-1/8
-              "
-            >
+            {/* Only the spice image hangs below the black card */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex translate-y-[42%] justify-center">
               <Image
                 src="/assets/home/why_choose_us/e901a8e43e221c4b953024f51bc6d8ba79e7809c.png"
-                alt="Why Choose Asian Spices"
-                width={520}
-                height={500}
-                className="
-                  object-contain
-                  w-[260px]
-                  sm:w-[340px]
-                  lg:w-[520px]
-                "
+                alt="Assortment of spices"
+                width={640}
+                height={520}
+                className="h-auto w-[95%] max-w-[400px] object-contain"
+                loading="lazy"
               />
             </div>
           </div>

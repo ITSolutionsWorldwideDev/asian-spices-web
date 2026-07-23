@@ -1,45 +1,43 @@
 // components/layout/home/Smart_Appliances.tsx
 
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import LazyVideo from "@/components/ui/LazyVideo";
+
+const banners = [
+  {
+    src: "/assets/home/smart_appliances/slow-cooker-banner.png",
+    alt: "New Slow Cooker by Signora — pre-order now",
+    href: "/kitchen-appliances",
+  },
+  {
+    src: "/assets/home/smart_appliances/summer-sale-banner.png",
+    alt: "Summer Sale — Cool Tech, Hot Prices",
+    href: "/kitchen-appliances",
+  },
+] as const;
 
 const Smart_Appliances: React.FC = () => {
   return (
-    <div className="relative min-h-[800px] overflow-hidden container mx-auto border-[8px] border-amber-500 rounded-2xl bg-black">
-      <LazyVideo
-        mode="lazy"
-        src="/assets/home/smart_appliances/Comp 1_6.mp4"
-        className="absolute inset-0 h-full w-full object-cover z-0"
-        rootMargin="150px"
-      />
-
-      <div className="relative z-10 flex min-h-[800px] items-center justify-center text-white p-4 bg-black/20">
-        <div className="max-w-xl text-center">
-          <h2 className="text-5xl md:text-6xl font-extrabold leading-tight">
-            Smart Appliances.
-            <br />
-            <span className="text-orange-400">Smarter </span>
-            <span className="text-white"> Living.</span>
-          </h2>
-          <p className="mt-4 text-lg text-gray-100">
-            Smart, stylish, durable appliances designed to simplify cooking,
-            save time, inspire creativity, and bring families together every
-            day.
-          </p>
-          <div className="flex justify-center mt-8">
-            <Link href={`/kitchen-appliances`}>
-              <button
-                type="button"
-                className="px-8 py-3 bg-white cursor-pointer text-gray-900 font-semibold rounded-lg shadow-lg hover:bg-black hover:text-white transition duration-300"
-              >
-                Shop Appliances
-              </button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
+    <section className="container mx-auto my-10 space-y-5 px-3 sm:my-14 sm:space-y-6 sm:px-4 md:my-16 md:space-y-8">
+      {banners.map((banner) => (
+        <Link
+          key={banner.src}
+          href={banner.href}
+          className="group relative block w-full overflow-hidden rounded-2xl shadow-md transition hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+        >
+          <Image
+            src={banner.src}
+            alt={banner.alt}
+            width={1600}
+            height={600}
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px"
+            className="h-auto w-full object-cover transition duration-500 group-hover:scale-[1.01]"
+            loading="lazy"
+          />
+        </Link>
+      ))}
+    </section>
   );
 };
 

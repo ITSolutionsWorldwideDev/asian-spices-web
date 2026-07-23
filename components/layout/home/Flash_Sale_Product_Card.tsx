@@ -4,7 +4,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { TfiTimer } from "react-icons/tfi";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { useCartStore } from "@/store/useCartStore";
 import { useSession } from "next-auth/react";
@@ -34,15 +33,22 @@ export default function FlashSaleProductCard() {
           const basePrice = Number(p.base_price);
           const salePrice = Number(p.sale_price || basePrice);
           const rawSave = basePrice - salePrice;
+          const discountPct =
+            basePrice > 0 ? Math.round((rawSave / basePrice) * 100) : 0;
 
-          let offBadge = "SALE";
+          let offBadge = "HOT DEAL";
           if (p.discount_type === "percentage" || p.discount_type === "Bulk") {
-            offBadge =
-              p.discount_value && p.discount_value !== "NaN"
-                ? `${p.discount_value}% OFF`
-                : "7.00% OFF"; // fallback matching video
+            const pct = Number(p.discount_value);
+            if (!isNaN(pct) && pct > 0) {
+              // Match mock: very strong deals can show HOT DEAL
+              offBadge = pct >= 50 ? "HOT DEAL" : `${pct}% OFF`;
+            } else if (discountPct > 0) {
+              offBadge = discountPct >= 50 ? "HOT DEAL" : `${discountPct}% OFF`;
+            }
           } else if (p.discount_type === "fixed") {
             offBadge = `€${p.discount_value} OFF`;
+          } else if (discountPct > 0) {
+            offBadge = discountPct >= 50 ? "HOT DEAL" : `${discountPct}% OFF`;
           }
 
           return {
@@ -85,52 +91,62 @@ export default function FlashSaleProductCard() {
 
   if (loading)
     return (
-      <div className="text-center py-12 text-sm text-gray-500 font-medium">
+      <div className="py-12 text-center text-sm font-medium text-white/80">
         Loading Deals...
       </div>
     );
   if (products.length === 0) return null;
 
   return (
-    <div className="relative group w-full">
-      {/* Slider Controls */}
+    <div className="group relative w-full min-w-0">
+      {/* Slider Controls — inset so they stay on-screen on mobile */}
       <button
+        type="button"
+        aria-label="Previous deals"
         onClick={() => scroll("left")}
-        className="absolute left-[-20px] top-1/2 -translate-y-1/2 z-40 bg-black p-2 rounded-full shadow-md border border-gray-100 opacity-0 group-hover:opacity-100 transition"
+        className="absolute left-0 top-1/2 z-40 -translate-y-1/2 rounded-full border border-gray-100 bg-black p-1.5 opacity-100 shadow-md transition sm:left-1 sm:p-2 md:left-0 md:opacity-0 md:group-hover:opacity-100"
       >
-        <ChevronLeft size={20} />
+        <ChevronLeft size={18} />
       </button>
       <button
+        type="button"
+        aria-label="Next deals"
         onClick={() => scroll("right")}
-        className="absolute right-[-20px] top-1/2 -translate-y-1/2 z-40 bg-black p-2 rounded-full shadow-md border border-gray-100 opacity-0 group-hover:opacity-100 transition"
+        className="absolute right-0 top-1/2 z-40 -translate-y-1/2 rounded-full border border-gray-100 bg-black p-1.5 opacity-100 shadow-md transition sm:right-1 sm:p-2 md:right-0 md:opacity-0 md:group-hover:opacity-100"
       >
-        <ChevronRight size={20} />
+        <ChevronRight size={18} />
       </button>
 
       {/* Horizontal Scroll Box */}
       <div
         ref={sliderRef}
-        className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory py-4 px-2"
-        style={{ scrollbarWidth: "none" }}
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-8 py-3 scrollbar-hide sm:gap-4 sm:px-10 sm:py-4 md:justify-center md:gap-6 md:px-12"
+        style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
       >
         {products.map((item, index) => {
-          // 2️⃣ Locate current product in cart state if active
           const cartItem = cart?.find((c) => c.id === item.id);
 
           return (
             <div
               key={item.id}
-              className="bg-white text-black rounded-2xl p-5 shadow-lg relative min-w-[300px] max-w-[350px] flex-shrink-0 snap-start border border-gray-50"
+              className="relative w-[min(280px,78vw)] max-w-[350px] flex-shrink-0 snap-center rounded-2xl border border-gray-50 bg-white p-4 text-black shadow-lg sm:w-[300px] sm:snap-start sm:p-5"
             >
               {/* Image Box */}
               <div className="relative">
-                <span className="absolute z-20 top-3 left-3 bg-red-600 text-white text-xs px-2.5 py-1 font-bold rounded-full uppercase tracking-wider">
+                <span className="absolute left-2 top-2 z-20 rounded-md bg-red-600 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white sm:left-3 sm:top-3 sm:text-[11px]">
                   {item.off}
                 </span>
 
                 <div
-                  className="relative h-48 w-full overflow-hidden rounded-xl cursor-pointer"
-                  onMouseEnter={() => setHoveredId(item.id)}
+                  className="relative h-40 w-full cursor-pointer overflow-hidden rounded-xl sm:h-48"
+                  onMouseEnter={() => {
+                    if (
+                      typeof window !== "undefined" &&
+                      window.matchMedia("(hover: hover)").matches
+                    ) {
+                      setHoveredId(item.id);
+                    }
+                  }}
                 >
                   <Image
                     src={
@@ -140,37 +156,35 @@ export default function FlashSaleProductCard() {
                     }
                     alt={item.title}
                     fill
-                    sizes="300px"
+                    sizes="(max-width: 640px) 78vw, 300px"
                     className="object-cover transition-transform duration-300 hover:scale-110"
                     priority={index < 2}
                   />
                 </div>
               </div>
 
-              {/* Content Labels */}
-              <h3 className="mt-4 text-gray-800 font-semibold text-lg truncate">
+              <h3 className="mt-3 truncate text-base font-semibold text-gray-800 sm:mt-4 sm:text-lg">
                 {item.title}
               </h3>
 
-              <div className="mt-2 flex items-center gap-2">
-                <span className="text-orange-500 text-xl font-bold">
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <span className="text-lg font-bold text-orange-500 sm:text-xl">
                   €{item.base_price.toFixed(2)}
                 </span>
-                <span className="text-gray-400 line-through text-sm">
+                <span className="text-sm text-gray-400 line-through">
                   €{item.oldPrice.toFixed(2)}
                 </span>
               </div>
 
-              <p className="text-green-600 text-xs font-semibold mt-1.5 flex items-center">
-                <TfiTimer className="mr-1.5" />
+              <p className="mt-1.5 text-xs font-semibold text-green-600">
                 You save {item.save}
               </p>
 
               {cartItem ? (
-                <div className="mt-4 flex items-center justify-between border border-gray-200 rounded-xl overflow-hidden h-[44px]">
+                <div className="mt-4 flex h-[44px] items-center justify-between overflow-hidden rounded-xl border border-gray-200">
                   <button
                     onClick={() => decreaseQty(item.id, isLoggedIn)}
-                    className="px-4 h-full text-xl font-medium hover:bg-gray-50 active:bg-gray-100 transition w-1/4 select-none cursor-pointer"
+                    className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
                   >
                     −
                   </button>
@@ -183,11 +197,11 @@ export default function FlashSaleProductCard() {
                       if (isNaN(value) || value < 1) return;
                       setQty(item.id, value, isLoggedIn);
                     }}
-                    className="w-2/4 text-center text-sm font-semibold outline-none bg-transparent"
+                    className="w-2/4 bg-transparent text-center text-sm font-semibold outline-none"
                   />
                   <button
                     onClick={() => increaseQty(item.id, isLoggedIn)}
-                    className="px-4 h-full text-xl font-medium hover:bg-gray-50 active:bg-gray-100 transition w-1/4 select-none cursor-pointer"
+                    className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
                   >
                     +
                   </button>
@@ -199,7 +213,7 @@ export default function FlashSaleProductCard() {
                       {
                         id: item.id,
                         title: item.title,
-                        base_price: Number(item.base_price || 0), // maps the valid discounted value
+                        base_price: Number(item.base_price || 0),
                         oldPrice: Number(item.base_price || 0),
                         discount_value: Number(item.oldPrice || 0),
                         discount_type: item.discount_type,
@@ -212,17 +226,16 @@ export default function FlashSaleProductCard() {
                       isLoggedIn,
                     );
                   }}
-                  className="mt-4 w-full h-[44px] bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl transition cursor-pointer text-sm tracking-wide shadow-sm active:scale-[0.98]"
+                  className="mt-4 h-[44px] w-full cursor-pointer rounded-xl bg-orange-500 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98]"
                 >
-                  Grab This Deal
+                  Grab This Now
                 </button>
               )}
 
-              {/* Hover Frame Component Overlay */}
-
+              {/* Desktop hover overlay only */}
               {hoveredId === item.id && (
                 <div
-                  className="absolute -top-4 -left-4 -right-4 bg-white rounded-2xl z-50 shadow-2xl p-4 border border-gray-100 min-w-[340px] max-w-[420px]"
+                  className="absolute -left-2 -right-2 -top-2 z-50 hidden rounded-2xl border border-gray-100 bg-white p-4 shadow-2xl md:block md:min-w-[320px] lg:min-w-[340px]"
                   onMouseLeave={() => setHoveredId(null)}
                 >
                   <Flash_Sale_Hover_product_Card
