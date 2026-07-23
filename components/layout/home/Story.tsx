@@ -8,36 +8,17 @@ const Story = () => {
     <div className="container mx-auto overflow-x-hidden px-4 py-12 sm:px-6 lg:px-8">
       <section className="grid items-start gap-10 xl:grid-cols-2 xl:gap-12">
         <div className="space-y-6">
-          <div className="relative h-[360px] overflow-hidden rounded-xl pl-6 sm:h-[420px] sm:pl-10 md:h-[450px]">
+          {/* Full 100% Organic banner — whole image, no empty bg */}
+          <div className="relative w-full overflow-hidden rounded-2xl">
             <Image
-              src="/assets/home/our_story/d10f2c08d6ed5db2264f1e5628f7f832a2959af1 (1)-min.webp"
-              alt="A farmer proudly standing in a field"
-              fill
+              src="/assets/home/our_story/organic-100-banner.png"
+              alt="100% Organic"
+              width={510}
+              height={306}
               sizes="(max-width: 1280px) 100vw, 50vw"
-              className="rounded-xl object-cover"
+              className="h-auto w-full object-contain"
               loading="lazy"
             />
-            <div className="absolute inset-0 z-[1] rounded-xl bg-green-600/90" />
-            <div className="relative z-[2] flex h-full items-center justify-center rounded-xl p-6 sm:p-8">
-              <h2 className="absolute top-6 left-0 z-[3] text-4xl font-bold text-white sm:top-7 sm:text-6xl lg:text-7xl xl:text-8xl">
-                100%
-                <br />
-                Organic
-              </h2>
-              <div
-                className="absolute right-0 bottom-0 z-[3] max-h-full"
-                style={{ clipPath: "inset(0 0 0 0)" }}
-              >
-                <Image
-                  src={`/assets/home/our_story/farmer.png`}
-                  alt="our story"
-                  height={450}
-                  width={230}
-                  className="h-[300px] w-auto object-contain object-bottom sm:h-[380px] md:h-[420px]"
-                  loading="lazy"
-                />
-              </div>
-            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 sm:gap-6">
