@@ -1,7 +1,7 @@
 const announcements = [
   "100% Organic Certified",
   "Free Shipping Over €50",
-  "30-Day Money Back",
+  "3-Day Money Back",
   "4.9/5 Rating (10K+ Reviews)",
 ];
 

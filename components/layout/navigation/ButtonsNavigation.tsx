@@ -1,69 +1,59 @@
-// apps/web/components/layout/navigation/ButtonsNavigation.tsx
-
 "use client";
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
-import { User, CircleUserRound } from "lucide-react";
-import UpperSelection from "./UpperSelection";
+import { CircleUserRound } from "lucide-react";
 
 const ButtonsNavigation = () => {
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
 
   if (status === "loading") {
-    return null;
+    return <div className="h-9 w-20 shrink-0" aria-hidden />;
   }
 
   return (
-    <div className="hidden lg:flex items-center space-x-3">
-      {!session && (
-        <>
-          <div className="hover:rotate-10 bg-white rounded-full hover:text-white">
-            <div className="hover:bg-black hover:-rotate-10 px-6 py-3 rounded-full">
-              <Link href="/login" className="font-bold">
-                Login
-              </Link>
-              {/* {" / "}
-              <Link href="/signup" className="font-bold">
-                Signup
-              </Link> */}
-            </div>
-          </div>
-        </>
-      )}
-
-      {session && (
+    <div className="shrink-0">
+      {!session ? (
+        <Link
+          href="/login"
+          className="flex items-center gap-1.5 rounded-full border-2 border-orange-500 px-4 py-1.5 text-sm font-semibold text-gray-800 transition hover:bg-orange-50"
+        >
+          <CircleUserRound className="h-4 w-4" strokeWidth={1.75} />
+          Login
+        </Link>
+      ) : (
         <div className="relative">
           <button
+            type="button"
             onClick={() => setOpen(!open)}
-            className="bg-white p-2 rounded-full font-bold ml-2 cursor-pointer"
+            className="flex items-center gap-1.5 rounded-full border-2 border-orange-500 px-4 py-1.5 text-sm font-semibold text-gray-800 transition hover:bg-orange-50"
           >
-            <User size={24} />
+            <CircleUserRound className="h-4 w-4" strokeWidth={1.75} />
+            Account
           </button>
 
           {open && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow">
+            <div className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
               <Link
                 href="/account"
-                className="block px-4 py-2 hover:bg-gray-100"
+                className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                 onClick={() => setOpen(false)}
               >
                 My Account
               </Link>
-
               <Link
                 href="/account/orders"
-                className="block px-4 py-2 hover:bg-gray-100"
+                className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                 onClick={() => setOpen(false)}
               >
                 Orders
               </Link>
-
               <button
+                type="button"
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                className="w-full px-4 py-2.5 text-left text-sm text-red-500 hover:bg-gray-50"
               >
                 Logout
               </button>
@@ -71,15 +61,6 @@ const ButtonsNavigation = () => {
           )}
         </div>
       )}
-
-      <div className="hover:rotate-10 bg-white rounded-full hover:text-white">
-        <div className="hover:bg-black hover:-rotate-10 px-6 py-3 rounded-full">
-          <Link href="/contact-us" className="font-bold whitespace-nowrap">
-            Contact Us
-          </Link>
-        </div>
-      </div>
-      <UpperSelection />
     </div>
   );
 };

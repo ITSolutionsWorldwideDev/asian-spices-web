@@ -1,108 +1,116 @@
-// apps/web/components/layout/navigation/UpperSelection.tsx
-
 "use client";
+
 import { useGlobalStore } from "@/store/useGlobalStore";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import CountryFlag from "@/components/ui/CountryFlag";
+import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function UpperSelection() {
   const router = useRouter();
   const { countries, selectedCountry, setSelectedCountry } = useGlobalStore();
-
   const { currencies, selectedCurrency, setSelectedCurrency, fetchCurrencies } =
     useCurrencyStore();
 
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [currencyOpen, setCurrencyOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  const selectedCurrencyData = currencies.find((c) => c.code === selectedCurrency);
 
   useEffect(() => {
     fetchCurrencies();
-
-    // Close dropdown when clicking anywhere outside of it
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [fetchCurrencies]);
 
+  useEffect(() => {
+    const close = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setCountryOpen(false);
+        setCurrencyOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
+
   return (
-    <nav className="flex items-center justify-between px-6 container mx-auto py-2">
-      <div></div>
+    <div
+      ref={ref}
+      className="flex shrink-0 items-center rounded-full bg-[#e8dfd0] px-1 py-1"
+    >
+      {/* Country */}
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => { setCountryOpen(!countryOpen); setCurrencyOpen(false); }}
+          className="flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold text-gray-800 transition hover:bg-white/40"
+        >
+          <CountryFlag iso2={selectedCountry || "NL"} size={16} />
+          <span className="uppercase">{selectedCountry || "NL"}</span>
+          <ChevronDown className="h-3 w-3 text-gray-500" />
+        </button>
 
-      <div className="flex flex-col gap-2">
-        <div className="relative" ref={dropdownRef}>
-          <button
-            type="button"
-            aria-label="Select country"
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center gap-2 border px-3 py-1.5 text-xs font-semibold rounded-md bg-white hover:bg-gray-50 transition min-w-[70px] justify-between"
-          >
-            <div className="flex items-center gap-1.5">
-              <CountryFlag iso2={selectedCountry} size={18} />
-              <span className="uppercase text-gray-700">
-                {selectedCountry || "NL"}
-              </span>
-            </div>
-            <span className="text-[10px] text-gray-400">
-              {isOpen ? "▲" : "▼"}
-            </span>
-          </button>
-
-          {isOpen && (
-            <div className="absolute right-0 mt-1 w-28 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto z-50 py-1">
-              {countries.length === 0 && (
-                <div className="px-3 py-2 text-xs text-gray-400">
-                  No options
-                </div>
-              )}
-              {countries.map((c) => (
+        {countryOpen && (
+          <div className="absolute right-0 top-full z-[200] mt-2 max-h-56 w-44 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+            {countries.length === 0 ? (
+              <p className="px-3 py-2 text-xs text-gray-400">No options</p>
+            ) : (
+              countries.map((c) => (
                 <button
                   key={c.id}
                   type="button"
                   onClick={async () => {
-                    setIsOpen(false);
+                    setCountryOpen(false);
                     await setSelectedCountry(c.iso2);
                     router.refresh();
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 text-xs text-left transition hover:bg-gray-50 ${
-                    selectedCountry === c.iso2
-                      ? "bg-blue-50/50 font-bold text-blue-600"
-                      : "text-gray-700"
+                  className={`flex w-full items-center gap-2 border-b border-gray-100 px-3 py-2 text-left text-xs last:border-b-0 hover:bg-gray-50 ${
+                    selectedCountry === c.iso2 ? "font-semibold text-gray-900" : "text-gray-700"
                   }`}
                 >
-                  <CountryFlag iso2={c.iso2} size={18} />
-                  <span className="uppercase">{c.iso2}</span>
+                  <CountryFlag iso2={c.iso2} size={15} />
+                  {c.name}
                 </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <label className="sr-only" htmlFor="currency-select">
-          Currency
-        </label>
-        <select
-          id="currency-select"
-          value={selectedCurrency}
-          onChange={(e) => setSelectedCurrency(e.target.value)}
-          className="border px-3 py-1 text-xs rounded-md bg-white cursor-pointer"
-          aria-label="Select currency"
-        >
-          {currencies.map((c) => (
-            <option key={c.id} value={c.code}>
-              {c.symbol} - {c.code}
-            </option>
-          ))}
-        </select>
+              ))
+            )}
+          </div>
+        )}
       </div>
-    </nav>
+
+      {/* Divider */}
+      <span className="mx-0.5 h-4 w-px bg-gray-400/40" aria-hidden />
+
+      {/* Currency */}
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => { setCurrencyOpen(!currencyOpen); setCountryOpen(false); }}
+          className="flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold text-gray-800 transition hover:bg-white/40"
+        >
+          <span>
+            {selectedCurrencyData?.symbol ?? "€"} {selectedCurrency || "EUR"}
+          </span>
+          <ChevronDown className="h-3 w-3 text-gray-500" />
+        </button>
+
+        {currencyOpen && (
+          <div className="absolute right-0 top-full z-[200] mt-2 max-h-56 w-36 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+            {currencies.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => { setSelectedCurrency(c.code); setCurrencyOpen(false); }}
+                className={`flex w-full items-center gap-1.5 border-b border-gray-100 px-3 py-2 text-left text-xs last:border-b-0 hover:bg-gray-50 ${
+                  selectedCurrency === c.code ? "font-semibold text-gray-900" : "text-gray-700"
+                }`}
+              >
+                {c.symbol} {c.code}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

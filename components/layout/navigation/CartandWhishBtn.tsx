@@ -1,50 +1,41 @@
-// apps/web/components/layout/navigation/CartandWhishBtn.tsx
-
 "use client";
-import React from "react";
-import { Heart, ShoppingBag } from "lucide-react";
-import { useState } from "react";
+
 import Link from "next/link";
+import { Heart, ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
 
 const CartandWhishBtn = () => {
-  const [isCartOpen, setCartOpen] = useState<boolean>(false);
   const { cart } = useCartStore();
-
   const itemInCart = cart.length;
-  return (
-    <div className="lg:flex items-center space-x-3 hidden ">
-      <div
-        className="bg-white rounded-full cursor-pointer "
-        onClick={() => setCartOpen(!isCartOpen)}
-      >
-        <Link href={"/wishlist"} aria-label="Wishlist">
-          <button
-            type="button"
-            aria-label="Wishlist"
-            className="px-2 py-2    font-bold rounded-full shadow-lg hover:shadow-xl   focus:ring-4 focus:ring-white/50 cursor-pointer"
-          >
-            <Heart />
-          </button>
-        </Link>
-      </div>
 
-      <div className="bg-white rounded-full cursor-pointer relative">
-        <Link href={"/cart"} aria-label="Shopping cart">
-          <button
-            type="button"
-            aria-label="Shopping cart"
-            className="px-3 py-3 font-bold rounded-full shadow-lg hover:shadow-xl   focus:ring-4 focus:ring-white/50 cursor-pointer"
-          >
-            <ShoppingBag className="h-5 w-5" />
-          </button>
-        </Link>
+  return (
+    <div className="flex shrink-0 items-center gap-1">
+      <Link
+        href="/wishlist"
+        aria-label="Wishlist"
+        className="flex flex-col items-center px-2.5 py-1 text-gray-700 transition hover:text-orange-500"
+      >
+        <Heart className="h-5 w-5" strokeWidth={1.75} />
+        <span className="mt-0.5 text-[10px] font-medium leading-none tracking-tight">
+          Wishlist
+        </span>
+      </Link>
+
+      <Link
+        href="/cart"
+        aria-label="Cart"
+        className="relative flex flex-col items-center px-2.5 py-1 text-gray-700 transition hover:text-orange-500"
+      >
+        <ShoppingCart className="h-5 w-5" strokeWidth={1.75} />
+        <span className="mt-0.5 text-[10px] font-medium leading-none tracking-tight">
+          Cart
+        </span>
         {itemInCart > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          <span className="absolute right-1 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white">
             {itemInCart}
           </span>
         )}
-      </div>
+      </Link>
     </div>
   );
 };

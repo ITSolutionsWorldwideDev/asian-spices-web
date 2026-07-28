@@ -1,10 +1,9 @@
 "use client";
+
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ChevronDown, Menu, Heart, Home, ShoppingBag, X } from "lucide-react";
-import Cart from "@/components/ui/Cart";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { createPortal } from "react-dom";
-
 import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/useCartStore";
 
@@ -23,78 +22,71 @@ interface NavChildren {
 
 interface NavLink {
   name: string;
-  hreflink?: string | undefined;
+  hreflink?: string;
   children?: NavChildren[];
 }
 
 const SHOP_CATEGORIES = [
-  {
-    heading: "Asian Spices & Seasonings",
-    slug: "spices",
-  },
-  {
-    heading: "Kitchen Appliances & Cooking Tools",
-    slug: "kitchen-appliances",
-  },
-  {
-    heading: "Asian Foods & Beverages",
-    slug: "foods-beverages",
-  },
+  { heading: "Asian Spices & Seasonings", slug: "spices" },
+  { heading: "Kitchen Appliances & Cooking Tools", slug: "kitchen-appliances" },
+  { heading: "Asian Foods & Beverages", slug: "foods-beverages" },
 ] as const;
 
-type SubcategoryRow = {
-  id: string;
-  name: string;
-};
+type SubcategoryRow = { id: string; name: string };
 
-const ResponsiveNavigation = () => {
+interface ResponsiveNavigationProps {
+  mobileOnly?: boolean;
+}
+
+const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps) => {
   const [activeLink, setActiveLink] = useState<string>("");
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [mobileMenu, setMobileMenu] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [shopCategoryChildren, setShopCategoryChildren] = useState<
-    NavChildren[]
-  >(
+  const [shopCategoryChildren, setShopCategoryChildren] = useState<NavChildren[]>(
     SHOP_CATEGORIES.map((cat) => ({
       heading: cat.heading,
       category: [{ name: "View all", href: cat.slug }],
     })),
   );
   const [shopCategoriesLoading, setShopCategoriesLoading] = useState(false);
-
-  const handleClick = (name: string) => {
-    setActiveLink(name);
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const [mounted, setMounted] = useState(false);
 
   const { data: session } = useSession();
-
   const { cart } = useCartStore();
-
   const itemInCart = cart.length;
+
+  const handleClick = (name: string) => {
+    if (activeLink === name && isMenuOpen) {
+      setIsMenuOpen(false);
+      setActiveLink("");
+    } else {
+      setActiveLink(name);
+      setIsMenuOpen(true);
+    }
+  };
 
   useEffect(() => {
     document.body.style.overflow = mobileMenu ? "hidden" : "auto";
   }, [mobileMenu]);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     let cancelled = false;
 
     const loadShopSubcategories = async () => {
       setShopCategoriesLoading(true);
-
       try {
         const results = await Promise.all(
           SHOP_CATEGORIES.map(async (cat) => {
             const res = await fetch(`/api/category/${cat.slug}`);
             const json = await res.json();
-
-            const subcategories: SubcategoryRow[] = Array.isArray(
-              json?.subcategories,
-            )
+            const subcategories: SubcategoryRow[] = Array.isArray(json?.subcategories)
               ? json.subcategories
               : [];
-
             const categoryLinks: NavCategoryItem[] = [
               { name: "View all", href: cat.slug },
               ...subcategories.map((sub) => ({
@@ -102,31 +94,19 @@ const ResponsiveNavigation = () => {
                 href: `${cat.slug}?subcategories=${sub.id}`,
               })),
             ];
-
-            return {
-              heading: cat.heading,
-              category: categoryLinks,
-            } satisfies NavChildren;
+            return { heading: cat.heading, category: categoryLinks } satisfies NavChildren;
           }),
         );
-
-        if (!cancelled) {
-          setShopCategoryChildren(results);
-        }
+        if (!cancelled) setShopCategoryChildren(results);
       } catch (error) {
         console.error("Failed to load shop subcategories:", error);
       } finally {
-        if (!cancelled) {
-          setShopCategoriesLoading(false);
-        }
+        if (!cancelled) setShopCategoriesLoading(false);
       }
     };
 
     loadShopSubcategories();
-
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, []);
 
   const navLinks: NavLink[] = useMemo(
@@ -136,7 +116,6 @@ const ResponsiveNavigation = () => {
         hreflink: "#",
         children: shopCategoryChildren,
       },
-
       {
         name: "Healthy Living",
         hreflink: "#",
@@ -144,22 +123,10 @@ const ResponsiveNavigation = () => {
           {
             heading: "Health Benefits of Herbs",
             category: [
-              {
-                name: "Supports Immunity",
-                href: "healthyliving/supports-immunity",
-              },
-              {
-                name: "Aids Digestion",
-                href: "healthyliving/aids-digestion",
-              },
-              {
-                name: "Promotes Relaxation",
-                href: "healthyliving/promotes-relaxation",
-              },
-              {
-                name: "Enhances Energy Levels",
-                href: "healthyliving/enhances-energy-levels",
-              },
+              { name: "Supports Immunity", href: "healthyliving/supports-immunity" },
+              { name: "Aids Digestion", href: "healthyliving/aids-digestion" },
+              { name: "Promotes Relaxation", href: "healthyliving/promotes-relaxation" },
+              { name: "Enhances Energy Levels", href: "healthyliving/enhances-energy-levels" },
             ],
           },
           {
@@ -192,12 +159,6 @@ const ResponsiveNavigation = () => {
     ],
     [shopCategoryChildren],
   );
-  const [isCartOpen, setCartOpen] = useState<boolean>(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const activeDropdownLink = navLinks.find(
     (link) => link.children && activeLink === link.name && isMenuOpen,
@@ -208,56 +169,36 @@ const ResponsiveNavigation = () => {
     activeDropdownLink?.children &&
     createPortal(
       <div className="fixed inset-0 z-[100] hidden lg:block" role="presentation">
-        {/* Click-outside overlay */}
         <div
           className="absolute inset-0"
-          onClick={() => {
-            setIsMenuOpen(false);
-            setActiveLink("");
-          }}
+          onClick={() => { setIsMenuOpen(false); setActiveLink(""); }}
         />
-
-        {/* Centered mega menu — viewport based, never clipped by nav blur */}
         <div className="pointer-events-none absolute inset-x-0 top-24 flex justify-center px-4 sm:px-6">
           <div className="pointer-events-auto w-full max-w-5xl">
-            <div className="bg-gray-100 rounded-xl shadow-md border border-gray-200 overflow-hidden">
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-100 shadow-md">
               <div
                 className={`grid gap-8 p-6 ${
-                  activeDropdownLink.children.length >= 4
-                    ? "grid-cols-4"
-                    : "grid-cols-3"
+                  activeDropdownLink.children.length >= 4 ? "grid-cols-4" : "grid-cols-3"
                 }`}
               >
-                {activeDropdownLink.name === "Shop by Category" &&
-                shopCategoriesLoading ? (
-                  <p className="col-span-full text-sm text-gray-500">
-                    Loading categories...
-                  </p>
+                {activeDropdownLink.name === "Shop by Category" && shopCategoriesLoading ? (
+                  <p className="col-span-full text-sm text-gray-500">Loading categories...</p>
                 ) : (
                   activeDropdownLink.children.map((section, index) => (
                     <div key={index}>
                       <h3
-                        className={`font-semibold text-gray-800 mb-3 ${
-                          index === 0
-                            ? "border-b-2 border-blue-400 inline-block"
-                            : ""
+                        className={`mb-3 font-semibold text-gray-800 ${
+                          index === 0 ? "inline-block border-b-2 border-blue-400" : ""
                         }`}
                       >
                         {section.heading}
                       </h3>
-
-                      <ul className="space-y-2 text-gray-600 text-sm max-h-64 overflow-y-auto">
+                      <ul className="max-h-64 space-y-2 overflow-y-auto text-sm text-gray-600">
                         {section.category?.map((item, i) => (
-                          <li
-                            key={`${item.href}-${i}`}
-                            className="hover:text-black cursor-pointer transition-colors"
-                          >
+                          <li key={`${item.href}-${i}`} className="cursor-pointer transition-colors hover:text-black">
                             <Link
                               href={`/${item.href}`}
-                              onClick={() => {
-                                setIsMenuOpen(false);
-                                setActiveLink("");
-                              }}
+                              onClick={() => { setIsMenuOpen(false); setActiveLink(""); }}
                             >
                               {item.name}
                             </Link>
@@ -268,19 +209,11 @@ const ResponsiveNavigation = () => {
                   ))
                 )}
               </div>
-
-              <div className="bg-orange-100 px-6 py-4 rounded-b-xl">
+              <div className="rounded-b-xl bg-orange-100 px-6 py-4">
                 <Link
-                  href={
-                    activeDropdownLink.name === "Shop by Category"
-                      ? "/spices"
-                      : "/healthyliving/supports-immunity"
-                  }
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    setActiveLink("");
-                  }}
-                  className="text-orange-600 font-medium hover:underline"
+                  href={activeDropdownLink.name === "Shop by Category" ? "/spices" : "/healthyliving/supports-immunity"}
+                  onClick={() => { setIsMenuOpen(false); setActiveLink(""); }}
+                  className="font-medium text-orange-600 hover:underline"
                 >
                   View All {activeDropdownLink.name} Products →
                 </Link>
@@ -292,313 +225,212 @@ const ResponsiveNavigation = () => {
       document.body,
     );
 
-  return (
-    <>
-      {megaMenu}
-
-      {/* mobilemenubtn */}
-      <div className="lg:hidden">
+  // ── Mobile-only: renders the hamburger + slide-out panel ──
+  if (mobileOnly) {
+    return (
+      <>
         <button
+          type="button"
           onClick={() => setMobileMenu(!mobileMenu)}
-          className="text-white p-0 m-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 transition"
+          className="rounded-lg p-2 text-gray-800 transition focus:outline-none focus:ring-2 focus:ring-amber-400"
+          aria-label={mobileMenu ? "Close menu" : "Open menu"}
         >
-          {mobileMenu ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
+          {mobileMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
-      </div>
 
-      {/* desktop navigatio */}
-      <div className="hidden lg:flex items-center space-x-4 ">
-        {/* <ul className=" flex items-center rounded-full  py-2 space-x-6 bg-white/30 backdrop-blur shadow-inner p-10"> */}
-        <ul className="flex items-center rounded-full py-2 px-6 space-x-2 bg-white/30 backdrop-blur shadow-inner">
-          {navLinks.map((link) => (
-            <li key={link.name} className="relative">
-              {link.name.toLocaleLowerCase() == "home" ? (
-                <Link
-                  href={`/`}
-                  onClick={() => handleClick(link.name)}
-                  className={`relative px-2 py-2 text-sm font-semibold transition-colors duration-200
-                     ${activeLink === link.name ? "text-amber-300" : "text-white/90 hover:text-amber-200"}`}
-                >
-                  {/* {link.name} */}
-                  <Home size={16} />
-
-                  {activeLink === link.name && (
-                    <span className="absolute left-0 right-0 bottom-0 h-1 bg-amber-400 w-full mx-auto rounded-full"></span>
-                  )}
-                </Link>
-              ) : !link.children ? (
-                <Link
-                  href={`/${link?.hreflink
-                    ?.toLowerCase()
-                    .replace(/[^a-z0-9\s-]/g, "")
-                    .trim()
-                    .replace(/\s+/g, "")}`}
-                  onClick={() => handleClick(link.name)}
-                  className={`relative px-2 py-2 text-sm font-semibold transition-colors duration-200 flex text-center
-                     ${activeLink === link.name ? "text-amber-300" : "text-white/90 hover:text-amber-200"}`}
-                >
-                  {link.name}
-
-                  {activeLink === link.name && (
-                    <span className="absolute left-0 right-0 bottom-0 h-1 bg-amber-400 w-3/4 mx-auto rounded-full"></span>
-                  )}
-                </Link>
-              ) : (
-                <>
-                  {/* DROPDOWN BUTTON */}
-                  <button
-                    onClick={() => handleClick(link.name)}
-                    className={`relative px-2 py-2 text-sm font-semibold transition-colors duration-200 flex items-center
-                        ${activeLink === link.name ? "text-amber-300" : "text-white/90 hover:text-amber-200"}
-            `}
-                  >
-                    {link.name}
-                    <ChevronDown className="ml-1 h-4 w-4" />
-
-                    {activeLink === link.name && (
-                      <span className="absolute left-0 right-0 bottom-0 h-1 bg-amber-400 w-3/4 mx-auto rounded-full"></span>
-                    )}
-                  </button>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* mobile navigation */}
-      {mobileMenu && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/40 z-40"
-            onClick={() => setMobileMenu(false)}
-          />
-
-          <div className="fixed inset-x-0 top-[100px] z-50 bg-amber-900/95 shadow-xl rounded-b-lg lg:hidden max-h-[80vh] overflow-y-auto ">
-            {navLinks.map((link) => (
-              <div
-                key={link.name}
-                className="border-b border-amber-800 last:border-b-0"
-              >
-                {/* NON-DROPDOWN LINKS */}
-                {!link.children ? (
-                  <Link
-                    href={
-                      link.name.toLowerCase() === "home"
-                        ? "/"
-                        : `/${(link.hreflink || link.name)
-                            .toLowerCase()
-                            .replace(/[^a-z0-9\s-]/g, "")
-                            .trim()
-                            .replace(/\s+/g, "")}`
-                    }
-                    onClick={() => {
-                      handleClick(link.name);
-                      setMobileMenu(false);
-                    }}
-                    className={`block px-4 py-3 text-lg transition-colors duration-200 ${
-                      activeLink === link.name
-                        ? "text-amber-300 bg-amber-800/50"
-                        : "text-white/90 hover:bg-amber-800"
-                    }`}
-                  >
-                    {link.name}
-                  </Link>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => handleClick(link.name)}
-                      className={`w-full flex items-center justify-between px-4 py-3 text-lg transition-colors duration-200 ${
-                        activeLink === link.name
-                          ? "text-amber-300 bg-amber-800/50"
-                          : "text-white/90 hover:bg-amber-800"
+        {mobileMenu && (
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-black/40"
+              onClick={() => setMobileMenu(false)}
+            />
+            <div className="fixed inset-x-0 top-[72px] z-50 max-h-[80vh] overflow-y-auto rounded-b-lg bg-amber-900/95 shadow-xl lg:hidden">
+              {navLinks.map((link) => (
+                <div key={link.name} className="border-b border-amber-800 last:border-b-0">
+                  {!link.children ? (
+                    <Link
+                      href={
+                        link.name.toLowerCase() === "home"
+                          ? "/"
+                          : `/${(link.hreflink || link.name)
+                              .toLowerCase()
+                              .replace(/[^a-z0-9\s-]/g, "")
+                              .trim()
+                              .replace(/\s+/g, "")}`
+                      }
+                      onClick={() => { handleClick(link.name); setMobileMenu(false); }}
+                      className={`block px-4 py-3 text-lg transition-colors duration-200 ${
+                        activeLink === link.name ? "bg-amber-800/50 text-amber-300" : "text-white/90 hover:bg-amber-800"
                       }`}
                     >
                       {link.name}
-                      <ChevronDown className="h-4 w-4" />
-                    </button>
+                    </Link>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => handleClick(link.name)}
+                        className={`flex w-full items-center justify-between px-4 py-3 text-lg transition-colors duration-200 ${
+                          activeLink === link.name ? "bg-amber-800/50 text-amber-300" : "text-white/90 hover:bg-amber-800"
+                        }`}
+                      >
+                        {link.name}
+                        <ChevronDown className="h-4 w-4" />
+                      </button>
 
-                    {activeLink === link.name && (
-                      <div className="bg-amber-800/60">
-                        {link.children.map((child, ind) => {
-                          // Shop by Category: go to category page (no subcategory accordion)
-                          if (link.name === "Shop by Category") {
-                            const categoryHref =
-                              child.category?.find(
-                                (item) => item.name === "View all",
-                              )?.href ||
-                              SHOP_CATEGORIES.find(
-                                (cat) => cat.heading === child.heading,
-                              )?.slug ||
-                              child.href;
+                      {activeLink === link.name && (
+                        <div className="bg-amber-800/60">
+                          {link.children.map((child, ind) => {
+                            if (link.name === "Shop by Category") {
+                              const categoryHref =
+                                child.category?.find((item) => item.name === "View all")?.href ||
+                                SHOP_CATEGORIES.find((cat) => cat.heading === child.heading)?.slug ||
+                                child.href;
+                              return (
+                                <Link
+                                  key={ind}
+                                  href={`/${categoryHref}`}
+                                  onClick={() => setMobileMenu(false)}
+                                  className="flex items-center justify-between px-6 py-3 text-sm font-bold uppercase text-white/90 transition-colors hover:bg-amber-700"
+                                >
+                                  {child.heading}
+                                </Link>
+                              );
+                            }
+
+                            if (child.category) {
+                              return (
+                                <div key={ind}>
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      setActiveSection(activeSection === child.heading ? null : (child.heading ?? null))
+                                    }
+                                    className="flex w-full items-center justify-between px-6 py-3 text-sm font-bold uppercase text-gray-300"
+                                  >
+                                    {child.heading}
+                                    <ChevronDown
+                                      className={`transition-transform duration-300 ${
+                                        activeSection === child.heading ? "rotate-180" : ""
+                                      }`}
+                                    />
+                                  </button>
+                                  {activeSection === child.heading &&
+                                    child.category.map((item) => (
+                                      <Link
+                                        key={item.name}
+                                        href={`/${item.href}`}
+                                        onClick={() => setMobileMenu(false)}
+                                        className="ml-4 flex items-center gap-4 px-6 py-3 text-white/90 transition-colors hover:bg-amber-700"
+                                      >
+                                        {item.name}
+                                      </Link>
+                                    ))}
+                                </div>
+                              );
+                            }
 
                             return (
                               <Link
                                 key={ind}
-                                href={`/${categoryHref}`}
+                                href={`/${child.href}`}
                                 onClick={() => setMobileMenu(false)}
-                                className="flex items-center justify-between px-6 py-3 text-sm font-bold text-white/90 uppercase hover:bg-amber-700 transition-colors"
+                                className="flex items-center gap-4 px-6 py-3 text-white/90 transition-colors hover:bg-amber-700"
                               >
-                                {child.heading}
+                                {child.name}
                               </Link>
                             );
-                          }
+                          })}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              ))}
 
-                          // Healthy Living: keep expandable sections
-                          if (child.category) {
-                            return (
-                              <div key={ind}>
-                                <button
-                                  onClick={() =>
-                                    setActiveSection(
-                                      activeSection === child.heading
-                                        ? null
-                                        : (child.heading ?? null),
-                                    )
-                                  }
-                                  className="w-full flex justify-between items-center px-6 py-3 text-sm font-bold text-gray-300 uppercase"
-                                >
-                                  {child.heading}
-
-                                  <ChevronDown
-                                    className={`transition-transform duration-300 ${
-                                      activeSection === child.heading
-                                        ? "rotate-180"
-                                        : ""
-                                    }`}
-                                  />
-                                </button>
-
-                                {activeSection === child.heading &&
-                                  child.category.map((item) => (
-                                    <Link
-                                      key={item.name}
-                                      href={`/${item.href}`}
-                                      onClick={() => setMobileMenu(false)}
-                                      className="flex items-center ml-4 gap-4 px-6 py-3 text-white/90 hover:bg-amber-700 transition-colors"
-                                    >
-                                      <span>{item.name}</span>
-                                    </Link>
-                                  ))}
-                              </div>
-                            );
-                          }
-
-                          return (
-                            <Link
-                              key={ind}
-                              href={`/${child.href}`}
-                              onClick={() => setMobileMenu(false)}
-                              className="relative z-600 flex items-center gap-4 px-6 py-3 text-white/90 hover:bg-amber-700 transition-colors"
-                            >
-                              {child.image && (
-                                <img
-                                  src={`/assets/navbar/${child.image}`}
-                                  alt={child.name}
-                                  className="w-12 h-7 object-cover rounded-md"
-                                />
-                              )}
-
-                              <span className="font-semibold">
-                                {child.name}
-                              </span>
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            ))}
-
-            <div
-              className="p-4 flex flex-col space-y-2"
-              onClick={() => setMobileMenu(!mobileMenu)}
-            >
-              <div className="">
+              <div className="flex flex-col gap-2 p-4">
                 {session ? (
-                  <div className="bg-white rounded-xl p-4 space-y-3">
-                    <p className="text-sm font-semibold text-gray-700">
-                      {session.user?.email}
-                    </p>
-
-                    <Link
-                      href="/account"
-                      className="block text-sm font-medium text-gray-800"
-                    >
-                      My Account
-                    </Link>
-
-                    <Link
-                      href="/account/orders"
-                      className="block text-sm font-medium text-gray-800"
-                    >
-                      Orders
-                    </Link>
-
+                  <div className="space-y-2 rounded-xl bg-white p-4">
+                    <p className="text-sm font-semibold text-gray-700">{session.user?.email}</p>
+                    <Link href="/account" className="block text-sm font-medium text-gray-800">My Account</Link>
+                    <Link href="/account/orders" className="block text-sm font-medium text-gray-800">Orders</Link>
                     <button
+                      type="button"
                       onClick={() => signOut({ callbackUrl: "/" })}
-                      className="text-left text-sm text-red-500 font-semibold"
+                      className="text-left text-sm font-semibold text-red-500"
                     >
                       Logout
                     </button>
                   </div>
                 ) : (
-                  <div className="bg-white rounded-full px-6 py-3 text-center">
-                    <Link href="/login" className="font-bold">
-                      Login
-                    </Link>
-                    {/* {" / "}
-                    <Link href="/signup" className="font-bold">
-                      Signup
-                    </Link> */}
-                  </div>
+                  <Link href="/login" className="block rounded-full bg-white px-6 py-3 text-center font-bold">Login</Link>
                 )}
-              </div>
+                <Link href="/contact-us" className="block rounded-full bg-white px-6 py-3 text-center font-bold">Contact Us</Link>
 
-              <div className=" bg-white rounded-full   ">
-                <div className=" px-6 py-3 rounded-full flex justify-center">
-                  <button className="  font-bold   hover:shadow-xl transform cursor-pointer hover:scale-105 transition duration-300 focus:outline-none focus:ring-4 ">
-                    <Link href="/contact-us">Contact Us</Link>
-                  </button>
+                {/* Cart + Wishlist shortcuts in mobile menu */}
+                <div className="flex items-center justify-center gap-4 pt-2">
+                  <Link href="/wishlist" className="flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-bold">
+                    Wishlist
+                  </Link>
+                  <Link href="/cart" className="relative flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-bold">
+                    Cart
+                    {itemInCart > 0 && (
+                      <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                        {itemInCart}
+                      </span>
+                    )}
+                  </Link>
                 </div>
               </div>
             </div>
+          </>
+        )}
+      </>
+    );
+  }
 
-            {/* cart and wish button */}
-            <div className="flex items-center space-x-3 justify-center mb-4">
-              <div
-                className="bg-white rounded-full cursor-pointer "
-                onClick={() => setCartOpen(!isCartOpen)}
-              >
-                <Link href={"/wishlist"}>
-                  <button className="px-2 py-2    font-bold rounded-full shadow-lg hover:shadow-xl   focus:ring-4 focus:ring-white/50 cursor-pointer">
-                    <Heart />
-                  </button>
-                </Link>
-              </div>
+  // ── Desktop: nav links rendered inside the pill bar ──
+  return (
+    <>
+      {megaMenu}
 
-              <div className="bg-white rounded-full cursor-pointer relative">
-                <Link href={"/cart"}>
-                  <button className="px-3 py-3 font-bold rounded-full shadow-lg hover:shadow-xl   focus:ring-4 focus:ring-white/50 cursor-pointer">
-                    <ShoppingBag className="h-5 w-5" />
-                  </button>
+      <ul className="flex shrink-0 items-center">
+        {navLinks.map((link, idx) => (
+          <React.Fragment key={link.name}>
+            <li className="relative">
+              {!link.children ? (
+                <Link
+                  href={`/${(link.hreflink || link.name)
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "")}`}
+                  onClick={() => handleClick(link.name)}
+                  className={`flex items-center whitespace-nowrap px-3 py-1.5 text-sm font-semibold transition-colors duration-200 ${
+                    activeLink === link.name ? "text-orange-500" : "text-gray-700 hover:text-orange-500"
+                  }`}
+                >
+                  {link.name}
                 </Link>
-                {itemInCart > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {itemInCart}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleClick(link.name)}
+                  className={`flex items-center whitespace-nowrap px-3 py-1.5 text-sm font-semibold transition-colors duration-200 ${
+                    activeLink === link.name ? "text-orange-500" : "text-gray-700 hover:text-orange-500"
+                  }`}
+                >
+                  {link.name}
+                  <ChevronDown className="ml-1 h-3.5 w-3.5" />
+                </button>
+              )}
+            </li>
+            {idx < navLinks.length - 1 && (
+              <span className="mx-0.5 h-4 w-px shrink-0 bg-gray-300" aria-hidden />
+            )}
+          </React.Fragment>
+        ))}
+      </ul>
     </>
   );
 };

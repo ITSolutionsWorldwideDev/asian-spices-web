@@ -4,8 +4,8 @@ const stats = [
   {
     id: 1,
     icon: Users,
-    value: "50K+",
-    label: "Happy Customers",
+    value: "50+",
+    label: "High Quality Brands",
   },
   {
     id: 2,

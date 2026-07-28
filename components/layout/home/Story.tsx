@@ -103,8 +103,8 @@ const Story = () => {
                 />
               </div>
               <div className="min-w-0">
-                <p className="text-2xl font-bold text-gray-900">50K+</p>
-                <p className="text-sm text-orange-500">Happy Customer</p>
+                <p className="text-2xl font-bold text-gray-900">50+</p>
+                <p className="text-sm text-orange-500">High Quality Brands</p>
               </div>
             </div>
 
