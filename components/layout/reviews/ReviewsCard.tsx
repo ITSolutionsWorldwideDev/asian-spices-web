@@ -3,6 +3,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { User } from "lucide-react";
 
 interface Testimonial {
   id?: string | number;
@@ -78,9 +79,6 @@ const ReviewsCard: React.FC<ReviewsCardProps> = ({ productId = "all" }) => {
             item.guest_name || item.name || "Anonymous Guest";
           const reviewerText = item.comment || item.text || "";
           const starCount = item.rating || item.stars || 5;
-          const imageSrc = item.image
-            ? `/assets/reviews/${item.image}`
-            : "/assets/reviews/966bdcc20de9d1146da18068833210d399cd593e.jpg";
 
           return (
             <div
@@ -88,11 +86,12 @@ const ReviewsCard: React.FC<ReviewsCardProps> = ({ productId = "all" }) => {
               className="relative p-6 bg-cover rounded-2xl bg-[url('/assets/reviews/Subtract.png')] bg-white shadow-md hover:shadow-xl w-[320px] md:w-[400px] flex-shrink-0 border border-gray-100"
             >
               <div className="flex items-center gap-4 mb-4">
-                <img
-                  src={imageSrc}
-                  alt={reviewerName}
-                  className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-sm"
-                />
+                <div
+                  className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-white bg-orange-50 text-orange-500 shadow-sm"
+                  aria-hidden
+                >
+                  <User className="h-8 w-8" strokeWidth={1.75} />
+                </div>
                 <div>
                   <div className="flex text-yellow-400 text-sm mb-1">
                     {Array.from({ length: Math.min(5, starCount) }).map(
