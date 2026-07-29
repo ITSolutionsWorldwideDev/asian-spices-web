@@ -15,12 +15,18 @@ export async function GET(req: NextRequest) {
 
   const brands = cleanArray(searchParams.get("brands")?.split(",") || []);
 
+  const rawCategory = searchParams.get("category");
+  const category =
+    rawCategory === "all" || rawCategory === ""
+      ? ""
+      : rawCategory || "spices";
+
   const filters = {
-    category: searchParams.get("category") || "spices",
+    category,
     subcategories,
     brands,
-    minPrice: searchParams.get("min"),
-    maxPrice: searchParams.get("max"),
+    minPrice: searchParams.get("min") || searchParams.get("minPrice"),
+    maxPrice: searchParams.get("max") || searchParams.get("maxPrice"),
     search: searchParams.get("search"),
     sort: searchParams.get("sort") || "newest",
     page: Number(searchParams.get("page") || "1"),

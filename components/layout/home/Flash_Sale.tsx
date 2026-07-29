@@ -42,7 +42,7 @@ export default function FlashSale() {
 
         <div className="w-full max-w-full shrink-0 overflow-x-auto sm:w-auto">
           <div className="mx-auto flex w-max max-w-full justify-center">
-            <FlashSaleTimer startDate="2025-11-24" endDate="2026-11-15" />
+            <FlashSaleTimer startDate="2026-07-29T00:00:00Z" cycleDays={3} />
           </div>
         </div>
       </div>

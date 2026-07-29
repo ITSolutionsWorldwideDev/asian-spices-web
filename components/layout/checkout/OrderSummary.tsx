@@ -56,9 +56,6 @@ export default function OrderSummary({
   const { taxRules } = useGlobalStore();
 
   const globalRule = taxRules.find((r) => r.category_id === null);
-  const globalRateLabel = globalRule
-    ? `${globalRule.tax_name} (${globalRule.tax_rate}%)`
-    : "VAT (21%)";
 
   let derivedSubtotal = 0;
   let totalOrderSavings = 0;
@@ -115,9 +112,6 @@ export default function OrderSummary({
     const matchingRule = taxRules.find(
       (r) => r.category_id === item.category_id,
     );
-    const ruleName = matchingRule
-      ? matchingRule.tax_name
-      : globalRule?.tax_name || "VAT";
     const rulePercent = matchingRule
       ? matchingRule.tax_rate
       : globalRule?.tax_rate || "21";
@@ -129,7 +123,6 @@ export default function OrderSummary({
       itemTotalPrice,
       originalPrice,
       activeBadge,
-      ruleName,
       rulePercent,
       isPromoAppliedMatched,
     };
@@ -212,9 +205,6 @@ export default function OrderSummary({
           const matchingRule = taxRules.find(
             (r) => r.category_id === item.category_id,
           );
-          const ruleName = matchingRule
-            ? matchingRule.tax_name
-            : globalRule?.tax_name || "VAT";
           const rulePercent = matchingRule
             ? matchingRule.tax_rate
             : globalRule?.tax_rate || "21";
@@ -261,7 +251,7 @@ export default function OrderSummary({
                 </div>
 
                 <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-1">
-                  Includes {ruleName} ({Number(rulePercent).toFixed(0)}%)
+                  Includes {Number(rulePercent).toFixed(0)}%
                 </span>
               </div>
             </div>

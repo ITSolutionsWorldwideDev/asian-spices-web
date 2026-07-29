@@ -141,9 +141,6 @@ export default function Cart() {
               (r) => r.category_id === item.category_id,
             );
 
-            const ruleName = matchingRule
-              ? matchingRule.tax_name
-              : globalRule?.tax_name || "VAT";
             const rulePercent = matchingRule
               ? matchingRule.tax_rate
               : globalRule?.tax_rate || "21";
@@ -196,8 +193,7 @@ export default function Cart() {
                       {/* 🌟 Dynamic tag highlighting the item's custom category tax rate */}
                       <div className="mt-2">
                         <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-2 py-0.5 font-medium">
-                          Includes {ruleName} ({Number(rulePercent).toFixed(0)}
-                          %)
+                          Includes {Number(rulePercent).toFixed(0)}%
                         </span>
                       </div>
                     </div>

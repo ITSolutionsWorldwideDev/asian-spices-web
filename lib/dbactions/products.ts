@@ -25,12 +25,21 @@ export const getProducts = async (filters: any) => {
   values.push(countryCode.toUpperCase());
   const countryParamIndex = index;
 
-  let rankField = "0 as rank";
+  let searchParamIndex: number | null = null;
   if (search) {
     index++;
-    values.push(search);
-    rankField = `ts_rank(p.search_vector, plainto_tsquery($${index})) AS rank`;
+    searchParamIndex = index;
+    values.push(search.trim());
   }
+
+  const rankField =
+    searchParamIndex !== null
+      ? `GREATEST(
+          ts_rank(COALESCE(p.search_vector, ''::tsvector), plainto_tsquery('english', $${searchParamIndex})),
+          CASE WHEN p.name ILIKE '%' || $${searchParamIndex} || '%' THEN 1 ELSE 0 END,
+          CASE WHEN COALESCE(b.name, '') ILIKE '%' || $${searchParamIndex} || '%' THEN 0.9 ELSE 0 END
+        ) AS rank`
+      : "0 as rank";
 
   const joinType = showUnavailable ? "LEFT JOIN" : "INNER JOIN";
 
@@ -38,6 +47,7 @@ export const getProducts = async (filters: any) => {
     SELECT 
       p.*, 
       c.slug as category_slug,
+      b.name as brand_name,
       img.file_url AS image,
       cat.min_offered_price,
       cat.total_available_stock,
@@ -54,6 +64,7 @@ export const getProducts = async (filters: any) => {
       GROUP BY spc.product_id
     ) cat ON cat.product_id = p.id
     LEFT JOIN store_categories c ON c.id = p.category_id
+    LEFT JOIN store_brands b ON b.brand_id = p.brand_id
     LEFT JOIN (
       SELECT DISTINCT ON (pi.product_id) 
         pi.product_id, 
@@ -105,15 +116,16 @@ export const getProducts = async (filters: any) => {
     values.push(maxPrice);
   }
 
-  if (search) {
-    index++;
-    query += ` AND p.search_vector @@ plainto_tsquery($${index})`;
-    values.push(search);
+  if (searchParamIndex !== null) {
+    query += ` AND (
+      COALESCE(p.search_vector, ''::tsvector) @@ plainto_tsquery('english', $${searchParamIndex})
+      OR p.name ILIKE '%' || $${searchParamIndex} || '%'
+      OR COALESCE(b.name, '') ILIKE '%' || $${searchParamIndex} || '%'
+      OR p.slug ILIKE '%' || $${searchParamIndex} || '%'
+    )`;
   }
 
   // 🔥 Sorting
-  const currentRankPlaceholder = search ? "$1" : "0";
-
   switch (sort) {
     case "price_asc":
       query += ` ORDER BY COALESCE(cat.min_offered_price, p.base_price) ASC, p.id DESC`;
@@ -128,15 +140,22 @@ export const getProducts = async (filters: any) => {
       break;
 
     case "relevance":
-      query += ` ORDER BY ts_rank(p.search_vector, plainto_tsquery($${search ? values.indexOf(search) + 1 : 1})) DESC, p.id DESC`;
+      query += searchParamIndex !== null
+        ? ` ORDER BY rank DESC, p.id DESC`
+        : ` ORDER BY p.created_at DESC, p.id DESC`;
       break;
 
     case "newest":
-      query += ` ORDER BY p.created_at DESC, p.id DESC`;
+      // Prefer relevance when a search query is active
+      query += searchParamIndex !== null
+        ? ` ORDER BY rank DESC, p.created_at DESC, p.id DESC`
+        : ` ORDER BY p.created_at DESC, p.id DESC`;
       break;
 
     default:
-      query += ` ORDER BY p.created_at DESC, p.id DESC`;
+      query += searchParamIndex !== null
+        ? ` ORDER BY rank DESC, p.created_at DESC, p.id DESC`
+        : ` ORDER BY p.created_at DESC, p.id DESC`;
   }
 
   // switch (sort) {
@@ -390,11 +409,20 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
     values.push(maxPrice);
   }
 
-  // 🔹 Text Search Constraint
+  // 🔹 Text Search Constraint — name, brand, slug, or full-text vector
   if (search) {
     index++;
-    productConditions += ` AND p.search_vector @@ plainto_tsquery($${index})`;
-    values.push(search);
+    productConditions += ` AND (
+      COALESCE(p.search_vector, ''::tsvector) @@ plainto_tsquery('english', $${index})
+      OR p.name ILIKE '%' || $${index} || '%'
+      OR p.slug ILIKE '%' || $${index} || '%'
+      OR EXISTS (
+        SELECT 1 FROM store_brands sb
+        WHERE sb.brand_id = p.brand_id
+          AND sb.name ILIKE '%' || $${index} || '%'
+      )
+    )`;
+    values.push(search.trim());
   }
 
   // We build a clean query where c.slug filter is absolute,
@@ -452,11 +480,20 @@ export const getBrands = async (category: string, filters: any = {}) => {
     values.push(maxPrice);
   }
 
-  // 🔹 Search
+  // 🔹 Search — name, brand, slug, or full-text vector
   if (search) {
     index++;
-    productConditions += ` AND p.search_vector @@ plainto_tsquery($${index})`;
-    values.push(search);
+    productConditions += ` AND (
+      COALESCE(p.search_vector, ''::tsvector) @@ plainto_tsquery('english', $${index})
+      OR p.name ILIKE '%' || $${index} || '%'
+      OR p.slug ILIKE '%' || $${index} || '%'
+      OR EXISTS (
+        SELECT 1 FROM store_brands sb
+        WHERE sb.brand_id = p.brand_id
+          AND sb.name ILIKE '%' || $${index} || '%'
+      )
+    )`;
+    values.push(search.trim());
   }
 
   const query = `

@@ -5,15 +5,42 @@ import {
   FaFacebookF,
   FaInstagram,
   FaYoutube,
-  FaLinkedinIn,
-  FaTiktok
+  FaTiktok,
 } from "react-icons/fa";
 import { IoLogoWhatsapp } from "react-icons/io";
-import { AiOutlineMail } from "react-icons/ai";
 import Link from "next/link";
 import SubscribeNewsletter from "./SubscribeNewsletter";
+
+/** Update these URLs to your real social profiles */
+const SOCIAL_LINKS = [
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61591119970456",
+    Icon: FaFacebookF,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/asianspicessocial/",
+    Icon: FaInstagram,
+  },
+  // {
+  //   label: "WhatsApp",
+  //   href: "https://wa.me/31107660786",
+  //   Icon: IoLogoWhatsapp,
+  // },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@AsianSpices-p5c",
+    Icon: FaYoutube,
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@asianspices0",
+    Icon: FaTiktok,
+  },
+] as const;
+
 const FooterContent = () => {
- 
   return (
     <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 ">
       {/* Logo + Social Icons */}
@@ -26,27 +53,20 @@ const FooterContent = () => {
           className="mb-6"
         />
 
-        {/* <div className="flex items-center gap-4 text-xl mt-20  ">
-          <div className="rounded-full p-1  bg-white/40">
-            <FaFacebookF className=" text-black cursor-pointer hover:scale-110 duration-150    " />
-          </div>
-          <div className="rounded-full p-1  bg-white/40">
-            <FaInstagram className="cursor-pointer hover:scale-110 duration-150 " />
-          </div>
-          <div className="rounded-full p-1  bg-white/40">
-            <IoLogoWhatsapp className="cursor-pointer hover:scale-110 duration-150 " />
-          </div>
-          <div className="rounded-full p-1  bg-white/40">
-            <AiOutlineMail className="cursor-pointer hover:scale-110 duration-150 " />
-          </div>
-          <div className="rounded-full p-1  bg-white/40">
-            <FaYoutube className="cursor-pointer hover:scale-110 duration-150 " />
-          </div>
-          <div className="rounded-full p-1  bg-white/40">
-            {/* <FaLinkedinIn className="cursor-pointer hover:scale-110 duration-150 " /> */}
-            {/* <FaTiktok className="cursor-pointer hover:scale-110 duration-150 " /> */}
-          {/* </div> */}
-        {/* </div> */} 
+        <div className="mt-20 flex items-center gap-4 text-xl">
+          {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="rounded-full bg-white/40 p-1 text-black transition duration-150 hover:scale-110"
+            >
+              <Icon />
+            </a>
+          ))}
+        </div>
       </div>
 
       {/* Menu */}

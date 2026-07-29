@@ -150,56 +150,58 @@ export default function FilterSidebar({
           📦 CATEGORIES
       ========================= */}
       <Collapsible title="Categories">
-        {subcategories.map((item) => {
-          const checked = selectedSub.includes(item.id);
+        <div className="max-h-64 space-y-3 overflow-y-auto pr-2 [scrollbar-color:#d1d5db_transparent] [scrollbar-width:thin]">
+          {subcategories.map((item) => {
+            const checked = selectedSub.includes(item.id);
 
-          return (
-            <label
-              key={item.id}
-              className="flex items-center cursor-pointer group"
-            >
-              <input
-                type="checkbox"
-                checked={checked}
-                disabled={item.product_count === 0}
-                onChange={() =>
-                  updateMultiFilter("subcategories", item.id)
-                }
-                className="sr-only"
-              />
-
-              <div
-                className={`w-5 h-5 rounded border-2 flex items-center justify-center transition ${
-                  checked
-                    ? "bg-black border-black"
-                    : "border-gray-300"
-                }`}
+            return (
+              <label
+                key={item.id}
+                className="flex items-center cursor-pointer group"
               >
-                {checked && (
-                  <svg
-                    className="w-3 h-3 text-white"
-                    fill="none"
-                    strokeWidth="3"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
-              </div>
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  disabled={item.product_count === 0}
+                  onChange={() =>
+                    updateMultiFilter("subcategories", item.id)
+                  }
+                  className="sr-only"
+                />
 
-              <span className="ml-3 text-sm text-gray-700 group-hover:text-black">
-                {item.name}
+                <div
+                  className={`w-5 h-5 shrink-0 rounded border-2 flex items-center justify-center transition ${
+                    checked
+                      ? "bg-black border-black"
+                      : "border-gray-300"
+                  }`}
+                >
+                  {checked && (
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="none"
+                      strokeWidth="3"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
 
-                {item.product_count ? (
-                  <span className="ml-1 text-gray-600">
-                    ({item.product_count})
-                  </span>
-                ) : null}
-              </span>
-            </label>
-          );
-        })}
+                <span className="ml-3 text-sm text-gray-700 group-hover:text-black">
+                  {item.name}
+
+                  {item.product_count ? (
+                    <span className="ml-1 text-gray-600">
+                      ({item.product_count})
+                    </span>
+                  ) : null}
+                </span>
+              </label>
+            );
+          })}
+        </div>
 
         <button
           onClick={() => clearFilter("subcategories")}
@@ -213,56 +215,58 @@ export default function FilterSidebar({
           🏷️ BRANDS
       ========================= */}
       <Collapsible title="Brands">
-        {brands.map((brand) => {
-          const checked = selectedBrands.includes(brand.brand_id);
+        <div className="max-h-64 space-y-3 overflow-y-auto pr-2 [scrollbar-color:#d1d5db_transparent] [scrollbar-width:thin]">
+          {brands.map((brand) => {
+            const checked = selectedBrands.includes(brand.brand_id);
 
-          return (
-            <label
-              key={brand.brand_id}
-              className="flex items-center cursor-pointer group"
-            >
-              <input
-                type="checkbox"
-                checked={checked}
-                disabled={brand.product_count === 0}
-                onChange={() =>
-                  updateMultiFilter("brands", brand.brand_id)
-                }
-                className="sr-only"
-              />
-
-              <div
-                className={`w-5 h-5 rounded border-2 flex items-center justify-center transition ${
-                  checked
-                    ? "bg-black border-black"
-                    : "border-gray-300"
-                }`}
+            return (
+              <label
+                key={brand.brand_id}
+                className="flex items-center cursor-pointer group"
               >
-                {checked && (
-                  <svg
-                    className="w-3 h-3 text-white"
-                    fill="none"
-                    strokeWidth="3"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
-              </div>
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  disabled={brand.product_count === 0}
+                  onChange={() =>
+                    updateMultiFilter("brands", brand.brand_id)
+                  }
+                  className="sr-only"
+                />
 
-              <span className="ml-3 text-sm text-gray-700 group-hover:text-black">
-                {brand.name}
+                <div
+                  className={`w-5 h-5 shrink-0 rounded border-2 flex items-center justify-center transition ${
+                    checked
+                      ? "bg-black border-black"
+                      : "border-gray-300"
+                  }`}
+                >
+                  {checked && (
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="none"
+                      strokeWidth="3"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
 
-                {brand.product_count ? (
-                  <span className="ml-1 text-gray-600">
-                    ({brand.product_count})
-                  </span>
-                ) : null}
-              </span>
-            </label>
-          );
-        })}
+                <span className="ml-3 text-sm text-gray-700 group-hover:text-black">
+                  {brand.name}
+
+                  {brand.product_count ? (
+                    <span className="ml-1 text-gray-600">
+                      ({brand.product_count})
+                    </span>
+                  ) : null}
+                </span>
+              </label>
+            );
+          })}
+        </div>
 
         <button
           onClick={() => clearFilter("brands")}

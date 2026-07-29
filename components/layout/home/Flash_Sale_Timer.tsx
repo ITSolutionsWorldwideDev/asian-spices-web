@@ -4,7 +4,9 @@ import React, { useState, useEffect } from "react";
 
 interface FlashSaleTimerProps {
   startDate?: string;
-  endDate: string;
+  endDate?: string;
+  /** When set, the countdown repeats every N days and never exceeds it. */
+  cycleDays?: number;
 }
 
 type TimeLeft = {
@@ -14,13 +16,18 @@ type TimeLeft = {
   seconds: number;
 };
 
+const splitDiff = (diff: number): TimeLeft => ({
+  days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+  hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+  minutes: Math.floor((diff / 1000 / 60) % 60),
+  seconds: Math.floor((diff / 1000) % 60),
+});
+
 export const FlashSaleTimer: React.FC<FlashSaleTimerProps> = ({
   startDate,
   endDate,
+  cycleDays,
 }) => {
-  const start = startDate ? new Date(startDate) : new Date();
-  const end = new Date(endDate);
-
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -29,38 +36,40 @@ export const FlashSaleTimer: React.FC<FlashSaleTimerProps> = ({
   });
   const [isTimeUp, setIsTimeUp] = useState(false);
 
-  const calculateTimeLeft = (): TimeLeft => {
-    const now = new Date();
-
-    // Count down to start if sale hasn't begun yet
-    if (now < start) {
-      return splitDiff(start.getTime() - now.getTime());
-    }
-
-    const diff = end.getTime() - now.getTime();
-
-    if (diff <= 0) {
-      setIsTimeUp(true);
-      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    }
-
-    return splitDiff(diff);
-  };
-
-  const splitDiff = (diff: number): TimeLeft => ({
-    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((diff / 1000 / 60) % 60),
-    seconds: Math.floor((diff / 1000) % 60),
-  });
-
   const formatTime = (time: number) => (time < 10 ? `0${time}` : String(time));
 
   useEffect(() => {
+    const cycleMs = cycleDays ? cycleDays * 24 * 60 * 60 * 1000 : 0;
+
+    const calculateTimeLeft = (): TimeLeft => {
+      const now = Date.now();
+
+      // Rolling window: restarts automatically, so days never grow past cycleDays
+      if (cycleMs > 0) {
+        const anchor = startDate ? new Date(startDate).getTime() : 0;
+        const elapsed = now - anchor;
+        const remaining = cycleMs - (((elapsed % cycleMs) + cycleMs) % cycleMs);
+        return splitDiff(remaining);
+      }
+
+      const start = startDate ? new Date(startDate).getTime() : now;
+      if (now < start) return splitDiff(start - now);
+
+      const end = endDate ? new Date(endDate).getTime() : now;
+      const diff = end - now;
+
+      if (diff <= 0) {
+        setIsTimeUp(true);
+        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+      }
+
+      return splitDiff(diff);
+    };
+
     setTimeLeft(calculateTimeLeft());
     const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
     return () => clearInterval(timer);
-  }, [startDate, endDate]);
+  }, [startDate, endDate, cycleDays]);
 
   if (isTimeUp) {
     return (

@@ -17,7 +17,7 @@ async function fetchSuggestions(query: string): Promise<Suggestion[]> {
 
   try {
     const [productsRes, recipesRes] = await Promise.all([
-      fetch(`/api/products?search=${encodeURIComponent(query)}&limit=3`),
+      fetch(`/api/products?search=${encodeURIComponent(query)}&limit=5&category=all`),
       fetch(`/api/recipes?search=${encodeURIComponent(query)}&limit=4`),
     ]);
 

@@ -14,7 +14,7 @@ const contactCards = [
     icon: Phone,
     label: "CALL US",
     value: "+31 10 766 0786",
-    subtext: "Mon-Fri 10AM-5PM EST",
+    subtext: "Mon-Fri 10AM-5PM CST",
     href: "tel:+31107660786",
   },
   // {

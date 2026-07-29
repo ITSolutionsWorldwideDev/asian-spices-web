@@ -62,7 +62,7 @@ async function SearchResults({ query }: { query: string }) {
       category: "",
       search: query,
       page: 1,
-      limit: 12,
+      limit: 40,
       sort: "newest",
       countryCode: "NL",
       showUnavailable: true,

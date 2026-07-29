@@ -101,16 +101,12 @@ export default function OrderSummaryReadOnly({
           const matchingRule = taxRules.find(
             (r) => r.category_id === item?.category_id,
           );
-          const ruleName = matchingRule
-            ? matchingRule.tax_name
-            : globalRule?.tax_name || "VAT";
           const rulePercent = matchingRule
             ? matchingRule.tax_rate
             : globalRule?.tax_rate || "21";
 
             console.log('item?.category_id === ',item?.category_id);
             console.log('matchingRule === ',matchingRule);
-            console.log('ruleName === ',ruleName);
             console.log('rulePercent === ',rulePercent);
             console.log('taxRules === ',taxRules);
 
@@ -152,7 +148,7 @@ export default function OrderSummaryReadOnly({
                 </div>
 
                 <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-1">
-                  Includes {ruleName} ({Number(rulePercent).toFixed(0)}%)
+                  Includes {Number(rulePercent).toFixed(0)}%
                 </span>
               </div>
             </div>

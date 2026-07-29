@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Lock } from "lucide-react";
 
 interface Props {
@@ -43,6 +44,9 @@ export default function PaymentForm({
   minOrderMessage,
 }: Props) {
   const [method, setMethod] = useState<"paynl" | "paypal">("paynl");
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+
+  const canContinue = !disabled && agreedToTerms;
 
   return (
     <div className="flex justify-center">
@@ -116,12 +120,39 @@ export default function PaymentForm({
           Your payment information is encrypted and secure
         </div>
 
+        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+          <input
+            type="checkbox"
+            checked={agreedToTerms}
+            onChange={(e) => setAgreedToTerms(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 accent-orange-500"
+          />
+          <span>
+            I agree to the{" "}
+            <Link
+              href="/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-orange-600 underline hover:text-orange-700"
+              onClick={(e) => e.stopPropagation()}
+            >
+              Terms &amp; Conditions
+            </Link>
+          </span>
+        </label>
+
+        {!agreedToTerms && !disabled ? (
+          <p className="mt-2 text-xs text-gray-500">
+            Please agree to the Terms &amp; Conditions to continue.
+          </p>
+        ) : null}
+
         <button
           type="button"
-          disabled={disabled}
+          disabled={!canContinue}
           className={`w-full mt-6 px-6 py-3 rounded-lg text-white flex items-center justify-center gap-2 transition
           ${
-            disabled
+            !canContinue
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-orange-500 hover:bg-orange-600"
           }`}
