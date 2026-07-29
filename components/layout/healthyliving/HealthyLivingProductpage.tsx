@@ -81,23 +81,22 @@ export default async function HealthyLivingProductpage({
   ];
 
   const slugToImage: Record<AllowedSlug, string> = {
-    "supports-immunity": "2d9352553931e5c819d797c2021f90b6cc5487cb (1).webp",
-    "aids-digestion": "2d9352553931e5c819d797c2021f90b6cc5487cb (1).webp",
-    "promotes-relaxation": "2d9352553931e5c819d797c2021f90b6cc5487cb (1).webp",
-    "enhances-energy-levels":
-      "2d9352553931e5c819d797c2021f90b6cc5487cb (1).webp",
+    "supports-immunity": "supports-immunity.png",
+    "aids-digestion": "aids-digestion.png",
+    "promotes-relaxation": "promotes-relaxation.png",
+    "enhances-energy-levels": "enhances-energy-levels.png",
 
-    capsules: "2d9352553931e5c819d797c2021f90b6cc5487cb (1).webp",
-    powders: "4777fae28bf8c8529b660c5ef85ae3659de6d557.webp",
-    teas: "b4158a315fa57749b144b6d49c4f448d4a4d7249.webp",
+    capsules: "capsules.png",
+    powders: "powders.png",
+    teas: "teas.png",
 
-    "face-oils": "d2cb8935bb558e99e2e4b28b0b9676798515ab77.webp",
-    creams: "820d80edf257bfaaafaf9f554b155a673f1442d5 (1).webp",
-    cleansers: "06e813a64e3ac39522ae949f8180359993726b4d.webp",
+    "face-oils": "face-oils.png",
+    creams: "creams.png",
+    cleansers: "cleansers.png",
 
-    "hair-oils": "58fc0fa164ef0ee9e82f34ad3160c3b9c3e8657c.webp",
-    shampoos: "58fc0fa164ef0ee9e82f34ad3160c3b9c3e8657c (1).webp",
-    "hair-masks": "fecb41921011cc0e5db4dbd75df119f1ea19d248.webp",
+    "hair-oils": "hair-oils.png",
+    shampoos: "shampoos.png",
+    "hair-masks": "hair-masks.png",
   };
 
   if (!allowedSlugs.includes(slug as AllowedSlug)) {
@@ -147,10 +146,10 @@ export default async function HealthyLivingProductpage({
         description="Discover authentic Health Products from across Asia"
       />
 
-      <div className="grid lg:grid-cols-[260px_1fr] gap-6 container mx-auto p-5">
+      <div className="relative z-0 grid lg:grid-cols-[260px_1fr] gap-6 container mx-auto p-5">
         <FilterSidebar subcategories={subcategories} brands={brands} />
 
-        <div className="relative z-20 min-w-0 bg-white">
+        <div className="relative z-0 min-w-0 bg-white">
           <SortDropdown />
 
           <InfiniteProducts initialProducts={products} filters={filters} />

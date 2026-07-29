@@ -168,12 +168,25 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
     mounted &&
     activeDropdownLink?.children &&
     createPortal(
-      <div className="fixed inset-0 z-[100] hidden lg:block" role="presentation">
+      <div
+        className="hidden lg:block"
+        style={{
+          position: "fixed",
+          left: 0,
+          right: 0,
+          top: "5.5rem",
+          bottom: 0,
+          // Below the nav (999999), above all page content
+          zIndex: 999998,
+        }}
+        role="presentation"
+      >
+        {/* Backdrop starts BELOW the navbar so nav stays clickable */}
         <div
           className="absolute inset-0"
           onClick={() => { setIsMenuOpen(false); setActiveLink(""); }}
         />
-        <div className="pointer-events-none absolute inset-x-0 top-24 flex justify-center px-4 sm:px-6">
+        <div className="pointer-events-none absolute inset-x-0 top-2 flex justify-center px-4 sm:px-6">
           <div className="pointer-events-auto w-full max-w-5xl">
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-100 shadow-md">
               <div

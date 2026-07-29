@@ -61,22 +61,22 @@ export default function Header() {
   const current = frames[index];
 
   return (
-    <section className="relative w-full min-h-[90vh] flex flex-col justify-between overflow-hidden bg-zinc-950">
+    <section className="relative w-full min-h-[90vh] flex flex-col justify-between bg-zinc-950">
       <LazyVideo
         mode="hero"
         src="/assets/home/homeheaderimages/Loop Slider.mp4"
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        className="pointer-events-none absolute inset-0 w-full h-full object-cover z-0"
       />
-      <div className="absolute inset-0 bg-black/40 z-10" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 bg-black/40 z-10" aria-hidden />
 
-      <div className="relative z-30 w-full">
-        <Nav />
-      </div>
+      {/* Nav portals to body; spacer keeps hero copy clear of the fixed bar */}
+      <Nav />
+      <div className="relative z-30 h-20 shrink-0 sm:h-24 lg:h-28" aria-hidden />
 
-      <div className="relative z-20 flex-1 flex items-center w-full">
+      <div className="pointer-events-none relative z-20 flex flex-1 items-center w-full">
         <div
           key={index}
-          className="w-full min-h-[400px] flex items-center transition-all duration-500 animate-fade-in"
+          className="pointer-events-auto w-full min-h-[400px] flex items-center transition-all duration-500 animate-fade-in"
         >
           <HeaderContent current={current} />
         </div>

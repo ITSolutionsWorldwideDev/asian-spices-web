@@ -12,20 +12,18 @@ interface TextandImage {
 /** Heading + nav in first HTML paint; video loads after idle so UI isn't blocked. */
 const ProductPageHeader = ({ heading, text, videoLink }: TextandImage) => {
   return (
-    <section className="relative w-full min-h-[70vh] sm:min-h-[85vh] bg-zinc-950 overflow-hidden">
+    <section className="relative w-full min-h-[70vh] sm:min-h-[85vh] bg-zinc-950">
       <LazyVideo
         mode="hero"
         src={`/assets${videoLink}`}
-        className="absolute inset-0 h-full w-full object-cover"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       />
 
-      <div className="absolute inset-0 bg-black/45" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 bg-black/45" aria-hidden />
 
-      <div className="relative z-30">
-        <Nav />
-      </div>
+      <Nav />
 
-      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-white container mx-auto px-4">
+      <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center text-white container mx-auto px-4">
         <div className="text-center">
           <h1 className="text-5xl lg:text-7xl font-bold lg:max-w-[50rem] mx-auto leading-tight">
             {heading}

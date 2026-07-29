@@ -116,7 +116,7 @@ export default function FilterSidebar({
   const selectedBrands = getArray("brands");
 
   return (
-    <aside className="self-start h-fit rounded-2xl bg-white p-6 shadow-sm lg:shadow-xl border border-gray-100 lg:sticky lg:top-24 lg:z-10">
+    <aside className="relative z-0 self-start h-fit rounded-2xl bg-white p-6 shadow-sm lg:shadow-xl border border-gray-100 lg:sticky lg:top-28">
       {/* =========================
           💰 PRICE FILTER
       ========================= */}

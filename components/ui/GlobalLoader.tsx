@@ -10,7 +10,7 @@ export default function GlobalLoader() {
   if (!loading) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[100000] bg-black/50 flex items-center justify-center">
       <div className="bg-white px-6 py-5 rounded-xl shadow-xl flex flex-col items-center">
         
         {/* Spinner */}

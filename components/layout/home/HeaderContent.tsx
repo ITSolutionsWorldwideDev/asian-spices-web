@@ -164,7 +164,6 @@ interface SpiceFrameProps {
 const HeaderContent = ({ current }: SpiceFrameProps) => {
   return (
     <>
-      <Nav />
       <div className="relative flex items-center container mx-auto  ">
         <div className="px-8 md:px-20 max-w-3xl text-white">
           <span className="bg-white/20 text-sm px-4 py-2 rounded-full inline-block  border border-white/30">
