@@ -69,9 +69,7 @@ export default function Header() {
       />
       <div className="pointer-events-none absolute inset-0 bg-black/40 z-10" aria-hidden />
 
-      {/* Nav portals to body; spacer keeps hero copy clear of the fixed bar */}
       <Nav />
-      <div className="relative z-30 h-20 shrink-0 sm:h-24 lg:h-28" aria-hidden />
 
       <div className="pointer-events-none relative z-20 flex flex-1 items-center w-full">
         <div

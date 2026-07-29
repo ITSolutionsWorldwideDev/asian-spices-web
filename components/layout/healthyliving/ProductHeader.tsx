@@ -9,11 +9,12 @@ interface TextandImage {
 
 const ProductHeader = ({ heading, text, imageLink }: TextandImage) => {
   return (
-    <section className="relative h-screen w-full container mx-auto">
+    <section className="relative h-screen min-h-[100svh] w-full max-w-none overflow-hidden">
       <Image
-        className="pointer-events-none object-cover"
+        className="pointer-events-none object-cover object-center"
         src={`/assets/healtyliving/${imageLink}`}
         fill
+        sizes="100vw"
         alt={text}
         priority
       />

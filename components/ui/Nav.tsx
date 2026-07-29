@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,15 +11,15 @@ import UpperSelection from "../layout/navigation/UpperSelection";
 import NavSearch from "../layout/navigation/NavSearch";
 import useNavbarVisibility from "@/hooks/useNAvbarVisibility";
 
+const subscribeToClient = () => () => {};
+
 const Nav: React.FC = () => {
   const visible = useNavbarVisibility(2500);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  const mounted = useSyncExternalStore(
+    subscribeToClient,
+    () => true,
+    () => false,
+  );
 
   const bar = (
     <div
@@ -70,7 +70,13 @@ const Nav: React.FC = () => {
     </div>
   );
 
-  return createPortal(bar, document.body);
+  return (
+    <>
+      {/* The fixed portal is outside page flow, so reserve its exact height here. */}
+      <div className="h-20 shrink-0 sm:h-24 lg:h-28" aria-hidden />
+      {mounted ? createPortal(bar, document.body) : null}
+    </>
+  );
 };
 
 export default Nav;
