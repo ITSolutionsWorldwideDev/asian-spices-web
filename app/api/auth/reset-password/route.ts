@@ -21,7 +21,10 @@ export async function POST(req: Request) {
     const record = rows[0];
     const hash = await bcrypt.hash(password, 10);
 
-    await client.query(`UPDATE users SET password_hash = $1 WHERE id = $2`, [hash, record.user_id]);
+    await client.query(
+      `UPDATE users SET password_hash = $1, password_changed_at = now() WHERE id = $2`,
+      [hash, record.user_id]
+    );
     await client.query(`DELETE FROM password_reset_tokens WHERE id = $1`, [record.id]);
 
     return NextResponse.json({ success: true });
