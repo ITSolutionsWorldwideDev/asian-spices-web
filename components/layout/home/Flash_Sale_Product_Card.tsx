@@ -138,7 +138,7 @@ export default function FlashSaleProductCard() {
                 </span>
 
                 <div
-                  className="relative h-40 w-full cursor-pointer overflow-hidden rounded-xl sm:h-48"
+                  className="relative h-40 w-full cursor-pointer overflow-hidden rounded-xl bg-gray-50 sm:h-48"
                   onMouseEnter={() => {
                     if (
                       typeof window !== "undefined" &&
@@ -157,7 +157,7 @@ export default function FlashSaleProductCard() {
                     alt={item.title}
                     fill
                     sizes="(max-width: 640px) 78vw, 300px"
-                    className="object-cover transition-transform duration-300 hover:scale-110"
+                    className="object-contain transition-transform duration-300 hover:scale-110"
                     priority={index < 2}
                   />
                 </div>
@@ -359,14 +359,14 @@ const FlashSaleProductCard = () => {
             </span>
 
             <div
-              className="relative h-48 w-full overflow-hidden rounded-xl  cursor-pointer"
+              className="relative h-48 w-full overflow-hidden rounded-xl bg-gray-50 cursor-pointer"
               onMouseEnter={() => setHoveredId(item.id)}
             >
               <Image
                 src={`/assets/home/hot_sale/${item.image}`}
                 alt={item.title}
                 fill
-                className="object-cover hover:scale-110"
+                className="object-contain hover:scale-110"
               />
             </div>
           </div>
