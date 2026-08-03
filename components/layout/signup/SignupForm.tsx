@@ -16,6 +16,11 @@ const signupSchema = z
     phone: z.string().min(8, "Phone is required"),
     password: z.string().min(8, "Minimum 8 characters"),
     confirmPassword: z.string(),
+    acceptedTerms: z
+      .boolean()
+      .refine((value) => value === true, {
+        message: "Please agree to the Terms & Conditions and Privacy Policy",
+      }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -28,6 +33,7 @@ export default function SignupForm() {
     phone: "",
     password: "",
     confirmPassword: "",
+    acceptedTerms: false,
   });
 
   const [signupType, setSignupType] = useState<"selection" | "customer">(
@@ -39,7 +45,7 @@ export default function SignupForm() {
 
   const { show, hide } = useLoaderStore();
 
-  const handleChange = (key: string, value: string) => {
+  const handleChange = (key: string, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: "" }));
   };
@@ -79,6 +85,7 @@ export default function SignupForm() {
         body: JSON.stringify({
           email: form.email.trim().toLowerCase(),
           password: form.password,
+          acceptedTerms: form.acceptedTerms,
         }),
         headers: { "Content-Type": "application/json" },
       });
@@ -373,6 +380,42 @@ export default function SignupForm() {
                 <p className="error">{errors.confirmPassword}</p>
               )}
             </div>
+
+            <label className="mt-1 flex cursor-pointer items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                checked={form.acceptedTerms}
+                onChange={(e) =>
+                  handleChange("acceptedTerms", e.target.checked)
+                }
+                className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 accent-orange-500"
+              />
+              <span>
+                I agree to the{" "}
+                <Link
+                  href="/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-orange-600 underline hover:text-orange-700"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Terms &amp; Conditions
+                </Link>{" "}
+                and the{" "}
+                <Link
+                  href="/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-orange-600 underline hover:text-orange-700"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Privacy Policy
+                </Link>
+              </span>
+            </label>
+            {errors.acceptedTerms && (
+              <p className="error">{errors.acceptedTerms}</p>
+            )}
 
             <button
               type="submit"

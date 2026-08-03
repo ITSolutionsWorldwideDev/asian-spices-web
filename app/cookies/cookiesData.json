@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "badge": "Juridisch",
+    "title": "Cookieverklaring",
+    "subtitle": "Deze Cookieverklaring legt uit welke cookies en vergelijkbare technieken Asian Spices Online B.V. gebruikt wanneer je onze website, webshop of app bezoekt of gebruikt. Je leest welke technieken wij gebruiken, waarvoor wij ze gebruiken, welke gegevens daarbij kunnen worden verwerkt, hoe lang ze worden bewaard en hoe je je keuze kunt aanpassen.",
+    "lastUpdated": "14 juli 2026",
+    "effectiveFrom": "14 juli 2026"
+  },
+  "support": {
+    "heading": "Vragen over cookies?",
+    "text": "Neem contact op met onze klantenservice voor vragen over cookies en vergelijkbare technieken.",
+    "email": "support@asianspices.online"
+  },
+  "sections": [
+    {
+      "id": "welkom",
+      "title": "Welkom",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Deze Cookieverklaring legt uit welke cookies en vergelijkbare technieken Asian Spices Online B.V. gebruikt wanneer je onze website, webshop of app bezoekt of gebruikt. Je leest welke technieken wij gebruiken, waarvoor wij ze gebruiken, welke gegevens daarbij kunnen worden verwerkt, hoe lang ze worden bewaard en hoe je je keuze kunt aanpassen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wij gebruiken noodzakelijke technieken om onze digitale diensten goed en veilig te laten werken. Niet-noodzakelijke analytics- en marketingtechnieken gebruiken wij alleen nadat je daarvoor toestemming hebt gegeven."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cookies en vergelijkbare technieken kunnen persoonsgegevens verwerken, zoals online identifiers, IP-adres-, apparaat- en gebruiksgegevens. Meer informatie over hoe wij persoonsgegevens verwerken, met wie wij gegevens delen, hoe lang wij gegevens bewaren en welke privacyrechten je hebt, vind je in onze Privacyverklaring."
+        }
+      ]
+    },
+    {
+      "id": "article-1",
+      "title": "1. Wat zijn cookies en vergelijkbare technieken?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cookies zijn kleine tekstbestanden die bij een bezoek aan een website op je computer, tablet of smartphone kunnen worden opgeslagen. Cookies helpen een website bijvoorbeeld om goed te functioneren, een sessie of winkelwagen te onthouden, voorkeuren te bewaren en inzicht te geven in het gebruik van de website."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wij gebruiken ook vergelijkbare technieken, zoals local storage, session storage, pixels, tags, SDK’s, apparaat-ID’s en andere technieken waarmee informatie op een apparaat wordt opgeslagen of uitgelezen. In onze app kunnen vergelijkbare opslag-, authenticatie-, analyse- en notificatietechnieken worden gebruikt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cookies bevatten meestal niet rechtstreeks je naam, maar de informatie kan wel aan jou of aan je apparaat worden gekoppeld, bijvoorbeeld via een account, sessie-ID, cookie-ID, IP-adres of andere online identifier."
+        }
+      ]
+    },
+    {
+      "id": "article-2",
+      "title": "2. Welke categorieën gebruiken wij?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij delen cookies en vergelijkbare technieken in de volgende categorieën in:"
+        },
+        {
+          "type": "subheading",
+          "text": "Overzicht categorieën"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Noodzakelijk — Werking en beveiliging van de website en app, sessies, inloggen, winkelwagen, veilige checkout, gevraagde voorkeuren en cookiekeuze. — Geen toestemming wanneer de techniek strikt noodzakelijk is.",
+            "Voorkeuren — Onthouden van niet-essentiële keuzes, zoals taal, weergave, opgeslagen voorkeuren of recent bekeken producten. — Toestemming wanneer de techniek niet strikt noodzakelijk is.",
+            "Analytics — Meten en analyseren van gebruik, prestaties, fouten en gebruikersinteracties. — Voorafgaande toestemming voor privacygevoelige of niet-noodzakelijke analytics.",
+            "Marketing — Advertentiemeting, retargeting, doelgroepen en marketingpersonalisatie. — Voorafgaande toestemming."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Noodzakelijke technieken kun je niet via de cookiebanner uitschakelen, omdat de website, webshop of app anders mogelijk niet goed of niet veilig werkt. Je kunt deze technieken wel via je browser of apparaat blokkeren, maar sommige functies werken dan mogelijk niet meer."
+        }
+      ]
+    },
+    {
+      "id": "article-3",
+      "title": "3. Hoe werkt de cookiebanner?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij gebruiken een eigen cookie-toestemmingsoplossing die in Next.js is ontwikkeld. Wij gebruiken hiervoor geen externe consent-managementprovider."
+        },
+        {
+          "type": "paragraph",
+          "text": "Alle niet-noodzakelijke cookies en vergelijkbare technieken worden standaard geblokkeerd totdat je daarvoor toestemming geeft. Je kunt alle niet-noodzakelijke technieken accepteren, weigeren of per categorie een keuze maken. De keuze om te weigeren is net zo toegankelijk als de keuze om te accepteren."
+        },
+        {
+          "type": "paragraph",
+          "text": "Je kunt je keuze later op ieder moment aanpassen of intrekken via de cookie- of privacy-instellingen op onze website. Een wijziging of intrekking geldt voor toekomstige verwerking. Voor zover technisch mogelijk worden eerder geplaatste niet-noodzakelijke cookies verwijderd of buiten gebruik gesteld. Je kunt cookies daarnaast zelf verwijderen via je browser- of apparaatinstellingen."
+        }
+      ]
+    },
+    {
+      "id": "article-4",
+      "title": "4. Hoe registreren wij je cookiekeuze?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij kunnen de status van je keuze (geaccepteerd, geweigerd of aangepast), de gekozen categorieën, datum en tijd, een consent-ID of pseudonieme identifier en de versie van de cookiebanner of consentconfiguratie registreren. Wij gebruiken deze gegevens om je keuze te onthouden, toe te passen en waar nodig aan te tonen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: je cookiekeuze en het bijbehorende toestemmingsbewijs worden 6 maanden bewaard. Bij belangrijke wijzigingen in cookies, doeleinden of leveranciers vragen wij eerder opnieuw om een keuze."
+        }
+      ]
+    },
+    {
+      "id": "article-5",
+      "title": "5. Welke cookies en technieken gebruiken wij?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In onderstaande tabel staan de belangrijkste cookies en vergelijkbare technieken die wij gebruiken, hun categorie, doel, gegevens en bewaartermijn. De daadwerkelijk beschikbare technieken kunnen verschillen tussen de website, webshop, klantomgeving, partneromgeving en app."
+        },
+        {
+          "type": "subheading",
+          "text": "Overzicht cookies en technieken"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Eigen sessie-, authenticatie- en beveiligingstechnieken | Noodzakelijk | Inloggen, sessiebeheer, veilige checkout, beveiliging en goede werking | Sessie-ID, authenticatietoken, technische status | Bewaartermijn: Sessiecookies worden verwijderd aan het einde van de sessie of na maximaal 24 uur inactiviteit. Een token voor ingelogd blijven wordt maximaal 30 dagen bewaard.",
+            "Eigen winkelwagentechniek - gast | Noodzakelijk / voorkeur | Winkelwagen tijdelijk bewaren | Producten, aantallen, sessie-, cookie- of apparaat-ID | Bewaartermijn: Maximaal 30 dagen na de laatste activiteit, of eerder wanneer de winkelwagen wordt geleegd of de lokale opslag wordt verwijderd.",
+            "Eigen winkelwagentechniek - ingelogde klant | Noodzakelijk / voorkeur | Winkelwagen aan account koppelen | Producten, aantallen, account-ID, winkelwagengegevens | Bewaartermijn: Maximaal 90 dagen na de laatste activiteit, of totdat de bestelling wordt afgerond of de winkelwagen wordt geleegd.",
+            "Eigen cookievoorkeur | Noodzakelijk | Cookiekeuze onthouden en aantonen | Consentstatus, categorieën, ID, datum/tijd, versie | Bewaartermijn: 6 maanden. Bij belangrijke wijzigingen vragen wij eerder opnieuw om een keuze.",
+            "Google Tag Manager | Beheerlaag | Tags overeenkomstig de cookiekeuze beheren | Afhankelijk van geactiveerde tags | Bewaartermijn: Google Tag Manager heeft geen zelfstandige algemene bewaartermijn. De bewaartermijnen worden bepaald door de diensten die via de tagmanager worden geactiveerd.",
+            "Google Analytics 4 | Analytics | Website- en appgebruik meten en rapporteren | Online identifiers, IP-/apparaat- en browsergegevens, pagina’s, gebeurtenissen, verkeersbron, verwijzer en mogelijk een globale locatie die uit technische gegevens wordt afgeleid | Bewaartermijn: Analytische cookies worden maximaal 6 maanden bewaard. Gegevens op gebruikers- en gebeurtenisniveau in Google Analytics 4 worden maximaal 14 maanden bewaard.",
+            "Microsoft Clarity | Analytics | Gebruiksanalyse, interacties, heatmaps en mogelijk sessieanalyse | Online identifiers, apparaat-, browser-, pagina-, klik- en interactiegegevens en mogelijk een globale locatie die uit technische gegevens wordt afgeleid | Bewaartermijn: Gewone sessieopnames worden 30 dagen bewaard. Klik-, heatmap- en geselecteerde analysegegevens kunnen maximaal 9 maanden worden bewaard.",
+            "Mobiele app-SDK’s en secure storage | Noodzakelijk / analytics / marketing | Appwerking, authenticatie, voorkeuren, analytics en notificaties | Apparaat-/app-ID, tokens, voorkeuren, gebruiksgegevens | Bewaartermijn: Authenticatie- en sessietokens worden gedurende de sessie of maximaal 30 dagen bewaard. Notificatietokens worden bewaard zolang de app op je apparaat actief is of totdat je notificaties uitschakelt. Analyticsgegevens worden maximaal 14 maanden bewaard."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "article-6",
+      "title": "6. Analytics",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wanneer je daarvoor toestemming geeft, gebruiken wij Google Analytics 4 en Microsoft Clarity om inzicht te krijgen in het gebruik en de prestaties van onze website en app. Google Tag Manager gebruiken wij als beheerlaag om tags overeenkomstig je cookiekeuze te activeren."
+        },
+        {
+          "type": "paragraph",
+          "text": "Deze diensten kunnen informatie verwerken over bijvoorbeeld bezochte pagina’s, sessieduur, klik- en scrollgedrag, gebruikte browser en apparaat, technische fouten, verkeersbron, verwijzende pagina en een globale locatie die uit technische gegevens wordt afgeleid. Wij gebruiken deze informatie om prestaties, gebruiksgemak, navigatie en de werking van onze digitale diensten te analyseren en te verbeteren."
+        },
+        {
+          "type": "paragraph",
+          "text": "Google Tag Manager bepaalt niet zelfstandig waarvoor gegevens worden gebruikt. Welke gegevens worden verwerkt en welke bewaartermijn geldt, hangt af van de tags en diensten die via de tagmanager worden geactiveerd."
+        }
+      ]
+    },
+    {
+      "id": "article-7",
+      "title": "7. Marketingcookies en advertenties",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Marketingcookies, pixels en vergelijkbare technieken worden alleen gebruikt nadat je daarvoor toestemming hebt gegeven. Hiermee kunnen wij bijvoorbeeld advertentieprestaties meten, conversies analyseren, doelgroepen opbouwen, remarketing toepassen en marketing beter afstemmen op gebruiks- en interactiegegevens."
+        },
+        {
+          "type": "paragraph",
+          "text": "De actuele marketingtechnieken en aanbieders die op onze website of in onze app actief zijn, worden in het cookie- en technologieoverzicht opgenomen. Wanneer wij een nieuwe advertentie- of socialmediapartner activeren, passen wij dit overzicht en waar nodig de cookiebanner aan voordat de techniek wordt gebruikt."
+        }
+      ]
+    },
+    {
+      "id": "article-8",
+      "title": "8. Cookies en technieken van derden",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sommige cookies, tags en vergelijkbare technieken worden geleverd door externe aanbieders, zoals Google en Microsoft. Deze partijen kunnen gegevens verwerken om de betreffende analyse-, beveiligings- of andere technische dienst te leveren. Voor zover zij persoonsgegevens voor eigen doeleinden verwerken, kunnen ook hun eigen privacy- en cookievoorwaarden van toepassing zijn."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wij nemen een externe partij alleen in deze Cookieverklaring op wanneer die partij via onze website, webshop of app daadwerkelijk cookies of vergelijkbare technieken gebruikt. Een betaalprovider, vervoerder, verzendplatform of andere leverancier wordt daarom niet automatisch als cookieprovider vermeld."
+        }
+      ]
+    },
+    {
+      "id": "article-9",
+      "title": "9. Cookies beheren of verwijderen",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Je kunt je cookiekeuze op ieder moment aanpassen via de cookie- of privacy-instellingen op onze website. Je kunt cookies ook verwijderen of blokkeren via de instellingen van je browser of apparaat. De precieze stappen verschillen per browser en apparaat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wanneer je strikt noodzakelijke cookies of opslagtechnieken blokkeert, kunnen onderdelen van de website, webshop of app niet goed werken. Denk bijvoorbeeld aan inloggen, het onthouden van je winkelwagen, het uitvoeren van een veilige checkout of het bewaren van je cookiekeuze."
+        }
+      ]
+    },
+    {
+      "id": "article-10",
+      "title": "10. Relatie met de Privacyverklaring",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Voor zover cookies en vergelijkbare technieken persoonsgegevens verwerken, is ook onze Privacyverklaring van toepassing. Daarin leggen wij onder meer uit welke wettelijke grondslagen wij gebruiken, met wie wij persoonsgegevens delen, of gegevens buiten de EER worden verwerkt, hoe lang wij persoonsgegevens bewaren en welke privacyrechten je hebt."
+        }
+      ]
+    },
+    {
+      "id": "article-11",
+      "title": "11. Wijzigingen in deze Cookieverklaring",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij kunnen deze Cookieverklaring aanpassen wanneer onze website, app, cookies, leveranciers, doeleinden of wet- en regelgeving wijzigen. De meest actuele versie wordt op onze website gepubliceerd. Bij belangrijke wijzigingen in niet-noodzakelijke cookies, doeleinden of leveranciers vragen wij je waar nodig opnieuw om een keuze."
+        }
+      ]
+    },
+    {
+      "id": "article-12",
+      "title": "12. Contact",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Heb je vragen over deze Cookieverklaring of over het gebruik van cookies en vergelijkbare technieken? Neem dan contact op met:"
+        },
+        {
+          "type": "paragraph",
+          "text": "Asian Spices Online B.V."
+        },
+        {
+          "type": "paragraph",
+          "text": "Klantenservice (Support)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Slakkenveen 341"
+        },
+        {
+          "type": "paragraph",
+          "text": "3205 GK Spijkenisse"
+        },
+        {
+          "type": "paragraph",
+          "text": "E-mail: support@asianspices.online"
+        },
+        {
+          "type": "paragraph",
+          "text": "Algemeen e-mailadres: info@asianspices.online"
+        },
+        {
+          "type": "paragraph",
+          "text": "Telefoon: 010-7660786"
+        },
+        {
+          "type": "paragraph",
+          "text": "Website: www.asianspices.online"
+        },
+        {
+          "type": "contactCards",
+          "cards": [
+            {
+              "icon": "mail",
+              "label": "E-mail",
+              "value": "support@asianspices.online"
+            },
+            {
+              "icon": "mail",
+              "label": "Algemeen e-mailadres",
+              "value": "info@asianspices.online"
+            },
+            {
+              "icon": "phone",
+              "label": "Telefoon",
+              "value": "010-7660786"
+            },
+            {
+              "icon": "privacy",
+              "label": "Adres",
+              "value": "Slakkenveen 341, 3205 GK Spijkenisse"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { AiOutlineMail } from "react-icons/ai";
 import { useZodForm } from "@/hooks/useZodForm";
 import {
@@ -20,7 +21,10 @@ const SubscribeNewsletter = () => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useZodForm(newsletterSchema, { email: "" });
+  } = useZodForm(newsletterSchema, {
+    email: "",
+    privacyConsent: false,
+  });
 
   const onSubmit = async (data: NewsletterFormData) => {
     setStatus(null);
@@ -41,7 +45,7 @@ const SubscribeNewsletter = () => {
           type: "success",
           message: "Subscribed successfully. Thanks for subscribing!",
         });
-        reset();
+        reset({ email: "", privacyConsent: false });
         return;
       }
 
@@ -58,7 +62,7 @@ const SubscribeNewsletter = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-3">
       <div className="flex flex-col lg:flex-row bg-white rounded-xl overflow-hidden shadow-md w-full justify-between">
         <div className="flex items-center flex-1 px-3 py-2 text-gray-400 sm:py-0">
           <AiOutlineMail size={20} />
@@ -81,15 +85,44 @@ const SubscribeNewsletter = () => {
         </button>
       </div>
 
+      <label className="flex items-start gap-2 cursor-pointer text-left">
+        <input
+          type="checkbox"
+          {...register("privacyConsent")}
+          className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 accent-orange-500"
+          disabled={isSubmitting}
+        />
+        <span className="text-xs leading-relaxed text-gray-800">
+          I want to receive the Asian Spices newsletter and agree to the
+          processing of my email as described in the{" "}
+          <Link
+            href="/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-orange-700 underline hover:text-orange-800"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Privacy Policy
+          </Link>
+          .
+        </span>
+      </label>
+
       {errors.email && (
-        <p className="mt-2 text-xs text-red-500">
+        <p className="text-xs text-red-500">
           {getErrorMessage(errors.email)}
+        </p>
+      )}
+
+      {errors.privacyConsent && (
+        <p className="text-xs text-red-500">
+          {getErrorMessage(errors.privacyConsent)}
         </p>
       )}
 
       {status && (
         <p
-          className={`mt-2 text-xs ${
+          className={`text-xs ${
             status.type === "success" ? "text-green-600" : "text-red-500"
           }`}
         >

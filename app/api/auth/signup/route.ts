@@ -8,7 +8,14 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { email, password, name } = body;
+    const { email, password, name, acceptedTerms } = body;
+
+    if (acceptedTerms !== true) {
+      return NextResponse.json(
+        { error: "Please agree to the Terms & Conditions and Privacy Policy" },
+        { status: 400 },
+      );
+    }
 
     if (!email || !password) {
       return NextResponse.json(

@@ -1,8 +1,9 @@
 const announcements = [
-  "100% Organic Certified",
+  "Organic",
   "Free Shipping Over €50",
   "7-Day Money Back",
-  "4.9/5 Rating (10K+ Reviews)",
+  "500+ Partner Farms",
+  "Fair Trade",
 ];
 
 export default function AnnouncementBar() {

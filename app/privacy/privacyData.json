@@ -1,0 +1,910 @@
+{
+  "meta": {
+    "badge": "Juridisch",
+    "title": "Privacyverklaring",
+    "subtitle": "Deze privacyverklaring regelt hoe Asian Spices Online B.V. omgaat met persoonsgegevens van bezoekers, klanten en partners van onze website, webshop en app.",
+    "lastUpdated": "14 juli 2026",
+    "effectiveFrom": "14 juli 2026"
+  },
+  "support": {
+    "heading": "Privacyverzoeken?",
+    "text": "Je kunt je privacyrechten uitoefenen of vragen stellen via onze privacy mailbox.",
+    "email": "support@asianspices.online"
+  },
+  "sections": [
+    {
+      "id": "welkom-bij-asian-spices",
+      "title": "Welkom bij Asian Spices",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wanneer je onze website of app gebruikt, een bestelling plaatst, een account aanmaakt of contact met ons opneemt, hebben wij soms persoonsgegevens nodig. Wij gaan zorgvuldig met die gegevens om. In deze privacyverklaring leggen wij in duidelijke taal uit welke gegevens wij gebruiken, waarom wij dat doen, met wie wij gegevens delen, hoe lang wij ze bewaren en welke rechten en keuzes je hebt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wij verkopen je persoonsgegevens niet. Wij delen gegevens alleen wanneer dat nodig is voor onze dienstverlening, wanneer de wet dat verplicht of wanneer daarvoor een andere geldige grondslag bestaat."
+        }
+      ]
+    },
+    {
+      "id": "in-het-kort",
+      "title": "In het kort",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Wij verzamelen alleen gegevens die nodig zijn voor onze diensten, beveiliging, wettelijke verplichtingen of doelen waarvoor je toestemming hebt gegeven.",
+            "Je kunt bij ons bestellen met een account of als gast.",
+            "Voor nieuwsbrieven, niet-noodzakelijke cookies en bepaalde vormen van personalisatie vragen wij toestemming wanneer dat wettelijk nodig is.",
+            "Partnerstores ontvangen alleen de gegevens die nodig zijn om een toegewezen bestelling uit te voeren.",
+            "Je kunt je privacyrechten uitoefenen via support@asianspices.online.",
+            "Wij gebruiken technische en organisatorische maatregelen om je gegevens te beschermen."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "article-1",
+      "title": "1. Wie is verantwoordelijk voor je gegevens?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Asian Spices Online B.V. is de verwerkingsverantwoordelijke voor de persoonsgegevens die in deze verklaring worden beschreven. Dat betekent dat Asian Spices bepaalt voor welke doelen en op welke manier persoonsgegevens worden gebruikt."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Bedrijfsnaam: Asian Spices Online B.V.",
+            "Vestigingsadres: Slakkenveen 341, 3205 GK Spijkenisse",
+            "KvK-nummer: 42041922",
+            "Website: www.asianspices.online",
+            "Algemeen e-mailadres: info@asianspices.online",
+            "Privacyverzoeken: support@asianspices.online",
+            "Telefoonnummer: 010-7660786",
+            "Contactkanalen: E-mail, chatbot, contactformulier en telefoon",
+            "Privacycontact: Klantenservice"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "article-2",
+      "title": "2. Voor wie geldt deze verklaring?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Deze verklaring geldt voor bezoekers en gebruikers van onze website en webshop, de klantomgeving, de partneromgeving en de mobiele applicatie (hierna: de app). De app is beschikbaar voor iOS en Android."
+        },
+        {
+          "type": "paragraph",
+          "text": "De verklaring is onder meer van toepassing wanneer je:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Onze website of app bezoekt",
+            "Een klantaccount of partneraccount aanmaakt of gebruikt",
+            "Als gast of met een account een bestelling plaatst",
+            "Contact met ons opneemt via e-mail, telefoon, chatbot of contactformulier",
+            "Je inschrijft voor een nieuwsbrief of andere marketingcommunicatie",
+            "Een review achterlaat of wordt uitgenodigd om een review te plaatsen",
+            "Gebruikmaakt van andere functies binnen ons platform"
+          ]
+        },
+        {
+          "type": "subheading",
+          "text": "2.1 Wat zijn persoonsgegevens?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Persoonsgegevens zijn gegevens die direct of indirect iets over jou zeggen. Denk aan je naam, adres, e-mailadres of telefoonnummer. Ook een IP-adres, klantnummer, bestelgeschiedenis, account-ID, apparaat-ID of informatie over je gebruik van onze website of app kan een persoonsgegeven zijn."
+        },
+        {
+          "type": "subheading",
+          "text": "2.2 Van wie ontvangen wij persoonsgegevens?"
+        },
+        {
+          "type": "paragraph",
+          "text": "De meeste persoonsgegevens ontvangen wij rechtstreeks van jou. Dat gebeurt bijvoorbeeld wanneer je een account aanmaakt, een bestelling plaatst, een formulier invult, contact opneemt, je inschrijft voor de nieuwsbrief of een review achterlaat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Daarnaast kunnen wij gegevens ontvangen van partijen die betrokken zijn bij onze dienstverlening. Denk aan betaalproviders, CheapCargo en vervoerders, partnerstores en reviewproviders. Dit kan bijvoorbeeld gaan om een betaalstatus, transactiegegevens, verzend- of bezorginformatie of gegevens over de afhandeling van een review."
+        },
+        {
+          "type": "subheading",
+          "text": "2.3 Welke gegevens zijn verplicht en welke zijn optioneel?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Sommige gegevens zijn nodig om een account aan te maken, een bestelling uit te voeren, een partnerovereenkomst aan te gaan of een andere door jou gevraagde dienst te leveren. Wanneer je verplichte gegevens niet verstrekt, kunnen wij de betreffende dienst mogelijk niet aanbieden of uitvoeren. Gegevens die niet noodzakelijk zijn, worden waar mogelijk als optioneel aangegeven."
+        }
+      ]
+    },
+    {
+      "id": "article-3",
+      "title": "3. Op welke wettelijke grondslagen verwerken wij gegevens?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij verwerken persoonsgegevens alleen wanneer daarvoor een geldige wettelijke grondslag bestaat. Afhankelijk van het doel gebruiken wij een of meer van de volgende grondslagen:"
+        },
+        {
+          "type": "paragraph",
+          "text": "Uitvoering van een overeenkomst: de verwerking is nodig om een bestelling, account, partnerovereenkomst of andere afgesproken dienst uit te voeren, of om op je verzoek stappen te zetten vóór het sluiten van een overeenkomst."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wettelijke verplichting: de verwerking is nodig om te voldoen aan bijvoorbeeld fiscale, administratieve, voedselveiligheids- of andere wettelijke verplichtingen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Toestemming: je hebt vrij en duidelijk toestemming gegeven, bijvoorbeeld voor een nieuwsbrief of niet-noodzakelijke cookies. Je kunt je toestemming altijd intrekken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gerechtvaardigd belang: de verwerking is nodig voor een redelijk bedrijfsbelang, zoals beveiliging, fraudepreventie, klantenservice, het verbeteren van onze dienstverlening of het vaststellen en verdedigen van rechtsvorderingen. Wij wegen dit belang af tegen je privacyrechten."
+        }
+      ]
+    },
+    {
+      "id": "article-4",
+      "title": "4. Welke gegevens gebruiken wij in welke situatie?",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "4.1 Wat gebeurt er wanneer je onze website of app gebruikt?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Wij kunnen technische gegevens verwerken, zoals je IP-adres, browser- en apparaatgegevens, besturingssysteem, sessie-ID, verzoek-URL, tijdstippen, foutmeldingen, authenticatiegebeurtenissen en gegevens over het gebruik van onze website of app."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om onze digitale diensten te laten werken, de veiligheid en beschikbaarheid te bewaken, storingen op te lossen, fraude en misbruik te voorkomen en - wanneer je daarvoor toestemming hebt gegeven - het gebruik van onze diensten te analyseren en de ervaring te verbeteren."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: uitvoering van de gevraagde dienst en ons gerechtvaardigd belang voor noodzakelijke werking en beveiliging; toestemming voor niet-noodzakelijke analytics-, marketing- en trackingtechnieken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: de termijn verschilt per techniek en staat verder uitgewerkt in hoofdstuk 8 en onze Cookieverklaring."
+        },
+        {
+          "type": "subheading",
+          "text": "4.2 Welke gegevens gebruiken wij voor je klantaccount?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Voor het aanmaken en beheren van een klantaccount verwerken wij je voornaam, achternaam, e-mailadres, telefoonnummer en wachtwoord. Wanneer je vrijwillig een adres toevoegt, verwerken wij ook je adresgegevens. Wij verwerken daarnaast je account-ID, inlogmomenten, verificatiegegevens en de registratie van je 18+-verklaring."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om je account aan te maken en te beheren, beveiligd inloggen mogelijk te maken, je identiteit of contactgegevens te verifiëren, je wachtwoord te herstellen, je te informeren over je account en bestellingen, ondersteuning te bieden en toekomstige bestellingen sneller af te ronden."
+        },
+        {
+          "type": "paragraph",
+          "text": "Je e-mailadres wordt gebruikt voor accountbevestigingen, belangrijke accountmeldingen, wachtwoordherstel en communicatie over bestellingen. Je telefoonnummer kan worden gebruikt voor accountbeveiliging, eenmalige verificatiecodes en belangrijke informatie over een bestelling of bezorging. Voor accountverificatie kan een eenmalige verificatiecode (OTP) per e-mail of sms worden verstuurd."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wachtwoorden worden niet leesbaar opgeslagen. Zij worden beveiligd verwerkt met een eenrichtingshash."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: uitvoering van de overeenkomst voor accountbeheer; gerechtvaardigd belang voor accountbeveiliging, fraudepreventie en bescherming tegen onbevoegde toegang."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: je account wordt tot 24 maanden na de laatste activiteit bewaard. Voordat een inactief account wordt verwijderd, kunnen wij je hierover informeren. Daarna verwijderen of anonimiseren wij de accountgegevens, behalve gegevens die wij wettelijk langer moeten bewaren."
+        },
+        {
+          "type": "subheading",
+          "text": "4.3 Welke gegevens hebben wij nodig voor een bestelling?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Je kunt een bestelling plaatsen met een account of als gast."
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Wij verwerken onder meer je voornaam, achternaam, e-mailadres, telefoonnummer indien verstrekt, factuuradres, bezorgadres, postcode, woonplaats, land, ordernummer, bestelregels, klantnotities, betaalstatus en tijdstippen van aanmaak en wijziging."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om de bestelling te verwerken, de betaling te registreren, de levering te organiseren, orderupdates te sturen, klantenservice te bieden, retouren en terugbetalingen af te handelen, fraude te voorkomen en aan wettelijke verplichtingen te voldoen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: uitvoering van de overeenkomst; wettelijke verplichting voor de relevante financiële en administratieve gegevens; gerechtvaardigd belang voor fraudepreventie en dossieropbouw."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: relevante order- en factuurgegevens die onderdeel zijn van onze fiscale administratie worden in beginsel 7 jaar bewaard. Wanneer een toepasselijke OSS- of IOSS-verplichting geldt, kan een termijn van 10 jaar gelden. Andere persoonsgegevens uit gastbestellingen worden maximaal 24 maanden na voltooiing van de bestelling bewaard, tenzij een langere termijn nodig is voor bijvoorbeeld een klacht, terugroepactie, geschil of wettelijke verplichting."
+        },
+        {
+          "type": "subheading",
+          "text": "4.4 Hoe verwerken wij betalingen en terugbetalingen?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Asian Spices ontvangt geen volledige betaalkaartnummers, CVV/CVC-codes, bankinloggegevens of andere gevoelige betaalgegevens. Wij ontvangen wel gegevens die nodig zijn voor orderbeheer, klantenservice en administratie, zoals een transactie-ID, betaalstatus, betaalmethode, bedrag, valuta, tijdstip en betaalreferentie."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om betalingen te koppelen aan bestellingen, betalingsstatussen te verwerken, vragen te beantwoorden, terugbetalingen uit te voeren en onze administratie bij te houden."
+        },
+        {
+          "type": "paragraph",
+          "text": "Betalingen worden verwerkt via PAY. en PayPal. Een terugbetaling wordt door een bevoegde medewerker gestart en vervolgens uitgevoerd door de betaalprovider die de oorspronkelijke betaling heeft verwerkt. De terugbetaling gaat in beginsel terug naar de oorspronkelijke betaalmethode."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: uitvoering van de overeenkomst en wettelijke administratieve verplichtingen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: betaal- en factuurgegevens die deel uitmaken van de fiscale administratie worden gedurende de toepasselijke wettelijke termijn bewaard."
+        },
+        {
+          "type": "subheading",
+          "text": "4.5 Hoe worden je gegevens gebruikt voor levering en partnerstores?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Een toegewezen partnerstore ziet in de partneromgeving de bestelde producten en de postcode. Voor het aanmaken en printen van het verzendlabel worden je naam en volledige bezorgadres beschikbaar gesteld. De partnerstore ontvangt geen e-mailadres of telefoonnummer van je, tenzij dit in een uitzonderlijke situatie noodzakelijk is voor de uitvoering van de bestelling en Asian Spices dit toestaat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? De partnerstore gebruikt deze gegevens uitsluitend om de toegewezen bestelling klaar te maken en de verzending uit te voeren. De partnerstore mag de gegevens niet voor eigen marketing gebruiken en neemt niet rechtstreeks contact met je op, tenzij Asian Spices dit in een specifieke situatie noodzakelijk en toegestaan acht."
+        },
+        {
+          "type": "paragraph",
+          "text": "Asian Spices blijft je aanspreekpunt voor klachten, retouren en terugbetalingen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Voor het boeken van zendingen gebruiken wij CheapCargo. Afhankelijk van de zending kan een vervoerder zoals DHL, PostNL, DPD, UPS of een andere via CheapCargo beschikbare vervoerder worden ingezet. Voor het verzendlabel, de bezorging en track-and-trace kunnen naam, adresgegevens, telefoonnummer en e-mailadres worden gedeeld voor zover dat noodzakelijk is."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: uitvoering van de overeenkomst."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: verzend- en bezorggegevens worden bewaard zolang dat nodig is voor levering, klantenservice, retouren, klachten en de toepasselijke administratie."
+        },
+        {
+          "type": "subheading",
+          "text": "4.6 Wat gebeurt er wanneer je contact opneemt met onze klantenservice of chatbot?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Wij verwerken de informatie die je zelf verstrekt, zoals je naam, contactgegevens, account- of ordergegevens, de inhoud van je bericht, bijlagen en andere informatie die nodig is om je vraag of klacht te behandelen. Bij chat kunnen ook tijdstippen, sessie-ID’s, systeemantwoorden en technische browser- of apparaatgegevens worden verwerkt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om je vraag, klacht of verzoek te behandelen, je te ondersteunen, problemen op te lossen, de veiligheid te bewaken en onze dienstverlening te verbeteren."
+        },
+        {
+          "type": "paragraph",
+          "text": "De chatbot gebruikt Guru AI, de Google Gemini API en zelf gehoste n8n-workflows. De contactformulier- en chatworkflows worden via n8n en Google Cloud Platform verwerkt. Berichten die je via de AI-chatbot verstuurt, worden verwerkt om een antwoord te genereren en de chatfunctie te laten werken. Toegang is beperkt tot bevoegde systeembeheerders, ontwikkelaars en klantenservicemedewerkers voor zover dit voor hun werkzaamheden nodig is. Wij richten de diensten zo in dat chatgegevens niet worden gebruikt om algemene externe AI-modellen te trainen."
+        },
+        {
+          "type": "paragraph",
+          "text": "AI-gegenereerde antwoorden kunnen onvolledig of onjuist zijn. Gebruik de chatbot niet voor spoedeisende, medische of andere professionele beslissingen. Deel via de chatbot geen identiteitsdocumenten, volledige betaalkaartgegevens of andere gevoelige informatie, tenzij dit noodzakelijk is en wij daarvoor een passend beveiligd kanaal aanbieden."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: uitvoering van de overeenkomst of de gevraagde dienst; gerechtvaardigd belang bij klantenservice, kwaliteitsverbetering, beveiliging en foutoplossing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: routinematige chatbotgesprekken en contactformuliergegevens worden 6 maanden bewaard. Formele klachten, technische escalaties en factureringskwesties worden 24 maanden na definitieve afhandeling bewaard. Gegevens kunnen langer worden bewaard wanneer een klacht, onderzoek, wettelijke verplichting of juridisch geschil dat noodzakelijk maakt."
+        },
+        {
+          "type": "subheading",
+          "text": "4.7 Wat gebeurt er bij contact via telefoon?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Wanneer je telefonisch contact opneemt, verwerken wij je telefoonnummer, berichtinhoud en andere gegevens die je zelf verstrekt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om je vraag te behandelen, je te ondersteunen en onze dienstverlening uit te voeren."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: uitvoering van de overeenkomst of gevraagde ondersteuning en/of gerechtvaardigd belang bij klantenservice en dossieropbouw."
+        },
+        {
+          "type": "paragraph",
+          "text": "Opname van telefoongesprekken: telefoongesprekken kunnen worden opgenomen voor kwaliteits-, trainings- en beveiligingsdoeleinden. Je wordt hierover vooraf geïnformeerd. Routinematige opnames worden maximaal 3 maanden bewaard. Wanneer een opname onderdeel is van een formele klacht of een geschil, kan deze tot 24 maanden na afhandeling worden bewaard of langer zolang de procedure loopt."
+        },
+        {
+          "type": "subheading",
+          "text": "4.8 Hoe werkt onze nieuwsbrief en marketingcommunicatie?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Wanneer je je aanmeldt, verwerken wij je e-mailadres, de datum en het tijdstip van inschrijving, de inschrijfmethode, de versie van de toestemmingszin, de bevestiging van je inschrijving en je afmelddatum. Wanneer je daarvoor toestemming hebt gegeven, kunnen wij ook verwerken of je een bericht hebt geopend en op een link hebt geklikt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om je nieuws, inspiratie, recepten, informatie over nieuwe producten en aanbiedingen te sturen en om de werking van onze communicatie te analyseren wanneer je daarvoor toestemming hebt gegeven."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aanmelding is vrijwillig en staat los van het aanmaken van een account. Het vakje staat niet vooraf aangevinkt. Iedere nieuwsbrief bevat een afmeldmogelijkheid. Na afmelding bewaren wij alleen de minimale gegevens die nodig zijn om de afmelding te respecteren en, voor zover noodzakelijk, om aan te tonen dat de eerdere verzending rechtmatig was."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: toestemming. Voor bepaalde berichten aan bestaande klanten over eigen soortgelijke producten kan een wettelijke uitzondering gelden, mits aan alle voorwaarden is voldaan en een eenvoudige afmeldmogelijkheid wordt geboden."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: zolang je inschrijving actief is. Na afmelding bewaren wij beperkt bewijs van de toestemming gedurende 5 jaar. Een minimale suppressieregistratie bewaren wij zolang dit nodig is om je afmelding te respecteren."
+        },
+        {
+          "type": "subheading",
+          "text": "4.9 Wat doen wij met verlaten winkelwagens en productaanbevelingen?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Wij kunnen je naam, e-mailadres, account-ID, de inhoud en waarde van je winkelwagen, het moment waarop de winkelwagen is verlaten, eerdere bestellingen, bekeken producten, opgeslagen voorkeuren en interactiegegevens gebruiken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij bewaren winkelwagens tijdelijk zodat je later verder kunt winkelen. Wanneer daarvoor een geldige grondslag bestaat, kunnen wij je herinneren aan een achtergelaten winkelwagen. Wij kunnen daarnaast producten aanbevelen op onze website, in de app, in je account of per e-mail om de dienstverlening relevanter en gebruiksvriendelijker te maken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wanneer productaanbevelingen per e-mail worden verstuurd, kun je je afmelden via de afmeldlink. Je kunt ook bezwaar maken tegen het gebruik van je gegevens voor direct marketing via support@asianspices.online."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: toestemming wanneer die wettelijk vereist is; voor bestaande klanten kan onder voorwaarden een wettelijke uitzondering gelden voor eigen soortgelijke producten. Voor beperkte aanbevelingen binnen de website, app of het account kunnen wij ons baseren op een gerechtvaardigd belang, voor zover de verwerking noodzakelijk, proportioneel en redelijk te verwachten is. Voor niet-noodzakelijke trackingtechnieken vragen wij toestemming."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: gastwinkelwagens worden maximaal 30 dagen na de laatste activiteit bewaard. Winkelwagens van ingelogde klanten worden maximaal 90 dagen na de laatste activiteit bewaard, of totdat de bestelling wordt afgerond of de winkelwagen wordt leeggemaakt."
+        },
+        {
+          "type": "subheading",
+          "text": "4.10 Hoe werken reviews?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Voor beoordelingsuitnodigingen kunnen wij je naam, e-mailadres, bestelnummer, besteldatum en relevante bestelgegevens verwerken en delen met Trusted Shops. Wanneer je een review plaatst, kunnen de gekozen weergavenaam, sterrenbeoordeling, reviewtekst, reactie en vrijwillig verstrekte aanvullende informatie worden verwerkt. Je e-mailadres wordt niet openbaar weergegeven."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij verzamelen reviews om inzicht te krijgen in ervaringen, onze producten en dienstverlening te verbeteren, andere klanten te helpen bij hun keuze en de authenticiteit van beoordelingen te controleren."
+        },
+        {
+          "type": "paragraph",
+          "text": "Het plaatsen van een review is vrijwillig. Je kunt een uitnodiging negeren en je, voor zover de dienst dat aanbiedt, afmelden voor verdere beoordelingsuitnodigingen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: gerechtvaardigd belang bij het verzamelen en controleren van authentieke beoordelingen en het verbeteren van onze dienstverlening; toestemming voor zover die voor specifieke communicatie of tracking vereist is."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: een review wordt bewaard zolang deze gepubliceerd is. Gegevens voor uitnodigingen en verificatie worden maximaal 24 maanden bewaard, tenzij een klacht of geschil langer bewaren noodzakelijk maakt."
+        },
+        {
+          "type": "subheading",
+          "text": "4.11 Hoe gebruiken wij gegevens voor voedselveiligheid en terugroepacties?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Wij kunnen bestelgegevens, gekochte producten, batch- of productgegevens en contactgegevens gebruiken. Wanneer je zelf informatie deelt over een allergie, intolerantie, medische reactie, medicijngebruik of andere gezondheidskwestie, kan dit bijzondere persoonsgegevens bevatten."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om te voldoen aan verplichtingen rond voedsel- en productveiligheid, traceerbaarheid, veiligheidswaarschuwingen en terugroepacties en om meldingen of klachten zorgvuldig te behandelen. Wanneer een product mogelijk onveilig is of wordt teruggeroepen, kunnen wij rechtstreeks contact opnemen met klanten die het product hebben gekocht."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wij vragen niet standaard om medische of andere gezondheidsgegevens. Wanneer je zulke informatie vrijwillig deelt, verwerken wij deze alleen voor zover dat noodzakelijk is voor de behandeling van je melding of klacht, voedsel- of productveiligheid, het vaststellen, uitoefenen of verdedigen van rechtsvorderingen of op basis van een andere geldige uitzondering voor bijzondere persoonsgegevens."
+        },
+        {
+          "type": "paragraph",
+          "text": "Asian Spices is geen zorgverlener, stelt geen diagnoses en geeft geen persoonlijk medisch advies. Onze klantenservice beoordeelt niet of een product geschikt is in combinatie met geneesmiddelen, medische aandoeningen, allergieën, zwangerschap of borstvoeding. Raadpleeg bij medische vragen of twijfel een arts, apotheker of andere bevoegde zorgverlener en lees altijd het etiket, de ingrediënten, allergeneninformatie en waarschuwingen van het product."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: wettelijke verplichting en/of gerechtvaardigd belang bij voedsel- en productveiligheid; voor gezondheidsgegevens daarnaast een toepasselijke uitzondering voor de verwerking van bijzondere persoonsgegevens, zoals uitdrukkelijke toestemming of de noodzaak voor rechtsvorderingen, afhankelijk van de situatie."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: gezondheidsinformatie die je vrijwillig deelt is alleen toegankelijk voor medewerkers die deze nodig hebben voor de behandeling van de melding. Wij bewaren deze informatie maximaal 24 maanden na definitieve afhandeling, tenzij een wettelijke verplichting, terugroepactie of juridisch geschil een langere termijn noodzakelijk maakt."
+        },
+        {
+          "type": "subheading",
+          "text": "4.12 Hoe gebruiken wij gegevens voor beveiliging, fraudepreventie en juridische geschillen?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Wij kunnen IP-adressen, account-ID’s, sessiegegevens, inlogpogingen, apparaat- en browsergegevens, technische logs, beveiligingsgebeurtenissen en relevante account-, order-, betaal-, contact- en dossiergegevens verwerken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om onze systemen te beveiligen, onbevoegde toegang, misbruik en fraude te voorkomen en te onderzoeken, incidenten af te handelen en rechtsvorderingen vast te stellen, uit te oefenen of te verdedigen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: gerechtvaardigd belang en, wanneer concreet van toepassing, een wettelijke verplichting."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: de termijn verschilt per logtype en situatie. De termijnen staan in hoofdstuk 8."
+        },
+        {
+          "type": "subheading",
+          "text": "4.13 Hoe werkt het puntenprogramma en het delen van recepten?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Welke gegevens? Wanneer je deelneemt aan ons puntenprogramma, verwerken wij je account-ID, puntensaldo, puntentransacties, de activiteiten waarmee je punten verdient of inwisselt en de bijbehorende datum en tijd. Wanneer je een recept, foto of andere bijdrage instuurt, verwerken wij de inhoud die je aanlevert, je gekozen weergavenaam, de datum van inzending en gegevens over beoordeling, moderatie en publicatie."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om punten toe te kennen en in te wisselen, deelname te beheren, bijdragen te beoordelen en publiceren, misbruik te voorkomen en onze community en dienstverlening te verbeteren. Je bent zelf verantwoordelijk voor de inhoud die je instuurt en mag geen persoonsgegevens van anderen delen zonder geldige toestemming."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: uitvoering van de overeenkomst voor deelname aan het puntenprogramma; toestemming of de afspraken die gelden voor de publicatie van een vrijwillige bijdrage; gerechtvaardigd belang voor moderatie, beveiliging en het voorkomen van misbruik."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: gegevens over je puntensaldo en deelname worden bewaard zolang je account actief is en daarna maximaal 24 maanden, tenzij een wettelijke verplichting of geschil een langere termijn vereist. Gepubliceerde recepten en bijdragen blijven zichtbaar zolang zij onderdeel zijn van het platform. Wanneer je account wordt verwijderd, verwijderen of anonimiseren wij de koppeling met je account waar mogelijk. Je kunt verzoeken om een bijdrage te laten verwijderen."
+        }
+      ]
+    },
+    {
+      "id": "article-5",
+      "title": "5. Partneraccounts en de partneromgeving",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Partnerstores gebruiken een eigen partneromgeving binnen het Asian Spices-platform. Voor het beoordelen van partneraanvragen en het aanmaken, beheren en beveiligen van partneraccounts verwerken wij persoonsgegevens van eigenaren, vertegenwoordigers, medewerkers en contactpersonen van partnerstores."
+        },
+        {
+          "type": "subheading",
+          "text": "Welke gegevens verwerken wij bij een partnerregistratie?"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Bedrijfsnaam en handelsnaam",
+            "Kvk-nummer",
+            "Btw-identificatienummer",
+            "Het bij de kamer van koophandel geregistreerde adres",
+            "Naam en zakelijke contactgegevens van de eigenaar, vertegenwoordiger of contactpersoon",
+            "Gegevens waaruit blijkt dat een persoon bevoegd is om namens de onderneming te handelen, bijvoorbeeld een volmacht",
+            "Gegevens die nodig zijn om de identiteit van de bevoegde vertegenwoordiger te verifiëren",
+            "Account- en inloggegevens"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Gegevens over het gebruik en de beveiliging van de partneromgeving."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waarom? Wij gebruiken deze gegevens om partneraanvragen te beoordelen en te verifiëren, bedrijfs- en contactgegevens te controleren, de samenwerkingsovereenkomst aan te gaan en uit te voeren, accounts te beheren en te beveiligen, communicatie en ondersteuning te bieden, orders te verwerken en misbruik of fraude te voorkomen en te onderzoeken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grondslag: uitvoering van de samenwerkingsovereenkomst en ons gerechtvaardigd belang bij partnerbeheer, verificatie en beveiliging."
+        },
+        {
+          "type": "subheading",
+          "text": "Kunnen meerdere medewerkers de partneromgeving gebruiken?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Een partnerstore kan meerdere bevoegde medewerkers toegang geven. Voor iedere gebruiker kunnen wij onder meer de naam, het zakelijke e-mailadres, het zakelijke telefoonnummer, de toegewezen gebruikersrol, account- en inloggegevens en relevante beveiligings- en gebruiksgegevens verwerken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gebruikers krijgen uitsluitend toegang tot de gegevens en functies die nodig zijn voor hun rol en werkzaamheden. De partnerstore is verantwoordelijk voor het actueel houden van gebruikersaccounts en het tijdig laten blokkeren of verwijderen van toegang wanneer een medewerker niet langer werkzaam is of de toegang niet meer nodig heeft."
+        },
+        {
+          "type": "subheading",
+          "text": "Welke beveiligingsgegevens kunnen wij verwerken?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Voor authenticatie en beveiliging kunnen wij onder meer inloggegevens, verificatiegegevens, IP-adressen, browser- en apparaatgegevens, inlogmomenten, mislukte inlogpogingen, sessiegegevens en beveiligings- en activiteitenlogs verwerken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Verificatie en uitbetalingen: voor partnerverificatie registreren wij de uitkomst, datum en methode van de identiteits- en bevoegdheidscontrole. Wij bewaren niet standaard een volledige kopie van een identiteitsdocument. Wanneer een kopie wettelijk of aantoonbaar noodzakelijk is, beperken en beveiligen wij de gegevens. Voor uitbetalingen kunnen wij de naam van de rekeninghouder en het bankrekeningnummer verwerken. Toegang tot de partneromgeving is rolgebonden en voor bevoegde gebruikers wordt MFA/OTP gebruikt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bewaartermijn: gegevens van een actieve partnerstore worden gedurende de samenwerking bewaard. Bij beëindiging wordt de toegang direct ingetrokken. Niet-financiële account- en profielgegevens worden daarna maximaal 12 maanden bewaard. Gegevens van afgewezen partneraanvragen worden maximaal 6 maanden na de definitieve afwijzing bewaard. Financiële en administratieve gegevens worden gedurende de toepasselijke wettelijke termijn bewaard."
+        }
+      ]
+    },
+    {
+      "id": "article-6",
+      "title": "6. Met wie delen wij persoonsgegevens?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij delen persoonsgegevens alleen wanneer dat nodig is om onze diensten te leveren, om aan een wettelijke verplichting te voldoen of wanneer daarvoor een andere geldige grondslag bestaat. Wij verkopen of verhuren je persoonsgegevens niet."
+        },
+        {
+          "type": "subheading",
+          "text": "6.1 Partnerstores"
+        },
+        {
+          "type": "paragraph",
+          "text": "Wij delen met de toegewezen partnerstore alleen de gegevens die nodig zijn om de bestelling voor te bereiden en de verzending uit te voeren. Meer informatie staat in paragraaf 4.5."
+        },
+        {
+          "type": "subheading",
+          "text": "6.2 Itsolutionsworldwide.BV"
+        },
+        {
+          "type": "paragraph",
+          "text": "Itsolutionsworldwide.BV heeft toegang tot de productieomgeving en productiegegevens voor technisch beheer, implementatie, onderhoud, beveiliging, ondersteuning, probleemoplossing, databasebeheer, kwaliteitsborging en beveiligingsupdates. Toegang kan plaatsvinden vanuit Pakistan en andere vooraf goedgekeurde werklocaties."
+        },
+        {
+          "type": "paragraph",
+          "text": "Toegang is beperkt tot bevoegde rollen, zoals de Technical Lead, netwerk-/IT-beheerders en het kernontwikkelingsteam. Toegang wordt ingericht op basis van het least-privilegebeginsel, rolgebaseerde rechten, 2FA/MFA en platformlogs. Productiegegevens worden niet rechtstreeks naar ontwikkel- of testomgevingen gekopieerd; voor testen worden dummygegevens of geanonimiseerde gegevens gebruikt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Itsolutionsworldwide.BV verwerkt persoonsgegevens in opdracht van Asian Spices. Wij hebben hierover afspraken vastgelegd in een verwerkersovereenkomst. Voor toegang vanuit Pakistan gebruiken wij de standaardcontractbepalingen van de Europese Commissie en aanvullende technische en organisatorische beveiligingsmaatregelen. Wij beoordelen de risico’s van deze doorgifte periodiek."
+        },
+        {
+          "type": "subheading",
+          "text": "6.3 Hosting, domein, database en broncode"
+        },
+        {
+          "type": "paragraph",
+          "text": "Onze website en webapplicatie worden gehost via Vercel in een cloud-/serverlessomgeving. Het domein en DNS worden beheerd via GoDaddy. De primaire productieomgeving is geconfigureerd in Frankrijk en Duitsland. De applicatie gebruikt PostgreSQL als database. GitHub wordt gebruikt voor broncode en versiebeheer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Back-ups en herstelvoorzieningen worden gebruikt voor continuïteit en beveiliging. Cloud database- en deploymentback-ups worden versleuteld en gedurende een doorlopende periode van 30 dagen bewaard. Productiepersoonsgegevens worden niet als onbeheerde lokale ontwikkelback-up gebruikt."
+        },
+        {
+          "type": "subheading",
+          "text": "6.4 E-mail"
+        },
+        {
+          "type": "paragraph",
+          "text": "De mailboxen en mailserver, waaronder mail.asianspices.online, worden gehost via de GoDaddy cPanel-omgeving. Geautomatiseerde order-, betaal-, verzend-, account- en wachtwoordberichten worden verzonden via de GoDaddy cPanel SMTP-server. Voor de verzending kunnen naam, e-mailadres, order- of factuurgegevens en, wanneer nodig, bezorggegevens worden verwerkt. Technische verzendlogs worden 30 dagen bewaard."
+        },
+        {
+          "type": "subheading",
+          "text": "6.5 Betalingen"
+        },
+        {
+          "type": "paragraph",
+          "text": "Voor betalingen en terugbetalingen gebruiken wij PAY. en PayPal. Deze partijen verwerken betaalgegevens volgens hun eigen voorwaarden en privacybeleid. Asian Spices ontvangt alleen de niet-gevoelige betaalinformatie die nodig is voor orderbeheer, klantenservice, terugbetalingen en administratie."
+        },
+        {
+          "type": "subheading",
+          "text": "6.6 Verzending en vervoerders"
+        },
+        {
+          "type": "paragraph",
+          "text": "Voor verzending gebruiken wij CheapCargo en de vervoerder die voor de betreffende zending wordt geselecteerd. De noodzakelijke gegevens worden alleen gedeeld voor het aanmaken van het verzendlabel, de bezorging, track-and-trace en de afhandeling van verzendvragen."
+        },
+        {
+          "type": "subheading",
+          "text": "6.7 Boekhouding"
+        },
+        {
+          "type": "paragraph",
+          "text": "Voor onze financiële administratie gebruiken wij E-boekhouden.nl. Wij verwerken daarin factuurgegevens, relevante order- en betaalgegevens en de contactgegevens die nodig zijn voor onze administratie. Alleen bevoegde personen hebben toegang tot de boekhouding."
+        },
+        {
+          "type": "subheading",
+          "text": "6.8 Chatbot, AI en klantenservice"
+        },
+        {
+          "type": "paragraph",
+          "text": "Voor chatbot- en contactprocessen gebruiken wij Guru AI, Google Gemini, Google Cloud en n8n. Deze partijen verwerken gegevens alleen voor zover dat nodig is voor de chatbot, routering, ondersteuning, beveiliging en kwaliteitsbewaking. Wij maken passende contractuele en technische afspraken om de verwerking te beperken en te beveiligen."
+        },
+        {
+          "type": "subheading",
+          "text": "6.9 Analytics, cookies en vergelijkbare technieken"
+        },
+        {
+          "type": "paragraph",
+          "text": "Wanneer je toestemming geeft, gebruiken wij Google Tag Manager, Google Analytics 4 en Microsoft Clarity. Deze diensten kunnen technische en gebruiksgegevens verwerken. Meer informatie staat in onze Cookieverklaring."
+        },
+        {
+          "type": "subheading",
+          "text": "6.10 Reviews"
+        },
+        {
+          "type": "paragraph",
+          "text": "Voor het verzamelen, controleren en publiceren van klantbeoordelingen gebruiken wij Trusted Shops. Voor beoordelingsuitnodigingen kunnen wij je naam, e-mailadres, bestelnummer, besteldatum en relevante bestelgegevens delen. Trusted Shops kan deze gegevens gebruiken om uitnodigingen te verzenden, beoordelingen aan bestellingen te koppelen, de authenticiteit te controleren en reviews te beheren en publiceren."
+        },
+        {
+          "type": "subheading",
+          "text": "6.11 Overheidsinstanties en juridische verplichtingen"
+        },
+        {
+          "type": "paragraph",
+          "text": "Wij kunnen persoonsgegevens verstrekken aan bevoegde overheidsinstanties, toezichthouders, opsporingsinstanties, belastingautoriteiten of andere partijen wanneer wij daartoe wettelijk verplicht zijn of wanneer dit noodzakelijk is voor het vaststellen, uitoefenen of verdedigen van rechtsvorderingen."
+        }
+      ]
+    },
+    {
+      "id": "article-7",
+      "title": "7. Worden gegevens buiten de Europese Economische Ruimte verwerkt?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sommige leveranciers of bevoegde medewerkers kunnen persoonsgegevens verwerken of raadplegen buiten de Europese Economische Ruimte (EER). Bevoegde medewerkers van Itsolutionsworldwide.BV kunnen bijvoorbeeld vanuit Pakistan toegang krijgen tot persoonsgegevens voor technisch beheer, onderhoud, beveiliging en ondersteuning. Ook internationale leveranciers kunnen wereldwijde infrastructuur of ondersteuning gebruiken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wanneer persoonsgegevens buiten de EER worden doorgegeven, gebruiken wij een geldige doorgiftegrondslag en passende waarborgen. Voor toegang vanuit Pakistan gebruiken wij de standaardcontractbepalingen van de Europese Commissie, aangevuld met technische en organisatorische beveiligingsmaatregelen. Voor andere internationale leveranciers gebruiken wij een adequaatheidsbesluit, standaardcontractbepalingen of een andere geldige doorgiftewaarborg, afhankelijk van de betreffende verwerking."
+        }
+      ]
+    },
+    {
+      "id": "article-8",
+      "title": "8. Hoe lang bewaren wij persoonsgegevens?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij bewaren persoonsgegevens niet langer dan nodig is voor het doel waarvoor zij zijn verzameld, tenzij een wettelijke bewaarplicht of een andere gerechtvaardigde noodzaak een langere termijn vereist. Hieronder vind je de belangrijkste bewaartermijnen. Na afloop verwijderen of anonimiseren wij de gegevens, tenzij een uitzondering van toepassing is."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Facturen en fiscale basisadministratie: 7 jaar. Voor gegevens die onder een toepasselijke OSS- of IOSS-verplichting vallen, kan een termijn van 10 jaar gelden.",
+            "Routinematige chatbot- en contactformuliergegevens: 6 maanden.",
+            "Formele klachten, technische escalaties en factureringskwesties: 24 maanden na definitieve afhandeling; langer wanneer een klacht, onderzoek of juridisch geschil nog loopt.",
+            "E-mailverzendlogs in cPanel: 30 dagen.",
+            "Cloud database- en deploymentback-ups: 30 dagen volgens een doorlopende, versleutelde back-upcyclus.",
+            "Klantaccount: Tot 24 maanden na de laatste activiteit. Daarna verwijderen of anonimiseren wij de accountgegevens, behalve gegevens die wettelijk langer moeten worden bewaard.",
+            "Bestelgeschiedenis in klantaccount: Zichtbaar zolang het account actief is. Na accountverwijdering niet meer zichtbaar voor de klant; fiscale gegevens blijven intern 7 jaar of, indien van toepassing, 10 jaar bewaard.",
+            "Niet-fiscale gastbestelgegevens: 24 maanden na voltooiing van de bestelling. Daarna verwijderen of anonimiseren wij de niet-fiscale gegevens, tenzij een langere termijn nodig is voor een klacht, terugroepactie, geschil of wettelijke verplichting.",
+            "Winkelwagen gast: 30 dagen na de laatste activiteit, tenzij de winkelwagen eerder wordt geleegd of de lokale opslag eerder wordt verwijderd.",
+            "Winkelwagen ingelogde klant: 90 dagen na de laatste activiteit, of totdat de bestelling wordt afgerond of de winkelwagen wordt leeggemaakt.",
+            "Applicatie- en foutlogs: 30 dagen.",
+            "Toegangs- en beveiligingslogs: 90 dagen. Relevante logs kunnen langer worden bewaard wanneer dit nodig is voor een beveiligingsincident of onderzoek.",
+            "Beheer- en auditlogs: 12 maanden.",
+            "Mailboxinhoud en reguliere e-mails: Routinematige klantcommunicatie: 12 maanden na afhandeling. Formele klachten of geschillen: 24 maanden na afhandeling. E-mails die onderdeel zijn van de fiscale of wettelijke administratie: 7 jaar.",
+            "Nieuwsbriefinschrijving en toestemmingsbewijs: Zolang de inschrijving actief is. Na afmelding bewaren wij beperkt bewijs van toestemming gedurende 5 jaar. Een minimale suppressieregistratie bewaren wij zolang dit nodig is om de afmelding te respecteren.",
+            "Cookiekeuze en toestemmingsbewijs: 6 maanden. Bij belangrijke wijzigingen in cookies, doeleinden of leveranciers vragen wij eerder opnieuw om een keuze.",
+            "Reviews: Zolang de review gepubliceerd is. Gegevens voor beoordelingsuitnodigingen en verificatie: maximaal 24 maanden, tenzij een klacht of geschil langer bewaren noodzakelijk maakt.",
+            "Telefoonopnames: Routinematige opnames voor kwaliteit, training en beveiliging: maximaal 3 maanden. Wanneer een opname onderdeel is van een formele klacht of een geschil: maximaal 24 maanden na afhandeling, of langer zolang de procedure loopt.",
+            "Afgewezen partneraanvragen: 6 maanden na de definitieve afwijzing, tenzij langer bewaren nodig is voor een klacht of geschil.",
+            "Partneraccount na beëindiging: Toegang wordt direct beëindigd. Niet-financiële account- en profielgegevens worden maximaal 12 maanden bewaard. Financiële en fiscale gegevens worden gedurende de wettelijke termijn bewaard."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "article-9",
+      "title": "9. Hoe beveiligen wij persoonsgegevens?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij nemen passende technische en organisatorische maatregelen om persoonsgegevens te beschermen tegen verlies, misbruik, onbevoegde toegang, ongewenste openbaarmaking en ongeoorloofde wijziging."
+        },
+        {
+          "type": "subheading",
+          "text": "Wij gebruiken onder meer de volgende beveiligingsmaatregelen:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "HTTPS/TLS-versleuteling voor de website, app, API’s en beheeromgevingen;",
+            "Rolgebaseerde toegangsrechten en het least-privilegebeginsel;",
+            "2FA/MFA voor kritieke beheer-, infrastructuur- en ontwikkeltoegang;",
+            "Eenrichtingshashing van wachtwoorden met een unieke salt;",
+            "Logging van relevante authenticatie-, beheer-, fout- en beveiligingsgebeurtenissen;",
+            "Versleuteling van cloudback-ups en verbindingen;",
+            "Beperkte toegang tot productiegegevens;",
+            "Dummy- of geanonimiseerde gegevens voor ontwikkeling en testen;",
+            "Procedures voor beveiligingsincidenten en mogelijke datalekken;",
+            "Intrekking van toegang wanneer iemand uit dienst gaat of van rol verandert."
+          ]
+        },
+        {
+          "type": "subheading",
+          "text": "Wat gebeurt er bij een mogelijk datalek?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mogelijke beveiligingsincidenten en datalekken worden intern gemeld, beoordeeld, beperkt, onderzocht en geregistreerd. Wanneer een incident persoonsgegevens van Asian Spices raakt, wordt Asian Spices zonder onnodige vertraging geïnformeerd. Als de wet dit vereist, wordt een datalek tijdig gemeld bij de Autoriteit Persoonsgegevens en worden betrokken personen geïnformeerd."
+        }
+      ]
+    },
+    {
+      "id": "article-10",
+      "title": "10. Welke privacyrechten heb je?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Afhankelijk van de situatie heb je de volgende rechten:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Informatie ontvangen over de verwerking van je persoonsgegevens;",
+            "Inzage krijgen in je persoonsgegevens;",
+            "Onjuiste of onvolledige gegevens laten corrigeren;",
+            "Persoonsgegevens laten verwijderen wanneer aan de wettelijke voorwaarden is voldaan;",
+            "De verwerking laten beperken;",
+            "Gegevens laten overdragen wanneer het recht op dataportabiliteit van toepassing is;",
+            "Bezwaar maken tegen een verwerking op basis van een gerechtvaardigd belang;",
+            "Altijd bezwaar maken tegen direct marketing;",
+            "Toestemming op ieder moment intrekken, zonder dat dit afbreuk doet aan de rechtmatigheid van eerdere verwerking;",
+            "Niet worden onderworpen aan uitsluitend geautomatiseerde besluitvorming met rechtsgevolgen of vergelijkbare aanmerkelijke gevolgen, wanneer de wettelijke voorwaarden gelden."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Je kunt een verzoek indienen via support@asianspices.online. Wij kunnen aanvullende informatie vragen om je identiteit te controleren. Wij reageren in beginsel binnen één maand. Bij complexe of meerdere verzoeken kan deze termijn onder de wettelijke voorwaarden worden verlengd; je wordt daarover tijdig geïnformeerd."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sommige gegevens kunnen niet direct worden verwijderd wanneer wij deze nog moeten bewaren op grond van de wet, voor de uitvoering van een overeenkomst, voor fraudepreventie of voor het vaststellen, uitoefenen of verdedigen van rechtsvorderingen."
+        },
+        {
+          "type": "subheading",
+          "text": "Een klacht indienen"
+        },
+        {
+          "type": "paragraph",
+          "text": "Heb je een klacht over de manier waarop wij met persoonsgegevens omgaan? Neem dan eerst contact met ons op via support@asianspices.online. Je hebt daarnaast het recht om een klacht in te dienen bij de Autoriteit Persoonsgegevens."
+        }
+      ]
+    },
+    {
+      "id": "article-11",
+      "title": "11. Gebruiken wij profilering of geautomatiseerde besluitvorming?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij gebruiken beperkte geautomatiseerde personalisatie om relevante producten of aanbevelingen te tonen op basis van bijvoorbeeld eerdere bestellingen, bekeken producten, voorkeuren of winkelwagengegevens. Deze verwerking kan worden aangemerkt als profilering."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wij nemen geen uitsluitend geautomatiseerde beslissingen die rechtsgevolgen voor jou hebben of je op een andere wijze aanzienlijk treffen. Beslissingen met belangrijke gevolgen voor klantaccounts of bestellingen worden door bevoegde medewerkers genomen of kunnen door een medewerker worden beoordeeld."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wanneer personalisatie gebruikmaakt van niet-noodzakelijke cookies, vergelijkbare trackingtechnieken of toestemming voor persoonlijke marketing, kun je je keuze intrekken via de cookie- of privacy-instellingen of via de afmeldmogelijkheid in onze communicatie. Je kunt je personalisatie- en marketingvoorkeuren via je account, de cookie-instellingen of de afmeldlink aanpassen."
+        }
+      ]
+    },
+    {
+      "id": "article-12",
+      "title": "12. Minderjarigen en minimumleeftijd",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Het aanmaken van een klantaccount en het plaatsen van bestellingen via onze website en app is uitsluitend bestemd voor personen van 18 jaar en ouder."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bij het aanmaken van een account en bij het plaatsen van een bestelling zonder account vragen wij je te verklaren dat je 18 jaar of ouder bent. Wij registreren de verklaring met de datum en het tijdstip waarop deze is afgelegd. Wij vragen voor dit doel niet standaard om je volledige geboortedatum."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wij verzamelen niet bewust account- of bestelgegevens van personen jonger dan 18 jaar. Wanneer je als ouder of wettelijk vertegenwoordiger vermoedt dat een minderjarige in strijd met onze leeftijdsvoorwaarden persoonsgegevens aan ons heeft verstrekt, kun je contact opnemen via support@asianspices.online. Wij onderzoeken de melding en verwijderen of beperken de gegevens wanneer daarvoor aanleiding bestaat, behalve wanneer wij bepaalde gegevens op grond van een wettelijke verplichting moeten bewaren."
+        }
+      ]
+    },
+    {
+      "id": "article-13",
+      "title": "13. Links naar websites en diensten van derden",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Onze website en app kunnen links bevatten naar websites, apps of diensten van andere organisaties. Wanneer je zo’n externe dienst gebruikt, kan de privacyverklaring van die organisatie van toepassing zijn. We adviseren je om de privacy-informatie van die partij te lezen. De partneromgeving van Asian Spices is onderdeel van ons eigen platform en valt onder deze verklaring."
+        }
+      ]
+    },
+    {
+      "id": "article-14",
+      "title": "14. Cookies en vergelijkbare technieken",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij gebruiken cookies en vergelijkbare technieken om onze website, webshop en app goed te laten werken, voorkeuren te onthouden en, wanneer je daarvoor toestemming geeft, het gebruik van onze diensten te analyseren en marketing toe te passen. Meer informatie over de gebruikte technieken, doeleinden, aanbieders en bewaartermijnen vind je in onze Cookieverklaring."
+        },
+        {
+          "type": "paragraph",
+          "text": "Voor zover wij met cookies of vergelijkbare technieken persoonsgegevens verwerken, geldt ook deze Privacyverklaring. Je kunt je cookiekeuze op ieder moment aanpassen via de cookie- of privacy-instellingen op onze website."
+        }
+      ]
+    },
+    {
+      "id": "article-15",
+      "title": "15. Wijzigingen in deze verklaring",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij kunnen deze privacyverklaring aanpassen wanneer onze dienstverlening, systemen, leveranciers of wet- en regelgeving wijzigen. De meest actuele versie wordt op onze website gepubliceerd. Bij belangrijke wijzigingen informeren wij je wanneer dat wettelijk vereist of passend is. Bovenaan deze verklaring staat wanneer de versie voor het laatst is bijgewerkt."
+        }
+      ]
+    },
+    {
+      "id": "article-16",
+      "title": "16. Contact",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Heb je vragen over deze verklaring of wil je een privacyrecht uitoefenen? Neem dan contact op met:"
+        },
+        {
+          "type": "paragraph",
+          "text": "Asian Spices Online B.V."
+        },
+        {
+          "type": "paragraph",
+          "text": "Klantenservice (Support)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Slakkenveen 341"
+        },
+        {
+          "type": "paragraph",
+          "text": "3205 GK Spijkenisse"
+        },
+        {
+          "type": "paragraph",
+          "text": "E-mail voor privacyverzoeken: support@asianspices.online"
+        },
+        {
+          "type": "paragraph",
+          "text": "Algemeen e-mailadres: info@asianspices.online"
+        },
+        {
+          "type": "paragraph",
+          "text": "Telefoon: 010-7660786"
+        },
+        {
+          "type": "paragraph",
+          "text": "Website: www.asianspices.online"
+        },
+        {
+          "type": "contactCards",
+          "cards": [
+            {
+              "icon": "mail",
+              "label": "Privacyverzoeken",
+              "value": "support@asianspices.online"
+            },
+            {
+              "icon": "mail",
+              "label": "Algemeen e-mailadres",
+              "value": "info@asianspices.online"
+            },
+            {
+              "icon": "phone",
+              "label": "Telefoon",
+              "value": "010-7660786"
+            },
+            {
+              "icon": "privacy",
+              "label": "Adres",
+              "value": "Slakkenveen 341, 3205 GK Spijkenisse"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

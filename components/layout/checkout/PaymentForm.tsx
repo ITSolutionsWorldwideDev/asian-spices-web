@@ -137,13 +137,24 @@ export default function PaymentForm({
               onClick={(e) => e.stopPropagation()}
             >
               Terms &amp; Conditions
+            </Link>{" "}
+            and the{" "}
+            <Link
+              href="/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-orange-600 underline hover:text-orange-700"
+              onClick={(e) => e.stopPropagation()}
+            >
+              Privacy Policy
             </Link>
           </span>
         </label>
 
         {!agreedToTerms && !disabled ? (
           <p className="mt-2 text-xs text-gray-500">
-            Please agree to the Terms &amp; Conditions to continue.
+            Please agree to the Terms &amp; Conditions and Privacy Policy to
+            continue.
           </p>
         ) : null}
 

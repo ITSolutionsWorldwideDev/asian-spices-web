@@ -80,7 +80,7 @@ const FooterContent = () => {
             </Link>
           </li>
           <li>
-            <Link href="#" className="hover:underline">
+            <Link href="/privacy" className="hover:underline">
               Privacy & Policy
             </Link>
           </li>
