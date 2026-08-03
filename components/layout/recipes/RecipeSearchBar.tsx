@@ -11,7 +11,9 @@ interface RecipeSearchBarProps {
 }
 
 function scrollToResults() {
-  const el = document.getElementById("recipes-results");
+  const el =
+    document.getElementById("recipes-products") ||
+    document.getElementById("recipes-results");
   if (!el) return false;
 
   const y =
@@ -39,8 +41,8 @@ export default function RecipeSearchBar({
 
     const query = params.toString();
     const href = query
-      ? `/recipes?${query}#recipes-results`
-      : `/recipes#recipes-results`;
+      ? `/recipes?${query}#recipes-products`
+      : `/recipes#recipes-products`;
 
     // Prevent Next.js from jumping to the top/header
     router.push(href, { scroll: false });

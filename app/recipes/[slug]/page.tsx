@@ -181,13 +181,18 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
               </p>
 
               <div className="flex gap-3">
-                <button className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium">
+                <Link
+                  href="https://www.facebook.com/profile.php?id=61591119970456"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium"
+                >
                   Facebook
-                </button>
+                </Link>
 
-                <button className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium">
+                {/* <button className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium">
                   WhatsApp
-                </button>
+                </button> */}
               </div>
             </div>
           </aside>

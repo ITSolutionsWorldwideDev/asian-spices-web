@@ -32,6 +32,7 @@ export default function RecipeSidebar({
                 <Link
                   key={category.id}
                   href={`/recipes?category=${category.slug}`}
+                  scroll={false}
                   className={`block rounded-xl border px-4 py-3 font-medium hover:bg-gray-50 ${
                     isSelected
                       ? "text-orange-600 font-bold border-orange-200 bg-orange-50"
@@ -57,6 +58,7 @@ export default function RecipeSidebar({
                 <summary className="flex list-none items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-50 [&::-webkit-details-marker]:hidden">
                   <Link
                     href={`/recipes?category=${category.slug}`}
+                    scroll={false}
                     className={`flex-1 font-medium ${
                       isSelected
                         ? "text-orange-600 font-bold"
@@ -77,6 +79,7 @@ export default function RecipeSidebar({
                     <Link
                       key={child.id}
                       href={`/recipes?category=${child.slug}`}
+                      scroll={false}
                       className={`text-sm hover:text-orange-600 ${
                         selectedCategory === child.slug
                           ? "text-orange-600 font-semibold"
@@ -101,6 +104,7 @@ export default function RecipeSidebar({
             <Link
               key={tag.id}
               href={`/recipes?tag=${tag.slug}`}
+              scroll={false}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition ${
                 selectedTag === tag.slug
                   ? "text-white"

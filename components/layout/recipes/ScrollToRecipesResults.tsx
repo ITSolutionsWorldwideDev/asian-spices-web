@@ -4,7 +4,9 @@ import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 function scrollToResults() {
-  const el = document.getElementById("recipes-results");
+  const el =
+    document.getElementById("recipes-products") ||
+    document.getElementById("recipes-results");
   if (!el) return false;
 
   const y = el.getBoundingClientRect().top + window.scrollY - 96;
@@ -12,22 +14,20 @@ function scrollToResults() {
   return true;
 }
 
-/** When URL has search/category/tag/hash, scroll to results (not the header). */
+/** When URL has a search query or #recipes-results hash, scroll to results. */
 export default function ScrollToRecipesResults() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
-  const category = searchParams.get("category");
-  const tag = searchParams.get("tag");
 
   useEffect(() => {
     if (pathname !== "/recipes") return;
 
+    // Category/tag filters should not force a scroll jump.
     const shouldScroll =
       window.location.hash === "#recipes-results" ||
-      !!search ||
-      !!category ||
-      !!tag;
+      window.location.hash === "#recipes-products" ||
+      !!search;
 
     if (!shouldScroll) return;
 
@@ -45,7 +45,7 @@ export default function ScrollToRecipesResults() {
     return () => {
       if (timer) window.clearTimeout(timer);
     };
-  }, [pathname, search, category, tag]);
+  }, [pathname, search]);
 
   return null;
 }

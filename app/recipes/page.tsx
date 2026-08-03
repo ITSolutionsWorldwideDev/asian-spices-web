@@ -94,7 +94,10 @@ async function RecipesGridSection({
   const pagination = recipesData.pagination;
 
   return (
-    <div className="relative z-20 min-w-0 space-y-8 bg-white">
+    <div
+      id="recipes-products"
+      className="relative z-20 min-w-0 space-y-8 bg-white"
+    >
       <div>
         <h2 className="text-2xl font-bold text-gray-900">Explore Recipes</h2>
         <p className="text-sm text-gray-600 mt-1">

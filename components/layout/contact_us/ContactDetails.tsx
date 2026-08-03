@@ -10,13 +10,13 @@ const contactCards = [
     subtext: "We will respond within 48 hours",
     href: "mailto:support@asianspices.online",
   },
-  {
-    icon: Phone,
-    label: "CALL US",
-    value: "+31 10 766 0786",
-    subtext: "Mon-Fri 10AM-5PM CST",
-    href: "tel:+31107660786",
-  },
+  // {
+  //   icon: Phone,
+  //   label: "CALL US",
+  //   value: "+31 10 766 0786",
+  //   subtext: "Mon-Fri 10AM-5PM CST",
+  //   href: "tel:+31107660786",
+  // },
   // {
   //   icon: MapPin,
   //   label: "VISIT US",
@@ -31,17 +31,22 @@ const contactCards = [
   },
 ];
 
+{/* <div > */}
+// 
 export default function ContactDetails() {
   return (
     <div className="relative z-20 -mt-20 md:-mt-24 container mx-auto px-4 sm:px-6">
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-5">
+      <div 
+      // className="grid items-center justify-center grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-5"
+      className="flex flex-wrap items-stretch justify-center gap-4 md:gap-5">
         {contactCards.map((card) => {
           const Icon = card.icon;
 
           return (
             <div
               key={card.label}
-              className="bg-white rounded-t-2xl shadow-lg px-6 py-8 text-center border-t-4 border-orange-500"
+              className="w-full sm:w-[min(360px,48%)] lg:w-[320px] bg-white rounded-t-2xl shadow-lg px-6 py-8 text-center border-t-4 border-orange-500"
+              // className="bg-white rounded-t-2xl shadow-lg px-6 py-8 text-center border-t-4 border-orange-500"
             >
               <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-orange-100">
                 <Icon className="h-5 w-5 text-orange-500" />
