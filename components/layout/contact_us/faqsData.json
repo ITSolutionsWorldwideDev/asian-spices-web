@@ -1,0 +1,1342 @@
+{
+  "title": "Frequently Asked Questions",
+  "sections": {
+    "general": {
+      "id": "general",
+      "name": "General Questions",
+      "description": "Orders, shipping, returns, account, and common customer questions.",
+      "faqs": [
+        {
+          "question": "What is the return window for products?",
+          "answer": "Customers can request a return within 14 days of delivery for eligible items."
+        },
+        {
+          "question": "Are food items returnable?",
+          "answer": "Yes, food items can be returned if they are unopened, in their original packaging, or arrived damaged."
+        },
+        {
+          "question": "Can opened products be returned?",
+          "answer": "No. For health, safety, and hygiene reasons, opened food products or used spices cannot be returned."
+        },
+        {
+          "question": "Who pays for return shipping costs?",
+          "answer": "If the item is damaged or incorrect, the platform/seller covers shipping. For change-of-mind returns, the customer pays."
+        },
+        {
+          "question": "How long do refunds take to process?",
+          "answer": "Once approved, refunds take 5 to 7 business days to reflect in your original payment method."
+        },
+        {
+          "question": "Can customers exchange products?",
+          "answer": "Exchanges are permitted for non-perishable food items and unopened kitchen appliances within the 14-day window."
+        },
+        {
+          "question": "What happens if a product arrives damaged?",
+          "answer": "The platform will handle it immediately. Take a photo and contact support within 48 hours for a replacement or refund."
+        },
+        {
+          "question": "Who is responsible for lost packages during transit?",
+          "answer": "The Platform handles logistics security and assumes full responsibility for packages lost by our delivery partners."
+        },
+        {
+          "question": "Can customers track their orders?",
+          "answer": "Yes, a tracking link is automatically emailed as soon as the package leaves the store keeper."
+        },
+        {
+          "question": "Can I change my delivery address after placing an order?",
+          "answer": "No. Once an order is confirmed, the shipping address cannot be modified for security and fraud prevention reasons."
+        },
+        {
+          "question": "What happens if a customer misses their delivery?",
+          "answer": "The package is returned to the store keeper, and the payment is refunded to the customer's account."
+        },
+        {
+          "question": "Do you offer international shipping?",
+          "answer": "No, we do not offer international shipping at this time (Policy pending internal discussion with Furkan)."
+        },
+        {
+          "question": "Can users delete their accounts?",
+          "answer": "Yes, users can permanently delete their accounts and wipe their personal profiles through their account settings page."
+        },
+        {
+          "question": "What should I do if my account is hacked?",
+          "answer": "Contact platform support immediately. We will lock the account, clear active sessions, and help you regain secure access."
+        },
+        {
+          "question": "What is the password reset process?",
+          "answer": "Click \"Forgot Password\" on the login screen to receive a secure recovery and reset link through your registered email."
+        },
+        {
+          "question": "How is my personal customer data protected?",
+          "answer": "We strictly follow GDPR data privacy rules, using industry-standard encryption to keep all payment and personal details safe."
+        },
+        {
+          "question": "What are the age restrictions for using this platform?",
+          "answer": "Users must be 13 years of age or older to create an account and place orders on our platform."
+        },
+        {
+          "question": "What is your process for preventing transaction fraud?",
+          "answer": "We use automated payment screening, secure checkout layers, and manual verification for high-value orders."
+        },
+        {
+          "question": "Where can I view your complete Terms & Conditions and Privacy Policy?",
+          "answer": "Links to our full Terms, Conditions, and GDPR-compliant Privacy Policies are permanently accessible in the website footer. LINK?"
+        },
+        {
+          "question": "How is VAT and tax handled on orders?",
+          "answer": "Taxes are automatically calculated and applied at checkout according to local state and country Tax Laws."
+        },
+        {
+          "question": "How do I track my order?",
+          "answer": "Once your package leaves our facility, you will receive an email with a live tracking link. You can also view your order status at any time by logging into your account dashboard."
+        },
+        {
+          "question": "What happens if my package is lost in transit?",
+          "answer": "You don't need to worry! Our platform takes full responsibility for packages lost by our courier partners. If your tracking hasn't updated or your package is declared lost, contact support immediately for a full replacement or refund."
+        },
+        {
+          "question": "What happens if I miss my delivery?",
+          "answer": "If the courier is unable to deliver your package, it will be returned to our store keeper. Once we receive the returned package, your original payment method will be automatically refunded (minus any applicable shipping fees)."
+        },
+        {
+          "question": "What is your return policy?",
+          "answer": "We offer a 14-day return window from the date of delivery. To be eligible for a return, items must be in their original, unused condition and in the original packaging."
+        },
+        {
+          "question": "Can I return opened food or spice products?",
+          "answer": "No. Due to strict health, safety, and hygiene regulations, we cannot accept returns on opened food items, unsealed spices, or used kitchen appliances."
+        },
+        {
+          "question": "What should I do if my item arrives damaged?",
+          "answer": "We apologize if your order didn't arrive in perfect condition! Please take a clear photo of the damaged product and the packaging, and send it to our support team within 48 hours of delivery. We will issue a replacement or a full refund immediately."
+        },
+        {
+          "question": "Who pays for return shipping?",
+          "answer": "If the return is due to an error on our end (such as a damaged or incorrect item), the platform covers all return shipping costs. For standard change-of-mind returns, the customer is responsible for the return shipping fees."
+        },
+        {
+          "question": "How long does it take to receive my refund?",
+          "answer": "Once your returned item is received and inspected by our warehouse, your refund will be processed. It typically takes 5 to 7 business days for the funds to appear in your original bank account or on your credit card."
+        },
+        {
+          "question": "Where do your spices come from?",
+          "answer": "All of our spices are authentically sourced directly from trusted organic farms across India and Pakistan, ensuring traditional flavor profiles and high quality."
+        },
+        {
+          "question": "Are your spices completely natural?",
+          "answer": "Absolutely. Our spices are certified organic and contain zero artificial colors, dyes, or preservatives. You are purchasing 100% pure whole or ground spices."
+        },
+        {
+          "question": "How do you guarantee the freshness of packaged foods?",
+          "answer": "Our inventory system strictly monitors expiration dates. We guarantee that all packaged foods and beverages shipped to you will have a minimum of 6 months remaining on their shelf life."
+        },
+        {
+          "question": "Are there Halal, vegan, or gluten-free options available?",
+          "answer": "Yes! Many of our products cater to specific dietary needs. You can easily find these items by using the dietary filters on our category pages. Specific certifications (like Halal) are also clearly visible on the product packaging photos."
+        },
+        {
+          "question": "Do your kitchen appliances come with a warranty?",
+          "answer": "Yes, all electrical kitchen appliances sold on Asian Spices come with a standard 1-year manufacturer’s warranty, which covers mechanical and electrical defects."
+        },
+        {
+          "question": "Are the appliances compatible with my local voltage?",
+          "answer": "Yes. Every appliance listed on our site is specifically manufactured with the correct plugs and standard voltage specifications for local use—no power converters are required."
+        },
+        {
+          "question": "Can I return an appliance if I simply change my mind?",
+          "answer": "Yes, as long as the appliance is completely unboxed, unused, and returned within our 14-day return window. Once an appliance has been used, it is only covered under the manufacturer's warranty for defects."
+        },
+        {
+          "question": "Is my payment information safe?",
+          "answer": "Yes. We strictly adhere to GDPR compliance rules. All personal and payment data is protected using industry-standard SSL encryption. We do not store your raw credit card data on our servers."
+        },
+        {
+          "question": "What should I do if I forget my password or my account is compromised?",
+          "answer": "Simply click \"Forgot Password\" on the login page to receive a secure reset link via email. If you suspect your account has been hacked, contact our support team immediately so we can lock the account and help you regain secure access."
+        },
+        {
+          "question": "Are there any age restrictions for using the website?",
+          "answer": "Yes, users must be at least 13 years of age to create an account and place orders on our platform."
+        },
+        {
+          "question": "How do I become a seller on Asian Spices?",
+          "answer": "We welcome authentic suppliers! You can apply by clicking the \"Become a Vendor\" link in our website footer and submitting your verified business details and KYC documents."
+        },
+        {
+          "question": "How and when do vendors get paid?",
+          "answer": "Vendor payouts are processed strictly on a monthly basis. Sellers receive their earnings after the month closes; mid-month withdrawals are not permitted."
+        },
+        {
+          "question": "Who handles customer complaints for vendor products?",
+          "answer": "To ensure a consistently excellent customer experience, the platform handles all customer service inquiries and complaints. However, repeated customer complaints regarding a specific seller's products will result in the suspension of that vendor's account."
+        }
+      ]
+    },
+    "category": {
+      "id": "category",
+      "name": "Category Questions",
+      "description": "Questions about Spices, Kitchen Appliances, and Foods & Beverages.",
+      "categories": [
+        {
+          "id": "spices",
+          "name": "Spices",
+          "faqs": [
+            {
+              "question": "Where do your spices come from?",
+              "answer": "All our spices are completely organic and sourced directly from authentic farms across India and Pakistan."
+            },
+            {
+              "question": "Are your spices certified organic?",
+              "answer": "Yes, they are grown using traditional organic farming practices without synthetic chemical inputs."
+            },
+            {
+              "question": "Do these spices contain any artificial coloring?",
+              "answer": "No, all spices maintain their completely natural colors with zero artificial dyes or visual enhancers."
+            },
+            {
+              "question": "Are there any preservatives added to ground spices?",
+              "answer": "No, our products are 100% pure whole or ground spices without chemical preservatives."
+            },
+            {
+              "question": "How should I store these spices to keep them potent?",
+              "answer": "Store them in airtight glass jars inside a cool, dry, dark pantry away from stove steam and sunlight."
+            },
+            {
+              "question": "What is the typical shelf life of your ground spices?",
+              "answer": "Ground spices remain at peak flavor for 1 to 2 years if stored correctly in airtight conditions."
+            },
+            {
+              "question": "Do whole spices last longer than ground spices?",
+              "answer": "Yes, whole spices (like peppercorns and cardamom pods) retain their oils and flavors for up to 3–4 years."
+            },
+            {
+              "question": "Are your spices gluten-free?",
+              "answer": "Pure spices are naturally gluten-free, but check individual packaging details for allergen cross-contamination notes."
+            },
+            {
+              "question": "Can I buy spices in bulk or wholesale quantities?",
+              "answer": "Yes, bulk ordering options are listed directly on the product variations dropdown menu on our spice list page."
+            },
+            {
+              "question": "Are these spices irradiated?",
+              "answer": "No, our organic spices are cleaned and processed naturally without irradiation treatments."
+            },
+            {
+              "question": "What is the difference between your regular and premium spice grades?",
+              "answer": "Premium spices feature higher natural oil concentrations, stronger aromatic profiles, and larger whole sizes."
+            },
+            {
+              "question": "How do you ensure the purity of your ground turmeric and chili?",
+              "answer": "Every batch goes through strict laboratory testing at the origin to ensure there are zero adulterants or heavy metals."
+            },
+            {
+              "question": "Are your spices allergen-safe?",
+              "answer": "They are packed in facilities handling traditional agricultural goods; check product descriptions for specific cross-contamination warnings."
+            },
+            {
+              "question": "Why does my organic spice look slightly different from my last order?",
+              "answer": "Natural, un-dyed organic crops vary slightly in color and texture depending on the seasonal harvest conditions."
+            },
+            {
+              "question": "Are any anti-caking agents added to prevent clumping?",
+              "answer": "No, our spices are pure. Mild clumping can happen naturally in high humidity and is solved with a gentle shake."
+            },
+            {
+              "question": "Do you offer traditional spice blends (like Garam Masala) or just single ingredients?",
+              "answer": "We offer both raw single ingredients and authentic regional spice mixes formulated using traditional recipes."
+            },
+            {
+              "question": "Can these spices be traced back to specific farming regions?",
+              "answer": "Yes, our sourcing batches are fully traceable to agricultural clusters in India and Pakistan."
+            },
+            {
+              "question": "Are your spice packages resealable?",
+              "answer": "Most of our spice bags come with secure zip-lock closures to retain maximum freshness after opening."
+            },
+            {
+              "question": "Is your spice handling facility safety-certified?",
+              "answer": "Yes, our processing partners maintain international food safety and hygiene certifications."
+            },
+            {
+              "question": "How can I tell the harvest date of my spices?",
+              "answer": "The harvest season and packaging dates are clearly printed on the reverse label of every single item."
+            }
+          ]
+        },
+        {
+          "id": "kitchen-appliances",
+          "name": "Kitchen Appliances",
+          "faqs": [
+            {
+              "question": "What kinds of kitchen products are allowed to be listed here?",
+              "answer": "Our platform catalog exclusively allows items falling under our core categories: kitchen utilities, food, spices, and recipes."
+            },
+            {
+              "question": "Do electrical appliances come with an official warranty?",
+              "answer": "Yes, all electrical appliances feature a standard 1-year manufacturer warranty against defects."
+            },
+            {
+              "question": "What is covered under the kitchen appliance warranty?",
+              "answer": "The warranty covers internal component failures, motor issues, and electrical issues, but excludes physical accidental damage."
+            },
+            {
+              "question": "Are the appliances set to the correct local voltage specs?",
+              "answer": "Yes, all models are built directly for standard regional household voltage and plugs without adapters."
+            },
+            {
+              "question": "Can I purchase official spare parts or replacement blades?",
+              "answer": "Yes, replacement components for popular grinders and blenders are listed in our utility accessories section."
+            },
+            {
+              "question": "Are the plastic elements in your blenders and choppers BPA-free?",
+              "answer": "Yes, all food-contact surfaces on our kitchen utilities are strictly certified 100% BPA-free."
+            },
+            {
+              "question": "What should I do if an appliance stops working after a few uses?",
+              "answer": "File a warranty claim directly through your platform dashboard, and we will arrange a diagnostic check or replacement."
+            },
+            {
+              "question": "Can heavy-duty mixers grind hard whole spices like cinnamon sticks?",
+              "answer": "Models rated 750W or higher are designed specifically for heavy whole-spice grinding. Check item specs."
+            },
+            {
+              "question": "Are the stainless-steel parts rust-resistant?",
+              "answer": "Yes, all blades and grinding jars utilize high-grade, food-safe, rust-resistant stainless steel."
+            },
+            {
+              "question": "Do appliances come with user instruction manuals in English?",
+              "answer": "Yes, detailed user setups, operation manuals, and safety guides are enclosed in every retail box."
+            },
+            {
+              "question": "Are these kitchen appliances dishwasher safe?",
+              "answer": "Removable glass jars and non-electrical blending accessories are generally dishwasher safe; refer to your item guide."
+            },
+            {
+              "question": "How can I verify if an appliance brand is authentic?",
+              "answer": "We work directly with manufacturers and certified dealers. Every appliance ships in original brand retail packaging."
+            },
+            {
+              "question": "What happens if an appliance arrives with missing accessories?",
+              "answer": "Report the missing part to support within 48 hours, and we will ship the missing accessory out right away."
+            },
+            {
+              "question": "Are there any industrial or commercial-grade appliances here?",
+              "answer": "Our main catalog features home consumer products, but high-capacity units are explicitly tagged as \"Commercial Grade.\""
+            },
+            {
+              "question": "How energy-efficient are the electric cookers and food processors?",
+              "answer": "Energy star ratings and wattage draws are detailed on every single product specification table."
+            },
+            {
+              "question": "Can I return a kitchen appliance if I simply don't like the color?",
+              "answer": "Yes, provided it is completely unused, unboxed, and within our standard 14-day return window."
+            },
+            {
+              "question": "Do mixers and grinders have automatic thermal overload cut-offs?",
+              "answer": "Yes, most high-torque spice grinders include built-in safety switches to prevent motor burnouts."
+            },
+            {
+              "question": "Can I get a product demonstration video for complex appliances?",
+              "answer": "Yes, product pages include embedded video guides and step-by-step video walk-throughs for operation."
+            },
+            {
+              "question": "Are non-stick coatings on pans and cookers safe and non-toxic?",
+              "answer": "Yes, all non-stick utility items use certified PFOA-free coatings that are completely safe for high-temperature cooking."
+            },
+            {
+              "question": "Who handles repair services after the 14-day window but within the warranty?",
+              "answer": "The platform facilitates coordination with authorized brand service centers under your warranty contract."
+            }
+          ]
+        },
+        {
+          "id": "foods-beverages",
+          "name": "Foods & Beverages",
+          "faqs": [
+            {
+              "question": "What types of items are available in the Foods & Beverages section?",
+              "answer": "This category features authentic traditional snacks, shelf-stable ingredients, specialty grains, teas, and drinks."
+            },
+            {
+              "question": "Are your packaged foods Halal certified?",
+              "answer": "Yes, food items sourced from India and Pakistan carry clear, valid Halal certifications visible on packaging graphics."
+            },
+            {
+              "question": "How do you guarantee that food items don't arrive expired?",
+              "answer": "Our warehouse system automatically flags and bars any items with less than 6 months of remaining shelf life."
+            },
+            {
+              "question": "Are full nutrition profiles and ingredient lists available online?",
+              "answer": "Yes, high-resolution label images and full text ingredient lists are published on every item page."
+            },
+            {
+              "question": "Do you sell fresh, chilled, or frozen food products?",
+              "answer": "No, our store exclusively handles premium shelf-stable dry foods, pantry essentials, packaging mixes, and beverages."
+            },
+            {
+              "question": "Are there any specific vegan or vegetarian filters available?",
+              "answer": "Yes, you can filter items easily using the dietary checkboxes on our side navigation panel."
+            },
+            {
+              "question": "How are glass bottles and fragile items protected during shipping?",
+              "answer": "We use custom-fit thick cardboard frames and heavy-duty bubble columns to avoid shipping leakage."
+            },
+            {
+              "question": "What should I do if a food package arrives unsealed or leaking?",
+              "answer": "Do not consume it. Contact platform support immediately with a picture to receive an instant replacement."
+            },
+            {
+              "question": "Are there sugar-free beverage alternatives in your store?",
+              "answer": "Yes, we offer various unsweetened herbal teas, traditional drinks, and low-calorie organic beverage options."
+            },
+            {
+              "question": "Are your traditional teas sourced from single-origin estates?",
+              "answer": "Our premium tea selections clearly indicate their regional estate origins (such as Assam or Darjeeling) on the label."
+            },
+            {
+              "question": "Do any food items contain common allergens like nuts or soy?",
+              "answer": "Allergens are bolded in the ingredient texts, and cross-contamination facility notices are listed on product pages."
+            },
+            {
+              "question": "Can I buy multi-packs or bundle deals on food items?",
+              "answer": "Yes, specially priced multi-packs and ingredient bundle kits are regularly updated across our catalogs."
+            },
+            {
+              "question": "Are your traditional juices and squashes pasteurized?",
+              "answer": "Yes, all bottled commercial beverages are fully pasteurized to maintain absolute safety and shelf stability."
+            },
+            {
+              "question": "How are traditional sweets (Mithai) packaged to maintain freshness?",
+              "answer": "Sweets are vacuum-sealed in food-grade industrial trays to prevent oxidation and moisture damage."
+            },
+            {
+              "question": "Are your rice varieties aged?",
+              "answer": "Our premium Basmati rice options are traditionally aged for 1–2 years to ensure long, non-sticky grains."
+            },
+            {
+              "question": "Do you stock MSG-free cooking pastes and sauces?",
+              "answer": "Yes, the vast majority of our gourmet culinary pastes focus on all-natural ingredients with zero added MSG."
+            },
+            {
+              "question": "Can I buy readymade traditional recipe spice kits?",
+              "answer": "Yes, our recipe-mix category features pre-measured spice packs containing complete step-by-step cooking guides."
+            },
+            {
+              "question": "What is the country of origin for the packaged snacks?",
+              "answer": "Every snack item clearly states whether it was manufactured and packed in India, Pakistan, or locally."
+            },
+            {
+              "question": "Are there low-sodium food alternatives available for diet restrictions?",
+              "answer": "Yes, specialized low-sodium salt alternatives and salt-free spice blends are accessible via search filters."
+            },
+            {
+              "question": "Can I find organic flours (Atta) and grains on your site?",
+              "answer": "Yes, we carry completely organic whole-wheat flours, lentils, and pulses imported directly from organic farms."
+            }
+          ]
+        }
+      ]
+    },
+    "chatbot": {
+      "id": "chatbot",
+      "name": "Chatbot Questions",
+      "description": "Full knowledge-base Q&A used for chat support.",
+      "topics": [
+        {
+          "id": "order-management-checkout",
+          "name": "Order Management & Checkout",
+          "faqs": [
+            {
+              "question": "How do I place an order?",
+              "answer": "Simply add items to your cart, proceed to checkout, enter your shipping details, and complete your payment."
+            },
+            {
+              "question": "Can I cancel my order?",
+              "answer": "You can cancel your order within 2 hours of placing it. After that, it is processed for shipping."
+            },
+            {
+              "question": "Can I change my delivery address after ordering?",
+              "answer": "No, for security and fraud prevention, delivery addresses cannot be modified once an order is confirmed."
+            },
+            {
+              "question": "How do I apply a discount code?",
+              "answer": "Enter your promo code in the \"Discount Code\" box at checkout and click apply."
+            },
+            {
+              "question": "Why is my promo code not working?",
+              "answer": "Codes may be expired, one-time use, or inapplicable to clearance items."
+            },
+            {
+              "question": "Can I combine discount codes?",
+              "answer": "No, only one discount code can be applied per order."
+            },
+            {
+              "question": "What payment methods do you accept?",
+              "answer": "We accept all major credit/debit cards and standard digital wallets at checkout."
+            },
+            {
+              "question": "Is there a minimum order quantity?",
+              "answer": "No, there is no minimum order requirement."
+            },
+            {
+              "question": "Will I get an order confirmation?",
+              "answer": "Yes, an email confirmation with your invoice will be sent immediately after purchase."
+            },
+            {
+              "question": "Can I add items to an existing order?",
+              "answer": "No, you will need to place a new, separate order for additional items."
+            },
+            {
+              "question": "Why was my payment declined?",
+              "answer": "Declines are usually due to incorrect billing addresses or bank security blocks. Please contact your bank."
+            },
+            {
+              "question": "Is VAT included in the price?",
+              "answer": "Taxes and VAT are calculated at checkout based on your state and country tax laws."
+            },
+            {
+              "question": "Where can I find my invoice?",
+              "answer": "You can download your official invoice directly from your account order history."
+            },
+            {
+              "question": "Do I need an account to order?",
+              "answer": "You can checkout as a guest, but an account lets you track orders and save payment methods."
+            },
+            {
+              "question": "Can I order over the phone?",
+              "answer": "For security reasons, all orders must be placed online through our encrypted checkout."
+            },
+            {
+              "question": "What happens if an item goes out of stock after I order?",
+              "answer": "We will notify you immediately and issue a full refund for the out-of-stock item."
+            },
+            {
+              "question": "Do you offer wholesale pricing?",
+              "answer": "Yes, bulk and wholesale options are available in the product variations dropdown."
+            },
+            {
+              "question": "Are the prices in my local currency?",
+              "answer": "Yes, our site displays prices in your local currency based on your IP address."
+            },
+            {
+              "question": "How do you prevent fraudulent orders?",
+              "answer": "We use automated payment screening and manual verification for high-value orders."
+            },
+            {
+              "question": "Can I pre-order out-of-stock items?",
+              "answer": "We do not accept pre-orders. You can sign up for \"back in stock\" email alerts."
+            },
+            {
+              "question": "Do you offer gift wrapping?",
+              "answer": "Not at this time, but items are securely and neatly packaged."
+            },
+            {
+              "question": "Can I leave a delivery note?",
+              "answer": "Yes, you can add delivery instructions during the checkout process."
+            },
+            {
+              "question": "How do I reorder a past purchase?",
+              "answer": "Go to your account dashboard, view past orders, and click \"Reorder.\""
+            },
+            {
+              "question": "Why did my cart empty itself?",
+              "answer": "Carts may clear if your browser session expires. Logging in saves your cart automatically."
+            },
+            {
+              "question": "Can I send an order to multiple addresses?",
+              "answer": "No, you must place separate orders for each distinct delivery address."
+            }
+          ]
+        },
+        {
+          "id": "shipping-tracking-delivery",
+          "name": "Shipping, Tracking & Delivery",
+          "faqs": [
+            {
+              "question": "Do you ship internationally?",
+              "answer": "No, currently we do not offer international shipping. We only fulfill domestic orders."
+            },
+            {
+              "question": "Can you ship to India or Pakistan?",
+              "answer": "No, we source from there, but we do not ship retail orders internationally."
+            },
+            {
+              "question": "How long does standard shipping take?",
+              "answer": "Standard shipping usually takes 3-5 business days."
+            },
+            {
+              "question": "How do I track my order?",
+              "answer": "Click the tracking link in your shipping email or enter your order number in your account dashboard."
+            },
+            {
+              "question": "Who is responsible for lost packages?",
+              "answer": "The platform assumes full responsibility for packages lost in transit by our couriers."
+            },
+            {
+              "question": "What if my package says delivered but I can't find it?",
+              "answer": "Please check with neighbors or your building manager. If still missing after 24 hours, contact support."
+            },
+            {
+              "question": "What happens if I miss my delivery?",
+              "answer": "The package will return to the store keeper, and your payment will be refunded to your account."
+            },
+            {
+              "question": "Will courier call me before delivery?",
+              "answer": "Couriers typically send an SMS notification on the day of delivery."
+            },
+            {
+              "question": "Do you deliver on weekends?",
+              "answer": "Weekend delivery depends on the local courier schedules in your area."
+            },
+            {
+              "question": "Can I expedite my shipping?",
+              "answer": "Yes, 1-2 day expedited shipping is available at checkout for an extra fee."
+            },
+            {
+              "question": "Why is my tracking link not updating?",
+              "answer": "Tracking can take up to 24 hours to update after the package leaves our facility."
+            },
+            {
+              "question": "Do you ship to P.O. boxes?",
+              "answer": "No, we require a physical residential or business address for delivery."
+            },
+            {
+              "question": "What is the shipping cost?",
+              "answer": "Shipping is calculated at checkout based on package weight and your location."
+            },
+            {
+              "question": "Do you offer free shipping?",
+              "answer": "Free shipping promotions are occasionally run; check the banner at the top of the homepage."
+            },
+            {
+              "question": "Are fragile items protected during shipping?",
+              "answer": "Yes, glass and liquid items are wrapped in reinforced bubble columns and custom-fit boxes."
+            },
+            {
+              "question": "Why was my order split into two boxes?",
+              "answer": "Items sourced from different warehouse zones are shipped separately to ensure faster delivery."
+            },
+            {
+              "question": "Do I pay double shipping for split orders?",
+              "answer": "No, you are only charged the single shipping fee shown at checkout."
+            },
+            {
+              "question": "Can I change my delivery speed after paying?",
+              "answer": "No, delivery speeds cannot be altered once the order is in the system."
+            },
+            {
+              "question": "What if my package is delayed?",
+              "answer": "Weather and logistical delays happen. Check your tracking link for updated ETA alerts."
+            },
+            {
+              "question": "Can I pick up my order in person?",
+              "answer": "No, we operate strictly online and do not have physical pickup locations."
+            },
+            {
+              "question": "How are spices packaged for shipping?",
+              "answer": "They are sealed in airtight, moisture-proof bags or jars."
+            },
+            {
+              "question": "Will my appliance be shipped in its original box?",
+              "answer": "Yes, appliances ship in official retail packaging, placed inside a protective shipping box."
+            },
+            {
+              "question": "Is signature required on delivery?",
+              "answer": "High-value appliance orders may require a signature upon delivery."
+            },
+            {
+              "question": "My package was damaged by the courier. What now?",
+              "answer": "Send us a photo within 48 hours, and we will process a replacement immediately."
+            },
+            {
+              "question": "Can I route my package to a locker?",
+              "answer": "Delivery to smart lockers is currently unsupported by our primary couriers."
+            },
+            {
+              "question": "Are liquids safe from freezing in transit?",
+              "answer": "Our packaging is insulated against standard temperature changes during transit."
+            },
+            {
+              "question": "What courier do you use?",
+              "answer": "We partner with top-tier national logistics providers. The specific courier is shown on your tracking page."
+            },
+            {
+              "question": "Do you offer contactless delivery?",
+              "answer": "Yes, couriers default to safe-drop contactless delivery where applicable."
+            },
+            {
+              "question": "Will I get a text when it arrives?",
+              "answer": "Yes, if you provided a mobile number at checkout."
+            },
+            {
+              "question": "Can I refuse a delivery?",
+              "answer": "If you refuse delivery, it goes back to the store keeper and you are refunded (minus shipping fees)."
+            }
+          ]
+        },
+        {
+          "id": "returns-refunds-damages",
+          "name": "Returns, Refunds & Damages",
+          "faqs": [
+            {
+              "question": "What is the return window?",
+              "answer": "You have 14 days from the date of delivery to request a return."
+            },
+            {
+              "question": "Are food items returnable?",
+              "answer": "Yes, food items are returnable."
+            },
+            {
+              "question": "Can opened products be returned?",
+              "answer": "No. Opened food, spices, or used appliances cannot be returned for hygiene and safety reasons."
+            },
+            {
+              "question": "Who pays return shipping costs?",
+              "answer": "The customer pays for change-of-mind returns. The platform pays if the item was damaged or incorrect."
+            },
+            {
+              "question": "How long do refunds take?",
+              "answer": "Refunds take 5 to 7 business days to appear on your bank statement."
+            },
+            {
+              "question": "Can customers exchange products?",
+              "answer": "Yes, unopened items can be exchanged within the 14-day window."
+            },
+            {
+              "question": "What happens if a product arrives damaged?",
+              "answer": "Contact us with a photo within 48 hours. The platform handles it and will issue a replacement or refund."
+            },
+            {
+              "question": "Do I need the original receipt to return?",
+              "answer": "No, just your 6-digit order number is sufficient."
+            },
+            {
+              "question": "Where do I drop off my return?",
+              "answer": "Once approved, you will receive a return shipping label with drop-off instructions."
+            },
+            {
+              "question": "Can I return clearance items?",
+              "answer": "No, final sale and clearance items are non-returnable."
+            },
+            {
+              "question": "My spice bag was punctured, what do I do?",
+              "answer": "Do not consume it. Send a photo to support for an immediate replacement."
+            },
+            {
+              "question": "Can I get a refund in store credit?",
+              "answer": "Yes, you can choose store credit for an instant refund instead of waiting 5-7 days for bank processing."
+            },
+            {
+              "question": "I threw away the original box, can I return the appliance?",
+              "answer": "No, appliances must be returned in their original, undamaged retail packaging."
+            },
+            {
+              "question": "How do I know you received my return?",
+              "answer": "We will email you a confirmation as soon as our warehouse scans the returned barcode."
+            },
+            {
+              "question": "My blender broke after 3 weeks, can I return it?",
+              "answer": "Returns are only within 14 days. After that, it is covered by the 1-year warranty."
+            },
+            {
+              "question": "Will you refund my original shipping cost?",
+              "answer": "Original shipping costs are only refunded if the platform made an error or the item was damaged."
+            },
+            {
+              "question": "Can I return a bundle partially?",
+              "answer": "No, bundled items must be returned together in full."
+            },
+            {
+              "question": "What if I received the wrong spice?",
+              "answer": "Upload a photo of the incorrect item, and we will dispatch the right one free of charge."
+            },
+            {
+              "question": "The glass jar shattered, do I need to mail the glass back?",
+              "answer": "No! Just send a photo of the damage safely, and dispose of the glass. We will replace it."
+            },
+            {
+              "question": "Can I dispute a rejected return?",
+              "answer": "Yes, you can escalate the case to a platform manager through your support ticket."
+            },
+            {
+              "question": "How do I start a return process?",
+              "answer": "Go to your account dashboard, select the order, and click \"Request Return.\""
+            },
+            {
+              "question": "Is there a restocking fee?",
+              "answer": "No, we do not charge any hidden restocking fees."
+            },
+            {
+              "question": "Do you provide the return label?",
+              "answer": "Yes, a digital label is provided upon return approval."
+            },
+            {
+              "question": "Can I return items bought with a gift card?",
+              "answer": "Yes, the refund will be re-issued to the original gift card."
+            },
+            {
+              "question": "What if I return an item after 14 days?",
+              "answer": "Returns outside the 14-day window are rejected and shipped back to you."
+            },
+            {
+              "question": "Are recipe kits returnable?",
+              "answer": "Only if the entire kit is unopened and the seal is intact."
+            },
+            {
+              "question": "Can I cancel a return request?",
+              "answer": "Yes, simply ignore the label and keep the item, the request will auto-cancel."
+            },
+            {
+              "question": "Who handles customer complaints regarding returns?",
+              "answer": "The platform manages all complaints and return resolutions directly."
+            },
+            {
+              "question": "My refund is delayed, who do I contact?",
+              "answer": "If it has been more than 7 business days, please contact your bank using the ARN number we provided."
+            },
+            {
+              "question": "Can I return an item because I didn't like the taste?",
+              "answer": "No, we cannot accept returns on opened food items based on personal taste preferences."
+            }
+          ]
+        },
+        {
+          "id": "vendor-seller-policies",
+          "name": "Vendor & Seller Policies",
+          "faqs": [
+            {
+              "question": "What is the seller commission percentage?",
+              "answer": "The platform takes a standard percentage fee per sale (refer to your vendor agreement for exact rates)."
+            },
+            {
+              "question": "When are sellers paid?",
+              "answer": "Sellers are paid strictly on a Monthly schedule."
+            },
+            {
+              "question": "Can sellers withdraw earnings anytime?",
+              "answer": "No, sellers can only receive their funds After the Month is complete."
+            },
+            {
+              "question": "What causes a seller suspension?",
+              "answer": "Selling prohibited items, fake products, or receiving repeated customer complaints."
+            },
+            {
+              "question": "What happens after repeated complaints?",
+              "answer": "The platform will suspend the seller's account permanently."
+            },
+            {
+              "question": "Can sellers sell branded products?",
+              "answer": "Yes, selling authentic branded products is allowed."
+            },
+            {
+              "question": "Who handles customer complaints?",
+              "answer": "The Platform handles all customer complaints to ensure a unified customer experience."
+            },
+            {
+              "question": "Can sellers edit or remove products anytime?",
+              "answer": "No, to maintain order integrity, sellers cannot edit or remove live products instantly."
+            },
+            {
+              "question": "Who pays if a package is lost?",
+              "answer": "The Platform assumes responsibility for logistical losses."
+            },
+            {
+              "question": "Can sellers sell counterfeit items?",
+              "answer": "No, counterfeit products are strictly prohibited and result in immediate bans."
+            },
+            {
+              "question": "What categories can sellers use?",
+              "answer": "Sellers may only list in 4 categories: Spices, Kitchen Utilities, Food Items, and Recipes."
+            },
+            {
+              "question": "How are fake sellers handled?",
+              "answer": "They are immediately banned, and their funds are frozen."
+            },
+            {
+              "question": "Do sellers manage returns?",
+              "answer": "No, the platform processes and authorizes all customer returns."
+            },
+            {
+              "question": "Can vendors contact customers directly?",
+              "answer": "No, all communication must go through the platform's support system."
+            },
+            {
+              "question": "Are vendors responsible for tax collection?",
+              "answer": "The platform calculates and collects VAT based on state and country laws at checkout."
+            },
+            {
+              "question": "How do I apply to be a vendor?",
+              "answer": "Fill out the Vendor Application form located in the site footer."
+            },
+            {
+              "question": "Do I need a registered business to sell?",
+              "answer": "Yes, verified business details and KYC documents are required for approval."
+            },
+            {
+              "question": "Can sellers run their own promotions?",
+              "answer": "Vendors can submit discount requests to the platform admin for approval."
+            },
+            {
+              "question": "How do I upload my spice catalog?",
+              "answer": "Through the Vendor Dashboard via manual entry or bulk CSV upload."
+            },
+            {
+              "question": "Can I list a kitchen appliance without a warranty?",
+              "answer": "No, all electrical appliances must carry a standard 1-year manufacturer warranty."
+            },
+            {
+              "question": "Where do I see my monthly sales report?",
+              "answer": "Detailed analytics are available in your Vendor Dashboard under \"Reports.\""
+            },
+            {
+              "question": "Is there a listing fee per product?",
+              "answer": "No, uploading products is free. We only charge a commission on actual sales."
+            },
+            {
+              "question": "How do sellers ship the items?",
+              "answer": "Sellers pack the items and hand them off to our platform's designated courier partners."
+            },
+            {
+              "question": "What if a seller runs out of stock?",
+              "answer": "Sellers must monitor and update their inventory levels via the dashboard to prevent overselling."
+            },
+            {
+              "question": "Can a vendor have multiple accounts?",
+              "answer": "No, vendors are restricted to one verified account per business entity."
+            },
+            {
+              "question": "Are sellers allowed to include marketing flyers in boxes?",
+              "answer": "No, external marketing materials are strictly prohibited in packages."
+            },
+            {
+              "question": "How do sellers appeal a suspension?",
+              "answer": "Suspended sellers can submit one appeal to the platform administration via email."
+            },
+            {
+              "question": "Who pays for damaged goods returned by a customer?",
+              "answer": "If the seller packed the item poorly or it was defective, the cost is deducted from the seller's monthly payout."
+            },
+            {
+              "question": "Can sellers dictate their own return policies?",
+              "answer": "No, all sellers must abide by the platform's universal 14-day return policy."
+            },
+            {
+              "question": "How do I update my vendor bank details?",
+              "answer": "Bank details can be updated in the dashboard but require a 3-day verification hold."
+            }
+          ]
+        },
+        {
+          "id": "account-privacy-security",
+          "name": "Account, Privacy & Security",
+          "faqs": [
+            {
+              "question": "Can users delete their accounts?",
+              "answer": "Yes, you can delete your account permanently from the settings menu."
+            },
+            {
+              "question": "What happens if my account is hacked?",
+              "answer": "Contact support immediately. We will lock the account and assist with secure recovery."
+            },
+            {
+              "question": "What is the password reset process?",
+              "answer": "Click \"Forgot Password\" to receive a secure reset link via your registered Email."
+            },
+            {
+              "question": "How is customer data protected?",
+              "answer": "All data is encrypted, and we strictly follow GDPR compliance rules."
+            },
+            {
+              "question": "Are there age restrictions for buying?",
+              "answer": "Yes, users must be 13 years of age or older."
+            },
+            {
+              "question": "Where is the privacy policy?",
+              "answer": "Our full GDPR-compliant privacy policy is linked in the website footer."
+            },
+            {
+              "question": "Where are the Terms & Conditions?",
+              "answer": "The Terms & Conditions are located in the footer of every webpage."
+            },
+            {
+              "question": "How do you prevent fraud?",
+              "answer": "We utilize active AI screening on checkouts and verify high-risk transactions manually."
+            },
+            {
+              "question": "Can I change my email address?",
+              "answer": "Yes, you can update your email in account settings (requires email verification)."
+            },
+            {
+              "question": "Do you store my credit card details?",
+              "answer": "No, payment data is tokenized and processed by secure third-party gateways; we don't hold the data."
+            },
+            {
+              "question": "What is GDPR compliance process?",
+              "answer": "We offer full data transparency; you can request data downloads or deletions at any time."
+            },
+            {
+              "question": "Will you sell my email to third parties?",
+              "answer": "Never. We do not sell or rent customer data to any outside marketing firms."
+            },
+            {
+              "question": "How do I unsubscribe from emails?",
+              "answer": "Click the \"Unsubscribe\" link at the bottom of any promotional email we send."
+            },
+            {
+              "question": "Why was my account locked?",
+              "answer": "Accounts are locked after multiple failed login attempts. Use the password reset tool to unlock it."
+            },
+            {
+              "question": "Can I have multiple shipping addresses saved?",
+              "answer": "Yes, your address book can store multiple locations for faster checkout."
+            },
+            {
+              "question": "Is it safe to buy appliances here?",
+              "answer": "Absolutely, all checkout pages are secured with SSL encryption."
+            },
+            {
+              "question": "Can I use a VPN while ordering?",
+              "answer": "Yes, though some international VPN IPs might trigger our anti-fraud verification checks."
+            },
+            {
+              "question": "How do I report a bug on the website?",
+              "answer": "Please use the \"Contact Us\" form and select \"Technical Support.\""
+            },
+            {
+              "question": "Can I share my account with my family?",
+              "answer": "Yes, but the account holder is responsible for all orders placed."
+            },
+            {
+              "question": "What cookies do you track?",
+              "answer": "We only use essential session cookies and strictly opt-in analytics, per GDPR rules."
+            }
+          ]
+        },
+        {
+          "id": "spices-quality-sourcing-usage",
+          "name": "Spices - Quality, Sourcing & Usage",
+          "faqs": [
+            {
+              "question": "Where are your spices from?",
+              "answer": "They are authentic organic spices coming directly from India and Pakistan."
+            },
+            {
+              "question": "Are the spices 100% organic?",
+              "answer": "Yes, they are certified organic and free from synthetic chemicals."
+            },
+            {
+              "question": "Do the spices contain artificial colors?",
+              "answer": "No, they contain zero artificial colors or dyes."
+            },
+            {
+              "question": "Are there preservatives in the ground spices?",
+              "answer": "No, our spices are 100% pure with no preservatives."
+            },
+            {
+              "question": "How long do ground spices last?",
+              "answer": "Ground spices retain peak flavor for 1 to 2 years if stored properly."
+            },
+            {
+              "question": "How long do whole spices last?",
+              "answer": "Whole spices stay fresh and potent for up to 3 to 4 years."
+            },
+            {
+              "question": "How should I store my spices?",
+              "answer": "Keep them in an airtight container in a cool, dark, dry place."
+            },
+            {
+              "question": "Are your spices gluten-free?",
+              "answer": "Yes, pure spices are naturally gluten-free."
+            },
+            {
+              "question": "Are your spices safe from cross-contamination?",
+              "answer": "Check individual labels, but they are processed in facilities adhering to strict hygiene standards."
+            },
+            {
+              "question": "Do you sell bulk spice bags?",
+              "answer": "Yes, bulk weights are available on the product pages."
+            },
+            {
+              "question": "Are your spices irradiated?",
+              "answer": "No, they are naturally processed and completely non-irradiated."
+            },
+            {
+              "question": "Why is my spice clumping?",
+              "answer": "Because we don't use anti-caking chemicals, natural humidity may cause mild clumping. Shake to break it up."
+            },
+            {
+              "question": "Do you sell single ingredients or blends?",
+              "answer": "We sell both single whole/ground spices and traditional blends like Garam Masala."
+            },
+            {
+              "question": "How do I know the spice heat level?",
+              "answer": "We provide a heat scale (Mild, Medium, Hot, Extra Hot) on all chili-based product descriptions."
+            },
+            {
+              "question": "Are the spice bags resealable?",
+              "answer": "Yes, most of our retail bags feature a zip-lock seal for freshness."
+            },
+            {
+              "question": "Do you test for heavy metals?",
+              "answer": "Yes, all organic batches are rigorously tested at origin for absolute purity."
+            },
+            {
+              "question": "Why does the color vary between orders?",
+              "answer": "Organic crops naturally vary in shade depending on the season and harvest."
+            },
+            {
+              "question": "Can I use whole spices in a grinder?",
+              "answer": "Yes, our whole spices are perfect for toasting and home grinding."
+            },
+            {
+              "question": "What is the shelf life of your turmeric?",
+              "answer": "Approximately 2 years from the date of packing."
+            },
+            {
+              "question": "Do you sell saffron?",
+              "answer": "Yes, we carry premium grade organic saffron threads."
+            },
+            {
+              "question": "Are your spices vegan?",
+              "answer": "Yes, all our pure spices are 100% plant-based and vegan."
+            },
+            {
+              "question": "Can I request a custom blend?",
+              "answer": "Currently, we only sell pre-packaged traditional blends."
+            },
+            {
+              "question": "How do I know the harvest date?",
+              "answer": "The harvest season and packing date are printed on the back label."
+            },
+            {
+              "question": "Do you carry salt-free spice blends?",
+              "answer": "Yes, many of our pure spice mixes contain absolutely zero added salt."
+            },
+            {
+              "question": "Are these spices suitable for restaurant use?",
+              "answer": "Absolutely, many restaurants purchase our bulk wholesale variations."
+            }
+          ]
+        },
+        {
+          "id": "kitchen-appliances",
+          "name": "Kitchen Appliances",
+          "faqs": [
+            {
+              "question": "Do electrical appliances have a warranty?",
+              "answer": "Yes, all electrical appliances feature a 1-year manufacturer warranty."
+            },
+            {
+              "question": "Are appliances compatible with local voltage?",
+              "answer": "Yes, all listed appliances are manufactured with standard local voltage and plugs."
+            },
+            {
+              "question": "Do you sell spare parts?",
+              "answer": "Yes, replacement blades and jars are available in the utility section."
+            },
+            {
+              "question": "Are the blenders BPA-free?",
+              "answer": "Yes, all plastic food-contact surfaces are certified BPA-free."
+            },
+            {
+              "question": "Can mixers grind hard whole spices?",
+              "answer": "Yes, models specifically rated 750W or higher are designed for heavy spice grinding."
+            },
+            {
+              "question": "Are appliance blades rust-resistant?",
+              "answer": "Yes, they are made from high-grade, food-safe stainless steel."
+            },
+            {
+              "question": "Do appliances come with manuals?",
+              "answer": "Yes, English instruction manuals are included in every box."
+            },
+            {
+              "question": "Are the mixer jars dishwasher safe?",
+              "answer": "Removable glass and steel jars are generally dishwasher safe (refer to the manual)."
+            },
+            {
+              "question": "What if an appliance accessory is missing?",
+              "answer": "Contact support within 48 hours, and we will mail the missing part immediately."
+            },
+            {
+              "question": "Are your pans PFOA-free?",
+              "answer": "Yes, all non-stick utility items use safe, PFOA-free coatings."
+            },
+            {
+              "question": "Do grinders have overheat protection?",
+              "answer": "Yes, most high-power motors feature an automatic thermal overload cut-off switch."
+            },
+            {
+              "question": "Are these authentic brands?",
+              "answer": "Yes, all appliances are sourced directly from verified manufacturers and dealers."
+            },
+            {
+              "question": "Do you sell commercial-grade appliances?",
+              "answer": "We focus on consumer goods, but high-capacity items are clearly tagged \"Commercial.\""
+            },
+            {
+              "question": "Can I return an appliance if I don't like it?",
+              "answer": "Yes, but only if it is completely unused and in its original sealed box within 14 days."
+            },
+            {
+              "question": "Who services the warranty?",
+              "answer": "The platform facilitates coordination with authorized brand service centers."
+            },
+            {
+              "question": "Can I see a demo of the appliance?",
+              "answer": "Demo videos are embedded directly on the product listing pages."
+            },
+            {
+              "question": "Does the 1-year warranty cover accidental drops?",
+              "answer": "No, the warranty covers mechanical and electrical faults, not physical damage."
+            },
+            {
+              "question": "Do you sell wooden utensils?",
+              "answer": "Yes, we offer traditional kitchen utensils under our utilities category."
+            },
+            {
+              "question": "Are your cutting boards food-safe?",
+              "answer": "Yes, they are treated with natural, food-grade mineral oils."
+            },
+            {
+              "question": "How energy-efficient are the cookers?",
+              "answer": "Wattage and energy specs are listed in the details table of each product."
+            }
+          ]
+        },
+        {
+          "id": "foods-beverages",
+          "name": "Foods & Beverages",
+          "faqs": [
+            {
+              "question": "Are your food items Halal?",
+              "answer": "Yes, many sourced items are Halal certified (look for the logo on the packaging)."
+            },
+            {
+              "question": "How long is the shelf life on foods?",
+              "answer": "We guarantee a minimum of 6 months remaining shelf life on all shipped food items."
+            },
+            {
+              "question": "Do you sell fresh or frozen meat?",
+              "answer": "No, we only sell shelf-stable dry foods, snacks, and beverages."
+            },
+            {
+              "question": "Are there vegan options?",
+              "answer": "Yes, you can easily use the \"Vegan\" filter on the sidebar."
+            },
+            {
+              "question": "Are there gluten-free foods?",
+              "answer": "Yes, gluten-free items are clearly tagged in their descriptions."
+            },
+            {
+              "question": "How are glass juice bottles shipped safely?",
+              "answer": "They are secured with heavy-duty air columns and custom corrugated boxes."
+            },
+            {
+              "question": "What if my beverage leaks in transit?",
+              "answer": "Do not consume it. Send a photo to support for a fast replacement."
+            },
+            {
+              "question": "Do you sell sugar-free drinks?",
+              "answer": "Yes, we carry unsweetened herbal teas and low-calorie drink alternatives."
+            },
+            {
+              "question": "Is your Basmati rice aged?",
+              "answer": "Yes, our premium rice is traditionally aged for maximum grain length."
+            },
+            {
+              "question": "Do your sauces contain MSG?",
+              "answer": "Most of our traditional pastes and sauces are all-natural and completely MSG-free."
+            },
+            {
+              "question": "Are ingredients listed on the website?",
+              "answer": "Yes, full nutritional facts and ingredient lists are available on every item page."
+            },
+            {
+              "question": "Do you offer ready-to-eat meals?",
+              "answer": "We offer shelf-stable meal kits and ready-to-heat traditional pouches."
+            },
+            {
+              "question": "Where are the snacks made?",
+              "answer": "Origin details (India, Pakistan, or local) are explicitly stated on each product."
+            },
+            {
+              "question": "Do you have nut-free snacks?",
+              "answer": "Yes, but please carefully review the allergen warnings for cross-contamination."
+            },
+            {
+              "question": "Are your traditional sweets fresh?",
+              "answer": "They are vacuum-sealed at the source to preserve absolute freshness and texture."
+            },
+            {
+              "question": "Do you sell bulk grains or lentils?",
+              "answer": "Yes, bulk pulses, lentils, and flours are available in the foods category."
+            },
+            {
+              "question": "Are the teas single-origin?",
+              "answer": "Premium teas clearly label their regional estate origins (e.g., Assam, Darjeeling)."
+            },
+            {
+              "question": "Do you sell low-sodium options?",
+              "answer": "Yes, dietary-specific items can be found using the search filters."
+            },
+            {
+              "question": "Can I buy multi-packs of drinks?",
+              "answer": "Yes, bundle deals and multi-packs are available for most beverages."
+            },
+            {
+              "question": "Are the bottled juices pasteurized?",
+              "answer": "Yes, all commercial juices are fully pasteurized for shelf stability."
+            }
+          ]
+        },
+        {
+          "id": "platform-recipes-general-info",
+          "name": "Platform Recipes & General Info",
+          "faqs": [
+            {
+              "question": "Are the recipes on your site free?",
+              "answer": "Yes, all recipe guides on the platform are completely free to access and read."
+            },
+            {
+              "question": "Can I buy all the ingredients for a recipe at once?",
+              "answer": "Yes! Our recipe pages feature a \"Buy Ingredients\" button that auto-fills your cart."
+            },
+            {
+              "question": "Can I submit my own recipe?",
+              "answer": "Not currently, recipes are curated by our platform culinary experts."
+            },
+            {
+              "question": "Do you have a mobile app?",
+              "answer": "Currently, we operate via our mobile-optimized website, no app download is needed."
+            },
+            {
+              "question": "How do I leave a product review?",
+              "answer": "You will receive an email prompt to leave a review 7 days after your delivery."
+            },
+            {
+              "question": "Can I upload photos in my review?",
+              "answer": "Yes, we encourage customers to upload photos of their cooked meals or received items!"
+            },
+            {
+              "question": "Is there a loyalty points program?",
+              "answer": "We are launching a loyalty rewards system soon. Stay tuned to our newsletter!"
+            },
+            {
+              "question": "How do I contact a human agent?",
+              "answer": "Type \"Speak to agent\" in the chat, or use the \"Contact Us\" email form."
+            },
+            {
+              "question": "What are your customer service hours?",
+              "answer": "Our live support operates Monday to Friday, 9 AM to 6 PM."
+            },
+            {
+              "question": "Do you have a physical retail store?",
+              "answer": "No, Asian Spices operates 100% online to bring you the best direct prices."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
