@@ -84,7 +84,7 @@ export const getProducts = async (filters: any) => {
   }
 
   // 🔹 Category
-  if (category && !saleOnly) {
+  if (category && category !== "all" && !saleOnly) {
     index++;
     query += ` AND c.slug = $${index}`;
     values.push(category);
@@ -382,9 +382,10 @@ export const getProductReviews = async (productId: string, page = 1) => {
 
 export const getSubcategories = async (category: string, filters: any = {}) => {
   const { brands, minPrice, maxPrice, search } = filters;
+  const isAllCategories = !category || category === "all";
 
-  let values: any[] = [category];
-  let index = 1;
+  let values: any[] = isAllCategories ? [] : [category];
+  let index = values.length;
 
   // Base conditions for filtering the counted products
   let productConditions = `p.status = 1`;
@@ -427,6 +428,7 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
 
   // We build a clean query where c.slug filter is absolute,
   // and the dynamic product filters ONLY apply inside the join predicate.
+  const categoryFilter = isAllCategories ? "1=1" : "c.slug = $1";
   const query = `
     SELECT 
       sc.id,
@@ -438,7 +440,7 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
     LEFT JOIN store_products p 
       ON p.subcategory_id = sc.id 
       AND ${productConditions}
-    WHERE c.slug = $1
+    WHERE ${categoryFilter}
     GROUP BY sc.id, sc.name
     ORDER BY sc.name;
   `;
@@ -453,9 +455,10 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
 
 export const getBrands = async (category: string, filters: any = {}) => {
   const { subcategories, minPrice, maxPrice, search } = filters;
+  const isAllCategories = !category || category === "all";
 
-  let values: any[] = [category];
-  let index = 1;
+  let values: any[] = isAllCategories ? [] : [category];
+  let index = values.length;
 
   // Base product conditions
   let productConditions = `p.status = 1`;
@@ -496,6 +499,7 @@ export const getBrands = async (category: string, filters: any = {}) => {
     values.push(search.trim());
   }
 
+  const categoryFilter = isAllCategories ? "1=1" : "c.slug = $1";
   const query = `
     SELECT
       b.brand_id,
@@ -510,7 +514,7 @@ export const getBrands = async (category: string, filters: any = {}) => {
     INNER JOIN store_categories c
       ON c.id = p.category_id
 
-    WHERE c.slug = $1
+    WHERE ${categoryFilter}
 
     GROUP BY
       b.brand_id,

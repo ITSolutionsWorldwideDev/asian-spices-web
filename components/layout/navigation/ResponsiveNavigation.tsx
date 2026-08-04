@@ -28,8 +28,8 @@ interface NavLink {
 
 const SHOP_CATEGORIES = [
   { heading: "Asian Spices & Seasonings", slug: "spices" },
-  { heading: "Kitchen Appliances & Cooking Tools", slug: "kitchen-appliances" },
   { heading: "Asian Foods & Beverages", slug: "foods-beverages" },
+  { heading: "Kitchen Appliances & Cooking Tools", slug: "kitchen-appliances" },
 ] as const;
 
 type SubcategoryRow = { id: string; name: string };
@@ -224,11 +224,20 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
               </div>
               <div className="rounded-b-xl bg-orange-100 px-6 py-4">
                 <Link
-                  href={activeDropdownLink.name === "Shop by Category" ? "/spices" : "/healthyliving/supports-immunity"}
-                  onClick={() => { setIsMenuOpen(false); setActiveLink(""); }}
+                  href={
+                    activeDropdownLink.name === "Shop by Category"
+                      ? "/products"
+                      : "/healthyliving/supports-immunity"
+                  }
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setActiveLink("");
+                  }}
                   className="font-medium text-orange-600 hover:underline"
                 >
-                  View All {activeDropdownLink.name} Products →
+                  {activeDropdownLink.name === "Shop by Category"
+                    ? "View All Products →"
+                    : `View All ${activeDropdownLink.name} Products →`}
                 </Link>
               </div>
             </div>

@@ -21,6 +21,21 @@ function prettyDate(value: any) {
   });
 }
 
+function normalizeOrderNumber(value: any) {
+  const text = String(value ?? "").trim();
+  return text.replace(/^#+\s*/, "") || "-";
+}
+
+function buildInvoiceNumber(order: any, orderNumber: string) {
+  const withoutOrdPrefix = orderNumber.replace(/^ORD[-_\s]*/i, "");
+  const uniqueTail = String(order.id ?? "")
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .slice(-2)
+    .toUpperCase()
+    .padStart(2, "0");
+  return `INV-${withoutOrdPrefix}-${uniqueTail}`;
+}
+
 function loadAsianSpicesLogo() {
   try {
     const logoPath = path.join(
@@ -128,6 +143,8 @@ export async function GET(
       ? String(order.payment_method).toUpperCase()
       : "-";
     const paymentStatus = String(order.payment_status || "").toUpperCase();
+    const orderNumber = normalizeOrderNumber(order.order_number);
+    const invoiceNumber = buildInvoiceNumber(order, orderNumber);
 
     // Header left: logo
     const logoData = loadAsianSpicesLogo();
@@ -188,6 +205,9 @@ export async function GET(
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.setTextColor("#374151");
+    // Keep Bill To text within left column so it never overlaps meta labels.
+    const metaLabelX = 350;
+    const billToMaxWidth = metaLabelX - LEFT - 18;
     let billY = 236;
     [
       customerName,
@@ -198,19 +218,21 @@ export async function GET(
     ]
       .filter((line) => line && String(line).trim().length > 0)
       .forEach((line) => {
-        doc.text(String(line), LEFT, billY);
-        billY += 14;
+        const wrappedLines = doc.splitTextToSize(String(line), billToMaxWidth);
+        wrappedLines.forEach((wrappedLine: string) => {
+          doc.text(wrappedLine, LEFT, billY);
+          billY += 14;
+        });
       });
 
     // Meta table (right side)
-    const metaLabelX = 350;
     const metaValueX = RIGHT;
     let metaY = 214;
     const metaRows: [string, string][] = [
-      ["Invoice Number", `#${order.order_number}`],
+      ["Invoice Number", invoiceNumber],
       ["Invoice Date", prettyDate(order.created_at)],
       ["Order Date", prettyDate(order.created_at)],
-      ["Order Number", `#${order.order_number}`],
+      ["Order Number", orderNumber],
       ["Payment Method", paymentMethod],
       ["Payment Status", paymentStatus || "PAID"],
       ["Currency", currency],
@@ -339,25 +361,14 @@ export async function GET(
     doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
     doc.setTextColor("#111827");
-    const emailText = "finance@asianspices.com";
-    const separatorText = "  |  ";
-    const websiteText = "www.asianspices.com";
-    const emailWidth = doc.getTextWidth(emailText);
-    const separatorWidth = doc.getTextWidth(separatorText);
+    const websiteText = "asianspices.online";
     const websiteWidth = doc.getTextWidth(websiteText);
-    const totalFooterWidth = emailWidth + separatorWidth + websiteWidth;
+    const totalFooterWidth = websiteWidth;
     const footerStartX = footerCenterX - totalFooterWidth / 2;
 
-    doc.textWithLink(emailText, footerStartX, footerTextY, {
-      url: "mailto:finance@asianspices.com",
+    doc.textWithLink(websiteText, footerStartX, footerTextY, {
+      url: "https://asianspices.online/",
     });
-    doc.text(separatorText, footerStartX + emailWidth, footerTextY);
-    doc.textWithLink(
-      websiteText,
-      footerStartX + emailWidth + separatorWidth,
-      footerTextY,
-      { url: "https://www.asianspices.online/" },
-    );
 
     // Output straight as a raw array buffer stream type
     const pdfOutputArrayBuffer = doc.output("arraybuffer");
@@ -367,7 +378,7 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="invoice_order_${order.order_number}.pdf"`,
+        "Content-Disposition": `attachment; filename="invoice_order_${orderNumber}.pdf"`,
       },
     });
   } catch (error: any) {
