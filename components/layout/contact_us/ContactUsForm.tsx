@@ -2,40 +2,61 @@
 
 import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
-
-interface FormData {
-  fullName: string;
-  email: string;
-  subject: string;
-  message: string;
-}
+import { useZodForm } from "@/hooks/useZodForm";
+import { contactSchema, type ContactFormData } from "@/lib/validation/contact";
+import { getErrorMessage } from "@/lib/form/getErrorMessage";
 
 const ContactUsForm = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [status, setStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useZodForm(contactSchema, {
     fullName: "",
     email: "",
     subject: "",
     message: "",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const onSubmit = async (data: ContactFormData) => {
+    setStatus(null);
 
-  const handleSubmit = () => {
-    setFormData({
-      fullName: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        setStatus({
+          type: "success",
+          message: "Message sent! We'll respond within 48 hours.",
+        });
+        reset();
+        return;
+      }
+
+      setStatus({
+        type: "error",
+        message: result.message || "Unable to send your message. Please try again.",
+      });
+    } catch {
+      setStatus({
+        type: "error",
+        message: "Something went wrong. Please try again later.",
+      });
+    }
   };
 
   return (
@@ -45,7 +66,10 @@ const ContactUsForm = () => {
       </h2>
       <div className="mt-3 mb-6 h-1 w-12 bg-orange-500 rounded-full" />
 
-      <div className="bg-white rounded-xl shadow-md p-6 md:p-8">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-white rounded-xl shadow-md p-6 md:p-8"
+      >
         <div className="space-y-5">
           <div>
             <label
@@ -57,12 +81,16 @@ const ContactUsForm = () => {
             <input
               type="text"
               id="fullName"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
               placeholder="Enter your full name"
-              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              disabled={isSubmitting}
+              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-60"
+              {...register("fullName")}
             />
+            {errors.fullName && (
+              <p className="mt-1 text-xs text-red-500">
+                {getErrorMessage(errors.fullName)}
+              </p>
+            )}
           </div>
 
           <div>
@@ -75,12 +103,16 @@ const ContactUsForm = () => {
             <input
               type="email"
               id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
               placeholder="Enter your email address"
-              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              disabled={isSubmitting}
+              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-60"
+              {...register("email")}
             />
+            {errors.email && (
+              <p className="mt-1 text-xs text-red-500">
+                {getErrorMessage(errors.email)}
+              </p>
+            )}
           </div>
 
           <div>
@@ -93,12 +125,16 @@ const ContactUsForm = () => {
             <input
               type="text"
               id="subject"
-              name="subject"
-              value={formData.subject}
-              onChange={handleChange}
               placeholder="What is this regarding?"
-              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              disabled={isSubmitting}
+              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-60"
+              {...register("subject")}
             />
+            {errors.subject && (
+              <p className="mt-1 text-xs text-red-500">
+                {getErrorMessage(errors.subject)}
+              </p>
+            )}
           </div>
 
           <div>
@@ -110,24 +146,39 @@ const ContactUsForm = () => {
             </label>
             <textarea
               id="message"
-              name="message"
               rows={5}
-              value={formData.message}
-              onChange={handleChange}
               placeholder="Tell us how we can help you..."
-              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+              disabled={isSubmitting}
+              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none disabled:opacity-60"
+              {...register("message")}
             />
+            {errors.message && (
+              <p className="mt-1 text-xs text-red-500">
+                {getErrorMessage(errors.message)}
+              </p>
+            )}
           </div>
 
           <button
-            onClick={handleSubmit}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors"
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Send Message
+            {isSubmitting ? "Sending..." : "Send Message"}
             <ArrowRight className="w-4 h-4" />
           </button>
+
+          {status && (
+            <p
+              className={`text-sm text-center ${
+                status.type === "success" ? "text-green-600" : "text-red-500"
+              }`}
+            >
+              {status.message}
+            </p>
+          )}
         </div>
-      </div>
+      </form>
     </div>
   );
 };
