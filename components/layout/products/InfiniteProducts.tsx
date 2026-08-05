@@ -42,6 +42,7 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
         oldPrice: rawSave > 0 ? basePrice : null, // Original price strike-through
         off: offBadge, // Fixed valid badge text
         description: p.description || "",
+        seller_name: p.seller_name || null,
       };
     });
   };

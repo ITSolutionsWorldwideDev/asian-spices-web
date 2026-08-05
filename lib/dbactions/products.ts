@@ -51,15 +51,18 @@ export const getProducts = async (filters: any) => {
       img.file_url AS image,
       cat.min_offered_price,
       cat.total_available_stock,
+      cat.seller_name,
       ${rankField}
     FROM store_products p
     ${joinType} (
       SELECT 
         spc.product_id,
         MIN(spc.price) as min_offered_price,
-        SUM(spc.quantity) as total_available_stock
+        SUM(spc.quantity) as total_available_stock,
+        (ARRAY_AGG(st.name ORDER BY spc.price ASC NULLS LAST))[1] AS seller_name
       FROM public.store_product_catalog spc
       INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
+      LEFT JOIN public.stores st ON st.id = spc.store_id
       WHERE ss.country_code = $${countryParamIndex} AND spc.status = 1
       GROUP BY spc.product_id
     ) cat ON cat.product_id = p.id
@@ -226,6 +229,7 @@ export const getProductBySlug = async (
       c.slug AS category_slug,
       cat.min_offered_price,
       cat.total_available_stock,
+      cat.seller_name,
       COALESCE(
         json_agg(
           DISTINCT jsonb_build_object(
@@ -241,9 +245,11 @@ export const getProductBySlug = async (
       SELECT 
         spc.product_id,
         MIN(spc.price) as min_offered_price,
-        SUM(spc.quantity) as total_available_stock
+        SUM(spc.quantity) as total_available_stock,
+        (ARRAY_AGG(st.name ORDER BY spc.price ASC NULLS LAST))[1] AS seller_name
       FROM public.store_product_catalog spc
       INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
+      LEFT JOIN public.stores st ON st.id = spc.store_id
       WHERE ss.country_code = $2 AND spc.status = 1
       GROUP BY spc.product_id
     ) cat ON cat.product_id = p.id
@@ -274,7 +280,8 @@ export const getProductBySlug = async (
       c.name, 
       c.slug,
       cat.min_offered_price, 
-      cat.total_available_stock
+      cat.total_available_stock,
+      cat.seller_name
     LIMIT 1
   `;
 
@@ -301,6 +308,7 @@ export const getRelatedProducts = async (
       p.slug,
       p.base_price,
       cat.min_offered_price,
+      cat.seller_name,
       p.category_id,
       c.slug AS category_slug,
       md.file_url AS image
@@ -308,9 +316,11 @@ export const getRelatedProducts = async (
     LEFT JOIN (
       SELECT 
         spc.product_id,
-        MIN(spc.price) as min_offered_price
+        MIN(spc.price) as min_offered_price,
+        (ARRAY_AGG(st.name ORDER BY spc.price ASC NULLS LAST))[1] AS seller_name
       FROM public.store_product_catalog spc
       INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
+      LEFT JOIN public.stores st ON st.id = spc.store_id
       WHERE ss.country_code = $2 AND spc.status = 1
       GROUP BY spc.product_id
     ) cat ON cat.product_id = p.id

@@ -53,6 +53,7 @@ function mapProduct(p: any) {
     reviews: Number(p.review_count || 0),
     left: Number(p.total_available_stock || 0),
     quantity: 1,
+    seller_name: p.seller_name || null,
   };
 }
 

@@ -129,6 +129,7 @@ export default function Checkout() {
     },
     [setSelectedCountry],
   );
+  console.log(formData, "formData");
 
   const selectedOption = availableShippingOptions.find(
     (opt: any) =>

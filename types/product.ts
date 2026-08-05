@@ -20,6 +20,9 @@ export interface Product {
 
   country_of_origin?: string;
 
+  /** Fulfilling store/seller for the customer country */
+  seller_name?: string | null;
+
   discount_type?: string;
   discount_value?: number;
   promo_code?: string;

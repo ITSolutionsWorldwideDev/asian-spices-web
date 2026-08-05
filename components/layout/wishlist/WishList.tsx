@@ -131,7 +131,7 @@ export default function WishList() {
               Clear Wishlist
             </button>
 
-            <Link href="/">
+            <Link href="/products">
               <button className="bg-orange-500 hover:bg-orange-600 transition text-white px-6 py-3 rounded-xl font-semibold cursor-pointer">
                 Continue Shopping
               </button>
@@ -317,7 +317,7 @@ export default function WishList() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/spices">
+            <Link href="/products">
               <button className="border border-gray-300 bg-white hover:bg-gray-50 transition rounded-xl px-6 py-3 font-medium cursor-pointer">
                 Continue Shopping
               </button>

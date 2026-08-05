@@ -170,6 +170,11 @@ export default function ProductDesc({
           )}
 
           <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+          {product.seller_name ? (
+            <p className="text-sm font-medium text-orange-700">
+              Sold by {product.seller_name}
+            </p>
+          ) : null}
           <p className="text-gray-500">
             Origin: {product.country_of_origin || "International"}
           </p>
@@ -522,6 +527,11 @@ export default function ProductDesc({ product }: { product: Product }) {
           )}
 
           <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+          {product.seller_name ? (
+            <p className="text-sm font-medium text-orange-700">
+              Sold by {product.seller_name}
+            </p>
+          ) : null}
           <p className="text-gray-500">
             Origin: {product.country_of_origin || "International"}
           </p>

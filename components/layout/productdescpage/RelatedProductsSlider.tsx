@@ -68,6 +68,11 @@ export default function RelatedProductsSlider({ products }: any) {
                 <h3 className="text-sm font-semibold line-clamp-1">
                   {product.name}
                 </h3>
+                {product.seller_name ? (
+                  <p className="mt-0.5 text-[11px] font-medium text-orange-700 line-clamp-1">
+                    Sold by {product.seller_name}
+                  </p>
+                ) : null}
 
                 <p className="text-orange-500 font-bold text-sm mt-1">
                   {symbol}{product.base_price}

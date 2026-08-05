@@ -65,6 +65,11 @@ export default function FlashSaleProductCard() {
               : ["Premium Quality", "Intense Aroma", "Hand-Harvested"],
             rating: 5,
             rating_percentage: "100%",
+            seller_name: p.seller_name || null,
+            slug: p.slug,
+            category_slug: p.category_slug,
+            category_id: p.category_id,
+            promo_code: p.promo_code,
           };
         });
 
@@ -166,6 +171,11 @@ export default function FlashSaleProductCard() {
               <h3 className="mt-3 truncate text-base font-semibold text-gray-800 sm:mt-4 sm:text-lg">
                 {item.title}
               </h3>
+              {item.seller_name ? (
+                <p className="mt-1 truncate text-xs font-medium text-orange-700">
+                  Sold by {item.seller_name}
+                </p>
+              ) : null}
 
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <span className="text-lg font-bold text-orange-500 sm:text-xl">

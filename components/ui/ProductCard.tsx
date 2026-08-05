@@ -33,6 +33,7 @@ type Product = {
   discount_value?: string;
   discount_type?: string;
   promo_code?: string;
+  seller_name?: string | null;
 };
 
 interface ProductCardProps {
@@ -236,6 +237,11 @@ export default function ProductCard({
                   <h3 className="font-semibold text-gray-800 text-base line-clamp-1">
                     {product.name}
                   </h3>
+                  {product.seller_name ? (
+                    <p className="mt-1 text-xs font-medium text-orange-700 line-clamp-1">
+                      Sold by {product.seller_name}
+                    </p>
+                  ) : null}
                   <p className="text-xs text-gray-600 mt-0.5 line-clamp-2 min-h-[32px]">
                     {product.description || "No description available."}
                   </p>

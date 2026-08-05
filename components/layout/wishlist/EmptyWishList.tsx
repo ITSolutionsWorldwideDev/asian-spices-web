@@ -26,7 +26,7 @@ export default function EmptyWishList() {
             perfect collection.
           </p>
 
-          <Link href="/" className="mt-8">
+          <Link href="/products" className="mt-8">
             <button className="bg-orange-500 hover:bg-orange-600 transition text-white px-8 py-4 rounded-2xl font-semibold cursor-pointer">
               Continue Shopping
             </button>
