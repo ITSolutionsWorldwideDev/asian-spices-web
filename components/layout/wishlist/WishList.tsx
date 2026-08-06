@@ -223,7 +223,7 @@ export default function WishList() {
                         src={item.image || "/images/placeholder.png"}
                         alt={itemTitle}
                         fill
-                        className="object-cover"
+                        className="object-contain"
                       />
                     </div>
                   </Link>

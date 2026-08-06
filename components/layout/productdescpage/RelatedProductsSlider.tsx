@@ -54,12 +54,12 @@ export default function RelatedProductsSlider({ products }: any) {
               className="block bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group"
             >
               {/* IMAGE */}
-              <div className="relative w-full h-40 overflow-hidden">
+              <div className="relative w-full h-40 overflow-hidden bg-gray-50">
                 <Image
                   src={product.image || "/placeholder.png"}
                   alt={product.name}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="object-contain group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
 
