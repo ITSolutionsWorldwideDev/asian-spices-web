@@ -5,9 +5,10 @@ interface EmailOptions {
   to: string;
   subject: string;
   html: string;
-  fromAccount?: "billing" | "order" | "partners" | "support" | "default";
+  fromAccount?: "billing" | "order" | "partners" | "support" | "noreply" | "default";
   replyTo?: string;
   cc?: string | string[];
+  bcc?: string | string[];
   attachments?: Array<{
     filename: string;
     content: any;
@@ -68,6 +69,17 @@ const SMTP_PROFILES = {
     },
     fromAddress: '"Asian Spices Support" <support@asianspices.online>',
   },
+
+  noreply: {
+    host: "mail.asianspices.online",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.SMTP_NOREPLY_USER || "no-reply@asianspices.online",
+      pass: process.env.SMTP_NOREPLY_PASS || "",
+    },
+    fromAddress: '"Asian Spices" <no-reply@asianspices.online>',
+  },
 };
 
 type ProfileKey = keyof typeof SMTP_PROFILES;
@@ -105,13 +117,9 @@ export async function sendEmail({
   fromAccount = "default",
   replyTo,
   cc,
+  bcc,
   attachments,
 }: EmailOptions) {
-  console.log(
-    "sendEmail SMTP_PROFILES[fromAccount] === ",
-    SMTP_PROFILES[fromAccount],
-  );
-
   const profileKey: ProfileKey = SMTP_PROFILES[fromAccount]
     ? fromAccount
     : "default";
@@ -125,6 +133,7 @@ export async function sendEmail({
     from: fromAddress,
     to,
     cc,
+    bcc,
     subject,
     html,
     replyTo,
