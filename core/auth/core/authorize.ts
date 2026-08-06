@@ -7,7 +7,6 @@ export interface AuthUser {
   id: string;
   email: string;
   isPlatformAdmin: boolean;
-  passwordChangedAt: string | null;
   storeRoles: {
     store_id: string;
     role: string;
@@ -17,7 +16,7 @@ export interface AuthUser {
 
 export async function authorizeUser(email: string, password: string): Promise<AuthUser>{
   const userRes = await runQuery(
-    `SELECT id, email, password_hash, is_platform_admin, password_changed_at
+    `SELECT id, email, password_hash, is_platform_admin
      FROM users WHERE email = $1 AND status = 'active'`,
     [email]
   );
@@ -46,7 +45,6 @@ export async function authorizeUser(email: string, password: string): Promise<Au
     id: user.id,
     email: user.email,
     isPlatformAdmin: !!user.is_platform_admin,
-    passwordChangedAt: user.password_changed_at,
     storeRoles: rolesRes.rows
   };
 }
