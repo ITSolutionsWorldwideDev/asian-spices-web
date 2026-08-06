@@ -13,7 +13,7 @@ const RegisterOnApp: React.FC = () => {
       </div>
 
       {/* Main Structural Wrapper - Adaptive Flex layout */}
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 p-5 sm:p-8 md:p-10 max-w-5xl mx-auto">
+      <div className="relative z-0 flex flex-col md:flex-row items-center justify-between gap-6 p-5 pt-12 sm:p-8 sm:pt-12 md:p-10 md:pt-12 max-w-5xl mx-auto">
         
         {/* Left Side: Content Details */}
         <div className="flex-1 text-center md:text-left flex flex-col items-center md:items-start w-full">
@@ -81,7 +81,7 @@ const RegisterOnApp: React.FC = () => {
             fill
             priority
             sizes="(max-width: 768px) 240px, 320px"
-            className="object-contain drop-shadow-xl"
+            className="object-contain drop-shadow-xl pointer-events-none"
           />
         </div>
 

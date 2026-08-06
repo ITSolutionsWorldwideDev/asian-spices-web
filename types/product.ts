@@ -40,6 +40,7 @@ export interface Product {
   reviews?: number;
 
   unit?: string;
+  weight?: string | number | null;
   badge?: string;
   shippingNote?: string;
 }

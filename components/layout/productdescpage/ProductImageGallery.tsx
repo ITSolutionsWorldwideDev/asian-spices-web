@@ -8,9 +8,10 @@ import { useState } from "react";
 interface Props {
   images: string[];
   name: string;
+  badge?: string;
 }
 
-export default function ProductImageGallery({ images, name }: Props) {
+export default function ProductImageGallery({ images, name, badge }: Props) {
   const fallback = "/assets/spices/spices-1.png";
 
   const safeImages = images && images.length > 0 ? images : [fallback];
@@ -43,12 +44,17 @@ export default function ProductImageGallery({ images, name }: Props) {
 
   return (
     <div>
-      {/* 🔥 MAIN IMAGE */}
+      {/* Main image */}
       <div
-        className="relative w-full aspect-square bg-white rounded-2xl overflow-hidden cursor-zoom-in"
+        className="relative w-full aspect-square overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm cursor-zoom-in"
         onMouseMove={handleMouseMove}
         onMouseLeave={resetZoom}
       >
+        {badge ? (
+          <span className="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-amber-700 shadow-sm">
+            {badge}
+          </span>
+        ) : null}
         <Image
           src={activeImage}
           alt={name}
@@ -60,13 +66,13 @@ export default function ProductImageGallery({ images, name }: Props) {
         />
       </div>
 
-      {/* 🔥 THUMBNAILS */}
-      <div className="flex gap-3 mt-4 overflow-x-auto">
+      {/* Thumbnails */}
+      <div className="mt-4 grid grid-cols-4 gap-3">
         {safeImages.map((img, idx) => (
           <button
             key={idx}
             onClick={() => setActiveImage(img)}
-            className={`relative w-20 h-20 rounded-lg overflow-hidden border-2 transition
+            className={`relative h-20 w-full overflow-hidden rounded-xl border-2 transition sm:h-24
               ${activeImage === img ? "border-orange-500" : "border-gray-200"}`}
           >
             <Image

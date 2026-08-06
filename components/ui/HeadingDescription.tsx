@@ -13,8 +13,7 @@ const HeadingDescription = ({
   return (
     <div className="text-center max-w-2xl mx-auto my-10 px-4 ">
       <h2
-        className="py-4 font-bold text-2xl sm:text-3xl lg:text-4xl rounded-full 
-                     bg-linear-to-r from-orange-100 to-orange-200 text-red-600"
+        className="py-4 font-bold text-2xl sm:text-3xl lg:text-4xl text-red-600"
       >
         {heading}
       </h2>
