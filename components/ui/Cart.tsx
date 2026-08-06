@@ -159,7 +159,7 @@ export default function Cart() {
                       alt={item.title || "Product"}
                       width={96}
                       height={96}
-                      className="object-cover h-full w-full"
+                      className="object-contain h-full w-full"
                     />
                   </Link>
                 </div>
