@@ -335,61 +335,134 @@ export async function sendReturnStatusUpdateEmail(returnId: string) {
 
 
 export async function sendPasswordResetEmail({ email, token }: PasswordResetEmailOptions) {
+  // Generate base root URL dynamically using your system environment configurations
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const resetLink = `${baseUrl}/reset-password?token=${token}`;
+
+  const emailHtml = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <span style="background-color: #ea580c15; color: #ea580c; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 14px; display: inline-block; border-radius: 9999px; border: 1px solid #ea580c30;">
+          Security Notification
+        </span>
+      </div>
+
+      <h2 style="color: #111827; text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
+        Reset Your Password
+      </h2>
+
+      <p>Hello,</p>
+      <p>We received a verification request to change the credentials linked to your <strong>Asian Spices</strong> account. Click the button below to configure your new secure access phrase key:</p>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${resetLink}" style="background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: 600; border-radius: 8px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.2);">
+          Reset Account Password
+        </a>
+      </div>
+
+      <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 13px; color: #4b5563;">
+        <p style="margin: 0 0 8px 0;"><strong>Link Lifespan:</strong> This specific URL will expire in 1 hour for your security.</p>
+        <p style="margin: 0;">If the button above does not load, copy and paste this complete URL string directly into your browser address line:</p>
+        <p style="margin: 6px 0 0 0; word-break: break-all; color: #ea580c; font-family: monospace;">${resetLink}</p>
+      </div>
+
+      <p style="font-size: 14px; color: #6b7280; margin-top: 25px;">
+        If you did not issue this password recovery event request, you can safely ignore or disregard this message. Your original access parameters remain completely locked and unchanged.
+      </p>
+
+      <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
+      <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
+        © 2026 Asian Spices Security Desk. All rights reserved.<br>
+        Need support? Contact us via support@asianspices.online
+      </p>
+    </div>
+  `;
+
+  // Intentionally NOT caught here — the caller (forgot-password route) needs
+  // to know if this actually failed, since it decides what to tell the client.
+  await sendEmail({
+    to: email,
+    subject: "Reset your Asian Spices password",
+    html: emailHtml,
+    fromAccount: "support", // Uses your dedicated support configuration profiles
+  });
+
+  return { success: true };
+}
+
+export async function sendContactFormEmail({
+  fullName,
+  email,
+  subject,
+  message,
+}: ContactFormEmailOptions) {
   try {
-    // Generate base root URL dynamically using your system environment configurations
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-    const resetLink = `${baseUrl}/reset-password?token=${token}`;
-
-    const emailHtml = `
+    const notificationHtml = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
-        <div style="text-align: center; margin-bottom: 20px;">
-          <span style="background-color: #ea580c15; color: #ea580c; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 14px; display: inline-block; border-radius: 9999px; border: 1px solid #ea580c30;">
-            Security Notification
-          </span>
-        </div>
-
-        <h2 style="color: #111827; text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
-          Reset Your Password
+        <h2 style="color: #111827; margin-top: 0; margin-bottom: 20px; font-size: 22px; font-weight: 800;">
+          New Contact Form Submission
         </h2>
-        
-        <p>Hello,</p>
-        <p>We received a verification request to change the credentials linked to your <strong>Asian Spices</strong> account. Click the button below to configure your new secure access phrase key:</p>
-        
-        <div style="text-align: center; margin: 30px 0;">
-          <a href="${resetLink}" style="background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: 600; border-radius: 8px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.2);">
-            Reset Account Password
-          </a>
+
+        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px;">
+          <p style="margin: 0 0 8px 0;"><strong>Name:</strong> ${fullName}</p>
+          <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${email}</p>
+          <p style="margin: 0;"><strong>Subject:</strong> ${subject}</p>
         </div>
 
-        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 13px; color: #4b5563;">
-          <p style="margin: 0 0 8px 0;"><strong>Link Lifespan:</strong> This specific URL will expire in 1 hour for your security.</p>
-          <p style="margin: 0;">If the button above does not load, copy and paste this complete URL string directly into your browser address line:</p>
-          <p style="margin: 6px 0 0 0; word-break: break-all; color: #ea580c; font-family: monospace;">${resetLink}</p>
-        </div>
+        <p style="margin: 0 0 8px 0; font-weight: 600;">Message:</p>
+        <p style="white-space: pre-wrap; color: #374151;">${message}</p>
 
-        <p style="font-size: 14px; color: #6b7280; margin-top: 25px;">
-          If you did not issue this password recovery event request, you can safely ignore or disregard this message. Your original access parameters remain completely locked and unchanged.
-        </p>
-        
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
         <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
-          © 2026 Asian Spices Security Desk. All rights reserved.<br>
-          Need support? Contact us via support@asianspices.online
+          Sent via the Contact Us form on asianspices.online
+        </p>
+      </div>
+    `;
+
+    await sendEmail({
+      to: "support@asianspices.online",
+      replyTo: email,
+      subject: `[Contact Form] ${subject}`,
+      html: notificationHtml,
+      fromAccount: "support",
+    });
+
+    const confirmationHtml = `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
+        <h2 style="color: #111827; text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
+          We've Received Your Message
+        </h2>
+
+        <p>Hello ${fullName},</p>
+        <p>Thanks for reaching out to <strong>Asian Spices</strong>. Our support team has received your message and will respond within 48 hours.</p>
+
+        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; color: #4b5563;">
+          <p style="margin: 0 0 8px 0;"><strong>Subject:</strong> ${subject}</p>
+          <p style="margin: 0; white-space: pre-wrap;"><strong>Your message:</strong><br>${message}</p>
+        </div>
+
+        <p style="font-size: 14px; color: #6b7280;">This is an automated confirmation — please don't reply to this email. Our team will contact you directly at this address.</p>
+
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
+        <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
+          © 2026 Asian Spices Online. All rights reserved.<br>
+          Need urgent help? Contact us at support@asianspices.online
         </p>
       </div>
     `;
 
     await sendEmail({
       to: email,
-      subject: "Reset your Asian Spices password 🔒",
-      html: emailHtml,
-      fromAccount: "support", // Uses your dedicated support configuration profiles
+      subject: "We've received your message — Asian Spices",
+      html: confirmationHtml,
+      // Temporarily on "support" — the "noreply" mailbox is currently
+      // failing SMTP connections server-side, pending IT fixing it.
+      fromAccount: "support",
     });
 
     return { success: true };
-    // return { success: false, error };
-  } catch (error){
-    console.error(`[Forgot Password Email Fail] Target recipient: ${email}`, error);
+  } catch (error) {
+    console.error("[Contact Form Email Dispatch Failure]", error);
     return { success: false, error };
   }
 }

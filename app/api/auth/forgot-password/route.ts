@@ -32,8 +32,18 @@ export async function POST(req: Request) {
         [rows[0].id, token]
       );
 
-      // Dispatch your formatted support email payload directly over the connection pipeline
-      await sendPasswordResetEmail({ email, token });
+      // Dispatch your formatted support email payload directly over the connection pipeline.
+      // Failures are logged here but NOT surfaced to the client response below —
+      // the response must stay unconditional to avoid leaking whether an email
+      // exists/was delivered (user-enumeration protection).
+      try {
+        await sendPasswordResetEmail({ email, token });
+      } catch (emailError) {
+        console.error(
+          `[Forgot Password] Email dispatch failed for ${email}:`,
+          emailError
+        );
+      }
 
       return NextResponse.json({ success: true });
     } finally {
