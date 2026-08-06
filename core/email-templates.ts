@@ -75,7 +75,10 @@ export async function sendOrderConfirmationEmail(orderId: string) {
       bcc: ["sales@asianspices.online", "order@asianspices.online", "cheila.lopes@itsolutionshub2010.com", "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com", "ahmad.raza@itsolutionsworldwide.com"],
       subject: `Order Confirmed! 🎉 (Ref: ${order.order_number})`,
       html: emailHtml,
-      fromAccount: "noreply",
+      // Temporarily back on the "order" profile — the "noreply" mailbox is
+      // currently failing SMTP connections server-side (SSL handshake error),
+      // pending IT fixing the mailbox. Switch back to "noreply" once resolved.
+      fromAccount: "order",
     });
 
     return { success: true };
@@ -452,7 +455,9 @@ export async function sendContactFormEmail({
       to: email,
       subject: "We've received your message — Asian Spices",
       html: confirmationHtml,
-      fromAccount: "noreply",
+      // Temporarily on "support" — the "noreply" mailbox is currently
+      // failing SMTP connections server-side, pending IT fixing it.
+      fromAccount: "support",
     });
 
     return { success: true };
