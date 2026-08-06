@@ -382,7 +382,7 @@ export async function sendPasswordResetEmail({ email, token }: PasswordResetEmai
   // to know if this actually failed, since it decides what to tell the client.
   await sendEmail({
     to: email,
-    subject: "Reset your Asian Spices password 🔒",
+    subject: "Reset your Asian Spices password",
     html: emailHtml,
     fromAccount: "support", // Uses your dedicated support configuration profiles
   });
