@@ -22,6 +22,13 @@ interface PasswordResetEmailOptions {
   token: string;
 }
 
+interface ContactFormEmailOptions {
+  fullName: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
 export async function sendOrderConfirmationEmail(orderId: string) {
   try {
     // 1️⃣ Fetch complete payload variables for the email
@@ -380,6 +387,81 @@ export async function sendPasswordResetEmail({ email, token }: PasswordResetEmai
     // return { success: false, error };
   } catch (error){
     console.error(`[Forgot Password Email Fail] Target recipient: ${email}`, error);
+    return { success: false, error };
+  }
+}
+
+export async function sendContactFormEmail({
+  fullName,
+  email,
+  subject,
+  message,
+}: ContactFormEmailOptions) {
+  try {
+    const notificationHtml = `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
+        <h2 style="color: #111827; margin-top: 0; margin-bottom: 20px; font-size: 22px; font-weight: 800;">
+          New Contact Form Submission
+        </h2>
+
+        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px;">
+          <p style="margin: 0 0 8px 0;"><strong>Name:</strong> ${fullName}</p>
+          <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${email}</p>
+          <p style="margin: 0;"><strong>Subject:</strong> ${subject}</p>
+        </div>
+
+        <p style="margin: 0 0 8px 0; font-weight: 600;">Message:</p>
+        <p style="white-space: pre-wrap; color: #374151;">${message}</p>
+
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
+        <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
+          Sent via the Contact Us form on asianspices.online
+        </p>
+      </div>
+    `;
+
+    await sendEmail({
+      to: "support@asianspices.online",
+      replyTo: email,
+      subject: `[Contact Form] ${subject}`,
+      html: notificationHtml,
+      fromAccount: "support",
+    });
+
+    const confirmationHtml = `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
+        <h2 style="color: #111827; text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
+          We've Received Your Message
+        </h2>
+
+        <p>Hello ${fullName},</p>
+        <p>Thanks for reaching out to <strong>Asian Spices</strong>. Our support team has received your message and will respond within 48 hours.</p>
+
+        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; color: #4b5563;">
+          <p style="margin: 0 0 8px 0;"><strong>Subject:</strong> ${subject}</p>
+          <p style="margin: 0; white-space: pre-wrap;"><strong>Your message:</strong><br>${message}</p>
+        </div>
+
+        <p style="font-size: 14px; color: #6b7280;">This is an automated confirmation — please don't reply to this email. Our team will contact you directly at this address.</p>
+
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
+        <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
+          © 2026 Asian Spices Online. All rights reserved.<br>
+          Need urgent help? Contact us at support@asianspices.online
+        </p>
+      </div>
+    `;
+
+    await sendEmail({
+      to: email,
+      subject: "We've received your message — Asian Spices",
+      html: confirmationHtml,
+      fromAccount: "noreply",
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Contact Form Email Dispatch Failure]", error);
     return { success: false, error };
   }
 }
