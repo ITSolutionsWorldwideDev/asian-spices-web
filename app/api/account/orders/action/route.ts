@@ -32,9 +32,9 @@ export async function POST(request: Request) {
 
       // 1. Validate Order Status and Eligibility
       const orderQuery = `
-        SELECT order_status, payment_status, payment_method, total_amount 
-        FROM store_orders 
-        WHERE id = $1 
+        SELECT order_status, payment_status, shipping_status, fulfillment_status, payment_method, total_amount
+        FROM store_orders
+        WHERE id = $1
         LIMIT 1;
       `;
       const orderRes = await client.query(orderQuery, [orderId]);
@@ -44,63 +44,39 @@ export async function POST(request: Request) {
       }
 
       const order = orderRes.rows[0];
-      const currentStatus = order.order_status?.toLowerCase();
 
-      // Strict Policy Eligible Statuses: Awaiting Payment, Paid, Pending Picking Confirmation
-      const allowedCancelStatuses = [
-        "awaiting payment",
-        "paid",
-        "pending picking confirmation",
-        "pending",
-        "confirmed",
-      ];
+      if (order.order_status?.toLowerCase() === "cancelled") {
+        throw new Error("This order has already been cancelled.");
+      }
 
-      if (!allowedCancelStatuses.includes(currentStatus)) {
+      // Cancel is only allowed before the order ships, matching the
+      // customer portal's Cancel/Request Return button logic.
+      const shippingStatus = order.shipping_status?.toLowerCase();
+      const fulfillmentStatus = order.fulfillment_status?.toLowerCase();
+      const isShippedOrLater =
+        shippingStatus === "shipped" ||
+        shippingStatus === "delivered" ||
+        fulfillmentStatus === "shipped";
+
+      if (isShippedOrLater) {
         throw new Error(
-          "This order can no longer be cancelled. It has already moved to processing or fulfillment.",
+          "This order can no longer be cancelled - it has already shipped. Please file a return request instead.",
         );
       }
 
-      // 2. Handle Refund Processing if Order is Paid
-      let refundStatus = "No Refund Needed";
-      let gatewayMessage = "";
-
-      if (order.payment_status === "paid") {
-        const provider = (order.payment_method || "pay.nl").toLowerCase();
-
-        try {
-          if (provider.includes("paypal")) {
-            // Simulate / Execute PayPal API Refund Flow
-            gatewayMessage = `PayPal Refund initiated successfully for amount: ${order.total_amount}`;
-          } else {
-            // Default gateway: Pay.nl API Refund Flow
-            gatewayMessage = `Pay.nl Refund initiated successfully for amount: ${order.total_amount}`;
-          }
-          refundStatus = "Refund Successful";
-        } catch (gatewayError: any) {
-          refundStatus = "Refund Failed";
-          // Notice: In production, log this and trigger customer support workflows
-          console.error(`Gateway Refund Failure: ${gatewayError.message}`);
-          throw new Error(
-            `Refund Transaction Failed: ${gatewayError.message}. Please contact Support.`,
-          );
-        }
-      }
-
-      // 3. Mark the Order Status directly as 'cancelled'
+      // 2. Mark the Order Status directly as 'cancelled'
+      // No refund handling needed here - payment isn't confirmed yet at this
+      // point (guarded above), so there's nothing to refund.
       // Policy Rules note: No Inventory management, No ERP, No Accounting updates here.
       const updateOrderQuery = `
-        UPDATE store_orders 
-        SET 
-          order_status = 'cancelled', 
-          payment_status = $2,
-          updated_at = now() 
+        UPDATE store_orders
+        SET
+          order_status = 'cancelled',
+          updated_at = now()
         WHERE id = $1;
       `;
 
-      const targetPaymentStatus =
-        order.payment_status === "paid" ? "refunded" : order.payment_status;
-      await client.query(updateOrderQuery, [orderId, targetPaymentStatus]);
+      await client.query(updateOrderQuery, [orderId]);
 
       // Record cancellation metadata/reasons in admin comments for system visibility
       const appendReasonQuery = `
@@ -114,8 +90,8 @@ export async function POST(request: Request) {
 
       // 4. Send confirmation email to customer
       try {
-        // Send email containing cancellation details & refund state
-        // await sendCancellationEmail(orderId, refundStatus, reason);
+        // Send email containing cancellation details
+        // await sendCancellationEmail(orderId, reason);
       } catch (emailErr) {
         console.error(
           "Non-fatal email cancellation notification alert engine failure:",
@@ -126,8 +102,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: true,
-          message: `Order successfully cancelled. Status: ${refundStatus}. ${gatewayMessage}`,
-          refundStatus,
+          message: "Order successfully cancelled.",
         },
         { status: 200 },
       );
@@ -155,22 +130,24 @@ export async function POST(request: Request) {
     await client.query("BEGIN");
 
     // 1. Core verification against policy workflow properties
+    // shipping_status is the field CheapCargo tracking actually writes
+    // "delivered" to - order_status never reaches that value.
     const orderInfoQuery = `
-      SELECT customer_id, order_status, delivery_date 
-      FROM store_orders 
-      WHERE id = $1 
+      SELECT customer_id, shipping_status, delivery_date
+      FROM store_orders
+      WHERE id = $1
       LIMIT 1;
     `;
     const orderInfoRes = await client.query(orderInfoQuery, [orderId]);
-    
+
     if (orderInfoRes.rows.length === 0) {
       throw new Error("Parent order data record lookup returned empty.");
     }
-    
-    const { customer_id: customerId, order_status: orderStatus, delivery_date: deliveryDate } = orderInfoRes.rows[0];
+
+    const { customer_id: customerId, shipping_status: shippingStatus, delivery_date: deliveryDate } = orderInfoRes.rows[0];
 
     // Check Eligibility Condition A: Must be 'delivered'
-    if (orderStatus?.toLowerCase() !== "delivered") {
+    if (shippingStatus?.toLowerCase() !== "delivered") {
       throw new Error("Returns are strictly permitted for delivered orders only.");
     }
 
