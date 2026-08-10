@@ -133,7 +133,7 @@ export async function POST(request: Request) {
     // shipping_status is the field CheapCargo tracking actually writes
     // "delivered" to - order_status never reaches that value.
     const orderInfoQuery = `
-      SELECT customer_id, shipping_status, delivery_date
+      SELECT customer_id, shipping_status, delivered_at
       FROM store_orders
       WHERE id = $1
       LIMIT 1;
@@ -144,7 +144,7 @@ export async function POST(request: Request) {
       throw new Error("Parent order data record lookup returned empty.");
     }
 
-    const { customer_id: customerId, shipping_status: shippingStatus, delivery_date: deliveryDate } = orderInfoRes.rows[0];
+    const { customer_id: customerId, shipping_status: shippingStatus, delivered_at: deliveryDate } = orderInfoRes.rows[0];
 
     // Check Eligibility Condition A: Must be 'delivered'
     if (shippingStatus?.toLowerCase() !== "delivered") {
