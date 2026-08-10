@@ -27,22 +27,35 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
   const isPaid = order.payment_status === "paid";
   const { symbol } = useCurrencyStore();
 
-  // Aligned with diagram: Awaiting Payment, Paid, Pending Picking Confirmation
-  const eligibleCancellationStatuses = [
-    "awaiting payment",
-    "paid",
-    "pending picking confirmation",
-    "pending",
-    "confirmed",
-  ];
+  // Real order-progress stage, combining payment/shipping fields the backend
+  // actually sets (payment_status, fulfillment_status, shipping_status) -
+  // "delivered"/"shipped" only light up once shipping_status is genuinely
+  // set to that by admin/CheapCargo tracking, never guessed.
+  const getProgressStatus = () => {
+    if (order.payment_status?.toLowerCase() === "failed") return "failed";
+    if (order.shipping_status?.toLowerCase() === "delivered") return "delivered";
+    if (
+      order.shipping_status?.toLowerCase() === "shipped" ||
+      order.fulfillment_status?.toLowerCase() === "shipped"
+    )
+      return "shipped";
+    if (order.payment_status?.toLowerCase() === "paid") return "paid";
+    return "pending";
+  };
 
-  const canCancel = eligibleCancellationStatuses.includes(
-    order.order_status?.toLowerCase(),
-  );
+  const progressStatus = getProgressStatus();
+  const isShippedOrLater =
+    progressStatus === "shipped" || progressStatus === "delivered";
+
+  // Cancel is only allowed before the order ships. Once shipped, the
+  // customer can no longer cancel directly - "Request Return" takes over.
+  const canCancel = !isShippedOrLater;
 
   // ALIGNED WITH B2C ORDER RETURNS FLOW POLICY ---
-  const isDelivered = order.order_status?.toLowerCase() === "delivered";
-  
+  // shipping_status is the field CheapCargo tracking actually writes
+  // "delivered" to - order_status never reaches that value.
+  const isDelivered = order.shipping_status?.toLowerCase() === "delivered";
+
   // Calculate if the order is still within the strict 7-day return policy window
   const isWithinReturnWindow = (() => {
     if (!order.delivery_date) return false;
@@ -266,7 +279,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
           ) : (
             /* Read Only View */
             <>
-              <OrderTimeline status={order.payment_status} />
+              <OrderTimeline status={progressStatus} />
 
               <OrderSummaryReadOnly
                 items={
@@ -299,7 +312,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
                       className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 border border-gray-200 rounded-xl transition cursor-pointer"
                     >
                       <Undo2 size={15} className="text-gray-500" />
-                      File Item Return Request
+                      Request Return
                     </button>
                   )}
                 </div>
