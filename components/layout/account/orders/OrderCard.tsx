@@ -58,8 +58,8 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
 
   // Calculate if the order is still within the strict 7-day return policy window
   const isWithinReturnWindow = (() => {
-    if (!order.delivery_date) return false;
-    const deliveryDate = new Date(order.delivery_date);
+    if (!order.delivered_at) return false;
+    const deliveryDate = new Date(order.delivered_at);
     const currentDate = new Date();
     const diffTime = Math.abs(currentDate.getTime() - deliveryDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
