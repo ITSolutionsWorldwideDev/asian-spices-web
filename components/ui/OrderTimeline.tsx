@@ -11,18 +11,20 @@ const steps: Step[] = [
   { key: "pending", label: "Order Placed" },
   { key: "paid", label: "Payment Confirmed" },
   { key: "shipped", label: "Shipped" },
+  { key: "delivered", label: "Delivered" },
 ];
 
 export default function OrderTimeline({
   status,
 }: {
-  status: "pending" | "paid" | "failed" | "shipped";
+  status: "pending" | "paid" | "failed" | "shipped" | "delivered";
 }) {
   const getStepIndex = (status: string) => {
     if (status === "failed") return -1;
     if (status === "pending") return 0;
     if (status === "paid") return 1;
     if (status === "shipped") return 2;
+    if (status === "delivered") return 3;
     return 0;
   };
 
