@@ -132,12 +132,12 @@ export async function POST(request: Request) {
         );
 
         if (isFullCancel) {
-          // Matches the legacy whole-order cancel path below: leave
-          // subtotal/tax/shipping/total_amount as-is, a record of what was
-          // actually charged, rather than zeroing them out.
+          // Nothing is left to ship, so the order's live totals should
+          // reflect that (€0 across the board) rather than freezing at
+          // whatever was charged before this cancellation.
           await client.query(
             `UPDATE store_orders
-             SET order_status = 'cancelled', updated_at = now()
+             SET order_status = 'cancelled', subtotal = 0, tax_amount = 0, shipping_amount = 0, total_amount = 0, updated_at = now()
              WHERE id = $1;`,
             [orderId],
           );
