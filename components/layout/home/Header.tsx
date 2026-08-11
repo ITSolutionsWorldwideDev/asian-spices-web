@@ -79,20 +79,6 @@ export default function Header() {
           <HeaderContent current={current} />
         </div>
       </div>
-
-      <div className="relative z-20 mt-6 mb-10 flex items-center justify-center gap-6 container mx-auto">
-        {frames.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            aria-label={`Show slide ${i + 1}`}
-            onClick={() => setIndex(i)}
-            className={`transition-all duration-300 h-[5px] w-14 rounded-full cursor-pointer
-              ${index === i ? "bg-white" : "bg-white/30 hover:bg-white/50"}
-            `}
-          />
-        ))}
-      </div>
     </section>
   );
 }

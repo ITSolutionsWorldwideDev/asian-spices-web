@@ -52,7 +52,7 @@ export default function UpperSelection() {
         </button>
 
         {countryOpen && (
-          <div className="absolute right-0 top-full z-[200] mt-2 max-h-56 w-44 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+          <div className="absolute right-0 top-full z-[1000] mt-2 max-h-56 w-48 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-xl">
             {countries.length === 0 ? (
               <p className="px-3 py-2 text-xs text-gray-400">No options</p>
             ) : (
@@ -65,7 +65,7 @@ export default function UpperSelection() {
                     await setSelectedCountry(c.iso2);
                     router.refresh();
                   }}
-                  className={`flex w-full items-center gap-2 border-b border-gray-100 px-3 py-2 text-left text-xs last:border-b-0 hover:bg-gray-50 ${
+                  className={`flex w-full items-center gap-2 px-3 py-2.5 text-left text-xs hover:bg-gray-50 ${
                     selectedCountry === c.iso2 ? "font-semibold text-gray-900" : "text-gray-700"
                   }`}
                 >
@@ -95,19 +95,28 @@ export default function UpperSelection() {
         </button>
 
         {currencyOpen && (
-          <div className="absolute right-0 top-full z-[200] mt-2 max-h-56 w-36 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
-            {currencies.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => { setSelectedCurrency(c.code); setCurrencyOpen(false); }}
-                className={`flex w-full items-center gap-1.5 border-b border-gray-100 px-3 py-2 text-left text-xs last:border-b-0 hover:bg-gray-50 ${
-                  selectedCurrency === c.code ? "font-semibold text-gray-900" : "text-gray-700"
-                }`}
-              >
-                {c.symbol} {c.code}
-              </button>
-            ))}
+          <div className="absolute right-0 top-full z-[1000] mt-2 max-h-56 w-40 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-xl">
+            {currencies.length === 0 ? (
+              <p className="px-3 py-2 text-xs text-gray-400">No options</p>
+            ) : (
+              currencies.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCurrency(c.code);
+                    setCurrencyOpen(false);
+                  }}
+                  className={`flex w-full items-center gap-1.5 px-3 py-2.5 text-left text-xs hover:bg-gray-50 ${
+                    selectedCurrency === c.code
+                      ? "font-semibold text-gray-900"
+                      : "text-gray-700"
+                  }`}
+                >
+                  {c.symbol} {c.code}
+                </button>
+              ))
+            )}
           </div>
         )}
       </div>

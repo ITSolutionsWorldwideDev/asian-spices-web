@@ -35,7 +35,7 @@ const ButtonsNavigation = () => {
           </button>
 
           {open && (
-            <div className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
+            <div className="absolute right-0 top-full z-[1000] mt-2 w-44 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
               <Link
                 href="/account"
                 className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
