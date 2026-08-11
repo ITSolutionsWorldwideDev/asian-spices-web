@@ -44,7 +44,8 @@ export async function GET(req: NextRequest) {
             'category_id', p.category_id,
             'price', oi.price,
             'quantity', oi.quantity,
-            'image', md.file_url
+            'image', md.file_url,
+            'status', oi.status
           )
         ) AS cart_items
       FROM store_orders o
