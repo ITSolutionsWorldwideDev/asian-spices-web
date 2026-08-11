@@ -3,7 +3,11 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/core/db";
 import { sendReturnStatusUpdateEmail } from "@/core/email-templates";
-import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
+import {
+  MIN_ORDER_AMOUNT_EUR,
+  FREE_SHIPPING_THRESHOLD,
+  SHIPPING_OPTIONS,
+} from "@/lib/pricing";
 
 export async function POST(request: Request) {
   const client = await pool.connect();
@@ -34,7 +38,7 @@ export async function POST(request: Request) {
       // 1. Validate Order Status and Eligibility
       const orderQuery = `
         SELECT order_status, payment_status, shipping_status, fulfillment_status, payment_method,
-               subtotal, shipping_amount, tax_amount, total_amount
+               subtotal, shipping_amount, tax_amount, total_amount, shipping_provider
         FROM store_orders
         WHERE id = $1
         LIMIT 1;
@@ -128,20 +132,40 @@ export async function POST(request: Request) {
         );
 
         if (isFullCancel) {
+          // Matches the legacy whole-order cancel path below: leave
+          // subtotal/tax/shipping/total_amount as-is, a record of what was
+          // actually charged, rather than zeroing them out.
           await client.query(
             `UPDATE store_orders
-             SET order_status = 'cancelled', subtotal = 0, tax_amount = 0, total_amount = $2, updated_at = now()
+             SET order_status = 'cancelled', updated_at = now()
              WHERE id = $1;`,
-            [orderId, shippingAmount],
+            [orderId],
           );
         } else {
           const newTax = Math.max(0, taxAmount - cancelTax);
-          const newTotal = newSubtotal + shippingAmount;
+
+          // Re-apply the free-shipping threshold against the reduced
+          // subtotal - a "standard" shipping order that was free because it
+          // crossed FREE_SHIPPING_THRESHOLD at checkout must start charging
+          // shipping again if cancellation drops it back below that line.
+          // This is what closes the "cancel down to keep free shipping"
+          // abuse path.
+          const shippingMethod = order.shipping_provider?.toLowerCase();
+          const isStandardMethod =
+            shippingMethod === "standard" ||
+            shippingMethod === "standard delivery";
+          const newShippingAmount = isStandardMethod
+            ? newSubtotal >= FREE_SHIPPING_THRESHOLD
+              ? 0
+              : SHIPPING_OPTIONS.standard.price
+            : shippingAmount;
+
+          const newTotal = newSubtotal + newShippingAmount;
           await client.query(
             `UPDATE store_orders
-             SET subtotal = $2, tax_amount = $3, total_amount = $4, updated_at = now()
+             SET subtotal = $2, tax_amount = $3, shipping_amount = $4, total_amount = $5, updated_at = now()
              WHERE id = $1;`,
-            [orderId, newSubtotal, newTax, newTotal],
+            [orderId, newSubtotal, newTax, newShippingAmount, newTotal],
           );
         }
 

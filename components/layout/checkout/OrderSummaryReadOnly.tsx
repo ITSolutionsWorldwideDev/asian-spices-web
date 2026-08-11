@@ -69,6 +69,7 @@ export default function OrderSummaryReadOnly({
 
       <div className="space-y-4 mb-6">
         {items.map((item: any) => {
+          const isCancelled = item?.status === "cancelled";
           const itemPrice = safeNumber(item?.price);
           const itemQuantity = safeNumber(item?.quantity || 1);
           const itemLineTotalConverted = rate * (itemPrice * itemQuantity);
@@ -78,7 +79,10 @@ export default function OrderSummaryReadOnly({
           const discountNum = safeNumber(item?.discount_value);
           const rawSave = originalPrice && originalPrice > itemPrice ? originalPrice - itemPrice : 0;
 
-          if (rawSave > 0) {
+          // Cancelled lines are excluded from the subtotal/total already
+          // (those come straight from the order record), so don't let them
+          // contribute to the savings summary either.
+          if (rawSave > 0 && !isCancelled) {
             totalOrderSavings += (rawSave * itemQuantity);
           }
 
@@ -111,7 +115,10 @@ export default function OrderSummaryReadOnly({
             console.log('taxRules === ',taxRules);
 
           return (
-            <div key={item.id} className="flex gap-4">
+            <div
+              key={item.id}
+              className={`flex gap-4 ${isCancelled ? "opacity-50" : ""}`}
+            >
               <div className="relative h-14 w-14 rounded-lg overflow-hidden">
                 <Image
                   src={item.image || "/placeholder.png"}
@@ -123,24 +130,36 @@ export default function OrderSummaryReadOnly({
 
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start gap-2">
-                  <p className="text-sm font-medium text-gray-900 truncate">{item.title}</p>
-                  
+                  <p
+                    className={`text-sm font-medium text-gray-900 truncate ${isCancelled ? "line-through" : ""}`}
+                  >
+                    {item.title}
+                  </p>
+
                   {/* 2️⃣ Render dynamic item badge inside summary line */}
-                  {activeBadge && (
+                  {isCancelled ? (
                     <span className="text-[9px] bg-red-100 text-red-600 rounded px-1 py-0.5 font-bold uppercase shrink-0">
-                      {activeBadge}
+                      Cancelled
                     </span>
+                  ) : (
+                    activeBadge && (
+                      <span className="text-[9px] bg-red-100 text-red-600 rounded px-1 py-0.5 font-bold uppercase shrink-0">
+                        {activeBadge}
+                      </span>
+                    )
                   )}
                 </div>
 
-                <div className="text-xs text-gray-500 mt-0.5 flex flex-wrap items-center gap-x-1">
+                <div
+                  className={`text-xs text-gray-500 mt-0.5 flex flex-wrap items-center gap-x-1 ${isCancelled ? "line-through" : ""}`}
+                >
                   {originalPrice && originalPrice > itemPrice && (
                     <span className="line-through text-gray-400">
                       {symbol}{(rate * originalPrice).toFixed(2)}
                     </span>
                   )}
                   <span>
-                    {symbol}{itemPrice.toFixed(2)} x {itemQuantity} = 
+                    {symbol}{itemPrice.toFixed(2)} x {itemQuantity} =
                   </span>
                   <span className="font-medium text-gray-900">
                     {symbol}{itemLineTotalConverted.toFixed(2)}

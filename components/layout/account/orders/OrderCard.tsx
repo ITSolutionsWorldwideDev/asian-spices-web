@@ -288,10 +288,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
                 items={
                   Array.isArray(order.cart_items)
                     ? order.cart_items.filter(
-                        (item: any) =>
-                          item &&
-                          item.id !== null &&
-                          item.status !== "cancelled",
+                        (item: any) => item && item.id !== null,
                       )
                     : []
                 }
@@ -538,10 +535,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
                 items={
                   Array.isArray(order.cart_items)
                     ? order.cart_items.filter(
-                        (item: any) =>
-                          item &&
-                          item.id !== null &&
-                          item.status !== "cancelled",
+                        (item: any) => item && item.id !== null,
                       )
                     : []
                 }
