@@ -3,6 +3,11 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/core/db";
 import { sendReturnStatusUpdateEmail } from "@/core/email-templates";
+import {
+  MIN_ORDER_AMOUNT_EUR,
+  FREE_SHIPPING_THRESHOLD,
+  SHIPPING_OPTIONS,
+} from "@/lib/pricing";
 
 export async function POST(request: Request) {
   const client = await pool.connect();
@@ -32,7 +37,8 @@ export async function POST(request: Request) {
 
       // 1. Validate Order Status and Eligibility
       const orderQuery = `
-        SELECT order_status, payment_status, shipping_status, fulfillment_status, payment_method, total_amount
+        SELECT order_status, payment_status, shipping_status, fulfillment_status, payment_method,
+               subtotal, shipping_amount, tax_amount, total_amount, shipping_provider
         FROM store_orders
         WHERE id = $1
         LIMIT 1;
@@ -64,7 +70,119 @@ export async function POST(request: Request) {
         );
       }
 
-      // 2. Mark the Order Status directly as 'cancelled'
+      const requestedItems: Array<{ itemId: string }> = Array.isArray(items)
+        ? items
+        : [];
+
+      // 2a. Line-item cancellation path - customer selected specific products
+      // to cancel rather than the whole order.
+      if (requestedItems.length > 0) {
+        const activeItemsRes = await client.query(
+          `SELECT product_id, quantity, price, tax_amount
+           FROM store_order_items
+           WHERE order_id = $1 AND status != 'cancelled';`,
+          [orderId],
+        );
+        const activeItems = activeItemsRes.rows;
+        const activeById = new Map(
+          activeItems.map((row) => [String(row.product_id), row]),
+        );
+
+        const requestedIds = requestedItems.map((it) => String(it.itemId));
+        for (const id of requestedIds) {
+          if (!activeById.has(id)) {
+            throw new Error(
+              `Item ${id} is not an active line item on this order.`,
+            );
+          }
+        }
+
+        const cancelRows = requestedIds.map((id) => activeById.get(id)!);
+        const cancelAmount = cancelRows.reduce(
+          (sum, row) => sum + Number(row.price) * Number(row.quantity),
+          0,
+        );
+        const cancelTax = cancelRows.reduce(
+          (sum, row) => sum + Number(row.tax_amount || 0),
+          0,
+        );
+
+        const subtotal = Number(order.subtotal || 0);
+        const shippingAmount = Number(order.shipping_amount || 0);
+        const taxAmount = Number(order.tax_amount || 0);
+        const newSubtotal = Math.max(0, subtotal - cancelAmount);
+        const isFullCancel = requestedIds.length === activeItems.length;
+
+        // Enforce the €10 minimum-order threshold: a partial cancellation
+        // can never leave the order sitting at an uneconomical remainder.
+        // Cancelling everything (newSubtotal === 0) is a full cancel instead.
+        if (
+          !isFullCancel &&
+          newSubtotal > 0 &&
+          newSubtotal < MIN_ORDER_AMOUNT_EUR
+        ) {
+          throw new Error(
+            `Cancelling the selected item(s) would leave a subtotal of €${newSubtotal.toFixed(2)}, below the €${MIN_ORDER_AMOUNT_EUR.toFixed(2)} minimum. Cancel the entire order instead, or keep enough items to stay at or above €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}.`,
+          );
+        }
+
+        await client.query(
+          `UPDATE store_order_items SET status = 'cancelled' WHERE order_id = $1 AND product_id = ANY($2::uuid[]);`,
+          [orderId, requestedIds],
+        );
+
+        if (isFullCancel) {
+          // Nothing is left to ship, so the order's live totals should
+          // reflect that (€0 across the board) rather than freezing at
+          // whatever was charged before this cancellation.
+          await client.query(
+            `UPDATE store_orders
+             SET order_status = 'cancelled', subtotal = 0, tax_amount = 0, shipping_amount = 0, total_amount = 0, updated_at = now()
+             WHERE id = $1;`,
+            [orderId],
+          );
+        } else {
+          const newTax = Math.max(0, taxAmount - cancelTax);
+
+          // Re-apply the free-shipping threshold against the reduced
+          // subtotal - a "standard" shipping order that was free because it
+          // crossed FREE_SHIPPING_THRESHOLD at checkout must start charging
+          // shipping again if cancellation drops it back below that line.
+          // This is what closes the "cancel down to keep free shipping"
+          // abuse path.
+          const shippingMethod = order.shipping_provider?.toLowerCase();
+          const isStandardMethod =
+            shippingMethod === "standard" ||
+            shippingMethod === "standard delivery";
+          const newShippingAmount = isStandardMethod
+            ? newSubtotal >= FREE_SHIPPING_THRESHOLD
+              ? 0
+              : SHIPPING_OPTIONS.standard.price
+            : shippingAmount;
+
+          const newTotal = newSubtotal + newShippingAmount;
+          await client.query(
+            `UPDATE store_orders
+             SET subtotal = $2, tax_amount = $3, shipping_amount = $4, total_amount = $5, updated_at = now()
+             WHERE id = $1;`,
+            [orderId, newSubtotal, newTax, newShippingAmount, newTotal],
+          );
+        }
+
+        await client.query("COMMIT");
+
+        return NextResponse.json(
+          {
+            success: true,
+            message: isFullCancel
+              ? "Order successfully cancelled."
+              : "Selected item(s) successfully cancelled.",
+          },
+          { status: 200 },
+        );
+      }
+
+      // 2b. Legacy whole-order cancel path - no item selection supplied.
       // No refund handling needed here - payment isn't confirmed yet at this
       // point (guarded above), so there's nothing to refund.
       // Policy Rules note: No Inventory management, No ERP, No Accounting updates here.
@@ -78,26 +196,7 @@ export async function POST(request: Request) {
 
       await client.query(updateOrderQuery, [orderId]);
 
-      // Record cancellation metadata/reasons in admin comments for system visibility
-      const appendReasonQuery = `
-        UPDATE store_orders
-        SET tracking_number = $2
-        WHERE id = $1;
-      `;
-      // Storing cancellation context securely in DB logs or temporary audit tables if needed
-
       await client.query("COMMIT");
-
-      // 4. Send confirmation email to customer
-      try {
-        // Send email containing cancellation details
-        // await sendCancellationEmail(orderId, reason);
-      } catch (emailErr) {
-        console.error(
-          "Non-fatal email cancellation notification alert engine failure:",
-          emailErr,
-        );
-      }
 
       return NextResponse.json(
         {

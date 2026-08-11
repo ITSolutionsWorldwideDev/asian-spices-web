@@ -17,7 +17,7 @@ import OrderTimeline from "@/components/ui/OrderTimeline";
 
 import OrderSummaryReadOnly from "../../checkout/OrderSummaryReadOnly";
 import OrderActionWorkflow from "./OrderActionWorkflow";
-import CancellationWorkflow from "./CancellationWorkflow";
+import CancelItemsWorkflow from "./CancelItemsWorkflow";
 
 export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
   const [downloading, setDownloading] = useState(false);
@@ -98,10 +98,12 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
     }
   };
 
-  // Upgraded Cancel Submission (including reasons & comments from the diagram flow)
+  // Line-item cancellation submission - items selected by the customer
+  // (defaults to every active item, i.e. a full order cancellation).
   const handleCancelSubmit = async (payload: {
     reason: string;
     comments: string;
+    items: { itemId: string }[];
   }) => {
     try {
       const response = await fetch("/api/account/orders/action", {
@@ -112,6 +114,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
           actionType: "PRE_SHIPMENT_CANCEL",
           reason: payload.reason,
           comments: payload.comments,
+          items: payload.items,
         }),
       });
 
@@ -249,7 +252,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
                 </button>
               </div>
 
-              <CancellationWorkflow
+              <CancelItemsWorkflow
                 order={order}
                 onSubmit={handleCancelSubmit}
                 onClose={() => setIsCancelActive(false)}
