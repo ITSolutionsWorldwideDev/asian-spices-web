@@ -219,24 +219,24 @@ const FooterContent = () => {
           </div>
         </div>
 
-        {/* Partners Hub row — right-aligned link as in design */}
-        <div className="flex items-center justify-between gap-4 border-t border-white/15 py-5 text-sm">
-          <p className="text-white/50">
+        {/* Partners Hub row — stacks on mobile */}
+        <div className="flex flex-col gap-3 border-t border-white/15 py-5 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <p className="text-xs leading-relaxed text-white/50 sm:text-sm">
             KVK #: 42041922{" "}
             <span className="mx-1 text-white/25">|</span> BTW (VAT) Number:
             NL869440317B01
           </p>
           <Link
             href="/partnerplatform"
-            className="ml-auto shrink-0 text-sm font-semibold text-white underline underline-offset-4 transition hover:text-orange-300"
+            className="shrink-0 text-sm font-semibold text-white underline underline-offset-4 transition hover:text-orange-300 sm:ml-auto"
           >
             Go To The Partners Hub
           </Link>
         </div>
 
-        {/* Bottom credit — Powered by + logo on the far right */}
-        <div className="flex items-center justify-between gap-4 border-t border-white/15 py-5">
-          <p className="text-sm text-white/45">
+        {/* Bottom credit — Powered by + logo */}
+        <div className="flex flex-col gap-4 border-t border-white/15 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <p className="text-xs text-white/45 sm:text-sm">
             © {new Date().getFullYear()} Asian Spices. All rights reserved.
           </p>
 
@@ -244,10 +244,10 @@ const FooterContent = () => {
             href="https://www.itsolutionsworldwide.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="ml-auto inline-flex shrink-0 items-center gap-4 opacity-95 transition hover:opacity-100"
+            className="inline-flex w-full flex-col items-start gap-3 opacity-95 transition hover:opacity-100 sm:ml-auto sm:w-auto sm:flex-row sm:items-center sm:gap-4"
             aria-label="Powered by IT Solutions Worldwide"
           >
-            <span className="text-sm text-white/70">
+            <span className="text-xs leading-snug text-white/70 sm:text-sm">
               Powered by{" "}
               <span className="text-white/90 underline underline-offset-4">
                 IT Solutions Worldwide
@@ -258,7 +258,7 @@ const FooterContent = () => {
               alt="IT Solutions Worldwide"
               width={180}
               height={65}
-              className="h-[40px] w-auto object-contain object-right"
+              className="h-[32px] w-auto object-contain object-left sm:h-[36px] sm:object-right md:h-[40px]"
               unoptimized
             />
           </a>
