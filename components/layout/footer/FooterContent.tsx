@@ -234,7 +234,7 @@ const FooterContent = () => {
           </Link>
         </div>
 
-        {/* Bottom credit — logo only on the far right (no "Powered by" text) */}
+        {/* Bottom credit — Powered by + logo on the far right */}
         <div className="flex items-center justify-between gap-4 border-t border-white/15 py-5">
           <p className="text-sm text-white/45">
             © {new Date().getFullYear()} Asian Spices. All rights reserved.
@@ -244,15 +244,21 @@ const FooterContent = () => {
             href="https://www.itsolutionsworldwide.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="ml-auto inline-flex shrink-0 opacity-95 transition hover:opacity-100"
+            className="ml-auto inline-flex shrink-0 items-center gap-4 opacity-95 transition hover:opacity-100"
             aria-label="Powered by IT Solutions Worldwide"
           >
+            <span className="text-sm text-white/70">
+              Powered by{" "}
+              <span className="text-white/90 underline underline-offset-4">
+                IT Solutions Worldwide
+              </span>
+            </span>
             <Image
-              src="/assets/footer/it-solutions-worldwide-logo-white.svg"
+              src="/assets/footer/it-solutions-worldwide-logo-white.png"
               alt="IT Solutions Worldwide"
-              width={152}
-              height={42}
-              className="h-[42px] w-auto object-contain object-right"
+              width={180}
+              height={65}
+              className="h-[40px] w-auto object-contain object-right"
               unoptimized
             />
           </a>
