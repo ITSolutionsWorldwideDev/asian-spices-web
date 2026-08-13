@@ -11,6 +11,7 @@ export const newsletterSchema = z.object({
     .refine((value) => value === true, {
       message: "Please accept the Privacy Policy to subscribe",
     }),
+  wantsAppLaunchNotice: z.boolean().optional(),
 });
 
 export type NewsletterFormData = z.infer<typeof newsletterSchema>;

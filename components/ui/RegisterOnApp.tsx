@@ -1,10 +1,67 @@
 // apps/web/components/ui/RegisterOnApp.tsx
 
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useZodForm } from "@/hooks/useZodForm";
+import {
+  newsletterSchema,
+  type NewsletterFormData,
+} from "@/lib/validation/newsletter";
+import { getErrorMessage } from "@/lib/form/getErrorMessage";
 
 const RegisterOnApp: React.FC = () => {
+  const [status, setStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useZodForm(newsletterSchema, {
+    email: "",
+    privacyConsent: false,
+    wantsAppLaunchNotice: true,
+  });
+
+  const onSubmit = async (data: NewsletterFormData) => {
+    setStatus(null);
+
+    try {
+      const res = await fetch("/api/newsletter_subscriber", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, wantsAppLaunchNotice: true }),
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        setStatus({
+          type: "success",
+          message: "You're on the list — we'll email you when the app launches!",
+        });
+        reset({ email: "", privacyConsent: false, wantsAppLaunchNotice: true });
+        return;
+      }
+
+      setStatus({
+        type: "error",
+        message: result.message || "Unable to register. Please try again.",
+      });
+    } catch {
+      setStatus({
+        type: "error",
+        message: "Something went wrong. Please try again later.",
+      });
+    }
+  };
+
   return (
     <div className="relative overflow-hidden w-full rounded-2xl bg-gradient-to-br from-orange-600 to-orange-500">
       {/* Background Decorative Accent */}
@@ -61,16 +118,74 @@ const RegisterOnApp: React.FC = () => {
             </a>
           </div>
 
-          {/* Corrected Interactive Link Structure */}
-          <Link 
-            href="/signup"
-            className="group relative inline-flex items-center justify-center px-6 py-2.5 font-bold bg-white text-black rounded-lg overflow-hidden w-full sm:w-auto shadow-md transition-transform active:scale-[0.98]"
+          {/* Email capture — stores interest in newsletter_subscribers, does not create an account */}
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full max-w-sm md:max-w-none space-y-2"
           >
-            <span className="relative z-10 transition-colors duration-300 group-hover:text-white text-sm">
-              Register Interest
-            </span>
-            <span className="absolute inset-0 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-center" />
-          </Link>
+            <div className="flex flex-col sm:flex-row items-stretch gap-2 w-full">
+              <input
+                {...register("email")}
+                type="email"
+                placeholder="Enter your email address"
+                disabled={isSubmitting}
+                className="flex-1 rounded-lg px-4 py-2.5 text-sm text-gray-900 outline-none disabled:opacity-60"
+              />
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="group relative inline-flex items-center justify-center px-6 py-2.5 font-bold bg-white text-black rounded-lg overflow-hidden shadow-md transition-transform active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <span className="relative z-10 transition-colors duration-300 group-hover:text-white text-sm">
+                  {isSubmitting ? "Submitting..." : "Register Interest"}
+                </span>
+                <span className="absolute inset-0 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-center" />
+              </button>
+            </div>
+
+            <label className="flex items-start gap-2 cursor-pointer text-left">
+              <input
+                type="checkbox"
+                {...register("privacyConsent")}
+                disabled={isSubmitting}
+                className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-white/60 accent-black"
+              />
+              <span className="text-xs leading-relaxed text-white/90">
+                I agree to be emailed when the app launches, per the{" "}
+                <Link
+                  href="/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold underline"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Privacy Policy
+                </Link>
+                .
+              </span>
+            </label>
+
+            {errors.email && (
+              <p className="text-xs text-white bg-black/20 rounded px-2 py-1 inline-block">
+                {getErrorMessage(errors.email)}
+              </p>
+            )}
+            {errors.privacyConsent && (
+              <p className="text-xs text-white bg-black/20 rounded px-2 py-1 inline-block">
+                {getErrorMessage(errors.privacyConsent)}
+              </p>
+            )}
+            {status && (
+              <p
+                className={`text-xs font-medium ${
+                  status.type === "success" ? "text-white" : "text-white bg-black/20 rounded px-2 py-1 inline-block"
+                }`}
+              >
+                {status.message}
+              </p>
+            )}
+          </form>
         </div>
 
         {/* Right Side: Mockup Image Frame */}

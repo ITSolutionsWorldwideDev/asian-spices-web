@@ -18,7 +18,10 @@ export async function POST(req: Request) {
       );
     }
 
-    const result = await subscribeUser(parsed.data.email);
+    const result = await subscribeUser(
+      parsed.data.email,
+      parsed.data.wantsAppLaunchNotice ?? false,
+    );
 
     if (!result.success) {
       return NextResponse.json(result, { status: 400 });
