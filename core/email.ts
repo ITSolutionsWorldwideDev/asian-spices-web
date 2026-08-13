@@ -5,6 +5,7 @@ interface EmailOptions {
   to: string;
   subject: string;
   html: string;
+  text?: string;
   fromAccount?: "billing" | "order" | "partners" | "support" | "noreply" | "default";
   replyTo?: string;
   cc?: string | string[];
@@ -114,6 +115,7 @@ export async function sendEmail({
   to,
   subject,
   html,
+  text,
   fromAccount = "default",
   replyTo,
   cc,
@@ -136,6 +138,7 @@ export async function sendEmail({
     bcc,
     subject,
     html,
+    text,
     replyTo,
     attachments,
   };

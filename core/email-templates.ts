@@ -343,7 +343,7 @@ export async function sendPasswordResetEmail({ email, token }: PasswordResetEmai
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
       <div style="text-align: center; margin-bottom: 20px;">
         <span style="background-color: #ea580c15; color: #ea580c; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 14px; display: inline-block; border-radius: 9999px; border: 1px solid #ea580c30;">
-          Security Notification
+          Password Reset
         </span>
       </div>
 
@@ -352,31 +352,43 @@ export async function sendPasswordResetEmail({ email, token }: PasswordResetEmai
       </h2>
 
       <p>Hello,</p>
-      <p>We received a verification request to change the credentials linked to your <strong>Asian Spices</strong> account. Click the button below to configure your new secure access phrase key:</p>
+      <p>We received a request to reset the password for your <strong>Asian Spices</strong> account. Click the button below to choose a new password:</p>
 
       <div style="text-align: center; margin: 30px 0;">
-        <a href="${resetLink}" style="background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: 600; border-radius: 8px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.2);">
-          Reset Account Password
+        <a href="${resetLink}" style="background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: 600; border-radius: 8px; display: inline-block;">
+          Reset Password
         </a>
       </div>
 
       <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 13px; color: #4b5563;">
-        <p style="margin: 0 0 8px 0;"><strong>Link Lifespan:</strong> This specific URL will expire in 1 hour for your security.</p>
-        <p style="margin: 0;">If the button above does not load, copy and paste this complete URL string directly into your browser address line:</p>
-        <p style="margin: 6px 0 0 0; word-break: break-all; color: #ea580c; font-family: monospace;">${resetLink}</p>
+        <p style="margin: 0 0 8px 0;">This link expires in 1 hour.</p>
+        <p style="margin: 0;">If the button above doesn't work, copy and paste this link into your browser:</p>
+        <p style="margin: 6px 0 0 0; word-break: break-all; color: #ea580c;">${resetLink}</p>
       </div>
 
       <p style="font-size: 14px; color: #6b7280; margin-top: 25px;">
-        If you did not issue this password recovery event request, you can safely ignore or disregard this message. Your original access parameters remain completely locked and unchanged.
+        If you didn't request this, you can ignore this email — your password won't be changed.
       </p>
 
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
       <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
-        © 2026 Asian Spices Security Desk. All rights reserved.<br>
-        Need support? Contact us via support@asianspices.online
+        © 2026 Asian Spices Online. All rights reserved.<br>
+        Need help? Contact us at support@asianspices.online
       </p>
     </div>
   `;
+
+  const emailText = `Reset your Asian Spices password
+
+We received a request to reset the password for your Asian Spices account.
+
+Reset your password using this link (expires in 1 hour):
+${resetLink}
+
+If you didn't request this, you can ignore this email — your password won't be changed.
+
+Need help? Contact us at support@asianspices.online
+© 2026 Asian Spices Online. All rights reserved.`;
 
   // Intentionally NOT caught here — the caller (forgot-password route) needs
   // to know if this actually failed, since it decides what to tell the client.
@@ -384,6 +396,7 @@ export async function sendPasswordResetEmail({ email, token }: PasswordResetEmai
     to: email,
     subject: "Reset your Asian Spices password",
     html: emailHtml,
+    text: emailText,
     fromAccount: "support", // Uses your dedicated support configuration profiles
   });
 
