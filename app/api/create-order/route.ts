@@ -12,6 +12,7 @@ import {
   ORDER_EVENTS,
 } from "@/core/order-routing";
 import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
+import { validatePromo } from "@/app/api/checkout/promo/route";
 
 export async function POST(req: NextRequest) {
   const client = await pool.connect();
@@ -24,8 +25,14 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { customer, shippingAddress, cartItems, pricing, shippingMethod } =
-      body;
+    const {
+      customer,
+      shippingAddress,
+      cartItems,
+      pricing,
+      shippingMethod,
+      promoCode,
+    } = body;
 
     if (!cartItems?.length) {
       return errorResponse("Cart is empty", "EMPTY_CART");
@@ -49,6 +56,26 @@ export async function POST(req: NextRequest) {
         `Minimum order amount is €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}. Please add more items to your cart.`,
         "MIN_ORDER_AMOUNT",
       );
+    }
+
+    // Re-validate any applied promo code against the server's own view of the
+    // order (not the client-submitted discount) before trusting pricing.discount -
+    // otherwise a tampered request could claim a discount for a nonexistent or
+    // expired code. Full cross-currency amount reconciliation isn't done here
+    // (the client's currency conversion rate isn't sent to this route), but a
+    // fabricated/invalid code is always rejected outright.
+    const promoCodeInput =
+      typeof promoCode === "string" ? promoCode.trim() : "";
+
+    if (promoCodeInput) {
+      const promoValidation = await validatePromo(
+        promoCodeInput,
+        merchandiseSubtotalEur,
+      );
+
+      if (!promoValidation.valid) {
+        return errorResponse(promoValidation.error, "INVALID_PROMO");
+      }
     }
 
     const email = userId ? userEmail : customer.email;
@@ -423,6 +450,13 @@ export async function POST(req: NextRequest) {
           activeRate,
           extractedTaxAmount,
         ],
+      );
+    }
+
+    if (promoCodeInput) {
+      await client.query(
+        `UPDATE store_promo_codes SET usage_count = usage_count + 1 WHERE UPPER(code) = UPPER($1)`,
+        [promoCodeInput],
       );
     }
 

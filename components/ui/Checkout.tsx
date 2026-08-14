@@ -22,6 +22,8 @@ import { useCartStore } from "@/store/useCartStore";
 import {
   calculateTotals,
   convertTotals,
+  convertPrice,
+  applyDiscount,
   MIN_ORDER_AMOUNT_EUR,
 } from "@/lib/pricing";
 
@@ -62,6 +64,11 @@ export default function Checkout() {
   const [apiError, setApiError] = useState<string | null>(null);
 
   const [shippingMethod, setShippingMethod] = useState<string>("standard");
+
+  const [appliedPromo, setAppliedPromo] = useState<{
+    code: string;
+    discountAmountEur: number;
+  } | null>(null);
 
   const [availableShippingOptions, setAvailableShippingOptions] = useState<
     any[]
@@ -188,6 +195,14 @@ export default function Checkout() {
   );
 
   const convertedTotals = convertTotals(totals, rate || 1, selectedCurrency);
+
+  const discountConverted = convertPrice(
+    appliedPromo?.discountAmountEur || 0,
+    rate || 1,
+    selectedCurrency,
+  );
+
+  const finalTotals = applyDiscount(convertedTotals, discountConverted);
 
   useEffect(() => {
     const loadAddresses = async () => {
@@ -345,11 +360,12 @@ export default function Checkout() {
           cartItems: cart,
           pricing: {
             subtotal: convertedTotals.subtotal,
-            discount: 0,
+            discount: finalTotals.discount,
             tax_amount: convertedTotals.tax,
             shipping: convertedTotals.shipping,
-            total: convertedTotals.total,
+            total: finalTotals.total,
           },
+          promoCode: appliedPromo?.code || null,
           shippingMethod: selectedOption
             ? selectedOption.name
             : "Standard Delivery",
@@ -375,7 +391,7 @@ export default function Checkout() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             orderId,
-            amount: convertedTotals.total,
+            amount: finalTotals.total,
             customerEmail: formData.email,
             paymentMethod: method,
           }),
@@ -510,11 +526,13 @@ export default function Checkout() {
             subtotal={convertedTotals.subtotal}
             tax={convertedTotals.tax}
             shipping={convertedTotals.shipping}
-            total={convertedTotals.total}
+            total={finalTotals.total}
             shippingMethodName={
               selectedOption ? selectedOption.name : "Shipping"
             }
             deliveryDaysText={deliveryDaysString}
+            promoDiscount={discountConverted}
+            onPromoApplied={setAppliedPromo}
           />
         </div>
       </div>
