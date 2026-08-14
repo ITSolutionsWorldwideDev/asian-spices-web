@@ -26,6 +26,13 @@ interface Props {
   total: number;
   shippingMethodName?: string;
   deliveryDaysText?: string;
+  // Discount already converted to the display currency, computed by the parent
+  // from the raw EUR amount reported via onPromoApplied - kept as the single
+  // source of truth so the displayed total always matches what's actually charged.
+  promoDiscount?: number;
+  onPromoApplied?: (
+    result: { code: string; discountAmountEur: number } | null,
+  ) => void;
 }
 
 export default function OrderSummary({
@@ -37,12 +44,15 @@ export default function OrderSummary({
   total: initialTotal,
   shippingMethodName = "Shipping",
   deliveryDaysText,
+  promoDiscount = 0,
+  onPromoApplied,
 }: Props) {
   // const { taxRate, taxName } = useGlobalStore();
 
   const [promoInput, setPromoInput] = useState("");
   const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
   const [promoError, setPromoError] = useState<string | null>(null);
+  const [applyingPromo, setApplyingPromo] = useState(false);
 
   const isValidShippingMethod = (method: any): method is ShippingMethod => {
     return method in SHIPPING_OPTIONS;
@@ -128,8 +138,8 @@ export default function OrderSummary({
     };
   });
 
-  const finalSubtotal = appliedPromo ? derivedSubtotal : initialSubtotal;
-  const finalTotal = finalSubtotal + Number(shipping || 0);
+  const finalSubtotal = initialSubtotal;
+  const finalTotal = Math.max(0, finalSubtotal - promoDiscount) + Number(shipping || 0);
 
   const convertedThreshold = FREE_SHIPPING_THRESHOLD * (rate || 1);
 
@@ -140,23 +150,49 @@ export default function OrderSummary({
 
   const hasFreeShipping = shipping <= 0;
 
-  // Handle Promo application trigger logic
-  const handleApplyPromo = () => {
+  // Handle Promo application trigger logic - validates against the real
+  // store_promo_codes table (subtotal sent in base EUR, matching how
+  // discount amounts are stored).
+  const handleApplyPromo = async () => {
     setPromoError(null);
-    if (!promoInput.trim()) return;
+    const code = promoInput.trim();
+    if (!code) return;
 
-    // Check if any cart item matches the entered promo code string
-    const matchFound = items.some(
-      (item: any) =>
-        item.promo_code &&
-        item.promo_code.toLowerCase() === promoInput.trim().toLowerCase(),
-    );
+    try {
+      setApplyingPromo(true);
 
-    if (matchFound) {
-      setAppliedPromo(promoInput.trim());
-    } else {
-      setPromoError("Invalid or inapplicable promo code.");
+      const res = await fetch("/api/checkout/promo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, subtotal: derivedSubtotal }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.valid) {
+        setAppliedPromo(null);
+        onPromoApplied?.(null);
+        setPromoError(data.error || "Invalid or inapplicable promo code.");
+        return;
+      }
+
+      setAppliedPromo(data.code);
+      onPromoApplied?.({
+        code: data.code,
+        discountAmountEur: data.discount_amount,
+      });
+    } catch {
+      setPromoError("Couldn't validate that code right now. Please try again.");
+    } finally {
+      setApplyingPromo(false);
     }
+  };
+
+  const handleRemovePromo = () => {
+    setAppliedPromo(null);
+    setPromoInput("");
+    setPromoError(null);
+    onPromoApplied?.(null);
   };
 
   return (
@@ -288,6 +324,16 @@ export default function OrderSummary({
           </div>
         )}
 
+        {appliedPromo && promoDiscount > 0 && (
+          <div className="flex justify-between mt-2 text-green-600 font-medium">
+            <span>Promo ({appliedPromo})</span>
+            <span>
+              -{symbol}
+              {promoDiscount.toFixed(2)}
+            </span>
+          </div>
+        )}
+
         {/* 🌟 Global Breakdown Clean Label (Since value is already baked into price total) */}
         <div className="flex justify-between mt-3 text-gray-500 italic">
           <span>Total Tax</span>
@@ -329,15 +375,26 @@ export default function OrderSummary({
             value={promoInput}
             onChange={(e) => setPromoInput(e.target.value)}
             placeholder="Enter code"
-            className="w-full sm:flex-1 px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all"
+            disabled={!!appliedPromo || applyingPromo}
+            className="w-full sm:flex-1 px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all disabled:opacity-60"
           />
 
-          <button
-            onClick={handleApplyPromo}
-            className="w-full sm:w-auto px-6 py-2.5 bg-gray-900 border border-transparent rounded-md text-sm font-medium text-white hover:bg-black transition-all cursor-pointer"
-          >
-            Apply
-          </button>
+          {appliedPromo ? (
+            <button
+              onClick={handleRemovePromo}
+              className="w-full sm:w-auto px-6 py-2.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all cursor-pointer"
+            >
+              Remove
+            </button>
+          ) : (
+            <button
+              onClick={handleApplyPromo}
+              disabled={applyingPromo}
+              className="w-full sm:w-auto px-6 py-2.5 bg-gray-900 border border-transparent rounded-md text-sm font-medium text-white hover:bg-black transition-all cursor-pointer disabled:opacity-60"
+            >
+              {applyingPromo ? "Checking..." : "Apply"}
+            </button>
+          )}
         </div>
 
         {promoError && (
@@ -349,8 +406,6 @@ export default function OrderSummary({
             applied successfully!
           </p>
         )}
-
-        <p className="mt-2 text-xs text-gray-500">Try: SPICE20 or WELCOME10</p>
       </div>
 
       {!hasFreeShipping && amountForFreeShipping > 0 && (
