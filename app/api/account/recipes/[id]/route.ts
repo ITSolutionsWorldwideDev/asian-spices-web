@@ -36,6 +36,11 @@ export async function GET(
         r.title,
         r.slug,
         r.short_description,
+        r.origin,
+        r.preparation_time,
+        r.cooking_time,
+        r.servings,
+        r.difficulty,
         r.content,
         r.thumbnail_url,
         r.youtube_url,
@@ -113,15 +118,23 @@ export async function PUT(
   try {
     const customerId = await getCurrentCustomer();
 
+    const { id } = await params;
     const body = await req.json();
 
     const {
       title,
       slug,
       short_description,
+      origin,
+      preparation_time,
+      cooking_time,
+      servings,
+      difficulty,
       thumbnail_url,
       youtube_url,
       content,
+      ingredients = [],
+      instructions = [],
     } = body;
 
     const result = await pool.query(
@@ -131,22 +144,34 @@ export async function PUT(
         title = $1,
         slug = $2,
         short_description = $3,
-        thumbnail_url = $4,
-        youtube_url = $5,
-        content = $6,
+        origin = $4,
+        preparation_time = $5,
+        cooking_time = $6,
+        servings = $7,
+        difficulty = $8,
+        thumbnail_url = $9,
+        youtube_url = $10,
+        content = $11,
         updated_at = NOW()
-      WHERE id = $7
-      AND customer_id = $8
+      WHERE id = $12
+      AND customer_id = $13
       RETURNING id
       `,
       [
         title,
         slug,
         short_description,
+        origin || null,
+        preparation_time === "" || preparation_time == null ? null : Number(preparation_time),
+        cooking_time === "" || cooking_time == null ? null : Number(cooking_time),
+        servings === "" || servings == null ? null : Number(servings),
+        difficulty
+          ? String(difficulty).trim().toLowerCase()
+          : null,
         thumbnail_url,
         youtube_url,
         content,
-        body.id,
+        id,
         customerId,
       ],
     );
@@ -159,6 +184,91 @@ export async function PUT(
         },
         { status: 404 },
       );
+    }
+
+    /*
+     * REPLACE INGREDIENTS
+     */
+    await pool.query(
+      `DELETE FROM recipe_ingredients WHERE recipe_id = $1`,
+      [id],
+    );
+
+    if (Array.isArray(ingredients)) {
+      for (const item of ingredients) {
+        const name = String(item?.ingredient_name || "").trim();
+        if (!name) continue;
+
+        const quantityRaw = item?.quantity;
+        const quantity =
+          quantityRaw === "" || quantityRaw == null
+            ? null
+            : Number(quantityRaw);
+
+        await pool.query(
+          `
+          INSERT INTO recipe_ingredients (
+            ingredients_id,
+            recipe_id,
+            ingredient_name,
+            quantity,
+            unit
+          )
+          VALUES (gen_random_uuid(), $1, $2, $3, $4)
+          `,
+          [
+            id,
+            name,
+            Number.isFinite(quantity) ? quantity : null,
+            item?.unit ? String(item.unit).trim() : null,
+          ],
+        );
+      }
+    }
+
+    /*
+     * REPLACE INSTRUCTIONS
+     */
+    await pool.query(
+      `DELETE FROM recipe_instructions WHERE recipe_id = $1`,
+      [id],
+    );
+
+    if (Array.isArray(instructions)) {
+      let stepNumber = 0;
+      for (const item of instructions) {
+        const title = String(item?.step_title || "").trim();
+        const description = String(item?.step_description || "").trim();
+        if (!title && !description) continue;
+
+        stepNumber += 1;
+        const durationRaw = item?.duration_minutes;
+        const duration =
+          durationRaw === "" || durationRaw == null
+            ? null
+            : Number(durationRaw);
+
+        await pool.query(
+          `
+          INSERT INTO recipe_instructions (
+            instruction_id,
+            recipe_id,
+            step_number,
+            step_title,
+            step_description,
+            duration_minutes
+          )
+          VALUES (gen_random_uuid(), $1, $2, $3, $4, $5)
+          `,
+          [
+            id,
+            Number(item?.step_number) || stepNumber,
+            title || null,
+            description || null,
+            Number.isFinite(duration) ? duration : null,
+          ],
+        );
+      }
     }
 
     return NextResponse.json({

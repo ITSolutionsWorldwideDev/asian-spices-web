@@ -70,6 +70,7 @@ export async function GET(req: NextRequest) {
         r.title,
         r.slug,
         r.short_description,
+        r.origin,
         r.thumbnail_url,
         r.youtube_url,
         r.status,
@@ -122,10 +123,17 @@ export async function POST(req: NextRequest) {
       title,
       slug,
       short_description,
+      origin,
+      preparation_time,
+      cooking_time,
+      servings,
+      difficulty,
       thumbnail_url,
       youtube_url,
       content,
       tag_ids = [],
+      ingredients = [],
+      instructions = [],
     } = body;
 
     /*
@@ -153,6 +161,11 @@ export async function POST(req: NextRequest) {
         title,
         slug,
         short_description,
+        origin,
+        preparation_time,
+        cooking_time,
+        servings,
+        difficulty,
         thumbnail_url,
         youtube_url,
         content,
@@ -167,6 +180,11 @@ export async function POST(req: NextRequest) {
         $5,
         $6,
         $7,
+        $8,
+        $9,
+        $10,
+        $11,
+        $12,
         'draft',
         NOW()
       )
@@ -177,6 +195,13 @@ export async function POST(req: NextRequest) {
         title,
         slug,
         short_description || null,
+        origin || null,
+        preparation_time === "" || preparation_time == null ? null : Number(preparation_time),
+        cooking_time === "" || cooking_time == null ? null : Number(cooking_time),
+        servings === "" || servings == null ? null : Number(servings),
+        difficulty
+          ? String(difficulty).trim().toLowerCase()
+          : null,
         thumbnail_url || null,
         youtube_url || null,
         content,
@@ -199,6 +224,81 @@ export async function POST(req: NextRequest) {
           VALUES ($1, $2)
           `,
           [recipeId, tagId],
+        );
+      }
+    }
+
+    /*
+     * INSERT INGREDIENTS
+     */
+    if (Array.isArray(ingredients)) {
+      for (const item of ingredients) {
+        const name = String(item?.ingredient_name || "").trim();
+        if (!name) continue;
+
+        const quantityRaw = item?.quantity;
+        const quantity =
+          quantityRaw === "" || quantityRaw == null
+            ? null
+            : Number(quantityRaw);
+
+        await pool.query(
+          `
+          INSERT INTO recipe_ingredients (
+            ingredients_id,
+            recipe_id,
+            ingredient_name,
+            quantity,
+            unit
+          )
+          VALUES (gen_random_uuid(), $1, $2, $3, $4)
+          `,
+          [
+            recipeId,
+            name,
+            Number.isFinite(quantity) ? quantity : null,
+            item?.unit ? String(item.unit).trim() : null,
+          ],
+        );
+      }
+    }
+
+    /*
+     * INSERT INSTRUCTIONS
+     */
+    if (Array.isArray(instructions)) {
+      let stepNumber = 0;
+      for (const item of instructions) {
+        const title = String(item?.step_title || "").trim();
+        const description = String(item?.step_description || "").trim();
+        if (!title && !description) continue;
+
+        stepNumber += 1;
+        const durationRaw = item?.duration_minutes;
+        const duration =
+          durationRaw === "" || durationRaw == null
+            ? null
+            : Number(durationRaw);
+
+        await pool.query(
+          `
+          INSERT INTO recipe_instructions (
+            instruction_id,
+            recipe_id,
+            step_number,
+            step_title,
+            step_description,
+            duration_minutes
+          )
+          VALUES (gen_random_uuid(), $1, $2, $3, $4, $5)
+          `,
+          [
+            recipeId,
+            Number(item?.step_number) || stepNumber,
+            title || null,
+            description || null,
+            Number.isFinite(duration) ? duration : null,
+          ],
         );
       }
     }

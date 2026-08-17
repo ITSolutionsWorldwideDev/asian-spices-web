@@ -6,12 +6,14 @@ import { useLoaderStore } from "@/store/useLoaderStore";
 import { useState } from "react";
 
 interface WriteReviewFormProps {
-  productId: string;
+  productId?: string;
+  recipeId?: string;
   onSuccess?: () => void;
 }
 
 export default function WriteReviewForm({
   productId,
+  recipeId,
   onSuccess,
 }: WriteReviewFormProps) {
   const [loading, setLoading] = useState(false);
@@ -58,7 +60,8 @@ export default function WriteReviewForm({
         },
         body: JSON.stringify({
           ...formData,
-          product_id: productId,
+          product_id: productId || null,
+          recipe_id: recipeId || null,
         }),
       });
 

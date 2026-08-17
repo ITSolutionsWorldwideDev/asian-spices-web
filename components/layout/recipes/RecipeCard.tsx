@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Clock3, ChefHat } from "lucide-react";
+import { getRecipeImageSrc } from "@/core/utils";
 
 interface RecipeCardProps {
   recipe: any;

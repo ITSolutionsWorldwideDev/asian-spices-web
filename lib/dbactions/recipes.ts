@@ -9,6 +9,56 @@ type GetRecipesParams = {
   tag?: string;
 };
 
+export type RecipeTag = {
+  id: string;
+  name: string;
+  slug: string;
+  color?: string | null;
+};
+
+export type RecipeIngredient = {
+  ingredients_id?: string;
+  ingredient_name: string;
+  quantity?: number | string | null;
+  unit?: string | null;
+};
+
+export type RecipeInstruction = {
+  instruction_id?: string;
+  step_number?: number | null;
+  step_title?: string | null;
+  step_description?: string | null;
+  duration_minutes?: number | null;
+};
+
+export type RecipeDetail = {
+  id: string;
+  title: string;
+  slug: string;
+  short_description?: string | null;
+  origin?: string | null;
+  content?: string | null;
+  thumbnail_url?: string | null;
+  youtube_url?: string | null;
+  youtube_video_id?: string | null;
+  preparation_time?: number | null;
+  cooking_time?: number | null;
+  servings?: number | null;
+  difficulty?: string | null;
+  is_featured?: boolean | null;
+  total_views?: number | null;
+  created_at?: string | Date | null;
+  category_id?: string | null;
+  seo_title?: string | null;
+  seo_description?: string | null;
+  seo_keywords?: string | null;
+  category_name?: string | null;
+  category_slug?: string | null;
+  ingredients?: RecipeIngredient[];
+  instructions?: RecipeInstruction[];
+  tags?: RecipeTag[];
+};
+
 const PAGE_SIZE = 12;
 
 export async function getRecipes(params: GetRecipesParams) {
@@ -101,10 +151,39 @@ export async function getRecipes(params: GetRecipesParams) {
       r.short_description,
       r.thumbnail_url,
       r.youtube_url,
+      r.preparation_time,
+      r.cooking_time,
       r.created_at,
 
       c.name AS category_name,
       c.slug AS category_slug,
+
+      COALESCE(
+        NULLIF(
+          COALESCE(r.preparation_time, 0) + COALESCE(r.cooking_time, 0),
+          0
+        ),
+        (
+          SELECT SUM(ri.duration_minutes)::int
+          FROM recipe_instructions ri
+          WHERE ri.recipe_id = r.id
+            AND ri.duration_minutes IS NOT NULL
+        )
+      ) AS total_minutes,
+
+      COALESCE(
+        (
+          SELECT ROUND(AVG(spr.rating)::numeric, 1)
+          FROM store_product_reviews spr
+          WHERE spr.recipe_id = r.id
+            AND spr.rating IS NOT NULL
+            AND (
+              spr.status IS NULL
+              OR spr.status IN ('approved', 'pending', 'published')
+            )
+        ),
+        0
+      )::float AS average_rating,
 
       COALESCE(
         JSON_AGG(
@@ -153,19 +232,27 @@ export async function getRecipes(params: GetRecipesParams) {
   };
 }
 
-export async function getRecipeBySlug(slug: string) {
-  const { rows } = await runQuery(
+export async function getRecipeBySlug(slug: string): Promise<RecipeDetail | null> {
+  const { rows } = await runQuery<RecipeDetail>(
     `
     SELECT
       r.id,
       r.title,
       r.slug,
       r.short_description,
+      r.origin,
       r.content,
       r.thumbnail_url,
       r.youtube_url,
       r.youtube_video_id,
+      r.preparation_time,
+      r.cooking_time,
+      r.servings,
+      r.difficulty,
+      r.is_featured,
+      r.total_views,
       r.created_at,
+      r.category_id,
 
       r.seo_title,
       r.seo_description,
@@ -173,6 +260,41 @@ export async function getRecipeBySlug(slug: string) {
 
       c.name AS category_name,
       c.slug AS category_slug,
+
+      COALESCE(
+        (
+          SELECT JSON_AGG(
+            JSONB_BUILD_OBJECT(
+              'ingredients_id', ri.ingredients_id,
+              'ingredient_name', ri.ingredient_name,
+              'quantity', ri.quantity,
+              'unit', ri.unit
+            )
+            ORDER BY ri.created_at ASC, ri.ingredient_name ASC
+          )
+          FROM recipe_ingredients ri
+          WHERE ri.recipe_id = r.id
+        ),
+        '[]'
+      ) AS ingredients,
+
+      COALESCE(
+        (
+          SELECT JSON_AGG(
+            JSONB_BUILD_OBJECT(
+              'instruction_id', rin.instruction_id,
+              'step_number', rin.step_number,
+              'step_title', rin.step_title,
+              'step_description', rin.step_description,
+              'duration_minutes', rin.duration_minutes
+            )
+            ORDER BY rin.step_number ASC, rin.created_at ASC
+          )
+          FROM recipe_instructions rin
+          WHERE rin.recipe_id = r.id
+        ),
+        '[]'
+      ) AS instructions,
 
       COALESCE(
         JSON_AGG(
@@ -270,6 +392,11 @@ export async function getRecipeById(id: string) {
       r.title,
       r.slug,
       r.short_description,
+      r.origin,
+      r.preparation_time,
+      r.cooking_time,
+      r.servings,
+      r.difficulty,
       r.content,
       r.thumbnail_url,
       r.youtube_url,
@@ -286,6 +413,41 @@ export async function getRecipeById(id: string) {
 
       c.name AS category_name,
       c.slug AS category_slug,
+
+      COALESCE(
+        (
+          SELECT JSON_AGG(
+            JSONB_BUILD_OBJECT(
+              'ingredients_id', ri.ingredients_id,
+              'ingredient_name', ri.ingredient_name,
+              'quantity', ri.quantity,
+              'unit', ri.unit
+            )
+            ORDER BY ri.created_at ASC, ri.ingredient_name ASC
+          )
+          FROM recipe_ingredients ri
+          WHERE ri.recipe_id = r.id
+        ),
+        '[]'
+      ) AS ingredients,
+
+      COALESCE(
+        (
+          SELECT JSON_AGG(
+            JSONB_BUILD_OBJECT(
+              'instruction_id', rin.instruction_id,
+              'step_number', rin.step_number,
+              'step_title', rin.step_title,
+              'step_description', rin.step_description,
+              'duration_minutes', rin.duration_minutes
+            )
+            ORDER BY rin.step_number ASC, rin.created_at ASC
+          )
+          FROM recipe_instructions rin
+          WHERE rin.recipe_id = r.id
+        ),
+        '[]'
+      ) AS instructions,
 
       COALESCE(
         JSON_AGG(

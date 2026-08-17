@@ -10,10 +10,12 @@ import Link from "next/link";
 import { CartItem } from "@/store/useCartStore";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
+import { useRecipeDiscountStore } from "@/store/useRecipeDiscountStore";
 import {
   SHIPPING_OPTIONS,
   ShippingMethod,
   FREE_SHIPPING_THRESHOLD,
+  calculateRecipeLikeDiscountAmount,
 } from "@/lib/pricing";
 
 interface Props {
@@ -64,6 +66,7 @@ export default function OrderSummary({
 
   const { symbol, rate } = useCurrencyStore();
   const { taxRules } = useGlobalStore();
+  const { appliedDiscount, clearDiscount } = useRecipeDiscountStore();
 
   const globalRule = taxRules.find((r) => r.category_id === null);
 
@@ -138,8 +141,18 @@ export default function OrderSummary({
     };
   });
 
-  const finalSubtotal = initialSubtotal;
-  const finalTotal = Math.max(0, finalSubtotal - promoDiscount) + Number(shipping || 0);
+  const finalSubtotal = appliedPromo ? derivedSubtotal : initialSubtotal;
+  const recipeDiscountAmount = appliedDiscount
+    ? calculateRecipeLikeDiscountAmount(
+        finalSubtotal,
+        appliedDiscount,
+        rate || 1,
+      )
+    : 0;
+  const finalTotal = Math.max(
+    0,
+    finalSubtotal + Number(shipping || 0) - recipeDiscountAmount,
+  );
 
   const convertedThreshold = FREE_SHIPPING_THRESHOLD * (rate || 1);
 
@@ -324,12 +337,14 @@ export default function OrderSummary({
           </div>
         )}
 
-        {appliedPromo && promoDiscount > 0 && (
+        {appliedDiscount && (
           <div className="flex justify-between mt-2 text-green-600 font-medium">
-            <span>Promo ({appliedPromo})</span>
+            <span className="pr-4">
+              Recipe Like Discount ({appliedDiscount.label})
+            </span>
             <span>
               -{symbol}
-              {promoDiscount.toFixed(2)}
+              {recipeDiscountAmount.toFixed(2)}
             </span>
           </div>
         )}
@@ -406,6 +421,26 @@ export default function OrderSummary({
             applied successfully!
           </p>
         )}
+
+        {appliedDiscount && (
+          <div className="mt-4 rounded-lg border border-orange-200 bg-orange-50 p-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-orange-700">
+              Recipe like discount active
+            </p>
+            <p className="mt-1 text-sm text-gray-800">
+              {appliedDiscount.recipeTitle}: {appliedDiscount.label}
+            </p>
+            <button
+              type="button"
+              onClick={clearDiscount}
+              className="mt-2 text-xs font-medium text-orange-700 underline"
+            >
+              Remove discount
+            </button>
+          </div>
+        )}
+
+        <p className="mt-2 text-xs text-gray-500">Try: SPICE20 or WELCOME10</p>
       </div>
 
       {!hasFreeShipping && amountForFreeShipping > 0 && (

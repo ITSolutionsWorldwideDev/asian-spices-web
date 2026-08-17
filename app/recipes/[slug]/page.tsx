@@ -1,13 +1,26 @@
 // app/recipes/[slug]/page.tsx
 
-import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Calendar, Clock, Tag, Youtube } from "react-feather";
+import { getServerSession } from "next-auth";
 import { getRecipeBySlug } from "@/lib/dbactions/recipes";
+import { getRelatedRecipes } from "@/lib/dbactions/relatedRecipes";
+import {
+  getRecipeFavoriteCount,
+  getRecipeViewCount,
+  getYoutubeVideoStats,
+  isRecipeFavorited,
+} from "@/lib/dbactions/recipeStats";
+import { getRecipeReviewsSummary } from "@/lib/dbactions/products";
+import { getRecipeNutrition } from "@/lib/dbactions/recipeNutrition";
+import { webAuthOptions } from "@/core/auth";
 import Footer from "@/components/ui/Footer";
-// import RegisterOnApp from "@/components/ui/RegisterOnApp";
-import Nav from "@/components/ui/Nav";
+import RecipeDetailHeader from "@/components/layout/recipes/RecipeDetailHeader";
+import RecipeAboutSection from "@/components/layout/recipes/RecipeAboutSection";
+import RecipeIngredientsInstructionsSection from "@/components/layout/recipes/RecipeIngredientsInstructionsSection";
+import RecipeNutritionSection from "@/components/layout/recipes/RecipeNutritionSection";
+import RecipeReviewsSection from "@/components/layout/recipes/RecipeReviewsSection";
+import RelatedRecipesSlider from "@/components/layout/recipes/RelatedRecipesSlider";
 
 interface RecipePageProps {
   params: Promise<{
@@ -28,9 +41,7 @@ export async function generateMetadata({ params }: RecipePageProps) {
 
   return {
     title: recipe.seo_title || recipe.title,
-
     description: recipe.seo_description || recipe.short_description,
-
     keywords: recipe.seo_keywords,
   };
 }
@@ -44,162 +55,121 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
     notFound();
   }
 
-  const formattedDate = recipe.created_at
-    ? new Date(recipe.created_at).toLocaleDateString()
-    : new Date().toLocaleDateString();
+  const session = await getServerSession(webAuthOptions);
+
+  const [reviewsSummary, favoriteCount, dbViews, youtubeStats, relatedRecipes, nutrition, isFavorited] =
+    await Promise.all([
+      getRecipeReviewsSummary(recipe.id),
+      getRecipeFavoriteCount(recipe.id),
+      getRecipeViewCount(recipe.id),
+      getYoutubeVideoStats(recipe.youtube_video_id),
+      getRelatedRecipes(recipe.id, recipe.category_id),
+      getRecipeNutrition(recipe.id),
+      session?.user?.id
+        ? isRecipeFavorited(recipe.id, session.user.id)
+        : Promise.resolve(false),
+    ]);
+
+  const viewCount = Math.max(
+    Number(recipe.total_views || 0),
+    Number(dbViews || 0),
+    Number(youtubeStats.views || 0),
+  );
+  const likeCount = Math.max(
+    Number(favoriteCount || 0),
+    Number(youtubeStats.likes || 0),
+  );
 
   return (
-    <div>
-      <section className="relative">
-        <div className="relative h-[300px] md:h-[450px] overflow-hidden">
-          <Image
-            src={recipe.thumbnail_url || "/assets/alt-recipe-banner.jpg"}
-            alt={recipe.title}
-            fill
-            priority
-            className="object-cover"
-          />
+    <div className="bg-[#faf7f2]">
+      <RecipeDetailHeader
+        recipe={recipe}
+        averageRating={reviewsSummary.average}
+        reviewCount={reviewsSummary.total}
+        favoriteCount={favoriteCount}
+        isFavorited={isFavorited}
+      />
 
-          <div className="absolute inset-0 bg-black/50" />
+      <RecipeAboutSection
+        recipe={recipe}
+        favoriteCount={likeCount}
+        viewCount={viewCount}
+        videoDuration={youtubeStats.duration}
+      />
 
-          <Nav />
+      <RecipeIngredientsInstructionsSection
+        ingredients={recipe.ingredients}
+        instructions={recipe.instructions}
+      />
 
-          <div className="absolute inset-0 mt-10 flex items-center">
-            <div className="container mx-auto px-4">
-              {/* CATEGORY */}
-              {recipe.category_name && (
-                <Link
-                  href={`/recipes?category=${recipe.category_slug}`}
-                  className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm mb-5"
-                >
-                  <Tag size={14} />
+      <RecipeNutritionSection
+        nutrients={nutrition}
+        thumbnailUrl={recipe.thumbnail_url}
+      />
 
-                  {recipe.category_name}
-                </Link>
-              )}
+      <RecipeReviewsSection
+        recipeId={recipe.id}
+        initialAverage={reviewsSummary.average}
+        initialTotal={reviewsSummary.total}
+      />
 
-              {/* TITLE */}
-              <h1 className="text-4xl md:text-6xl font-bold text-white max-w-4xl leading-tight">
-                {recipe.title}
-              </h1>
+      {relatedRecipes.length > 0 && (
+        <section className="bg-[#faf7f2]">
+          <div className="container mx-auto px-4 pb-10 sm:px-6 sm:pb-12">
+            <h2 className="mb-5 text-2xl font-bold text-gray-900 sm:text-3xl">
+              You May Also Like
+            </h2>
+            <RelatedRecipesSlider recipes={relatedRecipes} />
+          </div>
+        </section>
+      )}
 
-              {/* META */}
-              <div className="flex flex-wrap items-center gap-6 text-white/90 mt-6">
-                <div className="flex items-center gap-2">
-                  <Calendar size={16} />
-                  <span>{formattedDate}</span>
-                  {/* <span>
-                    {new Date(recipe.created_at).toLocaleDateString()}
-                  </span> */}
-                </div>
+      {/*
+      <section className="container mx-auto px-4 pb-10 sm:px-6 sm:pb-12">
+        <aside className="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+          {recipe.tags && recipe.tags.length > 0 && (
+            <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+              <h3 className="mb-4 text-lg font-bold">Recipe Tags</h3>
 
-                {recipe.youtube_url && (
-                  <div className="flex items-center gap-2">
-                    <Youtube size={16} />
-
-                    <span>Video Recipe Available</span>
-                  </div>
-                )}
-
-                <div className="flex items-center gap-2">
-                  <Clock size={16} />
-
-                  <span>Fresh Homemade Recipe</span>
-                </div>
+              <div className="flex flex-wrap gap-3">
+                {recipe.tags.map((tag: any) => (
+                  <Link
+                    key={tag.id}
+                    href={`/recipes?tag=${tag.slug}`}
+                    className="rounded-full px-4 py-2 text-sm font-medium text-white"
+                    style={{
+                      background: tag.color || "#ef4444",
+                    }}
+                  >
+                    {tag.name}
+                  </Link>
+                ))}
               </div>
+            </div>
+          )}
+
+          <div className="rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 p-6 text-white">
+            <h3 className="mb-3 text-xl font-bold">Love this recipe?</h3>
+
+            <p className="mb-5 text-sm text-white/90">
+              Share this delicious recipe with your friends and family.
+            </p>
+
+            <div className="flex gap-3">
+              <Link
+                href="https://www.facebook.com/profile.php?id=61591119970456"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-black"
+              >
+                Facebook
+              </Link>
             </div>
           </div>
-        </div>
+        </aside>
       </section>
+      */}
 
-      <section className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10">
-          {/* LEFT */}
-          <div>
-            {recipe.short_description && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border mb-8">
-                <p className="text-lg leading-8 text-gray-700">
-                  {recipe.short_description}
-                </p>
-              </div>
-            )}
-
-            <div className="bg-white rounded-2xl p-8 shadow-sm border">
-              <div
-                className="prose prose-lg max-w-none prose-headings:font-bold prose-img:rounded-xl"
-                dangerouslySetInnerHTML={{
-                  __html: recipe.content || "",
-                }}
-              />
-            </div>
-          </div>
-
-          {/* SIDEBAR */}
-          <aside className="space-y-6">
-            {recipe.youtube_video_id && (
-              <div className="bg-white rounded-2xl p-5 border shadow-sm">
-                <h3 className="text-lg font-bold mb-4">Watch Recipe Video</h3>
-
-                <div className="aspect-video rounded-xl overflow-hidden">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${recipe.youtube_video_id}?controls=0&rel=0&modestbranding=1&iv_load_policy=3`}
-                    className="w-full h-full"
-                    allowFullScreen
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* TAGS */}
-            {recipe.tags && recipe.tags.length > 0 && (
-              <div className="bg-white rounded-2xl p-5 border shadow-sm">
-                <h3 className="text-lg font-bold mb-4">Recipe Tags</h3>
-
-                <div className="flex flex-wrap gap-3">
-                  {recipe.tags.map((tag: any) => (
-                    <Link
-                      key={tag.id}
-                      href={`/recipes?tag=${tag.slug}`}
-                      className="px-4 py-2 rounded-full text-sm font-medium text-white"
-                      style={{
-                        background: tag.color || "#ef4444",
-                      }}
-                    >
-                      {tag.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* SHARE */}
-            <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-6 text-white">
-              <h3 className="text-xl font-bold mb-3">Love this recipe?</h3>
-
-              <p className="text-sm text-white/90 mb-5">
-                Share this delicious recipe with your friends and family.
-              </p>
-
-              <div className="flex gap-3">
-                <Link
-                  href="https://www.facebook.com/profile.php?id=61591119970456"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium"
-                >
-                  Facebook
-                </Link>
-
-                {/* <button className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium">
-                  WhatsApp
-                </button> */}
-              </div>
-            </div>
-          </aside>
-        </div>
-      </section>
-
-      {/* <RegisterOnApp /> */}
       <Footer />
     </div>
   );

@@ -390,6 +390,79 @@ export const getProductReviews = async (productId: string, page = 1) => {
   };
 };
 
+/** Review summary for a recipe from store_product_reviews (matched by recipe_id). */
+export const getRecipeReviewsSummary = async (recipeId: string) => {
+  const { rows } = await pool.query(
+    `
+    SELECT
+      COUNT(*)::int AS total,
+      COALESCE(ROUND(AVG(rating)::numeric, 1), 0)::float AS average
+    FROM store_product_reviews
+    WHERE rating IS NOT NULL
+      AND recipe_id = $1
+      AND (
+        status IS NULL
+        OR status IN ('approved', 'pending', 'published')
+      )
+    `,
+    [recipeId],
+  );
+
+  return {
+    total: rows[0]?.total || 0,
+    average: Number(rows[0]?.average || 0),
+  };
+};
+
+export const getRecipeReviews = async (recipeId: string, page = 1) => {
+  const limit = 9;
+  const offset = (page - 1) * limit;
+
+  const reviewsQuery = `
+    SELECT
+      r.id,
+      r.rating,
+      r.title,
+      r.comment,
+      r.created_at,
+      r.status,
+      COALESCE(c.company_name, r.guest_name, 'Anonymous') AS name
+    FROM store_product_reviews r
+    LEFT JOIN store_customers c ON r.customer_id = c.id
+    WHERE r.recipe_id = $1
+      AND (
+        r.status IS NULL
+        OR r.status IN ('approved', 'pending', 'published')
+      )
+    ORDER BY r.created_at DESC
+    LIMIT $2 OFFSET $3
+  `;
+
+  const statsQuery = `
+    SELECT
+      COUNT(*)::int AS total,
+      COALESCE(ROUND(AVG(rating)::numeric, 1), 0)::float AS average
+    FROM store_product_reviews
+    WHERE recipe_id = $1
+      AND rating IS NOT NULL
+      AND (
+        status IS NULL
+        OR status IN ('approved', 'pending', 'published')
+      )
+  `;
+
+  const [reviewsRes, statsRes] = await Promise.all([
+    pool.query(reviewsQuery, [recipeId, limit, offset]),
+    pool.query(statsQuery, [recipeId]),
+  ]);
+
+  return {
+    reviews: reviewsRes.rows,
+    total: statsRes.rows[0]?.total || 0,
+    average: Number(statsRes.rows[0]?.average || 0),
+  };
+};
+
 export const getSubcategories = async (category: string, filters: any = {}) => {
   const { brands, minPrice, maxPrice, search } = filters;
   const isAllCategories = !category || category === "all";
