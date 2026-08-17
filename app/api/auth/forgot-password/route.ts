@@ -41,8 +41,8 @@ export async function POST(req: Request) {
       client.release();
     }
   } catch (error) {
-    console.error("[Forgot Password Controller Crash]:", error);
-    return NextResponse.json({ error: "Internal System Error" }, { status: 500 });
+    console.error("[Forgot Password Controller Crash due to]:", error);
+    return NextResponse.json({ error: "Internal System Error Unable to Send Email" }, { status: 500 });
   }
 }
 

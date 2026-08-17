@@ -23,7 +23,9 @@ import {
   calculateTotals,
   convertTotals,
   MIN_ORDER_AMOUNT_EUR,
+  calculateRecipeLikeDiscountAmount,
 } from "@/lib/pricing";
+import { useRecipeDiscountStore } from "@/store/useRecipeDiscountStore";
 
 export type CheckoutData = {
   email: string;
@@ -188,6 +190,20 @@ export default function Checkout() {
   );
 
   const convertedTotals = convertTotals(totals, rate || 1, selectedCurrency);
+  const appliedRecipeDiscount = useRecipeDiscountStore(
+    (state) => state.appliedDiscount,
+  );
+  const recipeDiscountAmount = appliedRecipeDiscount
+    ? calculateRecipeLikeDiscountAmount(
+        convertedTotals.subtotal,
+        appliedRecipeDiscount,
+        rate || 1,
+      )
+    : 0;
+  const checkoutTotal = Math.max(
+    0,
+    convertedTotals.total - recipeDiscountAmount,
+  );
 
   useEffect(() => {
     const loadAddresses = async () => {
@@ -345,10 +361,10 @@ export default function Checkout() {
           cartItems: cart,
           pricing: {
             subtotal: convertedTotals.subtotal,
-            discount: 0,
+            discount: recipeDiscountAmount,
             tax_amount: convertedTotals.tax,
             shipping: convertedTotals.shipping,
-            total: convertedTotals.total,
+            total: checkoutTotal,
           },
           shippingMethod: selectedOption
             ? selectedOption.name
@@ -375,7 +391,7 @@ export default function Checkout() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             orderId,
-            amount: convertedTotals.total,
+            amount: checkoutTotal,
             customerEmail: formData.email,
             paymentMethod: method,
           }),
@@ -510,7 +526,7 @@ export default function Checkout() {
             subtotal={convertedTotals.subtotal}
             tax={convertedTotals.tax}
             shipping={convertedTotals.shipping}
-            total={convertedTotals.total}
+            total={checkoutTotal}
             shippingMethodName={
               selectedOption ? selectedOption.name : "Shipping"
             }

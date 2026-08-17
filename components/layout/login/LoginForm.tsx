@@ -96,66 +96,58 @@ export default function LoginForm() {
   };
 
   return (
-    // <div className=" flex items-center justify-center ">
     <div
       className="
-        min-h-screen
-        flex
-        items-center
-        justify-center
-        px-4
-        py-10
-        bg-gradient-to-br
-        from-orange-50
-        via-white
-        to-amber-50
         relative
-        overflow-hidden
+        flex
+        h-full
+        w-full
+        items-start
+        justify-center
+        overflow-visible
+        px-0
+        py-4
+        sm:py-6
+        md:items-center
+        [@media(min-height:800px)]:py-10
       "
     >
-      <div className="absolute top-0 left-0 h-72 w-72 bg-orange-300/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 h-72 w-72 bg-amber-300/20 rounded-full blur-3xl" />
-      {/* <div className="w-full max-w-md"> */}
+      <div className="pointer-events-none absolute top-0 left-0 h-40 w-40 rounded-full bg-orange-300/20 blur-3xl sm:h-72 sm:w-72" />
+      <div className="pointer-events-none absolute right-0 bottom-0 h-40 w-40 rounded-full bg-amber-300/20 blur-3xl sm:h-72 sm:w-72" />
       <div
         className="
-    relative
-    w-full
-    max-w-lg
-    rounded-3xl
-    bg-white/80
-    backdrop-blur-xl
-    border
-    border-white/30
-    p-10
-    shadow-[0_20px_80px_rgba(0,0,0,0.08)]
-  "
+          relative
+          my-auto
+          w-full
+          max-w-lg
+          rounded-3xl
+          border
+          border-white/30
+          bg-white/80
+          p-5
+          shadow-[0_20px_80px_rgba(0,0,0,0.08)]
+          backdrop-blur-xl
+          sm:p-8
+          lg:p-10
+        "
       >
         <div className="flex justify-center">
           <Link href="/">
             <Image
               src="/assets/logo/Group 87.png"
               alt="Asian Spices"
-              width={70}
-              height={70}
-              className="cursor-pointer"
+              width={90}
+              height={90}
+              className="h-[70px] w-[70px] cursor-pointer sm:h-[90px] sm:w-[90px]"
             />
           </Link>
         </div>
-        {/* <div>
-          <Link href={`/`}>
-            <Image
-              src={`/assets/logo/Group 87.png`}
-              alt="home"
-              height={60}
-              width={60}
-              className="mb-10 cursor-pointer"
-            />
-          </Link>
-        </div> */}
-        <div className="text-center mb-8 mt-6">
-          <h1 className="text-3xl font-bold text-slate-900">Welcome Back 👋</h1>
+        <div className="mb-6 mt-4 text-center sm:mb-8 sm:mt-6 [@media(max-height:700px)]:mb-4 [@media(max-height:700px)]:mt-3">
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+            Welcome Back 👋
+          </h1>
 
-          <p className="mt-3 text-slate-500">
+          <p className="mt-2 text-slate-500 sm:mt-3 [@media(max-height:700px)]:hidden">
             Sign in to continue shopping your favorite Asian spices.
           </p>
         </div>
@@ -281,7 +273,7 @@ export default function LoginForm() {
         </form>
 
         {/* Divider */}
-        <div className="flex items-center my-8">
+        <div className="my-6 flex items-center sm:my-8 [@media(max-height:700px)]:my-4">
           <div className="flex-1 h-px bg-slate-200" />
 
           <span className="px-4 text-xs uppercase tracking-wider text-slate-400">
@@ -319,13 +311,15 @@ export default function LoginForm() {
 
         <div
           className="
-            mt-8
+            mt-6
             rounded-xl
-            bg-orange-50
             border
             border-orange-100
+            bg-orange-50
             p-3
             text-center
+            sm:mt-8
+            [@media(max-height:700px)]:mt-4
           "
         >
           <p className="text-xs text-orange-700">
@@ -333,8 +327,7 @@ export default function LoginForm() {
           </p>
         </div>
 
-        {/* Footer */}
-        <p className="text-xs text-gray-400 mt-10">
+        <p className="mt-6 text-xs text-gray-400 sm:mt-10 [@media(max-height:700px)]:mt-4">
           © 2026 ALL RIGHTS RESERVED
         </p>
       </div>

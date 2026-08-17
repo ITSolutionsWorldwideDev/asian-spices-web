@@ -255,7 +255,7 @@ const FooterContent = () => {
               className="h-[42px] w-auto object-contain object-right"
               unoptimized
             />
-          </a>g
+          </a>
         </div>
       </div>
     </div>

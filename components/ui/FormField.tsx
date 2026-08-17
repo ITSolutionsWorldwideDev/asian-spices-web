@@ -7,15 +7,15 @@ export function FormField({
   error,
   children,
 }: {
-  label: string;
+  label?: string;
   error?: string;
   children: ReactNode;
 }) {
   return (
     <div className="space-y-1">
-      <label className="text-sm font-medium text-gray-700">
-        {label}
-      </label>
+      {label ? (
+        <label className="text-sm font-medium text-gray-700">{label}</label>
+      ) : null}
 
       {children}
 

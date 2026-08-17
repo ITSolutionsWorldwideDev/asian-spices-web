@@ -87,3 +87,28 @@ export function extractYoutubeData(url: string) {
   }
 }
 
+const RECIPE_IMAGE_FALLBACK = "/assets/alt-recipe-banner.jpg";
+
+export function getRecipeImageSrc(
+  thumbnailUrl?: string | null,
+  fallback: string = RECIPE_IMAGE_FALLBACK,
+) {
+  const src = thumbnailUrl?.trim();
+  if (!src) return fallback;
+
+  const youtube = extractYoutubeData(src);
+  if (youtube?.thumbnailUrl) return youtube.thumbnailUrl;
+
+  try {
+    const parsed = new URL(src);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host === "youtube.com" || host === "youtu.be") {
+      return fallback;
+    }
+  } catch {
+    if (!src.startsWith("/")) return fallback;
+  }
+
+  return src;
+}
+

@@ -5,10 +5,12 @@ import LoginForm from "@/components/layout/login/LoginForm";
 
 export default function LogInPage() {
   return (
-    <div className="bg-gray-100 h-screen">
-      <div className="grid grid-cols-1 md:grid-cols-2 container mx-auto p-10 bg-gray-100 h-screen">
+    <div className="min-h-dvh overflow-y-auto bg-gray-100">
+      <div className="container mx-auto grid min-h-dvh grid-cols-1 items-stretch gap-4 p-4 sm:gap-6 sm:p-6 md:grid-cols-2 md:p-8 lg:p-10">
         <LoginForm />
-        <FormSideImage />
+        <div className="relative hidden min-h-[min(100dvh-4rem,640px)] md:block">
+          <FormSideImage />
+        </div>
       </div>
     </div>
   );

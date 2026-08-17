@@ -107,6 +107,32 @@ export function convertTotals(
   };
 }
 
+export type RecipeLikeDiscountInput = {
+  discount_type: string;
+  discount_value: number;
+};
+
+export function calculateRecipeLikeDiscountAmount(
+  subtotal: number,
+  discount: RecipeLikeDiscountInput,
+  currencyRate = 1,
+) {
+  const value = Number(discount.discount_value);
+
+  if (!Number.isFinite(value) || value <= 0 || subtotal <= 0) {
+    return 0;
+  }
+
+  const type = (discount.discount_type || "").toUpperCase();
+
+  if (type === "PERCENT" || type === "PERCENTAGE") {
+    return Math.min(subtotal, subtotal * (value / 100));
+  }
+
+  const flatAmount = value * (currencyRate || 1);
+  return Math.min(subtotal, flatAmount);
+}
+
 /* 
 import { CartItem } from "@/store/useCartStore";
 

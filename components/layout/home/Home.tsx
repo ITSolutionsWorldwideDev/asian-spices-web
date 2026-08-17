@@ -2,8 +2,15 @@
 
 import React, { Suspense } from "react";
 import Image from "next/image";
+import { getServerSession } from "next-auth";
 import Header from "./Header";
 import AnnouncementBar from "./Announcement_Bar";
+import RecipeLikeDiscountBanner from "@/components/layout/recipes/RecipeLikeDiscountBanner";
+import { webAuthOptions } from "@/core/auth";
+import {
+  formatRecipeLikeDiscountLabel,
+  getEligibleRecipeLikeDiscountsForUser,
+} from "@/lib/dbactions/recipeLikeDiscounts";
 import Collections from "./Collections";
 import FlashSale from "./Flash_Sale";
 import Premium_Spice_Collection from "./Premium_Spice_Collection";
@@ -26,12 +33,36 @@ function SectionSkeleton({ className = "h-64" }: { className?: string }) {
   );
 }
 
-export default function Homei() {
+export default async function Homei() {
+  const session = await getServerSession(webAuthOptions);
+  const likeDiscounts = session?.user?.id
+    ? await getEligibleRecipeLikeDiscountsForUser(session.user.id)
+    : [];
+
   return (
     <div>
       {/* Hero + nav paint first — nothing DB-related above the fold */}
       <Header />
       <AnnouncementBar />
+
+      {likeDiscounts.length > 0 && (
+        <div className="space-y-3 bg-[#faf7f2] py-4">
+          {likeDiscounts.map((likeDiscount) => (
+            <RecipeLikeDiscountBanner
+              key={likeDiscount.id}
+              recipeId={likeDiscount.recipe_id}
+              recipeTitle={likeDiscount.recipe_title || ""}
+              likesCount={likeDiscount.favorite_count ?? likeDiscount.likes_count}
+              discount={{
+                id: likeDiscount.id,
+                discount_type: likeDiscount.discount_type,
+                discount_value: likeDiscount.discount_value,
+                label: formatRecipeLikeDiscountLabel(likeDiscount),
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Flash sale shell is static; product cards fetch client-side inside */}
       <div className="relative overflow-hidden">

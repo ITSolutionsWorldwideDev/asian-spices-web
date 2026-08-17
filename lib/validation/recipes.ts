@@ -9,6 +9,16 @@ export const recipeSchema = z.object({
 
   short_description: z.string().optional(),
 
+  origin: z.string().optional(),
+
+  preparation_time: z.union([z.literal(""), z.coerce.number().int().min(0)]).optional(),
+
+  cooking_time: z.union([z.literal(""), z.coerce.number().int().min(0)]).optional(),
+
+  servings: z.union([z.literal(""), z.coerce.number().int().min(0)]).optional(),
+
+  difficulty: z.string().optional(),
+
   thumbnail_url: z.union([
     z.string().url("Invalid thumbnail URL"),
     z.literal(""),

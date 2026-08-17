@@ -13,6 +13,7 @@ type Recipe = {
   slug: string;
   status: "draft" | "pending" | "published" | "rejected";
   thumbnail_url?: string;
+  origin?: string;
   created_at: string;
 };
 
@@ -192,6 +193,12 @@ export default function MyRecipesPage() {
               <div>
                 <h3 className="font-semibold">{recipe.title}</h3>
 
+                {recipe.origin && (
+                  <p className="text-xs text-gray-500">
+                    Origin (cuisine): {recipe.origin}
+                  </p>
+                )}
+
                 <p className="text-xs text-gray-500">
                   {new Date(recipe.created_at).toLocaleDateString()}
                 </p>
@@ -277,6 +284,7 @@ type Recipe = {
   slug: string;
   status: "draft" | "pending" | "published" | "rejected";
   thumbnail_url?: string;
+  origin?: string;
   created_at: string;
 };
 
@@ -379,6 +387,12 @@ export default function MyRecipesPage() {
 
               <div>
                 <h3 className="font-semibold">{recipe.title}</h3>
+
+                {recipe.origin && (
+                  <p className="text-xs text-gray-500">
+                    Origin (cuisine): {recipe.origin}
+                  </p>
+                )}
 
                 <p className="text-xs text-gray-500">
                   {new Date(recipe.created_at).toLocaleDateString()}
