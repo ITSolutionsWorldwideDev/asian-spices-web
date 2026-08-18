@@ -206,6 +206,7 @@ export async function POST(req: NextRequest) {
       youtube_url,
       content,
       tag_ids = [],
+      youtube_consent,
     } = body;
 
     /*
@@ -220,6 +221,17 @@ export async function POST(req: NextRequest) {
         {
           status: 400,
         },
+      );
+    }
+
+    if (youtube_url && !youtube_consent) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Please accept the YouTube video usage terms to add a video URL",
+        },
+        { status: 400 },
       );
     }
 

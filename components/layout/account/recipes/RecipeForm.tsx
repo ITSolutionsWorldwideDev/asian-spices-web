@@ -135,6 +135,7 @@ export default function RecipeForm({
     difficulty: initialData?.difficulty || "",
     thumbnail_url: initialData?.thumbnail_url || "",
     youtube_url: initialData?.youtube_url || "",
+    youtube_consent: false,
     content: initialData?.content || "",
   });
 
@@ -655,17 +656,33 @@ export default function RecipeForm({
               {...register("youtube_url")}
               placeholder="https://youtube.com/watch?v=..."
               className="h-11"
-              // onChange={(e: any) => handleChange("youtube_url", e.target.value)}
             />
             {youtube?.embedUrl && (
               <iframe
-                className="w-full aspect-video rounded-lg"
+                className="mt-3 w-full aspect-video rounded-lg"
                 src={youtube.embedUrl}
                 allowFullScreen
               />
             )}
           </FormField>
         </div>
+
+        {youtubeUrl?.trim() ? (
+          <FormField error={getErrorMessage(errors.youtube_consent)}>
+            <label className="flex items-start gap-3 rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                {...register("youtube_consent")}
+                className="mt-1 h-4 w-4 shrink-0 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+              />
+              <span>
+                I confirm that I own this video (or have the rights to share it)
+                and I allow Asian Spices to upload and use it on the official
+                Asian Spices YouTube channel to prevent copyright strikes.
+              </span>
+            </label>
+          </FormField>
+        ) : null}
 
         {/* CONTENT */}
         <FormField

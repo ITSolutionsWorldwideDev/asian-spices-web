@@ -135,7 +135,19 @@ export async function PUT(
       content,
       ingredients = [],
       instructions = [],
+      youtube_consent,
     } = body;
+
+    if (youtube_url && !youtube_consent) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Please accept the YouTube video usage terms to add a video URL",
+        },
+        { status: 400 },
+      );
+    }
 
     const result = await pool.query(
       `
