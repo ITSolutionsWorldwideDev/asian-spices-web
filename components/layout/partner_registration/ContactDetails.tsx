@@ -2,10 +2,12 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReadAloudBtn from "./ReadAloudBtn";
 import { useFormValidator } from "@/hooks/FormValidator";
 import { z } from "zod";
+
+const VAT_READY = /^[A-Z]{2}[A-Z0-9]{6,12}$/;
 
 export default function ContactDetails({
   formData,
@@ -15,6 +17,8 @@ export default function ContactDetails({
   setCompletedSteps,
 }: any) {
   const [agree, setAgree] = useState(false);
+  const [checkingVat, setCheckingVat] = useState(false);
+  const [vatMessage, setVatMessage] = useState("");
   const contactSchema = z.object({
     first_name: z
       .string()
@@ -49,11 +53,17 @@ export default function ContactDetails({
     setFormData((prev: any) => ({
       ...prev,
       [field]: value,
+      ...(field === "vat_number"
+        ? { vat_verified: false, vat_registered_name: "" }
+        : {}),
     }));
     setErrors((prev: any) => ({
       ...prev,
       [field]: undefined,
     }));
+    if (field === "vat_number") {
+      setVatMessage("");
+    }
   };
   const requiredFields = [
     "first_name",
@@ -63,6 +73,96 @@ export default function ContactDetails({
     "vat_number",
   ];
   const { validateForm } = useFormValidator(requiredFields, formData);
+
+  useEffect(() => {
+    const vat = String(formData.vat_number || "");
+
+    if (!VAT_READY.test(vat)) {
+      setCheckingVat(false);
+      return;
+    }
+
+    if (formData.vat_verified) {
+      setCheckingVat(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setCheckingVat(true);
+      setVatMessage("");
+
+      try {
+        const response = await fetch(
+          "/api/partner-registration/vat/validate",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              vat_number: vat,
+              country: formData.country,
+            }),
+            signal: controller.signal,
+          },
+        );
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || !data.valid) {
+          setFormData((prev: any) => ({
+            ...prev,
+            vat_verified: false,
+            vat_registered_name: "",
+          }));
+          setErrors((prev: any) => ({
+            ...prev,
+            vat_number: [data.error || "Could not validate this VAT number"],
+          }));
+          setVatMessage("");
+          return;
+        }
+
+        setFormData((prev: any) => ({
+          ...prev,
+          vat_number: data.formatted || prev.vat_number,
+          vat_verified: true,
+          vat_registered_name: data.name || "",
+        }));
+        setErrors((prev: any) => ({ ...prev, vat_number: undefined }));
+        setVatMessage(
+          data.name
+            ? `VAT number verified: ${data.name}`
+            : data.skipped
+              ? "VAT number accepted. Non-EU numbers cannot be checked with VIES."
+              : "VAT number verified with VIES.",
+        );
+      } catch (error: any) {
+        if (error?.name === "AbortError") return;
+        setFormData((prev: any) => ({
+          ...prev,
+          vat_verified: false,
+          vat_registered_name: "",
+        }));
+        setErrors((prev: any) => ({
+          ...prev,
+          vat_number: [
+            "The EU VAT service is temporarily unavailable. Please try again.",
+          ],
+        }));
+      } finally {
+        if (!controller.signal.aborted) {
+          setCheckingVat(false);
+        }
+      }
+    }, 600);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [formData.vat_number, formData.country]);
+
+  const canContinue = agree && !!formData.vat_verified && !checkingVat;
 
   return (
     <div className=" bg-gray-100 flex justify-center p-6" id="contact">
@@ -194,17 +294,38 @@ export default function ContactDetails({
               type="text"
               placeholder="NL123456789B01"
               value={formData.vat_number || ""}
-              onChange={(e) => handleChange("vat_number", e.target.value)}
+              onChange={(e) =>
+                handleChange(
+                  "vat_number",
+                  e.target.value.replace(/[\s.\-]/g, "").toUpperCase(),
+                )
+              }
               className="w-full mt-1 border border-[#E5E7EB] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
             <p className="text-xs text-gray-400 mt-2">
-              Format: Country code + numbers (e.g., NL123456789B01)
+              Format: Country code + numbers (e.g., NL123456789B01). EU numbers
+              are checked automatically with VIES.
             </p>
-            {errors.vat_number && (
+            {checkingVat && (
+              <p className="text-blue-500 text-xs mt-1">
+                Checking VAT number...
+              </p>
+            )}
+            {errors.vat_number && !checkingVat && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.vat_number[0]}
               </p>
             )}
+            {(vatMessage || formData.vat_verified) &&
+              !errors.vat_number &&
+              !checkingVat && (
+                <p className="text-green-600 text-xs mt-1">
+                  {vatMessage ||
+                    (formData.vat_registered_name
+                      ? `VAT number verified: ${formData.vat_registered_name}`
+                      : "VAT number verified with VIES.")}
+                </p>
+              )}
           </div>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-6 space-y-4">
@@ -262,10 +383,10 @@ export default function ContactDetails({
           </button>
 
           <button
-            disabled={!agree}
+            disabled={!canContinue}
             type="button"
             className={`px-6 py-2 rounded-lg text-white transition ${
-              agree
+              canContinue
                 ? "bg-orange-500 hover:bg-orange-600"
                 : "bg-gray-300 cursor-not-allowed"
             }`}
@@ -275,6 +396,14 @@ export default function ContactDetails({
               if (!result.success) {
                 const fieldErrors = result.error.flatten().fieldErrors;
                 setErrors(fieldErrors);
+                return;
+              }
+
+              if (!formData.vat_verified) {
+                setErrors((prev: any) => ({
+                  ...prev,
+                  vat_number: ["Enter a valid VAT number to continue."],
+                }));
                 return;
               }
 
