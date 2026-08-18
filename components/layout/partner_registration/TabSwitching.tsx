@@ -1,14 +1,15 @@
 // apps/web/components/layout/partner_registration/TabSwitching.tsx
 
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { Check, Form } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Check } from "lucide-react";
 import Prerequisites from "./Prerequisites";
 import BusinessVerification from "./BusinessVerification";
 import DocumentUpload from "./DocumentUpload";
 import ContactDetails from "./ContactDetails";
 import IdentityVerification from "./IdentityVerification";
 import Confirmation from "./Confirmation";
+import SessionTimeoutModal from "./SessionTimeoutModal";
 
 const generateApplicationId = () => {
   const random = Math.floor(10000 + Math.random() * 90000);
@@ -98,6 +99,17 @@ export default function TabSwitching() {
         submitted_at: new Date().toISOString(),
       };
     });
+  }, []);
+
+  const handleSessionExpire = useCallback(() => {
+    localStorage.removeItem("partner_registration");
+    localStorage.removeItem("idin_transaction");
+    setFormData({
+      application_id: generateApplicationId(),
+      submitted_at: new Date().toISOString(),
+    });
+    setActiveStep(1);
+    setCompletedSteps([]);
   }, []);
 
   const stepComponents = (
@@ -232,6 +244,11 @@ export default function TabSwitching() {
           ]
         }
       </form>
+
+      <SessionTimeoutModal
+        enabled={activeStep < 6}
+        onExpire={handleSessionExpire}
+      />
     </div>
   );
 }

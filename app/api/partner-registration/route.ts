@@ -3,6 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";
 import { sendPartnerRegistrationEmail } from "@/core/email-templates";
+import { checkEuVatNumber } from "@/core/vies";
 
 const generateApplicationId = () => {
   const date = new Date();
@@ -17,55 +18,74 @@ const generateApplicationId = () => {
 };
 
 export async function POST(req: NextRequest) {
+  const body = await req.json();
+
+  const {
+    kvk_number,
+    company_name,
+    chamber_of_commerce_number,
+    country,
+    street,
+    house_number,
+    additional_address,
+    postal_code,
+    city,
+    chamberFiles,
+    power_of_attorney_document,
+    first_name,
+    middle_name,
+    last_name,
+    business_phone_number,
+    business_email_address,
+    vat_number: rawVatNumber,
+    idin,
+  } = body;
+
+  /* ---------------- VALIDATION ---------------- */
+
+  if (!company_name) {
+    return NextResponse.json(
+      { error: "Company name is required" },
+      { status: 400 },
+    );
+  }
+
+  if (!business_email_address) {
+    return NextResponse.json(
+      { error: "Business email is required" },
+      { status: 400 },
+    );
+  }
+
+  if (!chamberFiles || chamberFiles.length === 0) {
+    return NextResponse.json(
+      { error: "Chamber documents are required" },
+      { status: 400 },
+    );
+  }
+
+  if (!rawVatNumber) {
+    return NextResponse.json(
+      { error: "VAT number is required" },
+      { status: 400 },
+    );
+  }
+
+  const vatCheck = await checkEuVatNumber({
+    vat_number: rawVatNumber,
+    country,
+  });
+  if (!vatCheck.ok) {
+    return NextResponse.json(
+      { error: vatCheck.error, code: vatCheck.code },
+      { status: vatCheck.code === "SERVICE_UNAVAILABLE" ? 503 : 400 },
+    );
+  }
+
+  const vat_number = vatCheck.formatted;
   const client = await pool.connect();
 
   try {
-    const body = await req.json();
-
-    const {
-      kvk_number,
-      company_name,
-      chamber_of_commerce_number,
-      country,
-      street,
-      house_number,
-      additional_address,
-      postal_code,
-      city,
-      chamberFiles,
-      power_of_attorney_document,
-      first_name,
-      middle_name,
-      last_name,
-      business_phone_number,
-      business_email_address,
-      vat_number,
-      idin,
-    } = body;
-
-    /* ---------------- VALIDATION ---------------- */
-
-    if (!company_name) {
-      return NextResponse.json(
-        { error: "Company name is required" },
-        { status: 400 },
-      );
-    }
-
-    if (!business_email_address) {
-      return NextResponse.json(
-        { error: "Business email is required" },
-        { status: 400 },
-      );
-    }
-
-    if (!chamberFiles || chamberFiles.length === 0) {
-      return NextResponse.json(
-        { error: "Chamber documents are required" },
-        { status: 400 },
-      );
-    }
-
     /* ---------------- APPLICATION ID ---------------- */
 
     const application_id = generateApplicationId();
