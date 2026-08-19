@@ -431,8 +431,11 @@ export async function sendReturnStatusUpdateEmail(returnId: string) {
 
 
 export async function sendPasswordResetEmail({ email, token }: PasswordResetEmailOptions) {
-  // Generate base root URL dynamically using your system environment configurations
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const envUrl = (process.env.NEXT_PUBLIC_SITE_URL || "").replace(/\/$/, "");
+  const baseUrl =
+    envUrl && !/localhost|127\.0\.0\.1/i.test(envUrl)
+      ? envUrl
+      : "https://www.asianspices.online";
   const resetLink = `${baseUrl}/reset-password?token=${token}`;
 
   const emailHtml = `
@@ -493,7 +496,9 @@ Need help? Contact us at support@asianspices.online
     subject: "Reset your Asian Spices password",
     html: emailHtml,
     text: emailText,
-    fromAccount: "support", // Uses your dedicated support configuration profiles
+    // order@ already delivers customer mail on live; support@ reset
+    // messages are often 550'd as spam from Vercel.
+    fromAccount: "order",
   });
 
   return { success: true };
