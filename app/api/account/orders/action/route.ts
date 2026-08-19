@@ -2,7 +2,10 @@
 
 import { NextResponse } from "next/server";
 import { pool } from "@/core/db";
-import { sendReturnStatusUpdateEmail } from "@/core/email-templates";
+import {
+  sendCancellationEmail,
+  sendReturnStatusUpdateEmail,
+} from "@/core/email-templates";
 import {
   MIN_ORDER_AMOUNT_EUR,
   FREE_SHIPPING_THRESHOLD,
@@ -50,6 +53,10 @@ export async function POST(request: Request) {
       }
 
       const order = orderRes.rows[0];
+      const refundStatus =
+        order.payment_status === "paid"
+          ? "Refund Successful"
+          : "No Refund Needed";
 
       if (order.order_status?.toLowerCase() === "cancelled") {
         throw new Error("This order has already been cancelled.");
@@ -111,7 +118,8 @@ export async function POST(request: Request) {
         const shippingAmount = Number(order.shipping_amount || 0);
         const taxAmount = Number(order.tax_amount || 0);
         const newSubtotal = Math.max(0, subtotal - cancelAmount);
-        const isFullCancel = requestedIds.length === activeItems.length;
+        const isFullCancel =
+          requestedIds.length === activeItems.length || newSubtotal <= 0;
 
         // Enforce the €10 minimum-order threshold: a partial cancellation
         // can never leave the order sitting at an uneconomical remainder.
@@ -132,9 +140,10 @@ export async function POST(request: Request) {
         );
 
         if (isFullCancel) {
-          // Nothing is left to ship, so the order's live totals should
-          // reflect that (€0 across the board) rather than freezing at
-          // whatever was charged before this cancellation.
+          await client.query(
+            `UPDATE store_order_items SET status = 'cancelled' WHERE order_id = $1;`,
+            [orderId],
+          );
           await client.query(
             `UPDATE store_orders
              SET order_status = 'cancelled', subtotal = 0, tax_amount = 0, shipping_amount = 0, total_amount = 0, updated_at = now()
@@ -171,6 +180,15 @@ export async function POST(request: Request) {
 
         await client.query("COMMIT");
 
+        try {
+          await sendCancellationEmail(orderId, refundStatus, reason, comments);
+        } catch (emailErr) {
+          console.error(
+            "Non-fatal email cancellation notification alert engine failure:",
+            emailErr,
+          );
+        }
+
         return NextResponse.json(
           {
             success: true,
@@ -190,6 +208,10 @@ export async function POST(request: Request) {
         UPDATE store_orders
         SET
           order_status = 'cancelled',
+          subtotal = 0,
+          tax_amount = 0,
+          shipping_amount = 0,
+          total_amount = 0,
           updated_at = now()
         WHERE id = $1;
       `;
@@ -197,6 +219,15 @@ export async function POST(request: Request) {
       await client.query(updateOrderQuery, [orderId]);
 
       await client.query("COMMIT");
+
+      try {
+        await sendCancellationEmail(orderId, refundStatus, reason, comments);
+      } catch (emailErr) {
+        console.error(
+          "Non-fatal email cancellation notification alert engine failure:",
+          emailErr,
+        );
+      }
 
       return NextResponse.json(
         {
@@ -243,10 +274,14 @@ export async function POST(request: Request) {
       throw new Error("Parent order data record lookup returned empty.");
     }
 
-    const { customer_id: customerId, shipping_status: shippingStatus, delivered_at: deliveryDate } = orderInfoRes.rows[0];
+    const {
+      customer_id: customerId,
+      shipping_status: returnShippingStatus,
+      delivered_at: deliveryDate,
+    } = orderInfoRes.rows[0];
 
     // Check Eligibility Condition A: Must be 'delivered'
-    if (shippingStatus?.toLowerCase() !== "delivered") {
+    if (returnShippingStatus?.toLowerCase() !== "delivered") {
       throw new Error("Returns are strictly permitted for delivered orders only.");
     }
 

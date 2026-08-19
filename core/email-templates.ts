@@ -91,6 +91,102 @@ export async function sendOrderConfirmationEmail(orderId: string) {
   }
 }
 
+function escapeEmailText(value: string) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+export async function sendCancellationEmail(
+  orderId: string,
+  refundStatus?: string,
+  reason?: string,
+  comments?: string,
+) {
+  try {
+    const orderQuery = await pool.query(
+      `SELECT order_number, customer_email, total_amount, shipping_provider, payment_status
+       FROM store_orders WHERE id = $1`,
+      [orderId],
+    );
+
+    if (orderQuery.rowCount === 0) {
+      return { success: false, error: "Order context missing" };
+    }
+
+    const order = orderQuery.rows[0];
+    if (!order.customer_email) {
+      return { success: false, error: "Customer email missing" };
+    }
+
+    const safeReason = escapeEmailText(reason || "Not specified");
+    const safeComments = comments?.trim()
+      ? escapeEmailText(comments.trim())
+      : "";
+    const amount = `€${Number(order.total_amount || 0).toFixed(2)}`;
+    const refundNote =
+      refundStatus === "Refund Successful"
+        ? `A refund of ${amount} has been initiated to your original payment method. Please allow a few business days for it to appear.`
+        : refundStatus === "No Refund Needed"
+          ? "No payment was collected for this order, so no refund is required."
+          : "If a payment was taken, our team will review the refund and follow up if needed.";
+
+    const emailHtml = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #f0f0f0; padding: 20px; border-radius: 12px;">
+        <h2 style="color: #ea580c; text-align: center;">Order Cancelled</h2>
+        <p>Hello,</p>
+        <p>Your order with <strong>Asian Spices</strong> has been cancelled as requested. This message confirms that the cancellation is complete.</p>
+
+        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p style="margin: 0 0 8px 0;"><strong>Order Number:</strong> ${escapeEmailText(order.order_number)}</p>
+          <p style="margin: 0 0 8px 0;"><strong>Order Total:</strong> ${amount}</p>
+          <p style="margin: 0 0 8px 0;"><strong>Shipping Method:</strong> ${escapeEmailText(order.shipping_provider || "—")}</p>
+          <p style="margin: 0 0 8px 0;"><strong>Cancellation Reason:</strong> ${safeReason}</p>
+          ${
+            safeComments
+              ? `<p style="margin: 0;"><strong>Comments:</strong> ${safeComments}</p>`
+              : ""
+          }
+        </div>
+
+        <p>${refundNote}</p>
+        <p>If you did not request this cancellation, or if you have any questions, reply to this email or contact us at support@asianspices.online.</p>
+
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
+        <p style="font-size: 12px; color: #6b7280; text-align: center;">
+          © 2026 Asian Spices Online. All rights reserved.<br>
+          Need support? Contact us via support@asianspices.online
+        </p>
+      </div>
+    `;
+
+    await sendEmail({
+      to: order.customer_email,
+      cc: [
+        "sales@asianspices.online",
+        "order@asianspices.online",
+        "cheila.lopes@itsolutionshub2010.com",
+        "ahmed.mehmood@itsolutionshub2010.com",
+        "zraja@itsolutionsworldwide.com",
+        "sdevi@itsolutionsworldwide.com",
+      ],
+      subject: `Order Cancelled (Ref: ${order.order_number})`,
+      html: emailHtml,
+      fromAccount: "order",
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error(
+      `[Cancellation Email Dispatch Failure] Order ID: ${orderId}`,
+      error,
+    );
+    return { success: false, error };
+  }
+}
+
 export async function sendPartnerRegistrationEmail({
   email,
   companyName,

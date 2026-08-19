@@ -70,7 +70,10 @@ export async function GET(
   try {
     // 1. Fetch order details and verify ownership and payment status
     const orderQuery = `
-      SELECT o.*,
+      SELECT
+        o.*,
+        o.shipping_amount AS order_shipping_amount,
+        o.shipping_provider AS order_shipping_provider,
         json_agg(
           json_build_object(
             'title', p.name,
@@ -127,7 +130,12 @@ export async function GET(
     const topY = 42;
 
     const subtotalAmount = Number(order.subtotal || 0);
-    const shippingAmount = Number(order.shipping_amount || 0);
+    const shippingAmount = Number(
+      order.order_shipping_amount ?? order.shipping_amount ?? 0,
+    );
+    const shippingProvider = String(
+      order.order_shipping_provider ?? order.shipping_provider ?? "",
+    ).trim();
     const taxAmount = Number(order.tax_amount || 0);
     const totalAmount = Number(order.total_amount || 0);
     const exclVatAmount = subtotalAmount - taxAmount;
@@ -277,8 +285,17 @@ export async function GET(
       ? order.cart_items.filter((i: any) => i && i.title)
       : [];
 
+    const pageH = doc.internal.pageSize.getHeight();
+    const FOOTER_LINE_Y = pageH - 36;
+    const FOOTER_TEXT_Y = pageH - 18;
+
     // Loop through invoice item records
     validItems.forEach((item: any, index: number) => {
+      if (currentY > FOOTER_LINE_Y - 120) {
+        doc.addPage();
+        currentY = 50;
+      }
+
       currentY += 20;
       doc.setFont("helvetica", "normal");
       doc.setTextColor("#374151");
@@ -301,10 +318,14 @@ export async function GET(
       currentY += 6;
     });
 
-    // Summary section (left + right boxes style)
-    const sumTop = currentY + 42;
+    // Summary sits above the footer so the bottom line cannot cut the VAT row.
+    const SUMMARY_BLOCK_HEIGHT = 90;
+    let sumTop = currentY + 36;
+    if (sumTop + SUMMARY_BLOCK_HEIGHT > FOOTER_LINE_Y - 12) {
+      doc.addPage();
+      sumTop = 56;
+    }
 
-    // Left VAT summary
     const leftLabelX = LEFT + 12;
     const leftAmountX = 210;
     doc.setFont("helvetica", "normal");
@@ -313,21 +334,22 @@ export async function GET(
     doc.text("Excl. VAT", leftLabelX, sumTop);
     doc.text(euro(exclVatAmount), leftAmountX, sumTop, { align: "right" });
 
-    doc.text(`VAT ${vatPct}%`, leftLabelX, sumTop + 20);
-    doc.text(euro(taxAmount), leftAmountX, sumTop + 20, { align: "right" });
+    const vatRowY = sumTop + 18;
+    doc.text(`VAT ${vatPct}%`, leftLabelX, vatRowY);
+    doc.text(euro(taxAmount), leftAmountX, vatRowY, { align: "right" });
 
+    const summaryRuleY = vatRowY + 14;
     doc.setDrawColor(209, 213, 219);
     doc.setLineWidth(0.7);
-    doc.line(LEFT + 10, sumTop + 30, leftAmountX, sumTop + 30);
+    doc.line(LEFT + 10, summaryRuleY, leftAmountX, summaryRuleY);
 
     doc.setTextColor("#111827");
     doc.setFont("helvetica", "bold");
-    doc.text("Total", leftLabelX, sumTop + 46);
-    doc.text(euro(subtotalAmount), leftAmountX, sumTop + 46, {
+    doc.text("Total", leftLabelX, summaryRuleY + 18);
+    doc.text(euro(subtotalAmount), leftAmountX, summaryRuleY + 18, {
       align: "right",
     });
 
-    // Right payment summary
     const rightLabelX = 380;
     const rightAmountX = RIGHT;
     doc.setFont("helvetica", "normal");
@@ -335,39 +357,33 @@ export async function GET(
     doc.text("Subtotal (incl. VAT)", rightLabelX, sumTop);
     doc.text(euro(subtotalAmount), rightAmountX, sumTop, { align: "right" });
 
-    doc.text("Shipping (Standard)", rightLabelX, sumTop + 20);
-    doc.text(euro(shippingAmount), rightAmountX, sumTop + 20, {
+    doc.text(shippingProvider || "Shipping", rightLabelX, vatRowY);
+    doc.text(euro(shippingAmount), rightAmountX, vatRowY, {
       align: "right",
     });
 
     doc.setDrawColor("#111827");
     doc.setLineWidth(0.8);
-    doc.line(rightLabelX, sumTop + 30, RIGHT, sumTop + 30);
+    doc.line(rightLabelX, summaryRuleY, RIGHT, summaryRuleY);
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
     doc.setTextColor("#111827");
-    doc.text("Total", rightLabelX, sumTop + 48);
-    doc.text(euro(totalAmount), rightAmountX, sumTop + 48, { align: "right" });
+    doc.text("Total", rightLabelX, summaryRuleY + 20);
+    doc.text(euro(totalAmount), rightAmountX, summaryRuleY + 20, {
+      align: "right",
+    });
 
-    // Footer strip (line + contact details)
-    const footerLineY = 770;
-    const footerTextY = 788;
-    const footerCenterX = (LEFT + RIGHT) / 2;
+    // Footer at the very bottom of the last page, after totals.
     doc.setDrawColor("#111827");
     doc.setLineWidth(1.2);
-    doc.line(LEFT, footerLineY, RIGHT, footerLineY);
+    doc.line(LEFT, FOOTER_LINE_Y, RIGHT, FOOTER_LINE_Y);
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
+    doc.setFontSize(10);
     doc.setTextColor("#111827");
-    const websiteText = "asianspices.online";
-    const websiteWidth = doc.getTextWidth(websiteText);
-    const totalFooterWidth = websiteWidth;
-    const footerStartX = footerCenterX - totalFooterWidth / 2;
-
-    doc.textWithLink(websiteText, footerStartX, footerTextY, {
-      url: "https://asianspices.online/",
+    doc.text("asianspices.online", (LEFT + RIGHT) / 2, FOOTER_TEXT_Y, {
+      align: "center",
     });
 
     // Output straight as a raw array buffer stream type
