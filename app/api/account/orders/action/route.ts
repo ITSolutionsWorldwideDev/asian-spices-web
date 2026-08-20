@@ -57,6 +57,11 @@ export async function POST(request: Request) {
         order.payment_status === "paid"
           ? "Refund Successful"
           : "No Refund Needed";
+      const originalSubtotal = Number(order.subtotal || 0);
+      const originalShipping = Number(order.shipping_amount || 0);
+      const originalTax = Number(order.tax_amount || 0);
+      const originalTotal = Number(order.total_amount || 0);
+      const isPaid = order.payment_status === "paid";
 
       if (order.order_status?.toLowerCase() === "cancelled") {
         throw new Error("This order has already been cancelled.");
@@ -180,8 +185,40 @@ export async function POST(request: Request) {
 
         await client.query("COMMIT");
 
+        const cancelledOrderTotal = originalTotal;
+        let refundAmount = 0;
+
+        if (isFullCancel) {
+          refundAmount = isPaid ? originalTotal : 0;
+        } else {
+          const newTax = Math.max(0, taxAmount - cancelTax);
+          const shippingMethod = order.shipping_provider?.toLowerCase();
+          const isStandardMethod =
+            shippingMethod === "standard" ||
+            shippingMethod === "standard delivery";
+          const newShippingAmount = isStandardMethod
+            ? newSubtotal >= FREE_SHIPPING_THRESHOLD
+              ? 0
+              : SHIPPING_OPTIONS.standard.price
+            : shippingAmount;
+          const newTotal = newSubtotal + newShippingAmount;
+          refundAmount = isPaid ? Math.max(0, originalTotal - newTotal) : 0;
+        }
+
         try {
-          await sendCancellationEmail(orderId, refundStatus, reason, comments);
+          await sendCancellationEmail(
+            orderId,
+            refundStatus,
+            reason,
+            comments,
+            {
+              orderTotal: cancelledOrderTotal,
+              refundAmount,
+              subtotal: originalSubtotal,
+              shippingAmount: originalShipping,
+              taxAmount: originalTax,
+            },
+          );
         } catch (emailErr) {
           console.error(
             "Non-fatal email cancellation notification alert engine failure:",
@@ -221,7 +258,19 @@ export async function POST(request: Request) {
       await client.query("COMMIT");
 
       try {
-        await sendCancellationEmail(orderId, refundStatus, reason, comments);
+        await sendCancellationEmail(
+          orderId,
+          refundStatus,
+          reason,
+          comments,
+          {
+            orderTotal: originalTotal,
+            refundAmount: isPaid ? originalTotal : 0,
+            subtotal: originalSubtotal,
+            shippingAmount: originalShipping,
+            taxAmount: originalTax,
+          },
+        );
       } catch (emailErr) {
         console.error(
           "Non-fatal email cancellation notification alert engine failure:",

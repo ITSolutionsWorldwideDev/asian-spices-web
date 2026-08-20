@@ -175,20 +175,36 @@ export async function POST(req: NextRequest) {
 
     await client.query("COMMIT");
 
-    sendPartnerRegistrationEmail({
+    // Must await on Vercel — fire-and-forget is killed once the response is sent.
+    const emailResult = await sendPartnerRegistrationEmail({
       email: business_email_address,
       companyName: company_name,
       firstName: first_name,
       applicationId: application_id,
-    }).catch((emailErr) => {
-      console.error("[Background Email Notification Failed]:", emailErr);
     });
+
+    if (!emailResult.success) {
+      console.error(
+        "[Partner Registration Email Failed]",
+        application_id,
+        emailResult.error,
+      );
+    }
 
     return NextResponse.json(
       {
         success: true,
         message: "Registration submitted successfully",
         application_id,
+        emailSent: emailResult.success,
+        ...(emailResult.success
+          ? {}
+          : {
+              emailError:
+                emailResult.error instanceof Error
+                  ? emailResult.error.message
+                  : String(emailResult.error ?? "Email dispatch failed"),
+            }),
         data: result.rows[0],
       },
       { status: 201 },

@@ -104,10 +104,17 @@ export async function sendCancellationEmail(
   refundStatus?: string,
   reason?: string,
   comments?: string,
+  amounts?: {
+    orderTotal: number;
+    refundAmount: number;
+    subtotal?: number;
+    shippingAmount?: number;
+    taxAmount?: number;
+  },
 ) {
   try {
     const orderQuery = await pool.query(
-      `SELECT order_number, customer_email, total_amount, shipping_provider, payment_status
+      `SELECT order_number, customer_email, total_amount, subtotal, shipping_amount, tax_amount, shipping_provider, payment_status
        FROM store_orders WHERE id = $1`,
       [orderId],
     );
@@ -125,10 +132,24 @@ export async function sendCancellationEmail(
     const safeComments = comments?.trim()
       ? escapeEmailText(comments.trim())
       : "";
-    const amount = `€${Number(order.total_amount || 0).toFixed(2)}`;
+
+    const orderSubtotal = Number(
+      amounts?.subtotal ?? order.subtotal ?? 0,
+    );
+    const orderShipping = Number(
+      amounts?.shippingAmount ?? order.shipping_amount ?? 0,
+    );
+    const orderTax = Number(amounts?.taxAmount ?? order.tax_amount ?? 0);
+    const orderTotal = Number(
+      amounts?.orderTotal ?? order.total_amount ?? 0,
+    );
+    const refundAmount = Number(amounts?.refundAmount ?? orderTotal);
+
+    const fmt = (value: number) => `€${value.toFixed(2)}`;
+
     const refundNote =
       refundStatus === "Refund Successful"
-        ? `A refund of ${amount} has been initiated to your original payment method. Please allow a few business days for it to appear.`
+        ? `A refund of ${fmt(refundAmount)} has been initiated to your original payment method. Please allow a few business days for it to appear.`
         : refundStatus === "No Refund Needed"
           ? "No payment was collected for this order, so no refund is required."
           : "If a payment was taken, our team will review the refund and follow up if needed.";
@@ -141,7 +162,11 @@ export async function sendCancellationEmail(
 
         <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0;">
           <p style="margin: 0 0 8px 0;"><strong>Order Number:</strong> ${escapeEmailText(order.order_number)}</p>
-          <p style="margin: 0 0 8px 0;"><strong>Order Total:</strong> ${amount}</p>
+          <p style="margin: 0 0 8px 0;"><strong>Subtotal:</strong> ${fmt(orderSubtotal)}</p>
+          <p style="margin: 0 0 8px 0;"><strong>Shipping:</strong> ${fmt(orderShipping)}</p>
+          <p style="margin: 0 0 8px 0;"><strong>Tax:</strong> ${fmt(orderTax)}</p>
+          <p style="margin: 0 0 8px 0;"><strong>Order Total:</strong> ${fmt(orderTotal)}</p>
+          <p style="margin: 0 0 8px 0;"><strong>Refund Amount:</strong> ${fmt(refundAmount)}</p>
           <p style="margin: 0 0 8px 0;"><strong>Shipping Method:</strong> ${escapeEmailText(order.shipping_provider || "—")}</p>
           <p style="margin: 0 0 8px 0;"><strong>Cancellation Reason:</strong> ${safeReason}</p>
           ${
