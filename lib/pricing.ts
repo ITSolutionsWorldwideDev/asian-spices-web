@@ -84,17 +84,18 @@ export function calculateTotals(
 
 /**
  * Applies a promo discount (already converted to the same currency as `totals`)
- * against a subtotal/shipping/total breakdown. The discount is capped so it can
- * never exceed the subtotal itself.
+ * against the subtotal. The discount is capped so it can never exceed the
+ * subtotal itself. Shipping is added on top of the discounted subtotal.
  */
 export function applyDiscount(
   totals: { subtotal: number; tax: number; shipping: number; total: number },
   discount: number,
 ) {
   const cappedDiscount = Math.max(0, Math.min(discount || 0, totals.subtotal));
-  const total = Math.max(0, totals.subtotal - cappedDiscount) + totals.shipping;
+  const subtotal = Math.max(0, totals.subtotal - cappedDiscount);
+  const total = subtotal + totals.shipping;
 
-  return { ...totals, discount: cappedDiscount, total };
+  return { ...totals, subtotal, discount: cappedDiscount, total };
 }
 
 export function convertPrice(

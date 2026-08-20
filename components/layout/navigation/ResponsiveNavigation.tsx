@@ -169,7 +169,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
     activeDropdownLink?.children &&
     createPortal(
       <div
-        className="hidden lg:block"
+        className="hidden xl:block"
         style={{
           position: "fixed",
           left: 0,
@@ -266,7 +266,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
               className="fixed inset-0 z-40 bg-black/40"
               onClick={() => setMobileMenu(false)}
             />
-            <div className="fixed inset-x-0 top-[72px] z-50 max-h-[80vh] overflow-y-auto rounded-b-lg bg-amber-900/95 shadow-xl lg:hidden">
+            <div className="fixed inset-x-0 top-[72px] z-50 max-h-[80vh] overflow-y-auto rounded-b-lg bg-amber-900/95 shadow-xl xl:hidden">
               {navLinks.map((link) => (
                 <div key={link.name} className="border-b border-amber-800 last:border-b-0">
                   {!link.children ? (

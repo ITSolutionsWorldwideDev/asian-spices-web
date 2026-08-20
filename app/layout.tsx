@@ -11,7 +11,7 @@ import CountryChangeModal from "@/components/ui/CountryChangeModal";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Asian Spices - the asian tiger",
+  title: "Asian Spices",
   description:
     "Asian Spices is your trusted online destination for premium Asian spices, authentic ingredients, recipes, and kitchen essentials.",
   keywords:
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Asian Spices - the asian tiger",
+    title: "Asian Spices",
     description:
       "Asian Spices is your trusted online destination for premium Asian spices, authentic ingredients, recipes, and kitchen essentials.",
     url: "https://www.asianspices.online",

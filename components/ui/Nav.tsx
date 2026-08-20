@@ -98,7 +98,7 @@ const Nav: React.FC = () => {
     >
       <nav
         className={`container relative mx-auto flex items-center p-2 transition-all duration-300 ${
-          scrolled ? "min-h-12 justify-center sm:min-h-14" : "min-h-14 justify-between sm:min-h-16 lg:min-h-20"
+          scrolled ? "min-h-12 justify-center sm:min-h-14" : "min-h-14 justify-between sm:min-h-16 xl:min-h-20"
         }`}
       >
         {/* Logo only at page top — hides when scrolling so it does not stick */}
@@ -113,7 +113,7 @@ const Nav: React.FC = () => {
         </div>
 
         <div
-          className={`pointer-events-auto hidden transition-all duration-300 lg:block ${
+          className={`pointer-events-auto hidden transition-all duration-300 xl:block ${
             scrolled ? "" : "ml-auto"
           }`}
         >
@@ -121,7 +121,7 @@ const Nav: React.FC = () => {
         </div>
 
         <div
-          className={`pointer-events-auto transition-all duration-300 lg:hidden ${
+          className={`pointer-events-auto transition-all duration-300 xl:hidden ${
             scrolled ? "" : "ml-auto"
           }`}
         >
@@ -134,7 +134,7 @@ const Nav: React.FC = () => {
   return (
     <>
       {/* Reserves header height so content does not jump under the fixed bar */}
-      <div className="h-20 shrink-0 sm:h-24 lg:h-28" aria-hidden />
+      <div className="h-20 shrink-0 sm:h-24 xl:h-28" aria-hidden />
       {mounted ? createPortal(bar, document.body) : null}
     </>
   );

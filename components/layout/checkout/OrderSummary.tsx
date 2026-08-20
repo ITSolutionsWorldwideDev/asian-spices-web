@@ -141,24 +141,33 @@ export default function OrderSummary({
     };
   });
 
-  const finalSubtotal = appliedPromo ? derivedSubtotal : initialSubtotal;
+  const merchandiseSubtotal = initialSubtotal;
+  const cappedPromoDiscount = Math.max(
+    0,
+    Math.min(Number(promoDiscount) || 0, merchandiseSubtotal),
+  );
+  const subtotalAfterPromo = Math.max(
+    0,
+    merchandiseSubtotal - cappedPromoDiscount,
+  );
   const recipeDiscountAmount = appliedDiscount
     ? calculateRecipeLikeDiscountAmount(
-        finalSubtotal,
+        subtotalAfterPromo,
         appliedDiscount,
         rate || 1,
       )
     : 0;
-  const finalTotal = Math.max(
-    0,
-    finalSubtotal + Number(shipping || 0) - recipeDiscountAmount,
-  );
+  // Promo + recipe like discount both reduce the subtotal itself.
+  const finalSubtotal = Math.max(0, subtotalAfterPromo - recipeDiscountAmount);
+  const finalTotal = Math.max(0, finalSubtotal + Number(shipping || 0));
+  const hasSubtotalDiscount =
+    cappedPromoDiscount > 0 || recipeDiscountAmount > 0;
 
   const convertedThreshold = FREE_SHIPPING_THRESHOLD * (rate || 1);
 
   const amountForFreeShipping =
-    finalSubtotal < FREE_SHIPPING_THRESHOLD
-      ? convertedThreshold - finalSubtotal
+    merchandiseSubtotal < FREE_SHIPPING_THRESHOLD
+      ? convertedThreshold - merchandiseSubtotal
       : 0;
 
   const hasFreeShipping = shipping <= 0;
@@ -311,11 +320,41 @@ export default function OrderSummary({
       <div className="space-y-2 text-sm py-5 border-t border-gray-100">
         <div className="flex justify-between mt-3">
           <span>Subtotal</span>
-          <span>
-            {symbol}
-            {Number(finalSubtotal || 0).toFixed(2)}
+          <span className="flex items-center gap-2">
+            {hasSubtotalDiscount && (
+              <span className="text-gray-400 line-through">
+                {symbol}
+                {Number(merchandiseSubtotal || 0).toFixed(2)}
+              </span>
+            )}
+            <span>
+              {symbol}
+              {Number(finalSubtotal || 0).toFixed(2)}
+            </span>
           </span>
         </div>
+
+        {cappedPromoDiscount > 0 && appliedPromo && (
+          <div className="flex justify-between mt-2 text-green-600 font-medium">
+            <span>Promo ({appliedPromo})</span>
+            <span>
+              -{symbol}
+              {cappedPromoDiscount.toFixed(2)}
+            </span>
+          </div>
+        )}
+
+        {appliedDiscount && recipeDiscountAmount > 0 && (
+          <div className="flex justify-between mt-2 text-green-600 font-medium">
+            <span className="pr-4">
+              Recipe Like Discount ({appliedDiscount.label})
+            </span>
+            <span>
+              -{symbol}
+              {recipeDiscountAmount.toFixed(2)}
+            </span>
+          </div>
+        )}
 
         <div className="flex justify-between mt-3">
           <span>{shippingMethodName}</span>
@@ -333,18 +372,6 @@ export default function OrderSummary({
             <span>
               -{symbol}
               {(totalOrderSavings * rate).toFixed(2)}
-            </span>
-          </div>
-        )}
-
-        {appliedDiscount && (
-          <div className="flex justify-between mt-2 text-green-600 font-medium">
-            <span className="pr-4">
-              Recipe Like Discount ({appliedDiscount.label})
-            </span>
-            <span>
-              -{symbol}
-              {recipeDiscountAmount.toFixed(2)}
             </span>
           </div>
         )}

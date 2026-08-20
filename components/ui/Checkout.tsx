@@ -200,25 +200,23 @@ export default function Checkout() {
   const appliedRecipeDiscount = useRecipeDiscountStore(
     (state) => state.appliedDiscount,
   );
-  const recipeDiscountAmount = appliedRecipeDiscount
-    ? calculateRecipeLikeDiscountAmount(
-        convertedTotals.subtotal,
-        appliedRecipeDiscount,
-        rate || 1,
-      )
-    : 0;
-  const checkoutTotal = Math.max(
-    0,
-    convertedTotals.total - recipeDiscountAmount,
-  );
-
   const discountConverted = convertPrice(
     appliedPromo?.discountAmountEur || 0,
     rate || 1,
     selectedCurrency,
   );
-
   const finalTotals = applyDiscount(convertedTotals, discountConverted);
+  const recipeDiscountAmount = appliedRecipeDiscount
+    ? calculateRecipeLikeDiscountAmount(
+        finalTotals.subtotal,
+        appliedRecipeDiscount,
+        rate || 1,
+      )
+    : 0;
+  const totalDiscount = (finalTotals.discount || 0) + recipeDiscountAmount;
+  // Recipe like discount also reduces subtotal; shipping is added after.
+  const checkoutSubtotal = Math.max(0, finalTotals.subtotal - recipeDiscountAmount);
+  const checkoutTotal = checkoutSubtotal + finalTotals.shipping;
 
   useEffect(() => {
     const loadAddresses = async () => {
@@ -375,8 +373,8 @@ export default function Checkout() {
           },
           cartItems: cart,
           pricing: {
-            subtotal: convertedTotals.subtotal,
-            discount: recipeDiscountAmount,
+            subtotal: checkoutSubtotal,
+            discount: totalDiscount,
             tax_amount: convertedTotals.tax,
             shipping: convertedTotals.shipping,
             total: checkoutTotal,
