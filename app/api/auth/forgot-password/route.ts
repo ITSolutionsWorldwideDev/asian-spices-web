@@ -1,6 +1,7 @@
-// /api/auth/forgot-password/route.ts 
+// /api/auth/forgot-password/route.ts
 
-import { randomUUID } from "crypto";
+import { randomInt } from "crypto";
+import bcrypt from "bcryptjs";
 import { pool } from "@/core/db";
 import { sendPasswordResetEmail } from "@/core/email-templates";
 import { NextResponse } from "next/server";
@@ -11,79 +12,54 @@ export async function POST(req: Request) {
     const client = await pool.connect();
 
     try {
-      // Look up if user profile target exists
       const { rows } = await client.query(
         `SELECT id FROM users WHERE email = $1`,
-        [email]
+        [email],
       );
 
-      // Return a 200 OK success indicator even if the profile is missing 
-      // to safely prevent malicious email user enumeration attacks.
       if (!rows.length) {
         return NextResponse.json({ success: true });
       }
 
-      const token = randomUUID();
+      const otp = String(randomInt(100000, 1000000));
+      const otpHash = await bcrypt.hash(otp, 10);
 
-      // Write token allocation payload record to the active database cluster state
       await client.query(
-        `INSERT INTO password_reset_tokens (user_id, token, expires_at)
-         VALUES ($1, $2, now() + interval '1 hour')`,
-        [rows[0].id, token]
+        `DELETE FROM password_reset_tokens WHERE user_id = $1`,
+        [rows[0].id],
       );
 
-      // Dispatch your formatted support email payload directly over the connection pipeline.
-      // Failures are logged here but NOT surfaced to the client response below —
-      // the response must stay unconditional to avoid leaking whether an email
-      // exists/was delivered (user-enumeration protection).
-      try {
-        await sendPasswordResetEmail({ email, token });
-      } catch (emailError) {
+      await client.query(
+        `INSERT INTO password_reset_tokens (user_id, token, expires_at)
+         VALUES ($1, $2, now() + interval '15 minutes')`,
+        [rows[0].id, otpHash],
+      );
+
+      const result = await sendPasswordResetEmail({ email, otp });
+      if (!result.success) {
+        const message =
+          result.error instanceof Error
+            ? result.error.message
+            : String(result.error ?? "Failed to send password reset email");
         console.error(
           `[Forgot Password] Email dispatch failed for ${email}:`,
-          emailError
+          result.error,
+        );
+        return NextResponse.json(
+          { success: false, error: message },
+          { status: 500 },
         );
       }
 
       return NextResponse.json({ success: true });
     } finally {
-      // Clean up connection handles across all potential control pathways
       client.release();
     }
   } catch (error) {
     console.error("[Forgot Password Controller Crash due to]:", error);
-    return NextResponse.json({ error: "Internal System Error Unable to Send Email" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal System Error Unable to Send Email" },
+      { status: 500 },
+    );
   }
 }
-
-/* import { randomUUID } from "crypto";
-import { pool } from "@/core/db";
-
-export async function POST(req: Request) {
-  const { email } = await req.json();
-
-  const client = await pool.connect();
-
-  const { rows } = await client.query(
-    `SELECT id FROM users WHERE email = $1`,
-    [email],
-  );
-
-  if (!rows.length) {
-    return Response.json({ success: true }); // hide existence
-  }
-
-  const token = randomUUID();
-
-  await client.query(
-    `INSERT INTO password_reset_tokens (user_id, token, expires_at)
-     VALUES ($1,$2, now() + interval '1 hour')`,
-    [rows[0].id, token],
-  );
-
-  client.release();
-
-  console.log(`RESET LINK: /reset-password?token=${token}`);
-
-  return Response.json({ success: true });
-} */

@@ -19,7 +19,7 @@ interface PartnerOnboardingEmailOptions {
 
 interface PasswordResetEmailOptions {
   email: string;
-  token: string;
+  otp: string;
 }
 
 interface ContactFormEmailOptions {
@@ -430,41 +430,31 @@ export async function sendReturnStatusUpdateEmail(returnId: string) {
 }
 
 
-export async function sendPasswordResetEmail({ email, token }: PasswordResetEmailOptions) {
-  const envUrl = (process.env.NEXT_PUBLIC_SITE_URL || "").replace(/\/$/, "");
-  const baseUrl =
-    envUrl && !/localhost|127\.0\.0\.1/i.test(envUrl)
-      ? envUrl
-      : "https://www.asianspices.online";
-  const resetLink = `${baseUrl}/reset-password?token=${token}`;
-
+export async function sendPasswordResetEmail({ email, otp }: PasswordResetEmailOptions) {
   const emailHtml = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
       <div style="text-align: center; margin-bottom: 20px;">
         <span style="background-color: #ea580c15; color: #ea580c; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 14px; display: inline-block; border-radius: 9999px; border: 1px solid #ea580c30;">
-          Password Reset
+          Account Verification
         </span>
       </div>
 
       <h2 style="color: #111827; text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
-        Reset Your Password
+        Your Verification Code
       </h2>
 
       <p>Hello,</p>
-      <p>We received a request to reset the password for your <strong>Asian Spices</strong> account. Click the button below to choose a new password:</p>
+      <p>We received a request to update access for your <strong>Asian Spices</strong> account. Use this verification code on the reset password page:</p>
 
-      <!--
       <div style="text-align: center; margin: 30px 0;">
-        <a href="${resetLink}" style="background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: 600; border-radius: 8px; display: inline-block;">
-          Reset Password
-        </a>
+        <span style="display: inline-block; background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px 28px; font-size: 32px; font-weight: 800; letter-spacing: 0.35em; color: #ea580c;">
+          ${otp}
+        </span>
       </div>
-      -->
 
       <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 13px; color: #4b5563;">
-        <p style="margin: 0 0 8px 0;">This link expires in 1 hour.</p>
-        <!-- <p style="margin: 0;">If the button above doesn't work, copy and paste this link into your browser:</p>
-        <p style="margin: 6px 0 0 0; word-break: break-all; color: #ea580c;">${resetLink}</p> -->
+        <p style="margin: 0 0 8px 0;">This code expires in 15 minutes.</p>
+        <p style="margin: 0;">Go to the Asian Spices website, open <strong>Reset Password</strong>, and enter your email with this code.</p>
       </div>
 
       <p style="font-size: 14px; color: #6b7280; margin-top: 25px;">
@@ -479,11 +469,15 @@ export async function sendPasswordResetEmail({ email, token }: PasswordResetEmai
     </div>
   `;
 
-  const emailText = `Reset your Asian Spices password
+  const emailText = `Your Asian Spices verification code
 
-We received a request to reset the password for your Asian Spices account.
+We received a request to update access for your Asian Spices account.
 
-Reset link is temporarily disabled for deliverability testing.
+Your verification code: ${otp}
+
+This code expires in 15 minutes.
+
+Go to the Asian Spices website, open Reset Password, and enter your email with this code.
 
 If you didn't request this, you can ignore this email — your password won't be changed.
 
@@ -493,7 +487,7 @@ Need help? Contact us at support@asianspices.online
   try {
     await sendEmail({
       to: email,
-      subject: "Reset your Asian Spices password",
+      subject: "Your Asian Spices verification code",
       html: emailHtml,
       text: emailText,
       fromAccount: "support",

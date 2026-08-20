@@ -4,8 +4,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ForgotPasswordPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{
@@ -26,19 +28,19 @@ export default function ForgotPasswordPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
+      const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
-        setStatus({
-          type: "success",
-          message:
-            "If an account with that email address exists, a password reset link has been sent to the registered email address.",
-        });
-      } else {
-        setStatus({
-          type: "error",
-          message: "Something went wrong. Try again.",
-        });
+        router.push(
+          `/reset-password?email=${encodeURIComponent(email.trim())}`,
+        );
+        return;
       }
+
+      setStatus({
+        type: "error",
+        message: data.error || "Something went wrong. Try again.",
+      });
     } catch (err) {
       setStatus({ type: "error", message: "Failed to connect to the server." });
     } finally {
@@ -63,7 +65,7 @@ export default function ForgotPasswordPage() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-slate-900">Reset Password</h1>
           <p className="mt-2 text-slate-500">
-            Enter your email address to receive a secure configuration link.
+            Enter your email to receive a 6-digit verification code.
           </p>
         </div>
 
@@ -95,11 +97,19 @@ export default function ForgotPasswordPage() {
             disabled={loading}
             className="w-full py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:shadow-xl transition-all duration-300 disabled:opacity-60"
           >
-            {loading ? "Sending link..." : "Send Request Link"}
+            {loading ? "Sending code..." : "Send Verification Code"}
           </button>
         </form>
 
         <p className="text-center text-sm text-slate-500 mt-6">
+          Have a code?{" "}
+          <Link
+            href={`/reset-password?email=${encodeURIComponent(email)}`}
+            className="font-semibold text-orange-600 hover:text-orange-700"
+          >
+            Enter it here
+          </Link>
+          {" · "}
           Remembered your password?{" "}
           <Link
             href="/login"
