@@ -453,16 +453,18 @@ export async function sendPasswordResetEmail({ email, token }: PasswordResetEmai
       <p>Hello,</p>
       <p>We received a request to reset the password for your <strong>Asian Spices</strong> account. Click the button below to choose a new password:</p>
 
+      <!--
       <div style="text-align: center; margin: 30px 0;">
         <a href="${resetLink}" style="background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: 600; border-radius: 8px; display: inline-block;">
           Reset Password
         </a>
       </div>
+      -->
 
       <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 13px; color: #4b5563;">
         <p style="margin: 0 0 8px 0;">This link expires in 1 hour.</p>
-        <p style="margin: 0;">If the button above doesn't work, copy and paste this link into your browser:</p>
-        <p style="margin: 6px 0 0 0; word-break: break-all; color: #ea580c;">${resetLink}</p>
+        <!-- <p style="margin: 0;">If the button above doesn't work, copy and paste this link into your browser:</p>
+        <p style="margin: 6px 0 0 0; word-break: break-all; color: #ea580c;">${resetLink}</p> -->
       </div>
 
       <p style="font-size: 14px; color: #6b7280; margin-top: 25px;">
@@ -481,27 +483,27 @@ export async function sendPasswordResetEmail({ email, token }: PasswordResetEmai
 
 We received a request to reset the password for your Asian Spices account.
 
-Reset your password using this link (expires in 1 hour):
-${resetLink}
+Reset link is temporarily disabled for deliverability testing.
 
 If you didn't request this, you can ignore this email — your password won't be changed.
 
 Need help? Contact us at support@asianspices.online
 © 2026 Asian Spices Online. All rights reserved.`;
 
-  // Intentionally NOT caught here — the caller (forgot-password route) needs
-  // to know if this actually failed, since it decides what to tell the client.
-  await sendEmail({
-    to: email,
-    subject: "Reset your Asian Spices password",
-    html: emailHtml,
-    text: emailText,
-    // order@ already delivers customer mail on live; support@ reset
-    // messages are often 550'd as spam from Vercel.
-    fromAccount: "order",
-  });
+  try {
+    await sendEmail({
+      to: email,
+      subject: "Reset your Asian Spices password",
+      html: emailHtml,
+      text: emailText,
+      fromAccount: "support",
+    });
 
-  return { success: true };
+    return { success: true };
+  } catch (error) {
+    console.error(`[Password Reset Email Fail] Target recipient: ${email}`, error);
+    return { success: false, error };
+  }
 }
 
 export async function sendContactFormEmail({
