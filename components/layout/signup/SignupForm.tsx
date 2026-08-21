@@ -8,6 +8,7 @@ import Link from "next/link";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
 import { useLoaderStore } from "@/store/useLoaderStore";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 
 /* ---------------- ZOD SCHEMA ---------------- */
 const signupSchema = z
@@ -210,6 +211,19 @@ export default function SignupForm() {
                 </p>
               </div>
             </button>
+
+            <div className="my-4 flex items-center">
+              <div className="h-px flex-1 bg-slate-200" />
+              <span className="px-3 text-xs uppercase tracking-wider text-slate-400">
+                Or
+              </span>
+              <div className="h-px flex-1 bg-slate-200" />
+            </div>
+
+            <GoogleSignInButton
+              label="Continue with Google"
+              callbackUrl="/"
+            />
           </div>
         ) : (
           <>
@@ -436,11 +450,22 @@ export default function SignupForm() {
                 duration-300
                 disabled:opacity-60
                 "
-              // className="w-full rounded-lg bg-slate-900 py-3 font-medium text-white
-              //            hover:bg-slate-800 transition"
             >
               {loading ? "Creating..." : "Sign Up"}
             </button>
+
+            <div className="my-4 flex items-center">
+              <div className="h-px flex-1 bg-slate-200" />
+              <span className="px-3 text-xs uppercase tracking-wider text-slate-400">
+                Or
+              </span>
+              <div className="h-px flex-1 bg-slate-200" />
+            </div>
+
+            <GoogleSignInButton
+              label="Sign up with Google"
+              callbackUrl="/"
+            />
           </form>
         )}
 

@@ -1,5 +1,6 @@
 // core/auth/core/providers.ts
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { authorizeUser } from "./authorize";
 import { AUTH_ROLES } from "./constants";
 
@@ -53,5 +54,13 @@ export function credentialsProvider(app: AppType) {
 
       return user as any;
     },
+  });
+}
+
+export function googleProvider() {
+  return GoogleProvider({
+    clientId: process.env.GOOGLE_CLIENT_ID || "",
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    allowDangerousEmailAccountLinking: true,
   });
 }

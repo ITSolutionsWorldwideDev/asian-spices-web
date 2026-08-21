@@ -27,6 +27,10 @@ export async function authorizeUser(email: string, password: string): Promise<Au
     throw new Error("Invalid credentials");
   }
 
+  if (!user.password_hash) {
+    throw new Error("This account uses Google sign-in. Continue with Google.");
+  }
+
   const isValid = await bcrypt.compare(password, user.password_hash);
   if (!isValid) {
     throw new Error("Invalid credentials");

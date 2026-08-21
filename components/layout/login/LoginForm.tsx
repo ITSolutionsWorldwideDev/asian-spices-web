@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 
 import { z } from "zod";
 import { useLoaderStore } from "@/store/useLoaderStore";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 
 /* ---------------- SCHEMA ---------------- */
 const loginSchema = z.object({
@@ -151,12 +152,16 @@ export default function LoginForm() {
             Sign in to continue shopping your favorite Asian spices.
           </p>
         </div>
-        {/* <h1 className="text-2xl font-semibold text-gray-900 mb-8">
-          Welcome to Asian Spices 👋
-        </h1>
-        <p className="text-sm text-gray-400 mb-10">
-          Great to see you. Sign in to access your account and get started.
-        </p> */}
+
+        <GoogleSignInButton label="Continue with Google" callbackUrl="/" />
+
+        <div className="my-6 flex items-center sm:my-8 [@media(max-height:700px)]:my-4">
+          <div className="flex-1 h-px bg-slate-200" />
+          <span className="px-4 text-xs uppercase tracking-wider text-slate-400">
+            Or continue with email
+          </span>
+          <div className="flex-1 h-px bg-slate-200" />
+        </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4 text-left">
@@ -272,24 +277,7 @@ export default function LoginForm() {
           </button>
         </form>
 
-        {/* Divider */}
-        <div className="my-6 flex items-center sm:my-8 [@media(max-height:700px)]:my-4">
-          <div className="flex-1 h-px bg-slate-200" />
-
-          <span className="px-4 text-xs uppercase tracking-wider text-slate-400">
-            Account Access
-          </span>
-
-          <div className="flex-1 h-px bg-slate-200" />
-        </div>
-        {/* <div className="flex items-center my-6">
-          <div className="flex-1 h-px bg-gray-200" />
-          <div className="flex-1 h-px bg-gray-200" />
-        </div> */}
-
-        {/* Login link */}
-
-        <p className="text-center text-sm text-slate-500">
+        <p className="mt-6 text-center text-sm text-slate-500">
           Don't have an account?{" "}
           <Link
             href="/signup"
