@@ -2,10 +2,68 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ChevronDown, Menu, X } from "lucide-react";
+import Image from "next/image";
+import {
+  ChevronDown,
+  ChevronRight,
+  Menu,
+  X,
+  Home,
+  LayoutGrid,
+  Heart,
+  ShoppingCart,
+  Headphones,
+  BookOpen,
+  CircleUserRound,
+} from "lucide-react";
 import { createPortal } from "react-dom";
 import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/useCartStore";
+
+/** Existing Healthy Living sections from the nav, with card copy + images for the mobile drawer */
+const HEALTHY_LIVING_CARDS = [
+  {
+    heading: "Health Benefits of Herbs",
+    description: "Natural wellness guide.",
+    image: "/assets/healtyliving/supports-immunity.png",
+    items: [
+      { name: "Supports Immunity", href: "healthyliving/supports-immunity" },
+      { name: "Aids Digestion", href: "healthyliving/aids-digestion" },
+      { name: "Promotes Relaxation", href: "healthyliving/promotes-relaxation" },
+      { name: "Enhances Energy Levels", href: "healthyliving/enhances-energy-levels" },
+    ],
+  },
+  {
+    heading: "Herbal Food Supplements",
+    description: "Capsules, powders & teas.",
+    image: "/assets/healtyliving/capsules.png",
+    items: [
+      { name: "Capsules", href: "healthyliving/capsules" },
+      { name: "Powders", href: "healthyliving/powders" },
+      { name: "Teas", href: "healthyliving/teas" },
+    ],
+  },
+  {
+    heading: "Herbal Skin Products",
+    description: "Face oils, creams & cleansers.",
+    image: "/assets/healtyliving/face-oils.png",
+    items: [
+      { name: "Face oils", href: "healthyliving/face-oils" },
+      { name: "Creams", href: "healthyliving/creams" },
+      { name: "Cleansers", href: "healthyliving/cleansers" },
+    ],
+  },
+  {
+    heading: "Herbal Hair Products",
+    description: "Hair oils, shampoos & masks.",
+    image: "/assets/healtyliving/hair-oils.png",
+    items: [
+      { name: "Hair oils", href: "healthyliving/hair-oils" },
+      { name: "Shampoos", href: "healthyliving/shampoos" },
+      { name: "Hair masks", href: "healthyliving/hair-masks" },
+    ],
+  },
+] as const;
 
 interface NavCategoryItem {
   name: string;
@@ -55,6 +113,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
   const { data: session } = useSession();
   const { cart } = useCartStore();
   const itemInCart = cart.length;
+  const clearCart = useCartStore((s) => s.clearCart);
 
   const handleClick = (name: string) => {
     if (activeLink === name && isMenuOpen) {
@@ -247,166 +306,273 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
       document.body,
     );
 
-  // ── Mobile-only: renders the hamburger + slide-out panel ──
+  // ── Mobile-only: white drawer matching design (existing options only) ──
   if (mobileOnly) {
+    const closeMobileMenu = () => {
+      setMobileMenu(false);
+      setActiveLink("");
+      setActiveSection(null);
+    };
+
+    const openMenu = () => {
+      setMobileMenu(true);
+      // Match screenshot: Healthy Living open by default
+      setActiveLink("Healthy Living");
+    };
+
+    const shopExpanded = activeLink === "Shop by Category";
+    const healthyExpanded = activeLink === "Healthy Living";
+
+    const linkRow =
+      "flex w-full items-center gap-3.5 border-b border-gray-100 px-5 py-[1.125rem] text-left transition active:bg-gray-50";
+
     return (
       <>
         <button
           type="button"
-          onClick={() => setMobileMenu(!mobileMenu)}
-          className="rounded-lg p-2 text-gray-800 transition focus:outline-none focus:ring-2 focus:ring-amber-400"
-          aria-label={mobileMenu ? "Close menu" : "Open menu"}
+          onClick={openMenu}
+          className="relative z-50 rounded-lg p-2 text-gray-800 transition focus:outline-none focus:ring-2 focus:ring-amber-400"
+          aria-label="Open menu"
         >
-          {mobileMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          <Menu className="h-6 w-6" />
         </button>
 
-        {mobileMenu && (
-          <>
-            <div
-              className="fixed inset-0 z-40 bg-black/40"
-              onClick={() => setMobileMenu(false)}
-            />
-            <div className="fixed inset-x-0 top-[72px] z-50 max-h-[80vh] overflow-y-auto rounded-b-lg bg-amber-900/95 shadow-xl xl:hidden">
-              {navLinks.map((link) => (
-                <div key={link.name} className="border-b border-amber-800 last:border-b-0">
-                  {!link.children ? (
-                    <Link
-                      href={
-                        link.name.toLowerCase() === "home"
-                          ? "/"
-                          : `/${(link.hreflink || link.name)
-                              .toLowerCase()
-                              .replace(/[^a-z0-9\s-]/g, "")
-                              .trim()
-                              .replace(/\s+/g, "")}`
-                      }
-                      onClick={() => { handleClick(link.name); setMobileMenu(false); }}
-                      className={`block px-4 py-3 text-lg transition-colors duration-200 ${
-                        activeLink === link.name ? "bg-amber-800/50 text-amber-300" : "text-white/90 hover:bg-amber-800"
-                      }`}
-                    >
-                      {link.name}
-                    </Link>
-                  ) : (
-                    <>
-                      <button
-                        type="button"
-                        onClick={() => handleClick(link.name)}
-                        className={`flex w-full items-center justify-between px-4 py-3 text-lg transition-colors duration-200 ${
-                          activeLink === link.name ? "bg-amber-800/50 text-amber-300" : "text-white/90 hover:bg-amber-800"
-                        }`}
-                      >
-                        {link.name}
-                        <ChevronDown className="h-4 w-4" />
-                      </button>
+        {mobileMenu &&
+          createPortal(
+            <>
+              <div
+                className="fixed inset-0 z-[1000000] bg-black/35 xl:hidden"
+                onClick={closeMobileMenu}
+                aria-hidden
+              />
 
-                      {activeLink === link.name && (
-                        <div className="bg-amber-800/60">
-                          {link.children.map((child, ind) => {
-                            if (link.name === "Shop by Category") {
-                              const categoryHref =
-                                child.category?.find((item) => item.name === "View all")?.href ||
-                                SHOP_CATEGORIES.find((cat) => cat.heading === child.heading)?.slug ||
-                                child.href;
-                              return (
-                                <Link
-                                  key={ind}
-                                  href={`/${categoryHref}`}
-                                  onClick={() => setMobileMenu(false)}
-                                  className="flex items-center justify-between px-6 py-3 text-sm font-bold uppercase text-white/90 transition-colors hover:bg-amber-700"
-                                >
-                                  {child.heading}
-                                </Link>
-                              );
-                            }
-
-                            if (child.category) {
-                              return (
-                                <div key={ind}>
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      setActiveSection(activeSection === child.heading ? null : (child.heading ?? null))
-                                    }
-                                    className="flex w-full items-center justify-between px-6 py-3 text-sm font-bold uppercase text-gray-300"
-                                  >
-                                    {child.heading}
-                                    <ChevronDown
-                                      className={`transition-transform duration-300 ${
-                                        activeSection === child.heading ? "rotate-180" : ""
-                                      }`}
-                                    />
-                                  </button>
-                                  {activeSection === child.heading &&
-                                    child.category.map((item) => (
-                                      <Link
-                                        key={item.name}
-                                        href={`/${item.href}`}
-                                        onClick={() => setMobileMenu(false)}
-                                        className="ml-4 flex items-center gap-4 px-6 py-3 text-white/90 transition-colors hover:bg-amber-700"
-                                      >
-                                        {item.name}
-                                      </Link>
-                                    ))}
-                                </div>
-                              );
-                            }
-
-                            return (
-                              <Link
-                                key={ind}
-                                href={`/${child.href}`}
-                                onClick={() => setMobileMenu(false)}
-                                className="flex items-center gap-4 px-6 py-3 text-white/90 transition-colors hover:bg-amber-700"
-                              >
-                                {child.name}
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </>
-                  )}
+              <nav
+                className="fixed inset-x-0 top-0 z-[1000001] max-h-[94vh] overflow-y-auto rounded-b-2xl bg-white shadow-xl xl:hidden"
+                aria-label="Mobile menu"
+              >
+                {/* Header */}
+                <div className="sticky top-0 z-10 flex items-center justify-between bg-white px-5 py-4">
+                  <span className="text-[1.125rem] font-bold text-[#1c2b22]">
+                    Asian Spices
+                  </span>
+                  <button
+                    type="button"
+                    onClick={closeMobileMenu}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-800"
+                    aria-label="Close menu"
+                  >
+                    <X className="h-[18px] w-[18px]" strokeWidth={2} />
+                  </button>
                 </div>
-              ))}
 
-              <div className="flex flex-col gap-2 p-4">
-                {session ? (
-                  <div className="space-y-2 rounded-xl bg-white p-4">
-                    <p className="text-sm font-semibold text-gray-700">{session.user?.email}</p>
-                    <Link href="/account" className="block text-sm font-medium text-gray-800">My Account</Link>
-                    <Link href="/account/orders" className="block text-sm font-medium text-gray-800">Orders</Link>
-                    <button
-                      type="button"
-                      onClick={() => signOut({ callbackUrl: "/" })}
-                      className="text-left text-sm font-semibold text-red-500"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                ) : (
-                  <Link href="/login" className="block rounded-full bg-white px-6 py-3 text-center font-bold">Login</Link>
-                )}
-                <Link href="/contact-us" className="block rounded-full bg-white px-6 py-3 text-center font-bold">Contact Us</Link>
-
-                {/* Cart + Wishlist shortcuts in mobile menu */}
-                <div className="flex items-center justify-center gap-4 pt-2">
-                  <Link href="/wishlist" className="flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-bold">
-                    Wishlist
+                <div className="border-t border-gray-100">
+                  {/* Home */}
+                  <Link href="/" onClick={closeMobileMenu} className={linkRow}>
+                    <Home className="h-[22px] w-[22px] shrink-0 text-gray-800" strokeWidth={1.6} />
+                    <span className="flex-1 text-[15px] font-normal text-gray-900">Home</span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
                   </Link>
-                  <Link href="/cart" className="relative flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-bold">
-                    Cart
+
+                  {/* Shop By Categories — existing shop categories */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveLink(shopExpanded ? "Healthy Living" : "Shop by Category")
+                    }
+                    className={linkRow}
+                  >
+                    <LayoutGrid className="h-[22px] w-[22px] shrink-0 text-gray-800" strokeWidth={1.6} />
+                    <span className="flex-1 text-[15px] font-normal text-gray-900">
+                      Shop By Categories
+                    </span>
+                    {shopExpanded ? (
+                      <ChevronDown className="h-4 w-4 shrink-0 rotate-180 text-gray-400" strokeWidth={2} />
+                    ) : (
+                      <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
+                    )}
+                  </button>
+                  {shopExpanded && (
+                    <div className="border-b border-gray-100 bg-white">
+                      {shopCategoriesLoading ? (
+                        <p className="px-5 py-3 text-sm text-gray-400">Loading...</p>
+                      ) : (
+                        shopCategoryChildren.map((child, ind) => {
+                          const categoryHref =
+                            child.category?.find((item) => item.name === "View all")?.href ||
+                            SHOP_CATEGORIES.find((cat) => cat.heading === child.heading)?.slug ||
+                            child.href ||
+                            "products";
+                          return (
+                            <Link
+                              key={ind}
+                              href={`/${categoryHref}`}
+                              onClick={closeMobileMenu}
+                              className="flex items-center gap-3 border-b border-gray-50 px-5 py-3.5 last:border-b-0"
+                            >
+                              <span className="flex-1 text-[14px] font-medium text-gray-800">
+                                {child.heading}
+                              </span>
+                              <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" />
+                            </Link>
+                          );
+                        })
+                      )}
+                    </div>
+                  )}
+
+                  {/* HEALTHY LIVING — existing sections as cards */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveLink(healthyExpanded ? "" : "Healthy Living")
+                    }
+                    className="flex w-full items-center gap-3.5 border-b border-gray-100 px-5 py-[1.125rem] text-left transition active:bg-gray-50"
+                  >
+                    <span className="flex-1 text-[12px] font-semibold uppercase tracking-[0.06em] text-gray-400">
+                      Healthy Living
+                    </span>
+                    <ChevronDown
+                      className={`h-4 w-4 shrink-0 text-gray-400 transition-transform ${
+                        healthyExpanded ? "rotate-180" : ""
+                      }`}
+                      strokeWidth={2}
+                    />
+                  </button>
+                  {healthyExpanded && (
+                    <div className="border-b border-gray-100">
+                      {HEALTHY_LIVING_CARDS.map((card) => {
+                        const sectionOpen = activeSection === card.heading;
+                        return (
+                          <div key={card.heading} className="border-b border-gray-100 last:border-b-0">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setActiveSection(sectionOpen ? null : card.heading)
+                              }
+                              className="flex w-full items-center gap-3.5 px-5 py-3.5 text-left active:bg-gray-50"
+                            >
+                              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-gray-100">
+                                <Image
+                                  src={card.image}
+                                  alt={card.heading}
+                                  fill
+                                  sizes="56px"
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="text-[15px] font-semibold leading-snug text-gray-900">
+                                  {card.heading}
+                                </p>
+                                <p className="mt-0.5 text-[13px] leading-snug text-gray-400">
+                                  {card.description}
+                                </p>
+                              </div>
+                              <ChevronDown
+                                className={`h-4 w-4 shrink-0 text-gray-300 transition-transform ${
+                                  sectionOpen ? "rotate-180" : ""
+                                }`}
+                                strokeWidth={2}
+                              />
+                            </button>
+
+                            {sectionOpen && (
+                              <div className="bg-gray-50 pb-1">
+                                {card.items.map((item) => (
+                                  <Link
+                                    key={item.href}
+                                    href={`/${item.href}`}
+                                    onClick={closeMobileMenu}
+                                    className="flex items-center gap-3 px-5 py-3 pl-[5.25rem] active:bg-gray-100"
+                                  >
+                                    <span className="flex-1 text-[14px] text-gray-700">
+                                      {item.name}
+                                    </span>
+                                    <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-300" />
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Authentic Asian Recipes */}
+                  <Link href="/recipes" onClick={closeMobileMenu} className={linkRow}>
+                    <BookOpen className="h-[22px] w-[22px] shrink-0 text-gray-800" strokeWidth={1.6} />
+                    <span className="flex-1 text-[15px] font-normal text-gray-900">
+                      Authentic Asian Recipes
+                    </span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
+                  </Link>
+
+                  {/* Wishlist */}
+                  <Link href="/wishlist" onClick={closeMobileMenu} className={linkRow}>
+                    <Heart className="h-[22px] w-[22px] shrink-0 text-gray-800" strokeWidth={1.6} />
+                    <span className="flex-1 text-[15px] font-normal text-gray-900">Wishlist</span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
+                  </Link>
+
+                  {/* Cart */}
+                  <Link href="/cart" onClick={closeMobileMenu} className={linkRow}>
+                    <ShoppingCart className="h-[22px] w-[22px] shrink-0 text-gray-800" strokeWidth={1.6} />
+                    <span className="flex-1 text-[15px] font-normal text-gray-900">Cart</span>
                     {itemInCart > 0 && (
-                      <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                        {itemInCart}
+                      <span className="mr-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                        {itemInCart > 99 ? "99+" : itemInCart}
                       </span>
                     )}
+                    <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
                   </Link>
+
+                  {/* Contact us */}
+                  <Link href="/contact-us" onClick={closeMobileMenu} className={linkRow}>
+                    <Headphones className="h-[22px] w-[22px] shrink-0 text-gray-800" strokeWidth={1.6} />
+                    <span className="flex-1 text-[15px] font-normal text-gray-900">Contact us</span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
+                  </Link>
+
+                  {/* Login / Account */}
+                  {session ? (
+                    <>
+                      <Link href="/account" onClick={closeMobileMenu} className={linkRow}>
+                        <CircleUserRound className="h-[22px] w-[22px] shrink-0 text-gray-800" strokeWidth={1.6} />
+                        <span className="flex-1 text-[15px] font-normal text-gray-900">My Account</span>
+                        <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
+                      </Link>
+                      <Link href="/account/orders" onClick={closeMobileMenu} className={linkRow}>
+                        <CircleUserRound className="h-[22px] w-[22px] shrink-0 text-gray-800" strokeWidth={1.6} />
+                        <span className="flex-1 text-[15px] font-normal text-gray-900">Orders</span>
+                        <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          closeMobileMenu();
+                          clearCart(false);
+                          signOut({ callbackUrl: "/" });
+                        }}
+                        className={linkRow}
+                      >
+                        <CircleUserRound className="h-[22px] w-[22px] shrink-0 text-red-500" strokeWidth={1.6} />
+                        <span className="flex-1 text-[15px] font-normal text-red-500">Logout</span>
+                        <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
+                      </button>
+                    </>
+                  ) : (
+                    <Link href="/login" onClick={closeMobileMenu} className={linkRow}>
+                      <CircleUserRound className="h-[22px] w-[22px] shrink-0 text-gray-800" strokeWidth={1.6} />
+                      <span className="flex-1 text-[15px] font-normal text-gray-900">Login</span>
+                      <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
+                    </Link>
+                  )}
                 </div>
-              </div>
-            </div>
-          </>
-        )}
+              </nav>
+            </>,
+            document.body,
+          )}
       </>
     );
   }

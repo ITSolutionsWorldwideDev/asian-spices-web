@@ -176,8 +176,15 @@ export default function Confirmation({ formData }: any) {
               </p>
 
               <div className="flex flex-wrap gap-4 text-orange-600">
-                <span>✉ partners@asianspices.com</span>
-                <span>📄 Registration FAQ</span>
+                <a
+                  href="mailto:partners@asianspices.com"
+                  className="hover:underline"
+                >
+                  ✉ partners@asianspices.com
+                </a>
+                <Link href="/contact-us" className="hover:underline">
+                  📄 Registration FAQ
+                </Link>
               </div>
             </div>
           </div>
