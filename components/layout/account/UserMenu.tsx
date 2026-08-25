@@ -5,9 +5,11 @@
 import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useLoaderStore } from "@/store/useLoaderStore";
+import { useCartStore } from "@/store/useCartStore";
 
 export default function UserMenu({ email }: { email?: string }) {
   const [open, setOpen] = useState(false);
+  const clearCart = useCartStore((s) => s.clearCart);
 
   const { show, hide } = useLoaderStore();
   const [displayname, setdisplayname] = useState<any[]>([]);
@@ -44,7 +46,10 @@ export default function UserMenu({ email }: { email?: string }) {
         {open && (
           <div className="absolute right-0 mt-2 w-48 bg-white border rounded-xl shadow-lg p-2 z-50">
             <button
-              onClick={() => signOut()}
+              onClick={() => {
+                clearCart(false);
+                signOut();
+              }}
               className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-lg"
             >
               Logout

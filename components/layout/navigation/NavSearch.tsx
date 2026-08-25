@@ -1,13 +1,25 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Search, UtensilsCrossed, ShoppingBag } from "lucide-react";
+import { Search, UtensilsCrossed, ShoppingBag, Mic } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type Suggestion = {
   label: string;
   href: string;
   type: "product" | "recipe";
+};
+
+type BrowserSpeechRecognition = {
+  lang: string;
+  interimResults: boolean;
+  maxAlternatives: number;
+  start: () => void;
+  stop: () => void;
+  onstart: (() => void) | null;
+  onend: (() => void) | null;
+  onerror: (() => void) | null;
+  onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
 };
 
 async function fetchSuggestions(query: string): Promise<Suggestion[]> {
@@ -48,13 +60,19 @@ async function fetchSuggestions(query: string): Promise<Suggestion[]> {
   return results;
 }
 
-export default function NavSearch() {
+type NavSearchProps = {
+  variant?: "desktop" | "mobile";
+};
+
+export default function NavSearch({ variant = "desktop" }: NavSearchProps) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
+  const [listening, setListening] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const recognitionRef = useRef<BrowserSpeechRecognition | null>(null);
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -81,6 +99,12 @@ export default function NavSearch() {
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      recognitionRef.current?.stop();
+    };
+  }, []);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const trimmed = query.trim();
@@ -96,30 +120,103 @@ export default function NavSearch() {
     router.push(href);
   };
 
+  const handleVoiceSearch = () => {
+    const win = window as Window & {
+      SpeechRecognition?: new () => BrowserSpeechRecognition;
+      webkitSpeechRecognition?: new () => BrowserSpeechRecognition;
+    };
+    const SpeechRecognitionCtor =
+      win.SpeechRecognition || win.webkitSpeechRecognition;
+
+    if (!SpeechRecognitionCtor) {
+      return;
+    }
+
+    if (listening && recognitionRef.current) {
+      recognitionRef.current.stop();
+      setListening(false);
+      return;
+    }
+
+    const recognition = new SpeechRecognitionCtor();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognitionRef.current = recognition;
+
+    recognition.onstart = () => setListening(true);
+    recognition.onend = () => {
+      setListening(false);
+      recognitionRef.current = null;
+    };
+    recognition.onerror = () => {
+      setListening(false);
+      recognitionRef.current = null;
+    };
+    recognition.onresult = (event) => {
+      const transcript = event.results[0]?.[0]?.transcript?.trim();
+      if (!transcript) return;
+      setQuery(transcript);
+      setOpen(false);
+      router.push(`/search?q=${encodeURIComponent(transcript)}`);
+    };
+
+    recognition.start();
+  };
+
+  const isMobile = variant === "mobile";
+
   return (
-    <div ref={containerRef} className="relative flex w-40 shrink-0 items-center xl:w-48">
-      <form onSubmit={handleSubmit} className="w-full">
+    <div
+      ref={containerRef}
+      className={`relative flex items-center ${isMobile ? "w-full" : "w-40 shrink-0 xl:w-48"}`}
+    >
+      <form onSubmit={handleSubmit} className="relative w-full">
+        {isMobile && (
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+        )}
         <input
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => suggestions.length > 0 && setOpen(true)}
-          placeholder="Search Here....."
-          className="w-full rounded-full border border-gray-200 bg-white py-2 pl-4 pr-12 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-orange-300"
+          placeholder={isMobile ? "Search spices, herbs..." : "Search Here....."}
+          className={
+            isMobile
+              ? "w-full rounded-full border-0 bg-white py-3 pl-11 pr-12 text-sm text-gray-700 shadow-sm outline-none placeholder:text-gray-400"
+              : "w-full rounded-full border border-gray-200 bg-white py-2 pl-4 pr-12 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-orange-300"
+          }
           aria-label="Search products and recipes"
           autoComplete="off"
         />
-        <button
-          type="submit"
-          aria-label="Search"
-          className="absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-orange-500 text-white transition hover:bg-orange-600"
-        >
-          <Search className="h-4 w-4" />
-        </button>
+        {isMobile ? (
+          <button
+            type="button"
+            aria-label={listening ? "Stop voice search" : "Search by voice"}
+            onClick={handleVoiceSearch}
+            className={`absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-gray-600 transition ${
+              listening ? "bg-orange-100 text-orange-600" : "hover:bg-gray-100"
+            }`}
+          >
+            <Mic className="h-4 w-4" />
+          </button>
+        ) : (
+          <button
+            type="submit"
+            aria-label="Search"
+            className="absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-orange-500 text-white transition hover:bg-orange-600"
+          >
+            <Search className="h-4 w-4" />
+          </button>
+        )}
       </form>
 
       {open && suggestions.length > 0 && (
-        <ul className="absolute left-0 top-full z-[300] mt-1 w-72 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
+        <ul
+          className={`absolute left-0 top-full z-[300] mt-1 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl ${
+            isMobile ? "w-full" : "w-72"
+          }`}
+        >
           {suggestions.map((s, i) => (
             <li key={i}>
               <button

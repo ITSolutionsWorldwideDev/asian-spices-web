@@ -3,6 +3,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import { ArrowLeft, ArrowRight, Building2, MapPin } from "lucide-react";
 import { useLoaderStore } from "@/store/useLoaderStore";
@@ -403,8 +404,15 @@ export default function BusinessVerification({
               </p>
 
               <div className="flex flex-wrap gap-4 text-orange-600">
-                <span>✉ partners@asianspices.com</span>
-                <span>📄 Registration FAQ</span>
+                <a
+                  href="mailto:partners@asianspices.com"
+                  className="hover:underline"
+                >
+                  ✉ partners@asianspices.com
+                </a>
+                <Link href="/contact-us" className="hover:underline">
+                  📄 Registration FAQ
+                </Link>
               </div>
             </div>
           </div>

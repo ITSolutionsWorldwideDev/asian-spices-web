@@ -4,10 +4,17 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
 import { CircleUserRound } from "lucide-react";
+import { useCartStore } from "@/store/useCartStore";
 
 const ButtonsNavigation = () => {
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
+  const clearCart = useCartStore((s) => s.clearCart);
+
+  const handleLogout = () => {
+    clearCart(false); // clear local only — keep DB cart for next login
+    signOut({ callbackUrl: "/" });
+  };
 
   if (status === "loading") {
     return <div className="h-9 w-20 shrink-0" aria-hidden />;
@@ -52,7 +59,7 @@ const ButtonsNavigation = () => {
               </Link>
               <button
                 type="button"
-                onClick={() => signOut({ callbackUrl: "/" })}
+                onClick={handleLogout}
                 className="w-full px-4 py-2.5 text-left text-sm text-red-500 hover:bg-gray-50"
               >
                 Logout

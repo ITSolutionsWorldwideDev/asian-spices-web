@@ -3,6 +3,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import ReadAloudBtn from "./ReadAloudBtn";
 import { useFormValidator } from "@/hooks/FormValidator";
 import { z } from "zod";
@@ -368,8 +369,15 @@ export default function ContactDetails({
             </p>
 
             <div className="flex flex-wrap gap-4 text-orange-600">
-              <span>✉ partners@asianspices.com</span>
-              <span>📄 Registration FAQ</span>
+              <a
+                href="mailto:partners@asianspices.com"
+                className="hover:underline"
+              >
+                ✉ partners@asianspices.com
+              </a>
+              <Link href="/contact-us" className="hover:underline">
+                📄 Registration FAQ
+              </Link>
             </div>
           </div>
         </div>
