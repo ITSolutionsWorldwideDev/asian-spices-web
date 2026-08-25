@@ -208,11 +208,11 @@ const FooterContent = () => {
                   aria-hidden
                 />
                 <span>
-                  Mandenmakerstraat 100C
+                  Slakkenveen 341
                   <br />
-                  3194 DG Hoogvliet Rotterdam
+                  3205 GK Spijkenisse
                   <br />
-                  The Netherlands
+                  Netherlands
                 </span>
               </li>
             </ul>

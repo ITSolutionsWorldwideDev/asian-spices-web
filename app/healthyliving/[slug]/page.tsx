@@ -14,26 +14,9 @@ interface PageProps {
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
-  const { slug } = await params;
-
   return (
     <div>
-      <HealthyLivingProductpage slug={slug} searchParams={searchParams} />
+      <HealthyLivingProductpage params={params} searchParams={searchParams} />
     </div>
   );
 }
-
-/* export default async function Page({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  
-  const { slug } = await params;
-
-  return (
-    <div>
-      <HealthyLivingProductpage slug={slug} />
-    </div>
-  );
-} */

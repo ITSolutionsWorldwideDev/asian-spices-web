@@ -7,6 +7,33 @@ interface TextandImage {
   imageLink: string;
 }
 
+// Splits heading to highlight specific important words in the middle/end
+const renderHeading = (heading: string) => {
+  const words = heading.trim().split(" ");
+  
+  // Agar heading choti hai (<= 3 words) toh sab yellow kar do
+  if (words.length <= 2) {
+    return <span className="text-yellow-400">{heading}</span>;
+  }
+
+  // Beech ke ya last ke 2-3 important words highlight karne ke liye 
+  // Jaise "Herbs for Energy & Vitality" mein "Energy & Vitality" 3 words hain
+  const highlightCount = Math.min(3, Math.floor(words.length / 2) + 1);
+  const splitIndex = words.length - highlightCount;
+
+  const normalWords = words.slice(0, splitIndex);
+  const highlightedWords = words.slice(splitIndex);
+
+  return (
+    <>
+      {normalWords.length > 0 && (
+        <span className="text-white">{normalWords.join(" ")} </span>
+      )}
+      <span className="text-yellow-400">{highlightedWords.join(" ")}</span>
+    </>
+  );
+};
+
 const ProductHeader = ({ heading, text, imageLink }: TextandImage) => {
   return (
     <section className="relative h-screen min-h-[100svh] w-full max-w-none overflow-hidden">
@@ -18,20 +45,20 @@ const ProductHeader = ({ heading, text, imageLink }: TextandImage) => {
         alt={text}
         priority
       />
-      {/* Decorative layers must not block the fixed navbar */}
-      <div className="pointer-events-none absolute inset-0 bg-black/40" aria-hidden />
+
+      {/* Dark overlay for text contrast */}
+      <div className="pointer-events-none absolute inset-0 bg-black/45" aria-hidden />
 
       <Nav />
 
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-white container mx-auto px-4">
-        <div className="text-center">
-          <h1 className="text-5xl font-bold lg:max-w-[50rem] lg:text-7xl mx-auto">
-            {heading}
+        <div className="text-center max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold sm:text-4xl lg:text-5xl leading-tight tracking-tight">
+            {renderHeading(heading)}
           </h1>
-          <p className="mt-5 text-center font-normal text-white/95 lg:max-w-2xl mx-auto">
+          <p className="mt-5 text-sm sm:text-base font-normal text-white/85 leading-relaxed max-w-2xl mx-auto">
             {text}
           </p>
-          <h2 className="mt-10 text-2xl font-bold lg:text-5xl">Need Ideas?</h2>
         </div>
       </div>
     </section>

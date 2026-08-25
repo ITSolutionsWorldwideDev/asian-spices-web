@@ -109,7 +109,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
     return () => { cancelled = true; };
   }, []);
 
-  const navLinks: NavLink[] = useMemo(
+ const navLinks: NavLink[] = useMemo(
     () => [
       {
         name: "Shop by Category",
@@ -121,12 +121,13 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
         hreflink: "#",
         children: [
           {
-            heading: "Health Benefits of Herbs",
+            heading: "Health Benefits",
             category: [
-              { name: "Supports Immunity", href: "healthyliving/supports-immunity" },
-              { name: "Aids Digestion", href: "healthyliving/aids-digestion" },
-              { name: "Promotes Relaxation", href: "healthyliving/promotes-relaxation" },
-              { name: "Enhances Energy Levels", href: "healthyliving/enhances-energy-levels" },
+              { name: "Sleep & Stress Relief", href: "healthyliving/sleep-stress-relief" },
+              { name: "Immune Support", href: "healthyliving/immune-support" },
+              { name: "Digestion & Gut Health", href: "healthyliving/digestion-gut-health" },
+              { name: "Joint, Skin & Hair Health", href: "healthyliving/joint-skin-hair-health" },
+              { name: "Grandma's Kitchen Remedies", href: "healthyliving/grandmas-kitchen-remedies" },
             ],
           },
           {
