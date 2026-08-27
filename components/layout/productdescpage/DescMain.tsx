@@ -16,13 +16,15 @@ export default function ProductDescrption({
   relatedProducts,
   category,
 }: Props) {
+  const displayCategory = product?.category_name || category;
+
   return (
     <div className="bg-gray-50">
       <div className="bg-black">
         <Nav />
       </div>
 
-      <ProductDesc product={product} category={category} />
+      <ProductDesc product={product} category={displayCategory} />
 
       <div className="container mx-auto mt-10 p-5">
         <h1 className="text-black font-bold mb-5">You May Also Like</h1>

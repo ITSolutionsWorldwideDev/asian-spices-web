@@ -156,11 +156,13 @@ export default function ProductDesc({
       ? product.images.map((img: any) => img.url)
       : ["/assets/spices/spices-1.png"];
 
-  const categorySlug = category
-    .replace(/&/g, "-") // Replace & with -
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/-+/g, "-") // Remove duplicate hyphens
-    .toLowerCase();
+  const categorySlug =
+    product.category_slug ||
+    category
+      .replace(/&/g, "-")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .toLowerCase();
 
   const numericRating =
     typeof product.rating === "number" ? Number(product.rating) : 0;

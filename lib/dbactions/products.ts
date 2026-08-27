@@ -212,13 +212,18 @@ export const getProductBySlug = async (
       p.id,
       p.name,
       p.slug,
+      p.sku,
+      p.weight,
       p.base_price,
       p.sale_price,
       p.discount_type,
       p.discount_value,
       p.promo_code,
       p.description,
-      p.country_of_origin,
+      COALESCE(
+        NULLIF(TRIM(p.country_of_origin), ''),
+        origin_country.country_name
+      ) AS country_of_origin,
       p.category_id,
       p.subcategory_id,
       p.brand_id,
@@ -253,6 +258,8 @@ export const getProductBySlug = async (
       WHERE ss.country_code = $2 AND spc.status = 1
       GROUP BY spc.product_id
     ) cat ON cat.product_id = p.id
+    LEFT JOIN countries origin_country
+      ON origin_country.country_id = p.country_id
     LEFT JOIN store_categories c 
       ON p.category_id = c.id
     LEFT JOIN store_product_images pi 
@@ -263,14 +270,17 @@ export const getProductBySlug = async (
     GROUP BY 
       p.id, 
       p.name, 
-      p.slug, 
+      p.slug,
+      p.sku,
+      p.weight,
       p.base_price, 
       p.sale_price, 
       p.discount_type, 
       p.discount_value, 
       p.promo_code, 
       p.description,
-      p.country_of_origin, 
+      p.country_of_origin,
+      origin_country.country_name,
       p.category_id, 
       p.subcategory_id, 
       p.brand_id, 

@@ -24,6 +24,19 @@ export async function POST(req: Request) {
       }
 
       const record = rows[0];
+
+      const userRes = await client.query(
+        `SELECT password_hash FROM users WHERE id = $1`,
+        [record.user_id],
+      );
+      const currentHash = userRes.rows[0]?.password_hash;
+      if (currentHash && (await bcrypt.compare(password, currentHash))) {
+        return NextResponse.json(
+          { error: "New password must be different from your old password." },
+          { status: 400 },
+        );
+      }
+
       const hash = await bcrypt.hash(password, 10);
 
       await client.query(`UPDATE users SET password_hash = $1 WHERE id = $2`, [
@@ -45,7 +58,7 @@ export async function POST(req: Request) {
     }
 
     const userRes = await client.query(
-      `SELECT id FROM users WHERE email = $1`,
+      `SELECT id, password_hash FROM users WHERE email = $1`,
       [email],
     );
 
@@ -57,6 +70,7 @@ export async function POST(req: Request) {
     }
 
     const userId = userRes.rows[0].id;
+    const currentHash = userRes.rows[0].password_hash;
 
     const { rows } = await client.query(
       `SELECT * FROM password_reset_tokens
@@ -79,6 +93,13 @@ export async function POST(req: Request) {
     if (!otpValid) {
       return NextResponse.json(
         { error: "Invalid verification code." },
+        { status: 400 },
+      );
+    }
+
+    if (currentHash && (await bcrypt.compare(password, currentHash))) {
+      return NextResponse.json(
+        { error: "New password must be different from your old password." },
         { status: 400 },
       );
     }
