@@ -4,6 +4,7 @@ import { cache } from "react";
 import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";
 import { getProductBySlug, getRelatedProducts } from "@/lib/dbactions/products";
+import { resolveCountry } from "@/lib/country";
 
 interface PageProps {
   params: Promise<{
@@ -19,7 +20,7 @@ const cachedGetProduct = cache(async (slug: string, country: string) => {
 export async function generateMetadata({ params, searchParams }: PageProps) {
   const { slug } = await params;
   const sParams = await searchParams;
-  const country = (sParams?.country as string) || "NL";
+  const country = await resolveCountry(sParams?.country);
 
   // const product = await getProductBySlug(slug, country);
   const product = await cachedGetProduct(slug, country);
@@ -42,7 +43,7 @@ export default async function FoodAndBeveragesDetailPage({
 }: PageProps) {
   const { slug } = await params;
   const sParams = await searchParams;
-  const country = (sParams?.country as string) || "NL";
+  const country = await resolveCountry(sParams?.country);
 
   // const product = await getProductBySlug(slug, country);
   const product = await cachedGetProduct(slug, country);

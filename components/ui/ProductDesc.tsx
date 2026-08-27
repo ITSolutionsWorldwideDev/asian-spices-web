@@ -19,6 +19,7 @@ import { useCartStore } from "@/store/useCartStore";
 import { useSession } from "next-auth/react";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { useGlobalStore } from "@/store/useGlobalStore";
 import Link from "next/link";
 
 export default function ProductDesc({
@@ -31,8 +32,16 @@ export default function ProductDesc({
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
   const { symbol, rate } = useCurrencyStore();
+  const { taxRules } = useGlobalStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();
   const { cart, addToCart, increaseQty, decreaseQty, setQty } = useCartStore();
+
+  const globalRule = taxRules.find((r) => r.category_id === null);
+  const matchingRule = taxRules.find(
+    (r) => r.category_id === product.category_id,
+  );
+  const taxRate =
+    parseFloat(matchingRule?.tax_rate ?? globalRule?.tax_rate ?? "21") / 100;
 
   const cartItem = cart.find(
     (item) =>
@@ -107,6 +116,14 @@ export default function ProductDesc({
   if (originalPrice != null) {
     originalPrice = Number(originalPrice.toFixed(2));
     if (originalPrice <= currentPrice) originalPrice = null;
+  }
+
+  // Admin/catalog prices are net — show VAT-inclusive using existing taxRules
+  if (currentPrice > 0) {
+    currentPrice = Number((currentPrice * (1 + taxRate)).toFixed(2));
+  }
+  if (originalPrice != null) {
+    originalPrice = Number((originalPrice * (1 + taxRate)).toFixed(2));
   }
 
   const rawSave =
@@ -231,6 +248,7 @@ export default function ProductDesc({
         <div className="space-y-5">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
             {product.name}
+            {product.weight ? ` ${product.weight}` : ""}
           </h1>
           {product.seller_name ? (
             <p className="text-sm font-medium text-orange-700">
@@ -643,7 +661,10 @@ export default function ProductDesc({ product }: { product: Product }) {
             </span>
           )}
 
-          <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {product.name}
+            {product.weight ? ` ${product.weight}` : ""}
+          </h1>
           {product.seller_name ? (
             <p className="text-sm font-medium text-orange-700">
               Sold by {product.seller_name}

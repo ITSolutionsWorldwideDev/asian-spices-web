@@ -10,10 +10,13 @@ import { Autoplay, Navigation, Keyboard } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { useGlobalStore } from "@/store/useGlobalStore";
 
 export default function RelatedProductsSlider({ products }: any) {
-
   const { symbol, rate } = useCurrencyStore();
+  const { taxRules } = useGlobalStore();
+  const globalRule = taxRules.find((r) => r.category_id === null);
+
   return (
     <div className="relative w-full px-2 sm:px-4">
       <Swiper
@@ -47,7 +50,20 @@ export default function RelatedProductsSlider({ products }: any) {
         }}
         className="py-6"
       >
-        {products?.map((product: any) => (
+        {products?.map((product: any) => {
+          const netPrice = Number(
+            product.min_offered_price || product.base_price || 0,
+          );
+          const matchingRule = taxRules.find(
+            (r) => r.category_id === product.category_id,
+          );
+          const taxRate =
+            parseFloat(
+              matchingRule?.tax_rate ?? globalRule?.tax_rate ?? "21",
+            ) / 100;
+          const displayPrice = netPrice * (1 + taxRate);
+
+          return (
           <SwiperSlide key={product.id} className="!h-aut py-10">
             <Link
               href={`/${product.category_slug || "products"}/${product.slug}`}
@@ -75,12 +91,14 @@ export default function RelatedProductsSlider({ products }: any) {
                 ) : null}
 
                 <p className="text-orange-500 font-bold text-sm mt-1">
-                  {symbol}{product.base_price}
+                  {symbol}
+                  {(displayPrice * rate).toFixed(2)}
                 </p>
               </div>
             </Link>
           </SwiperSlide>
-        ))}
+          );
+        })}
       </Swiper>
     </div>
   );

@@ -15,6 +15,9 @@ export default function SortDropdown() {
   // 🔍 DEBOUNCED SEARCH
   // =========================
   useEffect(() => {
+    // Skip on mount / after our own replace, so a clean URL doesn't gain ?page=1
+    if (search === (params.get("search") || "")) return;
+
     const timeout = setTimeout(() => {
       const newParams = new URLSearchParams(params.toString());
 
@@ -32,7 +35,7 @@ export default function SortDropdown() {
     }, 400);
 
     return () => clearTimeout(timeout);
-  }, [search]);
+  }, [search, params, router]);
 
   // =========================
   // 🔄 SORT CHANGE

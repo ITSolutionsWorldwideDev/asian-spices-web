@@ -47,6 +47,7 @@ export const getProducts = async (filters: any) => {
     SELECT 
       p.*, 
       c.slug as category_slug,
+      sc.slug as subcategory_slug,
       b.name as brand_name,
       img.file_url AS image,
       cat.min_offered_price,
@@ -67,6 +68,7 @@ export const getProducts = async (filters: any) => {
       GROUP BY spc.product_id
     ) cat ON cat.product_id = p.id
     LEFT JOIN store_categories c ON c.id = p.category_id
+    LEFT JOIN store_subcategories sc ON sc.id = p.subcategory_id
     LEFT JOIN store_brands b ON b.brand_id = p.brand_id
     LEFT JOIN (
       SELECT DISTINCT ON (pi.product_id) 
@@ -220,6 +222,7 @@ export const getProductBySlug = async (
       p.discount_value,
       p.promo_code,
       p.description,
+      p.health_benefits,
       COALESCE(
         NULLIF(TRIM(p.country_of_origin), ''),
         origin_country.country_name
@@ -232,6 +235,7 @@ export const getProductBySlug = async (
       p.search_vector,
       c.name AS category_name,
       c.slug AS category_slug,
+      sc.slug AS subcategory_slug,
       cat.min_offered_price,
       cat.total_available_stock,
       cat.seller_name,
@@ -262,6 +266,8 @@ export const getProductBySlug = async (
       ON origin_country.country_id = p.country_id
     LEFT JOIN store_categories c 
       ON p.category_id = c.id
+    LEFT JOIN store_subcategories sc
+      ON sc.id = p.subcategory_id
     LEFT JOIN store_product_images pi 
       ON pi.product_id = p.id
     LEFT JOIN media m 
@@ -279,6 +285,7 @@ export const getProductBySlug = async (
       p.discount_value, 
       p.promo_code, 
       p.description,
+      p.health_benefits,
       p.country_of_origin,
       origin_country.country_name,
       p.category_id, 
@@ -289,6 +296,7 @@ export const getProductBySlug = async (
       p.search_vector,
       c.name, 
       c.slug,
+      sc.slug,
       cat.min_offered_price, 
       cat.total_available_stock,
       cat.seller_name
@@ -526,6 +534,8 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
     SELECT 
       sc.id,
       sc.name,
+      sc.slug,
+      c.slug AS category_slug,
       COUNT(DISTINCT p.id) AS product_count
     FROM store_subcategories sc
     INNER JOIN store_categories c 
@@ -534,13 +544,69 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
       ON p.subcategory_id = sc.id 
       AND ${productConditions}
     WHERE ${categoryFilter}
-    GROUP BY sc.id, sc.name
+    GROUP BY sc.id, sc.name, sc.slug, c.slug
     ORDER BY sc.name;
   `;
 
   // console.log("productConditions ==== ", productConditions);
   // console.log("query ==== ", query);
   // console.log("values ==== ", values);
+
+  const result = await pool.query(query, values);
+  return result.rows;
+};
+
+/** Top-level shop categories with counts, for the sidebar filter. */
+export const getCategories = async (filters: any = {}) => {
+  const { brands, minPrice, maxPrice, search } = filters;
+
+  const values: any[] = [];
+  let index = 0;
+  let productConditions = `p.status = 1`;
+
+  if (brands?.length > 0) {
+    index++;
+    productConditions += ` AND p.brand_id = ANY($${index}::uuid[])`;
+    values.push(brands);
+  }
+
+  if (minPrice) {
+    index++;
+    productConditions += ` AND p.base_price >= $${index}`;
+    values.push(minPrice);
+  }
+
+  if (maxPrice) {
+    index++;
+    productConditions += ` AND p.base_price <= $${index}`;
+    values.push(maxPrice);
+  }
+
+  if (search) {
+    index++;
+    productConditions += ` AND (
+      COALESCE(p.search_vector, ''::tsvector) @@ plainto_tsquery('english', $${index})
+      OR p.name ILIKE '%' || $${index} || '%'
+      OR p.slug ILIKE '%' || $${index} || '%'
+    )`;
+    values.push(search.trim());
+  }
+
+  const query = `
+    SELECT
+      c.id,
+      c.name,
+      c.slug,
+      COUNT(DISTINCT p.id) AS product_count
+    FROM store_categories c
+    LEFT JOIN store_products p
+      ON p.category_id = c.id
+      AND ${productConditions}
+    WHERE c.status = 1
+      AND LOWER(c.slug) <> 'healthy-living'
+    GROUP BY c.id, c.name, c.slug
+    ORDER BY c.name;
+  `;
 
   const result = await pool.query(query, values);
   return result.rows;
@@ -566,7 +632,7 @@ export const getBrands = async (category: string, filters: any = {}) => {
   // 🔹 Price filters
   if (minPrice !== undefined && minPrice !== "") {
     index++;
-    productConditions += ` AND p.price >= $${index}`;
+    productConditions += ` AND p.base_price >= $${index}`;
     values.push(minPrice);
   }
 

@@ -1,7 +1,7 @@
 // apps/web/components/layout/products/FilterSidebar.tsx
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 
 // =========================
@@ -32,17 +32,83 @@ function Collapsible({ title, children }: any) {
   );
 }
 
+// =========================
+// 🔹 CHECKBOX OPTION
+// =========================
+function CheckOption({
+  label,
+  count,
+  checked,
+  onChange,
+}: {
+  label: string;
+  count?: number;
+  checked: boolean;
+  onChange: () => void;
+}) {
+  return (
+    <label className="flex items-center cursor-pointer group">
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={count === 0}
+        onChange={onChange}
+        className="sr-only"
+      />
+
+      <div
+        className={`w-5 h-5 shrink-0 rounded border-2 flex items-center justify-center transition ${
+          checked ? "bg-black border-black" : "border-gray-300"
+        }`}
+      >
+        {checked && (
+          <svg
+            className="w-3 h-3 text-white"
+            fill="none"
+            strokeWidth="3"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path d="M5 13l4 4L19 7" />
+          </svg>
+        )}
+      </div>
+
+      <span className="ml-3 text-sm text-gray-700 group-hover:text-black">
+        {label}
+        {count ? <span className="ml-1 text-gray-600">({count})</span> : null}
+      </span>
+    </label>
+  );
+}
+
+const listClass =
+  "max-h-64 space-y-3 overflow-y-auto pr-2 [scrollbar-color:#d1d5db_transparent] [scrollbar-width:thin]";
+const clearClass = "text-sm text-orange-700 hover:text-orange-800 mt-2";
+
 interface Props {
   subcategories: any[];
   brands: any[];
+  /** When provided, an extra Categories box lists shop categories and links to /category. */
+  categories?: any[];
+  /** Subcategories link to /category/subcategory instead of filtering by ?subcategories=id. */
+  slugLinks?: boolean;
 }
 
 export default function FilterSidebar({
   subcategories,
   brands,
+  categories,
+  slugLinks = false,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const showCategories = Boolean(categories?.length);
+  const subcategoryTitle = slugLinks ? "Subcategories" : "Categories";
+  // Segments of /spices/aromas-colours
+  const [activeCategorySlug, activeSubSlug] = pathname.split("/").filter(Boolean);
 
   const [min, setMin] = useState(searchParams.get("min") || "");
   const [max, setMax] = useState(searchParams.get("max") || "");
@@ -106,8 +172,27 @@ export default function FilterSidebar({
   const clearFilter = (key: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete(key);
+
     updateUrl(params);
   };
+
+  /** Categories and subcategories are pages, not query filters. */
+  const goToPath = (path: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("subcategories");
+    params.delete("page");
+
+    const query = params.toString();
+    router.push(query ? `${path}?${query}` : path, { scroll: false });
+  };
+
+  const goToCategory = (item: any | null) =>
+    goToPath(item ? `/${item.slug}` : "/products");
+
+  const goToSubcategory = (item: any | null) =>
+    goToPath(
+      item ? `/${item.category_slug}/${item.slug}` : `/${activeCategorySlug}`,
+    );
 
   // =========================
   // SELECTED VALUES
@@ -149,129 +234,85 @@ export default function FilterSidebar({
       {/* =========================
           📦 CATEGORIES
       ========================= */}
-      <Collapsible title="Categories">
-        <div className="max-h-64 space-y-3 overflow-y-auto pr-2 [scrollbar-color:#d1d5db_transparent] [scrollbar-width:thin]">
-          {subcategories.map((item) => {
-            const checked = selectedSub.includes(item.id);
+      {showCategories && (
+        <Collapsible title="Categories">
+          <div className={listClass}>
+            {categories!.map((item) => {
+              const checked = item.slug === activeCategorySlug;
 
-            return (
-              <label
-                key={item.id}
-                className="flex items-center cursor-pointer group"
-              >
-                <input
-                  type="checkbox"
+              return (
+                <CheckOption
+                  key={item.id}
+                  label={item.name}
+                  count={item.product_count}
                   checked={checked}
-                  disabled={item.product_count === 0}
-                  onChange={() =>
-                    updateMultiFilter("subcategories", item.id)
-                  }
-                  className="sr-only"
+                  onChange={() => goToCategory(checked ? null : item)}
                 />
+              );
+            })}
+          </div>
 
-                <div
-                  className={`w-5 h-5 shrink-0 rounded border-2 flex items-center justify-center transition ${
-                    checked
-                      ? "bg-black border-black"
-                      : "border-gray-300"
-                  }`}
-                >
-                  {checked && (
-                    <svg
-                      className="w-3 h-3 text-white"
-                      fill="none"
-                      strokeWidth="3"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path d="M5 13l4 4L19 7" />
-                    </svg>
-                  )}
-                </div>
+          <button onClick={() => goToCategory(null)} className={clearClass}>
+            Clear Categories
+          </button>
+        </Collapsible>
+      )}
 
-                <span className="ml-3 text-sm text-gray-700 group-hover:text-black">
-                  {item.name}
+      {/* =========================
+          🗂️ SUBCATEGORIES
+      ========================= */}
+      {subcategories.length > 0 && (
+        <Collapsible title={subcategoryTitle}>
+          <div className={listClass}>
+            {subcategories.map((item) => {
+              const checked = slugLinks
+                ? item.slug === activeSubSlug
+                : selectedSub.includes(item.id);
 
-                  {item.product_count ? (
-                    <span className="ml-1 text-gray-600">
-                      ({item.product_count})
-                    </span>
-                  ) : null}
-                </span>
-              </label>
-            );
-          })}
-        </div>
+              return (
+                <CheckOption
+                  key={item.id}
+                  label={item.name}
+                  count={item.product_count}
+                  checked={checked}
+                  onChange={() =>
+                    slugLinks
+                      ? goToSubcategory(checked ? null : item)
+                      : updateMultiFilter("subcategories", item.id)
+                  }
+                />
+              );
+            })}
+          </div>
 
-        <button
-          onClick={() => clearFilter("subcategories")}
-          className="text-sm text-orange-700 hover:text-orange-800 mt-2"
-        >
-          Clear Categories
-        </button>
-      </Collapsible>
+          <button
+            onClick={() =>
+              slugLinks ? goToSubcategory(null) : clearFilter("subcategories")
+            }
+            className={clearClass}
+          >
+            {`Clear ${subcategoryTitle}`}
+          </button>
+        </Collapsible>
+      )}
 
       {/* =========================
           🏷️ BRANDS
       ========================= */}
       <Collapsible title="Brands">
-        <div className="max-h-64 space-y-3 overflow-y-auto pr-2 [scrollbar-color:#d1d5db_transparent] [scrollbar-width:thin]">
-          {brands.map((brand) => {
-            const checked = selectedBrands.includes(brand.brand_id);
-
-            return (
-              <label
-                key={brand.brand_id}
-                className="flex items-center cursor-pointer group"
-              >
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  disabled={brand.product_count === 0}
-                  onChange={() =>
-                    updateMultiFilter("brands", brand.brand_id)
-                  }
-                  className="sr-only"
-                />
-
-                <div
-                  className={`w-5 h-5 shrink-0 rounded border-2 flex items-center justify-center transition ${
-                    checked
-                      ? "bg-black border-black"
-                      : "border-gray-300"
-                  }`}
-                >
-                  {checked && (
-                    <svg
-                      className="w-3 h-3 text-white"
-                      fill="none"
-                      strokeWidth="3"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path d="M5 13l4 4L19 7" />
-                    </svg>
-                  )}
-                </div>
-
-                <span className="ml-3 text-sm text-gray-700 group-hover:text-black">
-                  {brand.name}
-
-                  {brand.product_count ? (
-                    <span className="ml-1 text-gray-600">
-                      ({brand.product_count})
-                    </span>
-                  ) : null}
-                </span>
-              </label>
-            );
-          })}
+        <div className={listClass}>
+          {brands.map((brand) => (
+            <CheckOption
+              key={brand.brand_id}
+              label={brand.name}
+              count={brand.product_count}
+              checked={selectedBrands.includes(brand.brand_id)}
+              onChange={() => updateMultiFilter("brands", brand.brand_id)}
+            />
+          ))}
         </div>
 
-        <button
-          onClick={() => clearFilter("brands")}
-          className="text-sm text-orange-700 hover:text-orange-800 mt-2"
-        >
+        <button onClick={() => clearFilter("brands")} className={clearClass}>
           Clear Brands
         </button>
       </Collapsible>

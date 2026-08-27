@@ -84,14 +84,6 @@ interface NavLink {
   children?: NavChildren[];
 }
 
-const SHOP_CATEGORIES = [
-  { heading: "Asian Spices & Seasonings", slug: "spices" },
-  { heading: "Asian Foods & Beverages", slug: "foods-beverages" },
-  { heading: "Kitchen Appliances & Cooking Tools", slug: "kitchen-appliances" },
-] as const;
-
-type SubcategoryRow = { id: string; name: string };
-
 interface ResponsiveNavigationProps {
   mobileOnly?: boolean;
 }
@@ -101,13 +93,9 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [mobileMenu, setMobileMenu] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [shopCategoryChildren, setShopCategoryChildren] = useState<NavChildren[]>(
-    SHOP_CATEGORIES.map((cat) => ({
-      heading: cat.heading,
-      category: [{ name: "View all", href: cat.slug }],
-    })),
-  );
-  const [shopCategoriesLoading, setShopCategoriesLoading] = useState(false);
+  const [shopCategoryChildren, setShopCategoryChildren] = useState<NavChildren[]>([]);
+  const [shopCategoriesLoading, setShopCategoriesLoading] = useState(true);
+  const [activeShopCategory, setActiveShopCategory] = useState(0);
   const [mounted, setMounted] = useState(false);
 
   const { data: session } = useSession();
@@ -136,36 +124,38 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
   useEffect(() => {
     let cancelled = false;
 
-    const loadShopSubcategories = async () => {
-      setShopCategoriesLoading(true);
-      try {
-        const results = await Promise.all(
-          SHOP_CATEGORIES.map(async (cat) => {
-            const res = await fetch(`/api/category/${cat.slug}`);
-            const json = await res.json();
-            const subcategories: SubcategoryRow[] = Array.isArray(json?.subcategories)
-              ? json.subcategories
-              : [];
-            const categoryLinks: NavCategoryItem[] = [
-              { name: "View all", href: cat.slug },
-              ...subcategories.map((sub) => ({
-                name: sub.name,
-                href: `${cat.slug}?subcategories=${sub.id}`,
-              })),
-            ];
-            return { heading: cat.heading, category: categoryLinks } satisfies NavChildren;
-          }),
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((json) => {
+        if (cancelled || !Array.isArray(json?.categories)) return;
+        setShopCategoryChildren(
+          json.categories.map(
+            (cat: {
+              name: string;
+              slug: string;
+              subcategories: { id: string; name: string; slug: string }[];
+            }) => ({
+              heading: cat.name,
+              category: [
+                { name: "View all", href: cat.slug },
+                ...cat.subcategories.map((sub) => ({
+                  name: sub.name,
+                  href: `${cat.slug}/${sub.slug}`,
+                })),
+              ],
+            }),
+          ),
         );
-        if (!cancelled) setShopCategoryChildren(results);
-      } catch (error) {
-        console.error("Failed to load shop subcategories:", error);
-      } finally {
+        setActiveShopCategory(0);
+      })
+      .catch((error) => console.error("Failed to load categories:", error))
+      .finally(() => {
         if (!cancelled) setShopCategoriesLoading(false);
-      }
-    };
+      });
 
-    loadShopSubcategories();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
  const navLinks: NavLink[] = useMemo(
@@ -224,6 +214,19 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
     (link) => link.children && activeLink === link.name && isMenuOpen,
   );
 
+  const selectedShopCategory =
+    shopCategoryChildren[activeShopCategory] || shopCategoryChildren[0];
+  const shopSubcategories =
+    selectedShopCategory?.category?.filter((item) => item.name !== "View all") || [];
+  const shopViewAllHref =
+    selectedShopCategory?.category?.find((item) => item.name === "View all")?.href ||
+    "products";
+
+  const closeMegaMenu = () => {
+    setIsMenuOpen(false);
+    setActiveLink("");
+  };
+
   const megaMenu =
     mounted &&
     activeDropdownLink?.children &&
@@ -236,70 +239,152 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
           right: 0,
           top: "5.5rem",
           bottom: 0,
-          // Below the nav (999999), above all page content
           zIndex: 999998,
         }}
         role="presentation"
       >
-        {/* Backdrop starts BELOW the navbar so nav stays clickable */}
-        <div
-          className="absolute inset-0"
-          onClick={() => { setIsMenuOpen(false); setActiveLink(""); }}
-        />
+        <div className="absolute inset-0" onClick={closeMegaMenu} />
         <div className="pointer-events-none absolute inset-x-0 top-2 flex justify-center px-4 sm:px-6">
-          <div className="pointer-events-auto w-full max-w-5xl">
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-100 shadow-md">
-              <div
-                className={`grid gap-8 p-6 ${
-                  activeDropdownLink.children.length >= 4 ? "grid-cols-4" : "grid-cols-3"
-                }`}
-              >
-                {activeDropdownLink.name === "Shop by Category" && shopCategoriesLoading ? (
-                  <p className="col-span-full text-sm text-gray-500">Loading categories...</p>
+          <div className="pointer-events-auto w-full max-w-4xl">
+            <div className="overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-xl shadow-stone-200/50">
+              {/* Shop by Category: left categories / right subcategories */}
+              {activeDropdownLink.name === "Shop by Category" ? (
+                shopCategoriesLoading ? (
+                  <p className="p-6 text-sm text-gray-500">Loading categories...</p>
                 ) : (
-                  activeDropdownLink.children.map((section, index) => (
-                    <div key={index}>
-                      <h3
-                        className={`mb-3 font-semibold text-gray-800 ${
-                          index === 0 ? "inline-block border-b-2 border-blue-400" : ""
-                        }`}
-                      >
-                        {section.heading}
-                      </h3>
-                      <ul className="max-h-64 space-y-2 overflow-y-auto text-sm text-gray-600">
-                        {section.category?.map((item, i) => (
-                          <li key={`${item.href}-${i}`} className="cursor-pointer transition-colors hover:text-black">
-                            <Link
-                              href={`/${item.href}`}
-                              onClick={() => { setIsMenuOpen(false); setActiveLink(""); }}
-                            >
-                              {item.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                  <>
+                    <div className="flex h-[20rem]">
+                      {/* Left: categories */}
+                      <aside className="flex w-[15.5rem] shrink-0 flex-col border-r border-stone-200/80 bg-[#faf8f5]">
+                        <p className="px-5 pb-2 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-400">
+                          Categories
+                        </p>
+                        <div className="flex-1 space-y-0.5 overflow-y-auto px-2.5 pb-3">
+                          {shopCategoryChildren.map((section, index) => {
+                            const isActive = activeShopCategory === index;
+                            return (
+                              <button
+                                key={index}
+                                type="button"
+                                onMouseEnter={() => setActiveShopCategory(index)}
+                                onClick={() => setActiveShopCategory(index)}
+                                className={`group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left transition-all duration-150 ${
+                                  isActive
+                                    ? "bg-white text-stone-900 shadow-sm ring-1 ring-orange-200/70"
+                                    : "text-stone-600 hover:bg-white/80 hover:text-stone-900"
+                                }`}
+                              >
+                                <span
+                                  className={`truncate text-[13px] ${
+                                    isActive ? "font-semibold" : "font-medium"
+                                  }`}
+                                >
+                                  {section.heading}
+                                </span>
+                                <ChevronRight
+                                  className={`h-3.5 w-3.5 shrink-0 transition ${
+                                    isActive
+                                      ? "text-orange-500"
+                                      : "text-stone-300 group-hover:text-stone-400"
+                                  }`}
+                                />
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </aside>
+
+                      {/* Right: subcategories */}
+                      <div className="flex flex-1 flex-col overflow-hidden bg-white">
+                        <div className="flex items-center justify-between gap-3 border-b border-stone-100 px-6 py-3.5">
+                          <div>
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-400">
+                              Subcategories
+                            </p>
+                            <h3 className="mt-0.5 text-[15px] font-semibold text-stone-900">
+                              {selectedShopCategory?.heading || "Category"}
+                            </h3>
+                          </div>
+                          <Link
+                            href={`/${shopViewAllHref}`}
+                            onClick={closeMegaMenu}
+                            className="rounded-full bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-600 transition hover:bg-orange-100"
+                          >
+                            View all
+                          </Link>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto px-5 py-4">
+                          {shopSubcategories.length === 0 ? (
+                            <div className="flex h-full items-center justify-center">
+                              <p className="text-sm text-stone-400">No subcategories yet</p>
+                            </div>
+                          ) : (
+                            <div className="grid grid-cols-2 gap-2 lg:grid-cols-3">
+                              {shopSubcategories.map((item, i) => (
+                                <Link
+                                  key={`${item.href}-${i}`}
+                                  href={`/${item.href}`}
+                                  onClick={closeMegaMenu}
+                                  className="rounded-xl border border-transparent px-3 py-2.5 text-[13px] font-medium text-stone-600 transition hover:border-orange-100 hover:bg-orange-50/60 hover:text-orange-700"
+                                >
+                                  {item.name}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  ))
-                )}
-              </div>
-              <div className="rounded-b-xl bg-orange-100 px-6 py-4">
-                <Link
-                  href={
-                    activeDropdownLink.name === "Shop by Category"
-                      ? "/products"
-                      : "/healthyliving/supports-immunity"
-                  }
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    setActiveLink("");
-                  }}
-                  className="font-medium text-orange-600 hover:underline"
-                >
-                  {activeDropdownLink.name === "Shop by Category"
-                    ? "View All Products →"
-                    : `View All ${activeDropdownLink.name} Products →`}
-                </Link>
-              </div>
+                    <div className="flex items-center justify-between border-t border-stone-100 bg-[#fff7ed] px-6 py-3">
+                      <Link
+                        href="/products"
+                        onClick={closeMegaMenu}
+                        className="text-sm font-semibold text-orange-600 transition hover:text-orange-700"
+                      >
+                        View All Products →
+                      </Link>
+                    </div>
+                  </>
+                )
+              ) : (
+                /* Healthy Living (and others): keep existing columns */
+                <>
+                  <div
+                    className={`grid gap-8 p-6 ${
+                      activeDropdownLink.children.length >= 4 ? "grid-cols-4" : "grid-cols-3"
+                    }`}
+                  >
+                    {activeDropdownLink.children.map((section, index) => (
+                      <div key={index}>
+                        <h3 className="mb-3 font-semibold text-gray-800">{section.heading}</h3>
+                        <ul className="max-h-64 space-y-2 overflow-y-auto text-sm text-gray-600">
+                          {section.category?.map((item, i) => (
+                            <li key={`${item.href}-${i}`}>
+                              <Link
+                                href={`/${item.href}`}
+                                className="hover:text-black"
+                                onClick={closeMegaMenu}
+                              >
+                                {item.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                  {/* <div className="rounded-b-xl bg-orange-100 px-6 py-4">
+                    <Link
+                      href="/healthyliving/supports-immunity"
+                      onClick={closeMegaMenu}
+                      className="font-medium text-orange-600 hover:underline"
+                    >
+                      View All {activeDropdownLink.name} Products →
+                    </Link>
+                  </div> */}
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -400,8 +485,6 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                         shopCategoryChildren.map((child, ind) => {
                           const categoryHref =
                             child.category?.find((item) => item.name === "View all")?.href ||
-                            SHOP_CATEGORIES.find((cat) => cat.heading === child.heading)?.slug ||
-                            child.href ||
                             "products";
                           return (
                             <Link

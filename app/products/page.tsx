@@ -9,11 +9,7 @@ import FilterSidebar from "@/components/layout/products/FilterSidebar";
 import InfiniteProducts from "@/components/layout/products/InfiniteProducts";
 import SortDropdown from "@/components/layout/product_filter_search/SortDropdown";
 
-import {
-  getBrands,
-  getProducts,
-  getSubcategories,
-} from "@/lib/dbactions/products";
+import { getBrands, getCategories, getProducts } from "@/lib/dbactions/products";
 
 interface PageProps {
   searchParams: Promise<{
@@ -42,15 +38,19 @@ async function ProductSection({
 }: {
   filters: Filters & { sort: string };
 }) {
-  const [subcategories, brands, products] = await Promise.all([
-    getSubcategories("all", filters),
+  const [categories, brands, products] = await Promise.all([
+    getCategories(filters),
     getBrands("all", filters),
     getProducts(filters),
   ]);
 
   return (
     <div className="relative z-0 grid lg:grid-cols-[260px_1fr] gap-6 container mx-auto p-5">
-      <FilterSidebar subcategories={subcategories} brands={brands} />
+      <FilterSidebar
+        subcategories={[]}
+        categories={categories}
+        brands={brands}
+      />
       <div className="relative min-w-0 bg-white">
         <SortDropdown />
         <InfiniteProducts initialProducts={products} filters={filters} />

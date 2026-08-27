@@ -46,7 +46,7 @@ export default function ProductCard({
   disableSlicing = false,
 }: ProductCardProps) {
   const { symbol, rate } = useCurrencyStore();
-  const { selectedCountry } = useGlobalStore();
+  const { selectedCountry, taxRules } = useGlobalStore();
 
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
@@ -60,6 +60,8 @@ export default function ProductCard({
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const globalRule = taxRules.find((r) => r.category_id === null);
 
   const visibleProducts =
     disableSlicing || showAll ? products : products.slice(0, 20);
@@ -77,38 +79,46 @@ export default function ProductCard({
           // 1️⃣ Safe Numeric Extractions & Conversions
           // const currentPrice = Number(product.base_price || 0);
 
-          const currentPrice = Number(
+          // Admin/catalog prices are net; apply existing taxRules for display + cart
+          const netPrice = Number(
             product.min_offered_price || product.base_price || 0,
           );
+          const matchingRule = taxRules.find(
+            (r) => r.category_id === product.category_id,
+          );
+          const taxRate =
+            parseFloat(
+              matchingRule?.tax_rate ?? globalRule?.tax_rate ?? "21",
+            ) / 100;
+          const currentPrice = netPrice * (1 + taxRate);
 
           let originalPrice: number | null = null;
 
           const discountValue = Number(product.discount_value);
 
           if (
-            currentPrice > 0 &&
+            netPrice > 0 &&
             product.discount_value &&
             !isNaN(discountValue) &&
             discountValue > 0
           ) {
+            let netOriginal: number | null = null;
             switch ((product.discount_type || "").toLowerCase()) {
               case "percentage":
               case "bulk":
-                // Current price is discounted. Recover original price.
-                originalPrice = currentPrice / (1 - discountValue / 100);
+                netOriginal = netPrice / (1 - discountValue / 100);
                 break;
 
               case "fixed":
-                // Fixed amount discount.
-                originalPrice = currentPrice + discountValue;
+                netOriginal = netPrice + discountValue;
                 break;
 
               default:
-                originalPrice = null;
+                netOriginal = null;
             }
 
-            if (originalPrice !== null) {
-              originalPrice = Number(originalPrice.toFixed(2));
+            if (netOriginal !== null) {
+              originalPrice = Number((netOriginal * (1 + taxRate)).toFixed(2));
             }
           }
           // const originalPrice = product.oldPrice

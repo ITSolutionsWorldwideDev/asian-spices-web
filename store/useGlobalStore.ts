@@ -31,6 +31,12 @@ interface GlobalState {
 
 const DEFAULT_COUNTRY = "NL";
 
+/** Mirror the choice into a cookie so server-rendered pages can price without a ?country= param. */
+const persistCountryCookie = (code: string) => {
+  if (typeof document === "undefined") return;
+  document.cookie = `selected_country=${code}; path=/; max-age=31536000; samesite=lax`;
+};
+
 export const useGlobalStore = create<GlobalState>((set, get) => ({
   countries: [],
   selectedCountry: DEFAULT_COUNTRY,
@@ -84,6 +90,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
         : DEFAULT_COUNTRY;
 
       // 5. Update the store state
+      persistCountryCookie(finalSelection);
       set({ countries: countriesList ?? [], selectedCountry: finalSelection });
       // await get().setSelectedCountry(finalSelection);
 
@@ -119,6 +126,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem("selected_country", cleanCode);
     }
+    persistCountryCookie(cleanCode);
 
     set({ selectedCountry: cleanCode, pendingCountryChange: null });
 
