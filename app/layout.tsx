@@ -8,6 +8,7 @@ import GoogleTagManager, {
   GoogleTagManagerHead,
 } from "@/components/GoogleTagManager";
 import CountryChangeModal from "@/components/ui/CountryChangeModal";
+import CartToast from "@/components/ui/CartToast";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -62,6 +63,7 @@ export default function RootLayout({
           <GlobalLoader />
           {children}
           <CountryChangeModal />
+          <CartToast />
         </Providers>
       </body>
     </html>

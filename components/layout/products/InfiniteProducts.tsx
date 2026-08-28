@@ -3,21 +3,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import ProductCard from "@/components/ui/ProductCard";
 import { useLoaderStore } from "@/store/useLoaderStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
 
-export default function InfiniteProducts({ initialProducts, filters }: any) {
+const PAGE_SIZE = 20;
 
+export default function InfiniteProducts({ initialProducts, filters }: any) {
   const { selectedCountry } = useGlobalStore();
 
   const mapProductData = (items: any[]) => {
     return (items || []).map((p: any) => {
-
       const basePrice = Number(p.min_offered_price || p.base_price || 0);
       const salePrice = Number(p.sale_price || basePrice);
       const rawSave = basePrice - salePrice;
-      
 
       let offBadge = "";
       if (rawSave > 0) {
@@ -34,43 +34,42 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
       }
 
       return {
-        ...p, // Keep categories, slugs, IDs intact
+        ...p,
         id: p.id,
         name: p.name,
         image: p.image,
-        base_price: salePrice, // Current purchase price
-        oldPrice: rawSave > 0 ? basePrice : null, // Original price strike-through
-        off: offBadge, // Fixed valid badge text
+        base_price: salePrice,
+        oldPrice: rawSave > 0 ? basePrice : null,
+        off: offBadge,
         description: p.description || "",
         seller_name: p.seller_name || null,
       };
     });
   };
 
-  // Initialize and transform initial products
   const [products, setProducts] = useState(() =>
     mapProductData(initialProducts),
   );
-  // const [products, setProducts] = useState(initialProducts || []);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [page, setPage] = useState(2);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(
+    (initialProducts || []).length >= PAGE_SIZE,
+  );
 
   const { show, hide } = useLoaderStore();
-  const observerRef = useRef<HTMLDivElement | null>(null);
   const isFetchingRef = useRef(false);
   const isInitialMount = useRef(true);
-  const limit = 20;
 
-  // const serializedFilters = JSON.stringify(filters);
-  const serializedFilters = JSON.stringify({ ...filters, country: selectedCountry });
+  const serializedFilters = JSON.stringify({
+    ...filters,
+    country: selectedCountry,
+  });
 
-  // console.log(' serializedFilters -==== ',serializedFilters);
-
-  const buildParams = (filters: any, targetPage: number) => {
+  const buildParams = (filterValues: any, targetPage: number) => {
     const params = new URLSearchParams();
 
-    Object.entries(filters).forEach(([key, value]) => {
+    Object.entries(filterValues).forEach(([key, value]) => {
       if (!value) return;
 
       if (Array.isArray(value)) {
@@ -88,10 +87,9 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
   };
 
   const fetchMore = async (fetchPage = page, clearExisting = false) => {
-
-    console.log("fetchMore  == ", fetchPage);
-    // if (loading || !hasMore || isFetchingRef.current) return;
-    if (loading || isFetchingRef.current || (!hasMore && !clearExisting)) return;
+    if (loading || isFetchingRef.current || (!hasMore && !clearExisting)) {
+      return 0;
+    }
 
     isFetchingRef.current = true;
     setLoading(true);
@@ -100,24 +98,23 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
       show("Loading Products...");
 
       const query = buildParams(filters, fetchPage);
-
-      // console.log(' InfiniteProducts query -==== ',query);
       const res = await fetch(`/api/products?${query}`);
       const data = await res.json();
 
       const rawNewProducts = data.data || [];
 
       if (rawNewProducts.length === 0) {
-        if (clearExisting) setProducts([]);
+        if (clearExisting) {
+          setProducts([]);
+          setVisibleCount(PAGE_SIZE);
+        }
         setHasMore(false);
-        return;
+        return 0;
       }
 
-      // Map incoming batch items through the transformation schema
       const newProducts = mapProductData(rawNewProducts);
 
       setProducts((prev: any) => {
-        
         const baseItems = clearExisting ? [] : prev;
         const map = new Map();
         [...baseItems, ...newProducts].forEach((p) => {
@@ -126,23 +123,23 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
         return Array.from(map.values());
       });
 
-      // setProducts((prev: any) => {
-      //   const map = new Map();
-      //   [...prev, ...newProducts].forEach((p) => {
-      //     if (p && p.id) map.set(p.id.toString(), p);
-      //   });
-      //   return Array.from(map.values());
-      // });
+      if (clearExisting) {
+        setVisibleCount(Math.min(PAGE_SIZE, newProducts.length));
+      } else {
+        setVisibleCount((prev) => prev + newProducts.length);
+      }
 
-      if (newProducts.length < limit) {
+      if (newProducts.length < PAGE_SIZE) {
         setHasMore(false);
       } else {
-        // setPage((prev) => prev + 1);
         setHasMore(true);
         setPage(fetchPage + 1);
       }
+
+      return newProducts.length;
     } catch (err) {
       console.error("Failed fetching paginated product listing items:", err);
+      return 0;
     } finally {
       setLoading(false);
       isFetchingRef.current = false;
@@ -156,68 +153,62 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
       return;
     }
 
-    // Explicitly wipe state and fetch refreshed records matching the chosen country setting
     setPage(2);
+    setHasMore(true);
     fetchMore(1, true);
   }, [serializedFilters]);
 
-  // useEffect(() => {
-  //   setProducts(mapProductData(initialProducts));
-  //   setPage(2);
-  //   setHasMore((initialProducts || []).length >= limit);
-  //   isFetchingRef.current = false;
-  // }, [serializedFilters, initialProducts]);
+  const atEnd = !hasMore && visibleCount >= products.length;
+  const showButton = products.length > PAGE_SIZE || hasMore;
 
-  useEffect(() => {
-    const currentTarget = observerRef.current;
-    if (!currentTarget) return;
+  const handleToggleProducts = async () => {
+    if (atEnd) {
+      const resetProducts = mapProductData(initialProducts);
+      setProducts(resetProducts);
+      setVisibleCount(Math.min(PAGE_SIZE, resetProducts.length));
+      setPage(2);
+      setHasMore(resetProducts.length >= PAGE_SIZE);
+      return;
+    }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry) return;
+    if (visibleCount < products.length) {
+      setVisibleCount((prev) =>
+        Math.min(prev + PAGE_SIZE, products.length),
+      );
+      return;
+    }
 
-        if (
-          entry?.isIntersecting &&
-          !isFetchingRef.current &&
-          hasMore &&
-          !loading
-        ) {
-          fetchMore();
-        }
-      },
-      {
-        threshold: 0.1, // Triggers as soon as 10% of the target element is visible
-        rootMargin: "150px", // Start pre-fetching 50px before touching the container absolute bottom
-      },
-    );
+    if (hasMore && !loading) {
+      await fetchMore();
+    }
+  };
 
-    observer.observe(currentTarget);
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [page, hasMore, loading, serializedFilters]);
+  const visibleProducts = products.slice(0, visibleCount);
 
   return (
     <>
-      <ProductCard products={products} disableSlicing={true} />
+      <ProductCard products={visibleProducts} disableSlicing={true} />
 
-      {hasMore && (
-        <div
-          ref={observerRef}
-          className="h-20 flex items-center justify-center w-full mt-6"
-        >
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+      {showButton && (
+        <div className="mt-8 mb-10 flex justify-center">
+          <button
+            type="button"
+            onClick={handleToggleProducts}
+            disabled={loading}
+            className="flex cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-orange-400 to-orange-500 px-10 py-2.5 font-semibold text-white shadow transition hover:from-amber-600 hover:to-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? (
+              "Loading..."
+            ) : atEnd ? (
+              "Show Less"
+            ) : (
+              <>
+                Load More
+                <ArrowRight className="ml-3 h-4 w-4" />
+              </>
+            )}
+          </button>
         </div>
-      )}
-
-      {!hasMore && products.length > 0 && (
-        <p className="text-center py-10 text-gray-400 text-sm font-medium">
-          You've viewed all available products
-        </p>
       )}
     </>
   );

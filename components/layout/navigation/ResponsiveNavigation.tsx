@@ -19,6 +19,7 @@ import {
 import { createPortal } from "react-dom";
 import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/useCartStore";
+import { useWishlistStore } from "@/store/useWishlistStore";
 
 /** Existing Healthy Living sections from the nav, with card copy + images for the mobile drawer */
 const HEALTHY_LIVING_CARDS = [
@@ -100,6 +101,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
 
   const { data: session } = useSession();
   const { cart } = useCartStore();
+  const wishlistCount = useWishlistStore((s) => s.items.length);
   const itemInCart = cart.length;
   const clearCart = useCartStore((s) => s.clearCart);
 
@@ -596,6 +598,11 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                   <Link href="/wishlist" onClick={closeMobileMenu} className={linkRow}>
                     <Heart className="h-[22px] w-[22px] shrink-0 text-gray-800" strokeWidth={1.6} />
                     <span className="flex-1 text-[15px] font-normal text-gray-900">Wishlist</span>
+                    {wishlistCount > 0 && (
+                      <span className="mr-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                        {wishlistCount > 99 ? "99+" : wishlistCount}
+                      </span>
+                    )}
                     <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
                   </Link>
 

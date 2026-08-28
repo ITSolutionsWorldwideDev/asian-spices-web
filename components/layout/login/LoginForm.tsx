@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -97,74 +98,77 @@ export default function LoginForm() {
   };
 
   return (
-    <div
-      className="
-        relative
-        flex
-        h-full
-        w-full
-        items-start
-        justify-center
-        overflow-visible
-        px-0
-        py-4
-        sm:py-6
-        md:items-center
-        [@media(min-height:800px)]:py-10
-      "
-    >
-      <div className="pointer-events-none absolute top-0 left-0 h-40 w-40 rounded-full bg-orange-300/20 blur-3xl sm:h-72 sm:w-72" />
-      <div className="pointer-events-none absolute right-0 bottom-0 h-40 w-40 rounded-full bg-amber-300/20 blur-3xl sm:h-72 sm:w-72" />
+    <div className="relative flex w-full min-w-0 flex-1">
+      <div className="pointer-events-none absolute top-0 left-0 h-24 w-24 rounded-full bg-orange-300/20 blur-3xl sm:h-32 sm:w-32 md:h-40 md:w-40" />
+      <div className="pointer-events-none absolute right-0 bottom-0 h-24 w-24 rounded-full bg-amber-300/20 blur-3xl sm:h-32 sm:w-32 md:h-40 md:w-40" />
       <div
         className="
           relative
-          my-auto
+          flex
           w-full
-          max-w-lg
-          rounded-3xl
+          min-w-0
+          flex-col
+          rounded-2xl
           border
           border-white/30
           bg-white/80
-          p-5
+          p-4
           shadow-[0_20px_80px_rgba(0,0,0,0.08)]
           backdrop-blur-xl
-          sm:p-8
-          lg:p-10
+          sm:p-5
+          sm:rounded-3xl
+          md:p-7
+          lg:p-8
+          xl:p-10
         "
       >
+        <Link
+          href="/"
+          className="group mb-3 inline-flex items-center gap-2 rounded-full border border-orange-100 bg-gradient-to-r from-orange-50 to-amber-50 px-3 py-1.5 text-xs font-semibold text-orange-700 shadow-sm transition-all duration-300 hover:border-orange-200 hover:from-orange-100 hover:to-amber-100 sm:mb-4 sm:text-sm sm:px-4 sm:py-2 md:mb-5"
+        >
+          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white text-orange-600 shadow-sm sm:h-7 sm:w-7">
+            <ArrowLeft size={14} strokeWidth={2.5} />
+          </span>
+          Back to Home
+        </Link>
         <div className="flex justify-center">
           <Link href="/">
             <Image
               src="/assets/logo/Group 87.png"
               alt="Asian Spices"
-              width={90}
-              height={90}
-              className="h-[70px] w-[70px] cursor-pointer sm:h-[90px] sm:w-[90px]"
+              width={180}
+              height={60}
+              priority
+              className="h-9 w-auto object-contain sm:h-10 md:h-11 lg:h-12"
             />
           </Link>
         </div>
-        <div className="mb-6 mt-4 text-center sm:mb-8 sm:mt-6 [@media(max-height:700px)]:mb-4 [@media(max-height:700px)]:mt-3">
-          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+        <div className="mb-4 mt-2 text-center sm:mb-5 sm:mt-3 md:mb-6 md:mt-4">
+          <h1 className="text-lg font-bold text-slate-900 sm:text-xl md:text-2xl lg:text-3xl">
             Welcome Back 👋
           </h1>
 
-          <p className="mt-2 text-slate-500 sm:mt-3 [@media(max-height:700px)]:hidden">
+          <p className="mx-auto mt-1 max-w-sm text-xs text-slate-500 sm:mt-1.5 sm:text-sm md:mt-2 md:text-base">
             Sign in to continue shopping your favorite Asian spices.
           </p>
         </div>
 
-        <GoogleSignInButton label="Continue with Google" callbackUrl="/" />
+        <GoogleSignInButton
+          label="Continue with Google"
+          callbackUrl="/"
+          className="min-h-[44px] text-sm sm:text-base"
+        />
 
-        <div className="my-6 flex items-center sm:my-8 [@media(max-height:700px)]:my-4">
-          <div className="flex-1 h-px bg-slate-200" />
-          <span className="px-4 text-xs uppercase tracking-wider text-slate-400">
+        <div className="my-3 flex items-center gap-2 sm:my-4 md:my-6">
+          <div className="h-px flex-1 bg-slate-200" />
+          <span className="shrink-0 px-2 text-center text-[10px] uppercase tracking-wide text-slate-400 sm:px-4 sm:text-xs sm:tracking-wider">
             Or continue with email
           </span>
-          <div className="flex-1 h-px bg-slate-200" />
+          <div className="h-px flex-1 bg-slate-200" />
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4 text-left">
+        <form onSubmit={handleSubmit} className="space-y-3 text-left sm:space-y-4">
           {/* Email */}
           <div>
             <label className="text-sm text-gray-600 font-bold">Email</label>
@@ -177,13 +181,16 @@ export default function LoginForm() {
                 className="
                 w-full
                 mt-2
+                min-h-[44px]
                 px-4
                 py-3
+                pr-10
                 rounded-xl
                 border
                 border-slate-200
                 bg-white
-                text-sm
+                text-base
+                sm:text-sm
                 transition-all
                 duration-200
                 focus:outline-none
@@ -194,7 +201,9 @@ export default function LoginForm() {
                 // className="w-full mt-1 px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
               />
 
-              <span className="absolute right-4 top-4">✉️</span>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm sm:right-4">
+                ✉️
+              </span>
             </div>
             {errors.email && <p className="error">{errors.email}</p>}
           </div>
@@ -211,13 +220,16 @@ export default function LoginForm() {
                 className="
                 w-full
                 mt-2
+                min-h-[44px]
                 px-4
                 py-3
+                pr-10
                 rounded-xl
                 border
                 border-slate-200
                 bg-white
-                text-sm
+                text-base
+                sm:text-sm
                 transition-all
                 duration-200
                 focus:outline-none
@@ -227,7 +239,9 @@ export default function LoginForm() {
                 "
                 // className="w-full mt-1 px-4 py-3 border  border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
               />
-              <span className="absolute right-4 top-4">🔒</span>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm sm:right-4">
+                🔒
+              </span>
             </div>
             {errors.password && <p className="error">{errors.password}</p>}
 
@@ -258,6 +272,7 @@ export default function LoginForm() {
             type="submit"
             className="
               w-full
+              min-h-[44px]
               py-3.5
               rounded-xl
               font-semibold
@@ -266,7 +281,8 @@ export default function LoginForm() {
               from-orange-500
               to-amber-500
               hover:shadow-xl
-              hover:scale-[1.01]
+              active:scale-[0.99]
+              sm:hover:scale-[1.01]
               transition-all
               duration-300
               disabled:opacity-60
@@ -277,7 +293,7 @@ export default function LoginForm() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-500">
+        <p className="mt-3 text-center text-xs text-slate-500 sm:mt-4 sm:text-sm md:mt-6">
           Don't have an account?{" "}
           <Link
             href="/signup"
@@ -299,23 +315,24 @@ export default function LoginForm() {
 
         <div
           className="
-            mt-6
+            mt-3
             rounded-xl
             border
             border-orange-100
             bg-orange-50
-            p-3
+            p-2.5
             text-center
-            sm:mt-8
-            [@media(max-height:700px)]:mt-4
+            sm:mt-4
+            sm:p-3
+            md:mt-6
           "
         >
-          <p className="text-xs text-orange-700">
+          <p className="text-[11px] text-orange-700 sm:text-xs">
             🔒 Your account is protected with secure authentication
           </p>
         </div>
 
-        <p className="mt-6 text-xs text-gray-400 sm:mt-10 [@media(max-height:700px)]:mt-4">
+        <p className="mt-3 text-[10px] text-gray-400 sm:mt-4 sm:text-xs md:mt-6">
           © 2026 ALL RIGHTS RESERVED
         </p>
       </div>

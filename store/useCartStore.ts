@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { useCurrencyStore } from "./useCurrencyStore";
 import { useGlobalStore } from "./useGlobalStore";
+import { useToastStore, type CartActionOptions } from "./useToastStore";
 import { calculateTotals } from "@/lib/pricing";
 
 export interface CartItem {
@@ -30,10 +31,18 @@ export interface CartItem {
 interface CartState {
   cart: CartItem[];
 
-  addToCart: (item: Omit<CartItem, "quantity">, isLoggedIn: boolean) => void;
+  addToCart: (
+    item: Omit<CartItem, "quantity">,
+    isLoggedIn: boolean,
+    options?: CartActionOptions,
+  ) => void;
   removeFromCart: (id: string, isLoggedIn: boolean) => void;
 
-  increaseQty: (id: string, isLoggedIn: boolean) => void;
+  increaseQty: (
+    id: string,
+    isLoggedIn: boolean,
+    options?: CartActionOptions,
+  ) => void;
   decreaseQty: (id: string, isLoggedIn: boolean) => void;
   setQty: (id: string, quantity: number, isLoggedIn: boolean) => void;
 
@@ -48,7 +57,7 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       cart: [],
 
-      addToCart: async (item, isLoggedIn) => {
+      addToCart: async (item, isLoggedIn, options) => {
         const normalizeId = (id: string | number) =>
           id.toString().toLowerCase().trim();
 
@@ -68,6 +77,25 @@ export const useCartStore = create<CartState>()(
         }
 
         set({ cart: updatedCart });
+
+        const newQty = existing ? existing.quantity + 1 : 1;
+        if (options?.showToast !== false) {
+          if (existing) {
+            useToastStore.getState().show({
+              variant: "increased",
+              title: "Quantity increased",
+              subtitle: `You now have ${newQty} in your cart`,
+              anchor: options?.anchor,
+            });
+          } else {
+            useToastStore.getState().show({
+              variant: "added",
+              title: "Added to cart!",
+              subtitle: "Item added successfully",
+              anchor: options?.anchor,
+            });
+          }
+        }
 
         if (!isLoggedIn) return;
 
@@ -143,14 +171,23 @@ export const useCartStore = create<CartState>()(
       },
 
       // ---------------- INCREASE ----------------
-      increaseQty: async (id, isLoggedIn) => {
+      increaseQty: async (id, isLoggedIn, options) => {
         const targetId = id.toString();
+        const item = get().cart.find((i) => i.id.toString() === targetId);
+        const newQty = (item?.quantity ?? 0) + 1;
+
         set({
           cart: get().cart.map((i) =>
             i.id.toString() === targetId
-              ? { ...i, quantity: i.quantity + 1 }
+              ? { ...i, quantity: newQty }
               : i,
           ),
+        });
+        useToastStore.getState().show({
+          variant: "increased",
+          title: "Quantity increased",
+          subtitle: `You now have ${newQty} in your cart`,
+          anchor: options?.anchor,
         });
 
         if (!isLoggedIn) return;

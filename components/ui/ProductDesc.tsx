@@ -21,6 +21,7 @@ import { useWishlistStore } from "@/store/useWishlistStore";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import Link from "next/link";
+import { anchorFromClick } from "@/lib/cart-toast-anchor";
 
 export default function ProductDesc({
   product,
@@ -168,6 +169,7 @@ export default function ProductDesc({
   ];
   const highlights = product?.highlights || [];
   const [pendingQty, setPendingQty] = useState(1);
+  const [showSeller, setShowSeller] = useState(false);
   const images =
     product.images && product?.images?.length > 0
       ? product.images.map((img: any) => img.url)
@@ -188,7 +190,8 @@ export default function ProductDesc({
     typeof product.reviews === "number" ? Number(product.reviews) : 0;
   const stockCount = Number((product as any)?.total_available_stock || 0);
 
-  const addConfiguredQuantity = () => {
+  const addConfiguredQuantity = (e: React.MouseEvent<HTMLElement>) => {
+    const anchor = anchorFromClick(e);
     const quantityToAdd = Math.max(1, pendingQty);
     for (let i = 0; i < quantityToAdd; i += 1) {
       addToCart(
@@ -206,6 +209,7 @@ export default function ProductDesc({
           promo_code: product.promo_code,
         },
         isLoggedIn,
+        { anchor, showToast: i === quantityToAdd - 1 },
       );
     }
   };
@@ -245,15 +249,25 @@ export default function ProductDesc({
         </div>
 
         {/* Right Info Details */}
-        <div className="space-y-5">
+        <div className="space-y-5" data-cart-anchor>
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
             {product.name}
             {product.weight ? ` ${product.weight}` : ""}
           </h1>
           {product.seller_name ? (
-            <p className="text-sm font-medium text-orange-700">
-              Sold by {product.seller_name}
-            </p>
+            showSeller ? (
+              <p className="text-sm font-medium text-orange-700">
+                Sold by {product.seller_name}
+              </p>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setShowSeller(true)}
+                className="text-sm font-medium text-orange-700 underline-offset-2 hover:underline"
+              >
+                View seller
+              </button>
+            )
           ) : null}
           <p className="text-base text-gray-500">
             Origin: {product.country_of_origin || "International"}
@@ -374,7 +388,11 @@ export default function ProductDesc({
                     className="w-12 text-center text-base font-semibold outline-none"
                   />
                   <button
-                    onClick={() => increaseQty(product.id, isLoggedIn)}
+                    onClick={(e) =>
+                      increaseQty(product.id, isLoggedIn, {
+                        anchor: anchorFromClick(e),
+                      })
+                    }
                     className="h-full px-4 text-lg font-semibold transition hover:bg-gray-100 cursor-pointer"
                   >
                     +
@@ -424,7 +442,11 @@ export default function ProductDesc({
               <div className="flex items-center gap-3">
                 {cartItem ? (
                   <button
-                    onClick={() => increaseQty(product.id, isLoggedIn)}
+                    onClick={(e) =>
+                      increaseQty(product.id, isLoggedIn, {
+                        anchor: anchorFromClick(e),
+                      })
+                    }
                     className="h-14 flex-1 rounded-xl bg-zinc-800 text-lg font-bold text-white transition hover:bg-black cursor-pointer"
                   >
                     In Cart ({cartItem.quantity})
@@ -654,7 +676,7 @@ export default function ProductDesc({ product }: { product: Product }) {
         </div>
 
 
-        <div className="space-y-6">
+        <div className="space-y-6" data-cart-anchor>
           {isPriceAvailable && activeBadge && (
             <span className="inline-block bg-red-100 text-red-600 font-bold text-xs uppercase tracking-wide px-4 py-1 rounded-full shadow-sm animate-fade-in">
               {activeBadge}
@@ -732,7 +754,11 @@ export default function ProductDesc({ product }: { product: Product }) {
                   className="w-14 text-center font-semibold bg-transparent outline-none text-sm"
                 />
                 <button
-                  onClick={() => increaseQty(product.id, isLoggedIn)}
+                  onClick={(e) =>
+                    increaseQty(product.id, isLoggedIn, {
+                      anchor: anchorFromClick(e),
+                    })
+                  }
                   className="px-4 h-full text-lg font-medium hover:bg-gray-100 active:bg-gray-200 transition select-none cursor-pointer"
                 >
                   +
@@ -744,7 +770,11 @@ export default function ProductDesc({ product }: { product: Product }) {
 
           {cartItem ? (
             <button
-              onClick={() => increaseQty(product.id, isLoggedIn)}
+              onClick={(e) =>
+                increaseQty(product.id, isLoggedIn, {
+                  anchor: anchorFromClick(e),
+                })
+              }
               className="w-full bg-green-600 hover:bg-green-700 transition text-white py-4 rounded-xl flex items-center justify-center gap-2 text-lg font-semibold cursor-pointer shadow-sm active:scale-[0.99]"
             >
               <Check size={20} />
@@ -752,7 +782,7 @@ export default function ProductDesc({ product }: { product: Product }) {
             </button>
           ) : (
             <button
-              onClick={() =>
+              onClick={(e) =>
                 addToCart(
                   {
                     id: product.id,
@@ -768,6 +798,7 @@ export default function ProductDesc({ product }: { product: Product }) {
                     promo_code: product.promo_code,
                   },
                   isLoggedIn,
+                  { anchor: anchorFromClick(e) },
                 )
               }
               className="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-4 rounded-xl flex items-center justify-center gap-2 text-lg font-semibold cursor-pointer shadow-sm active:scale-[0.99]"

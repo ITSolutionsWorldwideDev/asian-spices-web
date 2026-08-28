@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { Heart, ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
+import { useWishlistStore } from "@/store/useWishlistStore";
 
 const CartandWhishBtn = () => {
   const { cart } = useCartStore();
+  const wishlistCount = useWishlistStore((s) => s.items.length);
   const itemInCart = cart.length;
 
   return (
@@ -13,12 +15,17 @@ const CartandWhishBtn = () => {
       <Link
         href="/wishlist"
         aria-label="Wishlist"
-        className="flex flex-col items-center px-2.5 py-1 text-gray-700 transition hover:text-orange-500"
+        className="relative flex flex-col items-center px-2.5 py-1 text-gray-700 transition hover:text-orange-500"
       >
         <Heart className="h-5 w-5" strokeWidth={1.75} />
         <span className="mt-0.5 text-[10px] font-medium leading-none tracking-tight">
           Wishlist
         </span>
+        {wishlistCount > 0 && (
+          <span className="absolute right-1 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white">
+            {wishlistCount > 99 ? "99+" : wishlistCount}
+          </span>
+        )}
       </Link>
 
       <Link
@@ -32,7 +39,7 @@ const CartandWhishBtn = () => {
         </span>
         {itemInCart > 0 && (
           <span className="absolute right-1 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white">
-            {itemInCart}
+            {itemInCart > 99 ? "99+" : itemInCart}
           </span>
         )}
       </Link>

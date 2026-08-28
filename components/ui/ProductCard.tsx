@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useSession } from "next-auth/react";
 import { useGlobalStore } from "@/store/useGlobalStore";
+import { anchorFromClick } from "@/lib/cart-toast-anchor";
 
 type Product = {
   id: string;
@@ -46,7 +47,7 @@ export default function ProductCard({
   disableSlicing = false,
 }: ProductCardProps) {
   const { symbol, rate } = useCurrencyStore();
-  const { selectedCountry, taxRules } = useGlobalStore();
+  const { taxRules } = useGlobalStore();
 
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
@@ -171,6 +172,7 @@ export default function ProductCard({
             <div
               key={`${product.id}-${index}`}
               className="bg-white rounded-2xl shadow hover:shadow-2xl transition p-4 relative flex flex-col justify-between"
+              data-cart-anchor
             >
               {/* Upper Section */}
               <div className="relative">
@@ -238,7 +240,7 @@ export default function ProductCard({
 
                 {/* Routing Anchors */}
                 <Link
-                  href={`/${product.category_slug || "spices"}/${product.slug}?country=${selectedCountry}`.replace(
+                  href={`/${product.category_slug || "spices"}/${product.slug}`.replace(
                     /\/+/g,
                     "/",
                   )}
@@ -247,11 +249,6 @@ export default function ProductCard({
                   <h3 className="font-semibold text-gray-800 text-base line-clamp-1">
                     {product.name}
                   </h3>
-                  {product.seller_name ? (
-                    <p className="mt-1 text-xs font-medium text-orange-700 line-clamp-1">
-                      Sold by {product.seller_name}
-                    </p>
-                  ) : null}
                   <p className="text-xs text-gray-600 mt-0.5 line-clamp-2 min-h-[32px]">
                     {product.description || "No description available."}
                   </p>
@@ -309,7 +306,11 @@ export default function ProductCard({
                     <button
                       type="button"
                       aria-label={`Increase quantity of ${product.name}`}
-                      onClick={() => increaseQty(product.id, isLoggedIn)}
+                      onClick={(e) =>
+                        increaseQty(product.id, isLoggedIn, {
+                          anchor: anchorFromClick(e),
+                        })
+                      }
                       className="px-4 h-full text-lg hover:bg-gray-50 active:bg-gray-100 transition select-none cursor-pointer"
                     >
                       +
@@ -320,7 +321,7 @@ export default function ProductCard({
                     type="button"
                     aria-label={`Add ${product.name} to cart`}
                     className="cursor-pointer w-full h-[40px] bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white rounded-xl text-sm font-bold flex items-center justify-center transition shadow-sm active:scale-[0.99]"
-                    onClick={() => {
+                    onClick={(e) => {
                       addToCart(
                         {
                           id: product.id,
@@ -336,6 +337,7 @@ export default function ProductCard({
                           promo_code: product.promo_code,
                         },
                         isLoggedIn,
+                        { anchor: anchorFromClick(e) },
                       );
                     }}
                   >
@@ -449,6 +451,7 @@ export default function ProductCard({
             <div
               key={`${product.id}-${index}`}
               className="bg-white rounded-2xl shadow hover:shadow-2xl transition p-4 relative hover:scale-105"
+              data-cart-anchor
             >
               {product.tag && (
                 <span className="absolute top-1/11 left-1/11 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full flex items-center">
@@ -556,7 +559,11 @@ export default function ProductCard({
                     className="w-12 text-center text-sm font-semibold outline-none bg-transparent"
                   />
                   <button
-                    onClick={() => increaseQty(product.id, isLoggedIn)}
+                    onClick={(e) =>
+                      increaseQty(product.id, isLoggedIn, {
+                        anchor: anchorFromClick(e),
+                      })
+                    }
                     className="px-4 h-full text-lg hover:bg-gray-50 active:bg-gray-100 transition select-none cursor-pointer"
                   >
                     +
@@ -565,7 +572,7 @@ export default function ProductCard({
               ) : (
                 <button
                   className="cursor-pointer mt-4 w-full h-[40px] bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white rounded-xl text-sm font-bold flex items-center justify-center transition shadow-sm active:scale-[0.99]"
-                  onClick={() => {
+                  onClick={(e) => {
                     addToCart(
                       {
                         id: product.id,
@@ -576,6 +583,7 @@ export default function ProductCard({
                         category_slug: product.category_slug,
                       },
                       isLoggedIn,
+                      { anchor: anchorFromClick(e) },
                     );
                   }}
                 >
