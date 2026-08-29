@@ -1,11 +1,20 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import FlashSaleProductCard from "./Flash_Sale_Product_Card";
 import { FlashSaleTimer } from "./Flash_Sale_Timer";
 
 export default function FlashSale() {
+  const [visible, setVisible] = useState<boolean | null>(null);
+
+  if (visible === false) return null;
+
   return (
-    <section className="relative mx-auto mt-10 w-full max-w-full overflow-hidden rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 px-3 py-8 text-white sm:mt-14 sm:rounded-3xl sm:px-6 sm:py-10 md:mt-20 md:px-10 md:py-12">
+    <section
+      className={`relative mx-auto mt-10 w-full max-w-full overflow-hidden rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 px-3 py-8 text-white sm:mt-14 sm:rounded-3xl sm:px-6 sm:py-10 md:mt-20 md:px-10 md:py-12 ${visible === null ? "hidden" : ""}`}
+    >
       {/* Spice pattern background */}
       <div className="pointer-events-none absolute inset-0 opacity-20 sm:opacity-25">
         <Image
@@ -49,7 +58,7 @@ export default function FlashSale() {
 
       {/* Products */}
       <div className="relative z-10 w-full min-w-0">
-        <FlashSaleProductCard />
+        <FlashSaleProductCard onLoad={(count) => setVisible(count > 0)} />
       </div>
 
       {/* Footer link */}

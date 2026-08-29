@@ -11,13 +11,11 @@ import ButtonsNavigation from "../layout/navigation/ButtonsNavigation";
 import UpperSelection from "../layout/navigation/UpperSelection";
 import NavSearch from "../layout/navigation/NavSearch";
 import { useCartStore } from "@/store/useCartStore";
-import { useWishlistStore } from "@/store/useWishlistStore";
 
 const subscribeToClient = () => () => {};
 
 const Nav: React.FC = () => {
   const { cart } = useCartStore();
-  const wishlistCount = useWishlistStore((s) => s.items.length);
   const itemInCart = cart.length;
   const [scrolled, setScrolled] = useState(false);
   const mounted = useSyncExternalStore(
@@ -85,14 +83,9 @@ const Nav: React.FC = () => {
           <Link
             href="/wishlist"
             aria-label="Wishlist"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 transition active:scale-95"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 transition active:scale-95"
           >
             <Heart className="h-5 w-5" strokeWidth={1.75} />
-            {wishlistCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
-                {wishlistCount > 99 ? "99+" : wishlistCount}
-              </span>
-            )}
           </Link>
           <Link
             href="/cart"

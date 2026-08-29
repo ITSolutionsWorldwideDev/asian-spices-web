@@ -10,7 +10,11 @@ import { useSession } from "next-auth/react";
 
 import Flash_Sale_Hover_product_Card from "./Flash_Sale_Hover_product_Card";
 
-export default function FlashSaleProductCard() {
+type FlashSaleProductCardProps = {
+  onLoad?: (count: number) => void;
+};
+
+export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardProps) {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,8 +78,10 @@ export default function FlashSaleProductCard() {
         });
 
         setProducts(mapped);
+        onLoad?.(mapped.length);
       } catch (err) {
         console.error("Failed downloading slider collection layout:", err);
+        onLoad?.(0);
       } finally {
         setLoading(false);
       }
@@ -94,13 +100,7 @@ export default function FlashSaleProductCard() {
     }
   };
 
-  if (loading)
-    return (
-      <div className="py-12 text-center text-sm font-medium text-white/80">
-        Loading Deals...
-      </div>
-    );
-  if (products.length === 0) return null;
+  if (loading || products.length === 0) return null;
 
   return (
     <div className="group relative w-full min-w-0">
