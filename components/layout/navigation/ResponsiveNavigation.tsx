@@ -21,24 +21,25 @@ import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 
-/** Existing Healthy Living sections from the nav, with card copy + images for the mobile drawer */
-const HEALTHY_LIVING_CARDS = [
+/** Healthy Living nav — shared between desktop mega menu and mobile drawer */
+const HEALTHY_LIVING_SECTIONS = [
   {
-    heading: "Health Benefits of Herbs",
+    heading: "Health Benefits",
     description: "Natural wellness guide.",
     image: "/assets/healtyliving/supports-immunity.png",
-    items: [
-      { name: "Supports Immunity", href: "healthyliving/supports-immunity" },
-      { name: "Aids Digestion", href: "healthyliving/aids-digestion" },
-      { name: "Promotes Relaxation", href: "healthyliving/promotes-relaxation" },
-      { name: "Enhances Energy Levels", href: "healthyliving/enhances-energy-levels" },
+    category: [
+      { name: "Sleep & Stress Relief", href: "healthyliving/sleep-stress-relief" },
+      { name: "Immune Support", href: "healthyliving/immune-support" },
+      { name: "Digestion & Gut Health", href: "healthyliving/digestion-gut-health" },
+      { name: "Joint, Skin & Hair Health", href: "healthyliving/joint-skin-hair-health" },
+      { name: "Grandma's Kitchen Remedies", href: "healthyliving/grandmas-kitchen-remedies" },
     ],
   },
   {
     heading: "Herbal Food Supplements",
     description: "Capsules, powders & teas.",
     image: "/assets/healtyliving/capsules.png",
-    items: [
+    category: [
       { name: "Capsules", href: "healthyliving/capsules" },
       { name: "Powders", href: "healthyliving/powders" },
       { name: "Teas", href: "healthyliving/teas" },
@@ -48,7 +49,7 @@ const HEALTHY_LIVING_CARDS = [
     heading: "Herbal Skin Products",
     description: "Face oils, creams & cleansers.",
     image: "/assets/healtyliving/face-oils.png",
-    items: [
+    category: [
       { name: "Face oils", href: "healthyliving/face-oils" },
       { name: "Creams", href: "healthyliving/creams" },
       { name: "Cleansers", href: "healthyliving/cleansers" },
@@ -58,7 +59,7 @@ const HEALTHY_LIVING_CARDS = [
     heading: "Herbal Hair Products",
     description: "Hair oils, shampoos & masks.",
     image: "/assets/healtyliving/hair-oils.png",
-    items: [
+    category: [
       { name: "Hair oils", href: "healthyliving/hair-oils" },
       { name: "Shampoos", href: "healthyliving/shampoos" },
       { name: "Hair masks", href: "healthyliving/hair-masks" },
@@ -170,42 +171,10 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
       {
         name: "Healthy Living",
         hreflink: "#",
-        children: [
-          {
-            heading: "Health Benefits",
-            category: [
-              { name: "Sleep & Stress Relief", href: "healthyliving/sleep-stress-relief" },
-              { name: "Immune Support", href: "healthyliving/immune-support" },
-              { name: "Digestion & Gut Health", href: "healthyliving/digestion-gut-health" },
-              { name: "Joint, Skin & Hair Health", href: "healthyliving/joint-skin-hair-health" },
-              { name: "Grandma's Kitchen Remedies", href: "healthyliving/grandmas-kitchen-remedies" },
-            ],
-          },
-          {
-            heading: "Herbal Food Supplements",
-            category: [
-              { name: "Capsules", href: "healthyliving/capsules" },
-              { name: "Powders", href: "healthyliving/powders" },
-              { name: "Teas", href: "healthyliving/teas" },
-            ],
-          },
-          {
-            heading: "Herbal Skin Products",
-            category: [
-              { name: "Face oils", href: "healthyliving/face-oils" },
-              { name: "Creams", href: "healthyliving/creams" },
-              { name: "Cleansers", href: "healthyliving/cleansers" },
-            ],
-          },
-          {
-            heading: "Herbal Hair Products",
-            category: [
-              { name: "Hair oils", href: "healthyliving/hair-oils" },
-              { name: "Shampoos", href: "healthyliving/shampoos" },
-              { name: "Hair masks", href: "healthyliving/hair-masks" },
-            ],
-          },
-        ],
+        children: HEALTHY_LIVING_SECTIONS.map(({ heading, category }) => ({
+          heading,
+          category,
+        })),
       },
       { name: "Authentic Asian Recipes", hreflink: "recipes" },
     ],
@@ -526,21 +495,21 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                   </button>
                   {healthyExpanded && (
                     <div className="border-b border-gray-100">
-                      {HEALTHY_LIVING_CARDS.map((card) => {
-                        const sectionOpen = activeSection === card.heading;
+                      {HEALTHY_LIVING_SECTIONS.map((section) => {
+                        const sectionOpen = activeSection === section.heading;
                         return (
-                          <div key={card.heading} className="border-b border-gray-100 last:border-b-0">
+                          <div key={section.heading} className="border-b border-gray-100 last:border-b-0">
                             <button
                               type="button"
                               onClick={() =>
-                                setActiveSection(sectionOpen ? null : card.heading)
+                                setActiveSection(sectionOpen ? null : section.heading)
                               }
                               className="flex w-full items-center gap-3.5 px-5 py-3.5 text-left active:bg-gray-50"
                             >
                               <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-gray-100">
                                 <Image
-                                  src={card.image}
-                                  alt={card.heading}
+                                  src={section.image}
+                                  alt={section.heading}
                                   fill
                                   sizes="56px"
                                   className="object-cover"
@@ -548,10 +517,10 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                               </div>
                               <div className="min-w-0 flex-1">
                                 <p className="text-[15px] font-semibold leading-snug text-gray-900">
-                                  {card.heading}
+                                  {section.heading}
                                 </p>
                                 <p className="mt-0.5 text-[13px] leading-snug text-gray-400">
-                                  {card.description}
+                                  {section.description}
                                 </p>
                               </div>
                               <ChevronDown
@@ -564,7 +533,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
 
                             {sectionOpen && (
                               <div className="bg-gray-50 pb-1">
-                                {card.items.map((item) => (
+                                {section.category.map((item) => (
                                   <Link
                                     key={item.href}
                                     href={`/${item.href}`}
