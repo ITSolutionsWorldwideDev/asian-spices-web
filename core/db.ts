@@ -27,7 +27,7 @@ export const pool =
     // connectionString: process.env.DATABASE_URL2,
     connectionString: normalizeDatabaseUrl(process.env.DATABASE_URL2),
     // 🟢 OPTIMIZED: Scaled settings tailored to prevent serverless pool exhaustion
-    max: 10,// 20
+    max: 3,// 20
     idleTimeoutMillis: 20000,// 30000,
     connectionTimeoutMillis: 10000,//10000, // Raised to 10s to gracefully survive sudden server lag spikes
   });
@@ -44,9 +44,9 @@ export const pool =
 //   console.log("Remove");
 // });
 
-if (process.env.NODE_ENV !== "production") {
+// if (process.env.NODE_ENV !== "production") {
   globalThis.varGlobalPool = pool;
-}
+// }
 
 /**
  * Executes a type-safe raw PostgreSQL query using the connection pool
