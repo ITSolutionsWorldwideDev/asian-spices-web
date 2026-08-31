@@ -61,20 +61,20 @@ export default function Header() {
   const current = frames[index];
 
   return (
-    <section className="relative w-full min-h-[90vh] flex flex-col justify-between bg-zinc-950">
+    <section className="relative w-full bg-zinc-950">
       <LazyVideo
         mode="hero"
         src="/assets/home/homeheaderimages/Loop Slider.mp4"
-        className="pointer-events-none absolute inset-0 w-full h-full object-cover z-0"
+        className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover"
       />
       <div className="pointer-events-none absolute inset-0 bg-black/40 z-10" aria-hidden />
 
       <Nav />
 
-      <div className="pointer-events-none relative z-20 flex flex-1 items-center w-full">
+      <div className="relative z-20 w-full pb-8 md:min-h-[340px] md:pb-10 lg:min-h-[380px] lg:pb-12">
         <div
           key={index}
-          className="pointer-events-auto w-full min-h-[400px] flex items-center transition-all duration-500 animate-fade-in"
+          className="pointer-events-auto flex w-full min-h-[inherit] items-center py-6 transition-all duration-500 animate-fade-in md:py-8 lg:py-10"
         >
           <HeaderContent current={current} />
         </div>

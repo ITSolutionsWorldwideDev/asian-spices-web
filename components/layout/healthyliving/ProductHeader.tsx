@@ -36,27 +36,27 @@ const renderHeading = (heading: string) => {
 
 const ProductHeader = ({ heading, text, imageLink }: TextandImage) => {
   return (
-    <section className="relative h-screen min-h-[100svh] w-full max-w-none overflow-hidden">
-      <Image
-        className="pointer-events-none object-cover object-center"
-        src={`/assets/healtyliving/${imageLink}`}
-        fill
-        sizes="100vw"
-        alt={text}
-        priority
-      />
-
-      {/* Dark overlay for text contrast */}
-      <div className="pointer-events-none absolute inset-0 bg-black/45" aria-hidden />
+    <section className="relative w-full overflow-hidden">
+      <div className="absolute inset-0">
+        <Image
+          className="pointer-events-none object-cover object-center"
+          src={`/assets/healtyliving/${imageLink}`}
+          fill
+          sizes="100vw"
+          alt={text}
+          priority
+        />
+        <div className="pointer-events-none absolute inset-0 bg-black/45" aria-hidden />
+      </div>
 
       <Nav />
 
-      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-white container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold sm:text-4xl lg:text-5xl leading-tight tracking-tight">
+      <div className="relative z-10 container mx-auto flex min-h-[280px] flex-col items-center justify-center px-4 pb-10 pt-2 text-white md:min-h-[340px] md:pb-12 md:pt-4 lg:min-h-[380px] lg:pb-14">
+        <div className="mx-auto max-w-3xl text-center">
+          <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
             {renderHeading(heading)}
           </h1>
-          <p className="mt-5 text-sm sm:text-base font-normal text-white/85 leading-relaxed max-w-2xl mx-auto">
+          <p className="mx-auto mt-4 max-w-2xl text-sm font-normal leading-relaxed text-white/85 sm:mt-5 sm:text-base">
             {text}
           </p>
         </div>

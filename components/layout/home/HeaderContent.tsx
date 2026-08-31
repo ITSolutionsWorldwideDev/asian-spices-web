@@ -42,11 +42,11 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
         <p className="text-amber-300 ml-5 text-sm mb-8">{current.quality}</p>
 
         {/* Setting explicit heights or layout bounding limits stops layout fluctuations */}
-        <h1 className="text-4xl md:text-6xl font-bold mb-4 min-h-[2em] flex items-center">
+        <h1 className="mb-4 text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
           {current.title}
         </h1>
 
-        <p className="text-lg text-gray-200 mb-6 min-h-[4.5rem]">
+        <p className="mb-6 text-base text-gray-200 sm:text-lg">
           {current.description}
         </p>
 
@@ -96,7 +96,7 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
         </div>
 
         {/* Features Row */}
-        <div className="text-white flex mt-10 gap-5 flex-wrap">
+        <div className="mt-8 flex flex-wrap gap-4 text-white sm:gap-5 xl:mt-10">
           <p className="flex items-center gap-3 justify-center text-center">
             <span className="bg-green-500 rounded-full h-8 w-8 flex items-center justify-center">
               <Leaf className="w-5 h-5 text-white" />

@@ -386,10 +386,10 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
         <button
           type="button"
           onClick={openMenu}
-          className="relative z-50 rounded-lg p-2 text-gray-800 transition focus:outline-none focus:ring-2 focus:ring-amber-400"
+          className="relative z-50 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-800 transition focus:outline-none focus:ring-2 focus:ring-amber-400 active:scale-95 sm:h-[3.25rem] sm:w-[3.25rem] md:h-14 md:w-14 lg:h-16 lg:w-16"
           aria-label="Open menu"
         >
-          <Menu className="h-6 w-6" />
+          <Menu className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" strokeWidth={2} />
         </button>
 
         {mobileMenu &&

@@ -63,38 +63,38 @@ const Nav: React.FC = () => {
 
   const mobileHeader = (
     <div className="pointer-events-auto w-full xl:hidden">
-      <div className="flex items-center justify-between gap-2 bg-white px-3 py-2 shadow-sm">
-        <div className="flex min-w-0 items-center gap-1">
+      <div className="flex min-h-[3.5rem] items-center justify-between gap-3 bg-white px-4 py-3 shadow-sm sm:min-h-[3.75rem] sm:px-5 md:min-h-16 md:px-6 lg:min-h-[4.25rem] lg:px-8 lg:py-3.5">
+        <div className="flex min-w-0 items-center gap-2.5 sm:gap-3 md:gap-4">
           <ResponsiveNavigation mobileOnly />
           <Link href="/" className="flex shrink-0 items-center">
             <Image
               src="/assets/logo/Group 87.png"
               alt="Asian Spices Logo"
-              width={160}
-              height={52}
+              width={180}
+              height={60}
               priority
               fetchPriority="high"
-              className="h-9 w-auto object-contain sm:h-10"
+              className="h-11 w-auto object-contain sm:h-12 md:h-14 lg:h-16"
             />
           </Link>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2.5 sm:gap-3 md:gap-3.5">
           <Link
             href="/wishlist"
             aria-label="Wishlist"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 transition active:scale-95"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 transition active:scale-95 sm:h-[3.25rem] sm:w-[3.25rem] md:h-14 md:w-14 lg:h-16 lg:w-16"
           >
-            <Heart className="h-5 w-5" strokeWidth={1.75} />
+            <Heart className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" strokeWidth={1.75} />
           </Link>
           <Link
             href="/cart"
             aria-label="Cart"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 transition active:scale-95"
+            className="relative flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 transition active:scale-95 sm:h-[3.25rem] sm:w-[3.25rem] md:h-14 md:w-14 lg:h-16 lg:w-16"
           >
-            <ShoppingCart className="h-5 w-5" strokeWidth={1.75} />
+            <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" strokeWidth={1.75} />
             {itemInCart > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white sm:h-6 sm:min-w-6 sm:text-[11px] md:text-xs">
                 {itemInCart > 99 ? "99+" : itemInCart}
               </span>
             )}
@@ -102,8 +102,7 @@ const Nav: React.FC = () => {
         </div>
       </div>
 
-      {/* Search sits over the existing page/hero background — no solid orange strip */}
-      <div className="px-3 py-2.5">
+      <div className="px-4 py-3 sm:px-5 md:px-6 lg:px-8 lg:py-3.5">
         <NavSearch variant="mobile" />
       </div>
     </div>
@@ -162,7 +161,7 @@ const Nav: React.FC = () => {
   return (
     <>
       {/* Reserves header height so content does not jump under the fixed bar */}
-      <div className="h-[7.25rem] shrink-0 xl:h-28" aria-hidden />
+      <div className="h-[8rem] shrink-0 sm:h-[8.5rem] md:h-[9rem] lg:h-[10rem] xl:h-28" aria-hidden />
       {mounted ? createPortal(bar, document.body) : null}
     </>
   );
