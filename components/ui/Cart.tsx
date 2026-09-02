@@ -13,6 +13,7 @@ import { useWishlistStore } from "@/store/useWishlistStore";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import { useSession } from "next-auth/react";
+import { getProductPath } from "@/lib/product-path";
 import {
   calculateTotals,
   SHIPPING_OPTIONS,
@@ -152,7 +153,11 @@ export default function Cart() {
               >
                 <div className="h-30 w-full sm:w-24 rounded-xl overflow-hidden bg-gray-100 shrink-0">
                   <Link
-                    href={`/${item.category_slug || "products"}/${item.slug || item.id}`}
+                    href={getProductPath({
+                      slug: item.slug || item.id,
+                      subcategory_slug: item.subcategory_slug,
+                      category_slug: item.category_slug,
+                    })}
                   >
                     <Image
                       src={item.image || FALLBACK_IMAGE}
@@ -168,7 +173,11 @@ export default function Cart() {
                   <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
                     <div>
                       <Link
-                        href={`/${item.category_slug || "products"}/${item.slug || item.id}`}
+                        href={getProductPath({
+                      slug: item.slug || item.id,
+                      subcategory_slug: item.subcategory_slug,
+                      category_slug: item.category_slug,
+                    })}
                       >
                         <h3 className="font-semibold cursor-pointer hover:text-orange-600 transition-colors">
                           {item.title}

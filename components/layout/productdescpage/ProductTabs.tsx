@@ -10,7 +10,8 @@ interface ProductTabsProps {
 }
 
 export default function ProductTabs({ product }: ProductTabsProps) {
-  const reviewCount = product?.reviews || 0;
+  const [reviewRefresh, setReviewRefresh] = useState(0);
+  const [reviewCount, setReviewCount] = useState<number>(product?.reviews || 0);
 
   const tabs = [
     "Description",
@@ -81,7 +82,10 @@ export default function ProductTabs({ product }: ProductTabsProps) {
         {/* 🔥 REVIEWS */}
         {activeTab.startsWith("Reviews") && (
           <div className="space-y-4">
-            <ReviewsSection productId={product.id} />
+            <ReviewsSection
+              productId={product.id}
+              refreshKey={reviewRefresh}
+            />
           </div>
         )}
 
@@ -90,7 +94,12 @@ export default function ProductTabs({ product }: ProductTabsProps) {
           <WriteReviewForm
             productId={product.id}
             onSuccess={() => {
-              window.location.reload();
+              setReviewRefresh((n) => n + 1);
+              setReviewCount((count) => {
+                const next = count + 1;
+                setActiveTab(`Reviews (${next})` as Tab);
+                return next;
+              });
             }}
           />
         )}

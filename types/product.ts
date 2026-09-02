@@ -17,6 +17,8 @@ export interface Product {
   brand_id?: string;
 
   category_slug?: string;
+  subcategory_name?: string;
+  subcategory_slug?: string;
 
   country_of_origin?: string;
 

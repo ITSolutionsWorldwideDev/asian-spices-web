@@ -18,6 +18,7 @@ import {
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useCartStore } from "@/store/useCartStore";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { getProductPath } from "@/lib/product-path";
 
 import EmptyWishList from "./EmptyWishList";
 import { useSession } from "next-auth/react";
@@ -204,8 +205,12 @@ export default function WishList() {
           {wishlist.map((item, index) => {
             // ✅ Defensive fallback strategy for names coming from different API interfaces
             const itemTitle = item.name || "Product item";
-            const itemCategorySlug = item.category_slug || "products";
             const itemProductSlug = item.slug || item.id;
+            const productHref = getProductPath({
+              slug: itemProductSlug,
+              subcategory_slug: item.subcategory_slug,
+              category_slug: item.category_slug,
+            });
 
             return (
               <div
@@ -215,7 +220,7 @@ export default function WishList() {
                 <div className="flex flex-col lg:flex-row gap-6">
                   {/* IMAGE */}
                   <Link
-                    href={`/${itemCategorySlug}/${itemProductSlug}`}
+                    href={productHref}
                     className="shrink-0"
                   >
                     <div className="relative w-full lg:w-36 h-36 overflow-hidden rounded-2xl bg-gray-100">
@@ -231,7 +236,7 @@ export default function WishList() {
                   {/* CONTENT */}
                   <div className="flex-1 flex flex-col lg:flex-row justify-between gap-6">
                     <div className="flex-1">
-                      <Link href={`/${itemCategorySlug}/${itemProductSlug}`}>
+                      <Link href={productHref}>
                         <h3 className="font-semibold text-xl text-gray-900 hover:text-orange-500 transition">
                           {itemTitle}
                         </h3>
@@ -260,7 +265,8 @@ export default function WishList() {
                               discount_value: Number(item.discount_value || 0),
                               discount_type: item.discount_type,
                               slug: item.slug,
-                              category_slug: itemCategorySlug,
+                              category_slug: item.category_slug,
+                              subcategory_slug: item.subcategory_slug,
                               category_id: item.category_id,
                               promo_code: item.promo_code,
                             },
@@ -274,7 +280,7 @@ export default function WishList() {
                       </button>
 
                       {/* VIEW DETAILS */}
-                      <Link href={`/${itemCategorySlug}/${itemProductSlug}`}>
+                      <Link href={productHref}>
                         <button className="w-full border border-gray-300 hover:bg-gray-50 transition rounded-xl py-3 px-5 font-medium cursor-pointer">
                           View Details
                         </button>

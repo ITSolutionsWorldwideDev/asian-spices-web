@@ -72,6 +72,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
             seller_name: p.seller_name || null,
             slug: p.slug,
             category_slug: p.category_slug,
+            subcategory_slug: p.subcategory_slug,
             category_id: p.category_id,
             promo_code: p.promo_code,
           };
@@ -230,6 +231,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                         image: item.image,
                         slug: item.slug,
                         category_slug: item.category_slug,
+                        subcategory_slug: item.subcategory_slug,
                         category_id: item.category_id,
                         promo_code: item.promo_code,
                       },

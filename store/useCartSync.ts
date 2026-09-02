@@ -35,7 +35,9 @@ export const useCartSync = () => {
               base_price: Number(item.base_price),
               quantity: item.quantity,
               image: item.image || "",
+              slug: item.slug || "",
               category_slug: item.category_slug || "",
+              subcategory_slug: item.subcategory_slug || "",
             }));
             setCart(formattedCart);
           }
@@ -77,7 +79,9 @@ export const useCartSync = () => {
             base_price: Number(item.base_price),
             quantity: item.quantity,
             image: item.image || "",
+            slug: item.slug || "",
             category_slug: item.category_slug || "",
+            subcategory_slug: item.subcategory_slug || "",
           }));
 
           // const localCart = useCartStore.getState().cart;

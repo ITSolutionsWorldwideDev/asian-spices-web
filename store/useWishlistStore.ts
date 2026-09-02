@@ -13,6 +13,7 @@ export interface WishlistItem {
   slug?: string;
   category_id?: string;
   category_slug?: string;
+  subcategory_slug?: string;
 
   discount_type?: string;
   discount_value?: number;

@@ -12,6 +12,7 @@ import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useSession } from "next-auth/react";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import { anchorFromClick } from "@/lib/cart-toast-anchor";
+import { getProductPath } from "@/lib/product-path";
 
 type Product = {
   id: string;
@@ -19,6 +20,7 @@ type Product = {
   name: string;
   category_id: string;
   category_slug: string;
+  subcategory_slug?: string;
   slug: string;
   image: string;
   base_price: number;
@@ -208,6 +210,8 @@ export default function ProductCard({
                         base_price: product.base_price,
                         slug: product.slug,
                         category_slug: product.category_slug,
+                      subcategory_slug: product.subcategory_slug,
+                        subcategory_slug: product.subcategory_slug,
                       },
                       isLoggedIn,
                     )
@@ -240,10 +244,7 @@ export default function ProductCard({
 
                 {/* Routing Anchors */}
                 <Link
-                  href={`/${product.category_slug || "spices"}/${product.slug}`.replace(
-                    /\/+/g,
-                    "/",
-                  )}
+                  href={getProductPath(product, "spices")}
                   className="block mt-4"
                 >
                   <h3 className="font-semibold text-gray-800 text-base line-clamp-1">
@@ -333,6 +334,8 @@ export default function ProductCard({
                           image: product.image || "/images/placeholder.png",
                           slug: product.slug,
                           category_slug: product.category_slug,
+                      subcategory_slug: product.subcategory_slug,
+                        subcategory_slug: product.subcategory_slug,
                           category_id: product.category_id,
                           promo_code: product.promo_code,
                         },
@@ -394,6 +397,7 @@ type Product = {
   quantity: number;
   name: string;
   category_slug: string;
+  subcategory_slug?: string;
   slug: string;
   image: string;
   base_price: number;
@@ -479,6 +483,7 @@ export default function ProductCard({
                       base_price: product.base_price,
                       slug: product.slug,
                       category_slug: product.category_slug,
+                      subcategory_slug: product.subcategory_slug,
                     },
                     isLoggedIn,
                   )
@@ -509,10 +514,7 @@ export default function ProductCard({
 
       
               <Link
-                href={`/${product.category_slug || "spices"}/${product.slug}`.replace(
-                  /\/+/g,
-                  "/",
-                )}
+                href={getProductPath(product, "spices")}
                 className="block mt-4"
               >
                 <h3 className="font-semibold text-gray-800 text-base line-clamp-1">
@@ -581,6 +583,8 @@ export default function ProductCard({
                         image: product.image || "/images/placeholder.png",
                         slug: product.slug,
                         category_slug: product.category_slug,
+                      subcategory_slug: product.subcategory_slug,
+                        subcategory_slug: product.subcategory_slug,
                       },
                       isLoggedIn,
                       { anchor: anchorFromClick(e) },
@@ -643,10 +647,7 @@ export default function ProductCard({
 
 {
   /* <Link
-                href={`/${product.category_slug || "spices"}/${product.slug}`.replace(
-                  /\/+/g,
-                  "/",
-                )}
+                href={getProductPath(product, "spices")}
               >
                 <h3 className="font-semibold mt-1">
                   {product.name?.split(" ").slice(0, 3).join(" ")}
@@ -708,6 +709,8 @@ export default function ProductCard({
                         image: product.image || "/images/placeholder.png",
                         slug: product.slug,
                         category_slug: product.category_slug,
+                      subcategory_slug: product.subcategory_slug,
+                        subcategory_slug: product.subcategory_slug,
                       },
                       isLoggedIn,
                     );

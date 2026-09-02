@@ -77,6 +77,32 @@ export async function generateMetadata({
   return { title: product.name, description: product.description || "Product details" };
 }
 
+async function renderProductPage(
+  slug: string,
+  country: string,
+  categoryLabel: string,
+) {
+  const product = await cachedGetProduct(slug, country);
+
+  if (!product?.id) {
+    return (
+      <div className="bg-gray-50">
+        <ProductNotFound />
+      </div>
+    );
+  }
+
+  const relatedProducts = await getRelatedProducts(product.category_id, country);
+
+  return (
+    <ProductDescrption
+      product={JSON.parse(JSON.stringify(product))}
+      relatedProducts={JSON.parse(JSON.stringify(relatedProducts || []))}
+      category={product.category_name || categoryLabel}
+    />
+  );
+}
+
 export default async function CategorySlugPage({
   params,
   searchParams,
@@ -93,13 +119,27 @@ export default async function CategorySlugPage({
   }>;
 }) {
   const { category: categorySlug, slug } = await params;
+  const query = await searchParams;
+  const country = await resolveCountry(query.country);
+
   const category = await getStoreCategoryBySlug(categorySlug);
-  if (!category) notFound();
+
+  // /{subcategory}/{product} when first segment is not a category slug
+  if (!category) {
+    const product = await cachedGetProduct(slug, country);
+    if (
+      product?.id &&
+      product.subcategory_slug &&
+      product.subcategory_slug.toLowerCase() === categorySlug.toLowerCase()
+    ) {
+      return renderProductPage(slug, country, product.category_name || "");
+    }
+    notFound();
+  }
 
   // 1) Subcategory listing: /beverages/coffee
   const subcategory = await getStoreSubcategoryBySlug(categorySlug, slug);
   if (subcategory) {
-    const query = await searchParams;
     const clean = (val?: string) =>
       (val ?? "")
         .split(",")
@@ -141,26 +181,6 @@ export default async function CategorySlugPage({
     );
   }
 
-  // 2) Product detail fallback: /beverages/product-slug
-  const query = await searchParams;
-  const country = await resolveCountry(query.country);
-  const product = await cachedGetProduct(slug, country);
-
-  if (!product?.id) {
-    return (
-      <div className="bg-gray-50">
-        <ProductNotFound />
-      </div>
-    );
-  }
-
-  const relatedProducts = await getRelatedProducts(product.category_id, country);
-
-  return (
-    <ProductDescrption
-      product={JSON.parse(JSON.stringify(product))}
-      relatedProducts={JSON.parse(JSON.stringify(relatedProducts || []))}
-      category={product.category_name || category.name}
-    />
-  );
+  // 2) Product detail: /{category}/{product} (legacy) or /{subcategory}/{product}
+  return renderProductPage(slug, country, category.name);
 }
