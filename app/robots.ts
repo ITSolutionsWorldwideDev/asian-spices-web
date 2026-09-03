@@ -21,6 +21,8 @@ export default function robots(): MetadataRoute.Robots {
         "/site-access",
         "/coming-soon",
         "/partner-registration/idin/",
+        "/search",
+        "/*?*",
       ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,

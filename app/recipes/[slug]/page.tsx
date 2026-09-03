@@ -39,10 +39,27 @@ export async function generateMetadata({ params }: RecipePageProps) {
     };
   }
 
+  const title = (recipe.seo_title || recipe.title || "").trim();
+  const description = (
+    recipe.seo_description ||
+    recipe.short_description ||
+    ""
+  ).trim();
+
+  const clamp = (text: string, max: number) => {
+    if (text.length <= max) return text;
+    const cut = text.slice(0, max);
+    const lastSpace = cut.lastIndexOf(" ");
+    return (lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).trim();
+  };
+
   return {
-    title: recipe.seo_title || recipe.title,
-    description: recipe.seo_description || recipe.short_description,
+    title: clamp(title, 60),
+    description: clamp(description, 160),
     keywords: recipe.seo_keywords,
+    alternates: {
+      canonical: `/recipes/${slug}`,
+    },
   };
 }
 

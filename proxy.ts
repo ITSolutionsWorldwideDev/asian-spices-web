@@ -5,6 +5,15 @@ import { isGoogleSiteVerifier, placeGtmSnippets } from "./lib/gtm";
 
 const COOKIE_NAME = "site-access";
 const GTM_REWRITE_HEADER = "x-gtm-placement-rewrite";
+const PATHNAME_HEADER = "x-pathname";
+
+function nextWithPathname(req: NextRequest) {
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set(PATHNAME_HEADER, req.nextUrl.pathname);
+  return NextResponse.next({
+    request: { headers: requestHeaders },
+  });
+}
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -84,6 +93,7 @@ export async function proxy(req: NextRequest) {
   ) {
     const headers = new Headers(req.headers);
     headers.set(GTM_REWRITE_HEADER, "1");
+    headers.set(PATHNAME_HEADER, pathname);
 
     const originResponse = await fetch(req.url, {
       headers,
@@ -104,7 +114,7 @@ export async function proxy(req: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  return nextWithPathname(req);
 }
 
 export const config = {

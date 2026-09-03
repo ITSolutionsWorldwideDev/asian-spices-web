@@ -18,6 +18,10 @@ export async function generateMetadata({
   const { q } = await searchParams;
   return {
     title: q ? `Search results for "${q}"` : "Search",
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

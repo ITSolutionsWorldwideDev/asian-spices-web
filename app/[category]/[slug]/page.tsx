@@ -23,6 +23,7 @@ import {
   getSubcategories,
 } from "@/lib/dbactions/products";
 import { resolveCountry } from "@/lib/country";
+import { getProductMetadata } from "@/lib/product-metadata";
 
 type Filters = {
   category: string;
@@ -67,14 +68,18 @@ export async function generateMetadata({
   const { category, slug } = await params;
   const subcategory = await getStoreSubcategoryBySlug(category, slug);
   if (subcategory) {
-    return { title: subcategory.name, description: `Shop ${subcategory.name}` };
+    return {
+      title: subcategory.name,
+      description: `Shop ${subcategory.name}`,
+      alternates: { canonical: `/${category}/${slug}` },
+    };
   }
 
   const sParams = await searchParams;
   const country = await resolveCountry(sParams?.country);
   const product = await cachedGetProduct(slug, country);
   if (!product?.id) return { title: "Not found" };
-  return { title: product.name, description: product.description || "Product details" };
+  return getProductMetadata(product, product.category_name || undefined);
 }
 
 async function renderProductPage(

@@ -5,6 +5,7 @@ import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";
 import { getProductBySlug, getRelatedProducts } from "@/lib/dbactions/products";
 import { resolveCountry } from "@/lib/country";
+import { getProductMetadata } from "@/lib/product-metadata";
 
 interface PageProps {
   params: Promise<{
@@ -31,10 +32,7 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
     };
   }
 
-  return {
-    title: product.name,
-    description: product.description || "Product details",
-  };
+  return getProductMetadata(product, "Foods & Beverages");
 }
 
 export default async function FoodAndBeveragesDetailPage({
