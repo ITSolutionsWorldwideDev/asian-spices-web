@@ -26,7 +26,7 @@ interface PageProps {
     page?: string;
   }>;
 }
-
+             
 type Filters = {
   category: string;
   subcategories: string[];
