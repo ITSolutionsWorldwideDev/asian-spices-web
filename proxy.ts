@@ -18,6 +18,12 @@ function nextWithPathname(req: NextRequest) {
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Nested relative favicon requests (e.g. /spice-powder/favicon.ico) → root icon.
+  // Happens when metadata used a relative "favicon.ico" href on category/product pages.
+  if (pathname !== "/favicon.ico" && pathname.endsWith("/favicon.ico")) {
+    return NextResponse.rewrite(new URL("/favicon.ico", req.url));
+  }
+
   /* // Skip site lock for Vercel preview/domain
   if (hostname === "asian-spices-web.vercel.app") {
     return NextResponse.next();

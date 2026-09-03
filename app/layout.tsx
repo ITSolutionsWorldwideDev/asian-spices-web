@@ -33,9 +33,11 @@ export async function generateMetadata(): Promise<Metadata> {
     keywords:
       "inventory management, admin dashboard, bootstrap template, invoicing, estimates, business management, responsive admin, POS system",
     icons: {
-      icon: "favicon.ico",
-      shortcut: "favicon.ico",
-      apple: "favicon.ico",
+      // Absolute path is required — relative "favicon.ico" resolves to
+      // /{category}/favicon.ico on nested routes and causes SEO 404s.
+      icon: "/favicon.ico",
+      shortcut: "/favicon.ico",
+      apple: "/favicon.ico",
     },
     openGraph: {
       title: "Asian Spices",

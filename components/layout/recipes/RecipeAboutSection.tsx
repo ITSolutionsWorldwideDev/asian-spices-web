@@ -67,9 +67,11 @@ export default function RecipeAboutSection({
 }: RecipeAboutSectionProps) {
   const cuisine = recipe.origin || "Asian";
   const diet = recipe.category_name || "—";
-  const videoThumb = recipe.youtube_video_id
-    ? `https://img.youtube.com/vi/${recipe.youtube_video_id}/hqdefault.jpg`
-    : recipe.thumbnail_url || "/assets/alt-recipe-banner.jpg";
+  const videoThumb = getRecipeImageSrc(
+    recipe.youtube_video_id
+      ? `https://img.youtube.com/vi/${recipe.youtube_video_id}/hqdefault.jpg`
+      : recipe.thumbnail_url,
+  );
 
   return (
     <section className="bg-[#faf7f2]">

@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { BarChart3, Clock3, Users } from "lucide-react";
 import Nav from "@/components/ui/Nav";
 import RecipeHeaderActions from "./RecipeHeaderActions";
+import { getRecipeImageSrc } from "@/core/utils";
 
 type RecipeDetailHeaderProps = {
   recipe: {
@@ -91,7 +92,7 @@ export default function RecipeDetailHeader({
       {/* HERO — full-width banner (original size) */}
       <div className="relative h-[420px] overflow-hidden sm:h-[520px] md:h-[600px] lg:h-[640px]">
         <Image
-          src={recipe.thumbnail_url || "/assets/alt-recipe-banner.jpg"}
+          src={getRecipeImageSrc(recipe.thumbnail_url)}
           alt={recipe.title}
           fill
           priority
