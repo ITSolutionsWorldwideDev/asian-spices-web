@@ -4,7 +4,7 @@ import { slugContent } from "@/data/healthyLivingData";
 export function getSiteBaseUrl(): string {
   const raw =
     process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
-    process.env.VERCEL_URL?.trim() ||
+    // process.env.VERCEL_URL?.trim() ||
     "https://www.asianspices.online";
 
   const withProtocol = raw.startsWith("http") ? raw : `https://${raw}`;
@@ -90,7 +90,7 @@ export async function getProductSitemapEntries(): Promise<SitemapEntry[]> {
 
   return rows.map((row) => {
     const path = row.subcategory_slug
-      ? `/${row.category_slug}/${row.subcategory_slug}/${row.product_slug}`
+      ? `/${row.subcategory_slug}/${row.product_slug}`
       : `/${row.category_slug}/${row.product_slug}`;
 
     const lastModified = row.updated_at ?? row.created_at ?? undefined;

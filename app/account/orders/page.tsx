@@ -59,7 +59,7 @@ export default function OrdersPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-bold">Order History</h1>
+        <h2 className="text-xl font-bold">Order History</h2>
         <span className="text-sm text-gray-500 font-medium">
           Total Orders: {paginationMeta.totalRecords}
         </span>

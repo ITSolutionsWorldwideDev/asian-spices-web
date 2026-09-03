@@ -142,10 +142,10 @@ export default function Premium_Spice_Collection() {
         />
 
         <div>
-          <h1 className="md:text-6xl md:font-extrabold text-4xl">
+          <h2 className="md:text-6xl md:font-extrabold text-4xl">
             Premium Spice{" "}
-          </h1>
-          <h1 className="md:text-8xl md:font-extrabold text-4xl">Collection</h1>
+          </h2>
+          <h2 className="md:text-8xl md:font-extrabold text-4xl">Collection</h2>
         </div>
       </div>
 

@@ -68,7 +68,7 @@ export default async function Homei() {
       <div className="relative overflow-hidden">
         <Image
           src="/assets/home/collections/collection-bg.webp"
-          alt=""
+          alt="Decorative spice pattern with star anise, cloves, and peppercorns"
           fill
           sizes="100vw"
           className="object-cover opacity-90"

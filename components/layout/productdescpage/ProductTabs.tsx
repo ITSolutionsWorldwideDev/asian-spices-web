@@ -10,7 +10,8 @@ interface ProductTabsProps {
 }
 
 export default function ProductTabs({ product }: ProductTabsProps) {
-  const reviewCount = product?.reviews || 0;
+  const [reviewRefresh, setReviewRefresh] = useState(0);
+  const [reviewCount, setReviewCount] = useState<number>(product?.reviews || 0);
 
   const tabs = [
     "Description",
@@ -57,9 +58,8 @@ export default function ProductTabs({ product }: ProductTabsProps) {
         {/* 🔥 DESCRIPTION */}
         {activeTab === "Description" && (
           <>
+            <h2 className="mb-5 font-bold text-xl">Product Detail</h2>
             <p className="text-[#364153]">{description}</p>
-
-            <h4 className="mt-6 text-black">Product Details</h4>
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <Detail label="SKU" value={sku} />
@@ -73,7 +73,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
         {/* 🔥 HEALTH BENEFITS */}
         {activeTab === "Health Benefits" && (
           <>
-            <h1 className="mb-5 font-bold text-xl">Health Benefits</h1>
+            <h2 className="mb-5 font-bold text-xl">Health Benefits</h2>
             <p className="text-[#364153] whitespace-pre-line">{healthBenefits}</p>
           </>
         )}
@@ -81,7 +81,10 @@ export default function ProductTabs({ product }: ProductTabsProps) {
         {/* 🔥 REVIEWS */}
         {activeTab.startsWith("Reviews") && (
           <div className="space-y-4">
-            <ReviewsSection productId={product.id} />
+            <ReviewsSection
+              productId={product.id}
+              refreshKey={reviewRefresh}
+            />
           </div>
         )}
 
@@ -90,7 +93,12 @@ export default function ProductTabs({ product }: ProductTabsProps) {
           <WriteReviewForm
             productId={product.id}
             onSuccess={() => {
-              window.location.reload();
+              setReviewRefresh((n) => n + 1);
+              setReviewCount((count) => {
+                const next = count + 1;
+                setActiveTab(`Reviews (${next})` as Tab);
+                return next;
+              });
             }}
           />
         )}

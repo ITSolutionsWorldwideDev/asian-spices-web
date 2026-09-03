@@ -38,7 +38,7 @@ export default async function Collections() {
       <div className="pointer-events-none absolute inset-0 opacity-[0.14]">
         <Image
           src="/assets/home/collections/collection-bg.webp"
-          alt=""
+          alt="Decorative spice pattern with star anise, cloves, and peppercorns"
           fill
           sizes="100vw"
           className="object-cover"

@@ -13,9 +13,6 @@ export async function GET(req: Request) {
     return NextResponse.json([], { status: 200 });
   }
 
-  const { searchParams } = new URL(req.url);
-  const countryCode = (searchParams.get("country") || "NL").toUpperCase();
-
   const client = await pool.connect();
 
   try {
@@ -38,23 +35,19 @@ export async function GET(req: Request) {
           sci.product_id,
           sci.quantity,
           p.name AS title,
-          COALESCE(cat.min_offered_price, p.base_price)::numeric AS base_price,
+          p.slug,
+          sci.price::numeric AS base_price,
           p.discount_type,
           p.discount_value,
           p.sale_price,
           p.promo_code,
+          c.slug AS category_slug,
+          sc.slug AS subcategory_slug,
           img.file_url AS image 
         FROM store_cart_items sci
-        INNER JOIN store_products p ON p.id = sci.product_id        
-        LEFT JOIN (
-          SELECT 
-            spc.product_id,
-            MIN(spc.price) as min_offered_price
-          FROM public.store_product_catalog spc
-          INNER JOIN public.store_settings ss ON ss.store_id = spc.store_id
-          WHERE ss.country_code = $2 AND spc.status = 1
-          GROUP BY spc.product_id
-        ) cat ON cat.product_id = p.id
+        INNER JOIN store_products p ON p.id = sci.product_id
+        LEFT JOIN store_categories c ON c.id = p.category_id
+        LEFT JOIN store_subcategories sc ON sc.id = p.subcategory_id
         LEFT JOIN (
           SELECT DISTINCT ON (pi.product_id) 
             pi.product_id, 
@@ -65,35 +58,8 @@ export async function GET(req: Request) {
         ) img ON img.product_id = p.id
         WHERE sci.cart_id = $1
       `,
-      [cartRes.rows[0].id, countryCode],
+      [cartRes.rows[0].id],
     );
-
-    // const items = await client.query(
-    //   `
-    //     SELECT 
-    //       sci.product_id,
-    //       sci.quantity,
-    //       p.name AS title,
-    //       p.base_price::numeric AS base_price,
-    //       p.discount_type,
-    //       p.discount_value,
-    //       p.sale_price,
-    //       p.promo_code,
-    //       img.file_url AS image 
-    //     FROM store_cart_items sci
-    //     LEFT JOIN store_products p ON p.id = sci.product_id        
-    //     LEFT JOIN (
-    //       SELECT DISTINCT ON (pi.product_id) 
-    //         pi.product_id, 
-    //         md.file_url
-    //       FROM store_product_images pi
-    //       LEFT JOIN media md ON md.media_id = pi.url::int
-    //       ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
-    //     ) img ON img.product_id = p.id
-    //     WHERE sci.cart_id = $1
-    //   `,
-    //   [cartRes.rows[0].id],
-    // );
 
     return NextResponse.json(items.rows);
   } finally {
@@ -110,24 +76,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { product_id, quantity } = await req.json();
+  const { product_id, quantity, price } = await req.json();
 
-  /* ---------------- GET PRICE FROM DB ---------------- */
-
-  const productRes = await client.query(
-    `
-    SELECT base_price 
-    FROM store_products 
-    WHERE id = $1
-    `,
-    [product_id],
-  );
-
-  if (!productRes.rowCount) {
-    return NextResponse.json({ error: "Product not found" }, { status: 404 });
+  const cartPrice = Number(price);
+  if (!product_id || !cartPrice || cartPrice <= 0) {
+    return NextResponse.json({ error: "Invalid cart item" }, { status: 400 });
   }
-
-  const base_price = productRes.rows[0].base_price;
 
   try {
     const customerId = await getOrCreateCustomer(client, session.user);
@@ -158,7 +112,7 @@ export async function POST(req: Request) {
        ON CONFLICT (cart_id, product_id)
        DO UPDATE SET quantity = store_cart_items.quantity + EXCLUDED.quantity
        RETURNING *`,
-      [cartId, product_id, quantity, base_price],
+      [cartId, product_id, quantity, cartPrice],
     );
 
     return NextResponse.json(result.rows[0]);

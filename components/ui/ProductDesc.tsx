@@ -205,6 +205,7 @@ export default function ProductDesc({
           image: images[0] || "/images/placeholder.png",
           slug: product.slug,
           category_slug: product.category_slug,
+          subcategory_slug: product.subcategory_slug,
           category_id: product.category_id,
           promo_code: product.promo_code,
         },
@@ -225,8 +226,21 @@ export default function ProductDesc({
           className="flex items-center gap-2 hover:underline"
         >
           <p className="text-[#6A7282] whitespace-nowrap">{category}</p>
-          {/* Products-  */}
         </Link>
+
+        {product.subcategory_name && product.subcategory_slug && (
+          <>
+            <span className="text-[#6A7282]">/</span>
+            <Link
+              href={`/${categorySlug}/${product.subcategory_slug}`}
+              className="hover:underline"
+            >
+              <p className="text-[#6A7282] whitespace-nowrap">
+                {product.subcategory_name}
+              </p>
+            </Link>
+          </>
+        )}
 
         <span className="text-[#6A7282]">/</span>
         <p className="text-gray-900 font-medium wrap-break-word">
@@ -469,6 +483,7 @@ export default function ProductDesc({
                         base_price: isPriceAvailable ? currentPrice : 0,
                         slug: product.slug,
                         category_slug: product.category_slug,
+                        subcategory_slug: product.subcategory_slug,
                       },
                       isLoggedIn,
                     )
@@ -496,7 +511,7 @@ export default function ProductDesc({
 
           {/* Why choose us */}
           <section className="pt-2">
-            <h3 className="text-3xl font-bold text-gray-900">Why choose us?</h3>
+            <p className="text-3xl font-bold text-gray-900">Why choose us?</p>
             <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {whyChooseUs.map((item, idx) => (
                 <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">
@@ -794,6 +809,7 @@ export default function ProductDesc({ product }: { product: Product }) {
                     image: images[0] || "/images/placeholder.png",
                     slug: product.slug,
                     category_slug: product.category_slug,
+          subcategory_slug: product.subcategory_slug,
                     category_id: product.category_id,
                     promo_code: product.promo_code,
                   },
@@ -819,6 +835,7 @@ export default function ProductDesc({ product }: { product: Product }) {
                   base_price: currentPrice,
                   slug: product.slug,
                   category_slug: product.category_slug,
+          subcategory_slug: product.subcategory_slug,
                 },
                 isLoggedIn,
               )

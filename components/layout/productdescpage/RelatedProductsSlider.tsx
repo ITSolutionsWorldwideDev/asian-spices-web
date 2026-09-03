@@ -4,6 +4,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { getProductPath } from "@/lib/product-path";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Keyboard } from "swiper/modules";
 
@@ -66,7 +67,7 @@ export default function RelatedProductsSlider({ products }: any) {
           return (
           <SwiperSlide key={product.id} className="!h-aut py-10">
             <Link
-              href={`/${product.category_slug || "products"}/${product.slug}`}
+              href={getProductPath(product)}
               className="block bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group"
             >
               {/* IMAGE */}

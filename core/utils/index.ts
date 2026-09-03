@@ -89,6 +89,23 @@ export function extractYoutubeData(url: string) {
 
 const RECIPE_IMAGE_FALLBACK = "/assets/alt-recipe-banner.jpg";
 
+/** YouTube videos whose thumbnails permanently 404 (deleted/private). */
+const DEAD_YOUTUBE_VIDEO_IDS = new Set([
+  "I7wYl8wKFqU", // Bharwa Karela — img.youtube.com returns 404 for all sizes
+]);
+
+function youtubeVideoIdFromUrl(url: string): string | null {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host !== "img.youtube.com" && host !== "i.ytimg.com") return null;
+    const match = parsed.pathname.match(/\/vi\/([^/]+)\//);
+    return match?.[1] || null;
+  } catch {
+    return null;
+  }
+}
+
 export function getRecipeImageSrc(
   thumbnailUrl?: string | null,
   fallback: string = RECIPE_IMAGE_FALLBACK,
@@ -96,8 +113,16 @@ export function getRecipeImageSrc(
   const src = thumbnailUrl?.trim();
   if (!src) return fallback;
 
+  const deadId = youtubeVideoIdFromUrl(src);
+  if (deadId && DEAD_YOUTUBE_VIDEO_IDS.has(deadId)) {
+    return fallback;
+  }
+
   const youtube = extractYoutubeData(src);
-  if (youtube?.thumbnailUrl) return youtube.thumbnailUrl;
+  if (youtube?.thumbnailUrl) {
+    if (DEAD_YOUTUBE_VIDEO_IDS.has(youtube.videoId)) return fallback;
+    return youtube.thumbnailUrl;
+  }
 
   try {
     const parsed = new URL(src);

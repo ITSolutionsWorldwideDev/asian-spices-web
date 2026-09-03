@@ -27,7 +27,7 @@ export default function ProductDescrption({
       <ProductDesc product={product} category={displayCategory} />
 
       <div className="container mx-auto mt-10 p-5">
-        <h1 className="text-black font-bold mb-5">You May Also Like</h1>
+        <h2 className="text-black font-bold mb-5">You May Also Like</h2>
         <RelatedProductsSlider products={relatedProducts} />
       </div>
 

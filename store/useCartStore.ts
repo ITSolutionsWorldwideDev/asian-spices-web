@@ -18,6 +18,7 @@ export interface CartItem {
   slug?: string;
   category_id?: string;
   category_slug?: string;
+  subcategory_slug?: string;
 
   exchange_rate?: number;
   tax_rate?: number;
@@ -117,7 +118,7 @@ export const useCartStore = create<CartState>()(
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               product_id: item.id,
-              // base_price: item.base_price,
+              price: item.base_price,
               quantity: 1,
               exchange_rate: currentCurrencyState.rate || 1.0,
               tax_rate: stampedItem?.tax_rate || 0.0,
@@ -163,8 +164,10 @@ export const useCartStore = create<CartState>()(
               base_price: Number(item.base_price),
               quantity: item.quantity,
               image: item.image || "",
+              slug: item.slug || "",
               category_id: item.category_id || "",
               category_slug: item.category_slug || "",
+              subcategory_slug: item.subcategory_slug || "",
             })),
           });
         }

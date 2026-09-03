@@ -1,7 +1,7 @@
 import React from "react";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import RecipeThumbnail from "@/components/layout/recipes/RecipeThumbnail";
 
 interface RecipeCard {
   title: string;
@@ -18,7 +18,7 @@ interface RecipesProductCardProps {
 const RecipesProductCard = ({ card }: RecipesProductCardProps) => {
   const imageSrc =
     card.thumbnail_url ||
-    (card.image ? `/assets/recipes/${card.image}` : "/placeholder-food.jpg");
+    (card.image ? `/assets/recipes/${card.image}` : null);
 
   const recipeSlug =
     card.slug ||
@@ -31,7 +31,7 @@ const RecipesProductCard = ({ card }: RecipesProductCardProps) => {
   return (
     <div className="h-auto cursor-pointer overflow-hidden">
       <div className="relative h-64 rounded-2xl overflow-hidden m-5">
-        <Image
+        <RecipeThumbnail
           src={imageSrc}
           alt={card.title}
           fill

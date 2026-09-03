@@ -263,9 +263,9 @@ export default function BusinessVerification({
       <div className=" bg-gray-100 flex justify-center py-10 px-4">
         <div className="w-full max-w-3xl">
           {/* Title */}
-          <h1 className="text-3xl font-bold text-gray-800">
+          <h2 className="text-3xl font-bold text-gray-800">
             Business & Billing Verification
-          </h1>
+          </h2>
           <p className="text-gray-500 mt-2">
             Please review your company information retrieved from the Chamber of
             Commerce.
@@ -284,7 +284,7 @@ export default function BusinessVerification({
           <div className="mt-6 bg-white rounded-lg shadow-sm border border-[#E5E7EB] p-6">
             <div className="flex items-center gap-2 mb-4">
               <Building2 className="w-5 h-5 text-gray-600" />
-              <h2 className="font-semibold text-gray-700">Company Details</h2>
+              <h3 className="font-semibold text-gray-700">Company Details</h3>
             </div>
             <div className="space-y-4">
               <InputField
@@ -346,9 +346,9 @@ export default function BusinessVerification({
           <div className="mt-6 bg-white rounded-lg shadow-sm border border-[#E5E7EB] p-6">
             <div className="flex items-center gap-2 mb-4">
               <MapPin className="w-5 h-5 text-gray-600" />
-              <h2 className="font-semibold text-gray-700">
+              <h3 className="font-semibold text-gray-700">
                 Registered Address
-              </h2>
+              </h3>
             </div>
             <div className="space-y-4">
               <InputField
@@ -397,7 +397,7 @@ export default function BusinessVerification({
 
           <div className=" mt-6 bg-white rounded-lg shadow-sm border border-[#E5E7EB] p-6">
             <div className=" rounded-lg  text-sm text-gray-600 space-y-2">
-              <h2 className="font-semibold text-gray-800">Need Help?</h2>
+              <h3 className="font-semibold text-gray-800">Need Help?</h3>
               <p>
                 If you have any questions about your registration or need
                 assistance, our support team is here to help.

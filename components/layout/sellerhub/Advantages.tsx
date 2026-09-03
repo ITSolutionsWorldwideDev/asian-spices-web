@@ -51,9 +51,9 @@ export default function Advantages() {
 
           {/* Right side - Content */}
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-[#D85A27] mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-[#D85A27] mb-6">
               The advantages of selling via Asian Spices
-            </h1>
+            </h2>
 
             <p className="text-gray-700 mb-8 leading-relaxed">
               Together, we uncover new opportunities and empower ambitious

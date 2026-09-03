@@ -5,9 +5,24 @@ import { isGoogleSiteVerifier, placeGtmSnippets } from "./lib/gtm";
 
 const COOKIE_NAME = "site-access";
 const GTM_REWRITE_HEADER = "x-gtm-placement-rewrite";
+const PATHNAME_HEADER = "x-pathname";
+
+function nextWithPathname(req: NextRequest) {
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set(PATHNAME_HEADER, req.nextUrl.pathname);
+  return NextResponse.next({
+    request: { headers: requestHeaders },
+  });
+}
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // Nested relative favicon requests (e.g. /spice-powder/favicon.ico) → root icon.
+  // Happens when metadata used a relative "favicon.ico" href on category/product pages.
+  if (pathname !== "/favicon.ico" && pathname.endsWith("/favicon.ico")) {
+    return NextResponse.rewrite(new URL("/favicon.ico", req.url));
+  }
 
   /* // Skip site lock for Vercel preview/domain
   if (hostname === "asian-spices-web.vercel.app") {
@@ -84,6 +99,7 @@ export async function proxy(req: NextRequest) {
   ) {
     const headers = new Headers(req.headers);
     headers.set(GTM_REWRITE_HEADER, "1");
+    headers.set(PATHNAME_HEADER, pathname);
 
     const originResponse = await fetch(req.url, {
       headers,
@@ -104,7 +120,7 @@ export async function proxy(req: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  return nextWithPathname(req);
 }
 
 export const config = {

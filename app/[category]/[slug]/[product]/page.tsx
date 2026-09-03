@@ -11,6 +11,7 @@ import {
 } from "@/lib/dbactions/categories";
 import { getProductBySlug, getRelatedProducts } from "@/lib/dbactions/products";
 import { resolveCountry } from "@/lib/country";
+import { getProductMetadata } from "@/lib/product-metadata";
 
 interface PageProps {
   params: Promise<{ category: string; slug: string; product: string }>;
@@ -27,10 +28,7 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
   const country = await resolveCountry(sParams?.country);
   const product = await cachedGetProduct(productSlug, country);
   if (!product?.id) return { title: "Product not found" };
-  return {
-    title: product.name,
-    description: product.description || "Product details",
-  };
+  return getProductMetadata(product, product.category_name || undefined);
 }
 
 export default async function CategorySubcategoryProductPage({

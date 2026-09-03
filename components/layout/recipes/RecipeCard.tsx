@@ -1,8 +1,7 @@
 // apps/web/components/layout/recipes/RecipeCard.tsx
 import Link from "next/link";
-import Image from "next/image";
 import { Clock3, ChefHat } from "lucide-react";
-import { getRecipeImageSrc } from "@/core/utils";
+import RecipeThumbnail from "@/components/layout/recipes/RecipeThumbnail";
 
 interface RecipeCardProps {
   recipe: any;
@@ -19,8 +18,8 @@ export default function RecipeCard({
       className="group bg-white border rounded-3xl overflow-hidden hover:shadow-xl transition duration-300"
     >
       <div className="relative h-[240px] overflow-hidden bg-gray-100">
-        <Image
-          src={recipe.thumbnail_url || "/placeholder-food.jpg"}
+        <RecipeThumbnail
+          src={recipe.thumbnail_url}
           alt={recipe.title}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"

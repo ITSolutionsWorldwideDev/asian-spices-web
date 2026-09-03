@@ -1,6 +1,7 @@
 // app/layout.tsx
 
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Providers from "./providers";
 import GlobalLoader from "@/components/ui/GlobalLoader";
 import GoogleTagManager, {
@@ -9,38 +10,54 @@ import GoogleTagManager, {
 } from "@/components/GoogleTagManager";
 import CountryChangeModal from "@/components/ui/CountryChangeModal";
 import CartToast from "@/components/ui/CartToast";
+import { getSiteBaseUrl } from "@/lib/sitemap-urls";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "Asian Spices",
-  description:
-    "Asian Spices is your trusted online destination for premium Asian spices, authentic ingredients, recipes, and kitchen essentials.",
-  keywords:
-    "inventory management, admin dashboard, bootstrap template, invoicing, estimates, business management, responsive admin, POS system",
-  icons: {
-    icon: "favicon.ico",
-    shortcut: "favicon.ico",
-    apple: "favicon.ico",
-  },
+function normalizeCanonicalPath(pathname: string): string {
+  if (!pathname || pathname === "/") return "/";
+  return pathname.replace(/\/+$/, "") || "/";
+}
 
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const headerList = await headers();
+  const pathname = headerList.get("x-pathname") || "/";
+
+  return {
+    metadataBase: new URL(getSiteBaseUrl()),
+    alternates: {
+      canonical: normalizeCanonicalPath(pathname),
+    },
     title: "Asian Spices",
     description:
       "Asian Spices is your trusted online destination for premium Asian spices, authentic ingredients, recipes, and kitchen essentials.",
-    url: "https://www.asianspices.online",
-    siteName: "Asian Spices",
-    images: [
-      {
-        url: "https://www.asianspices.online/assets/as-thumbnail.png",
-        width: 1200,
-        height: 630,
-        alt: "Asian Spices Platform",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-};
+    keywords:
+      "inventory management, admin dashboard, bootstrap template, invoicing, estimates, business management, responsive admin, POS system",
+    icons: {
+      // Absolute path is required — relative "favicon.ico" resolves to
+      // /{category}/favicon.ico on nested routes and causes SEO 404s.
+      icon: "/favicon.ico",
+      shortcut: "/favicon.ico",
+      apple: "/favicon.ico",
+    },
+    openGraph: {
+      title: "Asian Spices",
+      description:
+        "Asian Spices is your trusted online destination for premium Asian spices, authentic ingredients, recipes, and kitchen essentials.",
+      url: "https://www.asianspices.online",
+      siteName: "Asian Spices",
+      images: [
+        {
+          url: "https://www.asianspices.online/assets/as-thumbnail.png",
+          width: 1200,
+          height: 630,
+          alt: "Asian Spices Platform",
+        },
+      ],
+      locale: "en_US",
+      type: "website",
+    },
+  };
+}
 
 export default function RootLayout({
   children,

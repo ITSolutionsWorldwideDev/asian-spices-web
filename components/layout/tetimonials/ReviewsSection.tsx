@@ -5,37 +5,54 @@
 import { useEffect, useState } from "react";
 import Stars from "./Stars";
 
-export default function ReviewsSection({ productId }: { productId: string }) {
+export default function ReviewsSection({
+  productId,
+  refreshKey = 0,
+}: {
+  productId: string;
+  refreshKey?: number;
+}) {
   const [data, setData] = useState<any>(null);
   const [page, setPage] = useState(1);
 
   const fetchReviews = async () => {
     const res = await fetch(
-      `/api/products/reviews?productId=${productId}&page=${page}`
+      `/api/products/reviews?productId=${productId}&page=${page}`,
     );
     const json = await res.json();
 
+    const safeData = res.ok
+      ? json
+      : { reviews: [], total: 0, average: 0, breakdown: [] };
+
     if (page === 1) {
-      setData(json);
+      setData(safeData);
     } else {
       setData((prev: any) => ({
-        ...json,
-        reviews: [...prev.reviews, ...json.reviews],
+        ...safeData,
+        reviews: [...(prev?.reviews || []), ...(safeData.reviews || [])],
       }));
     }
   };
 
   useEffect(() => {
+    setPage(1);
+    setData(null);
+  }, [productId, refreshKey]);
+
+  useEffect(() => {
     fetchReviews();
-  }, [page]);
+  }, [page, productId, refreshKey]);
 
   if (!data) return <p>Loading reviews...</p>;
 
   const breakdownMap: any = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
-  data.breakdown.forEach((b: any) => {
+  (data.breakdown || []).forEach((b: any) => {
     breakdownMap[b.rating] = b.count;
   });
+
+  const reviews = data.reviews || [];
 
   return (
     <section className="max-w-5xl mx-auto px-4 py-10">
@@ -67,7 +84,11 @@ export default function ReviewsSection({ productId }: { productId: string }) {
 
       {/* REVIEWS */}
       <div className="divide-y">
-        {data.reviews.map((r: any) => (
+        {reviews.length === 0 && (
+          <p className="py-8 text-center text-gray-500">No reviews yet.</p>
+        )}
+
+        {reviews.map((r: any) => (
           <div key={r.id} className="py-6">
             <p className="font-medium">{r.name}</p>
             <Stars rating={r.rating} />
@@ -80,7 +101,7 @@ export default function ReviewsSection({ productId }: { productId: string }) {
       </div>
 
       {/* LOAD MORE */}
-      {data.reviews.length < data.total && (
+      {reviews.length < (data.total || 0) && (
         <div className="text-center mt-6">
           <button
             onClick={() => setPage((p) => p + 1)}

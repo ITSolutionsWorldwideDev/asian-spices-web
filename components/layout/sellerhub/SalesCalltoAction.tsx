@@ -12,9 +12,9 @@ export default function SalesCalltoAction() {
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
           Ready to Grow Your Sales?
-        </h1>
+        </h2>
 
         {/* Subheading */}
         <p className="text-lg md:text-xl text-white/90 mb-8 px-4">

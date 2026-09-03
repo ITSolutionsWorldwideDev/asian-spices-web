@@ -78,7 +78,7 @@ export const getProducts = async (filters: any) => {
       LEFT JOIN media md ON md.media_id = pi.url::int
       ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
     ) img ON img.product_id = p.id
-    WHERE 1=1
+    WHERE p.status = 1
   `;
 
   if (saleOnly) {
@@ -235,10 +235,20 @@ export const getProductBySlug = async (
       p.search_vector,
       c.name AS category_name,
       c.slug AS category_slug,
+      sc.name AS subcategory_name,
       sc.slug AS subcategory_slug,
       cat.min_offered_price,
       cat.total_available_stock,
       cat.seller_name,
+      (
+        SELECT COUNT(*)::int
+        FROM store_product_reviews rv
+        WHERE rv.product_id = p.id
+          AND (
+            rv.status IS NULL
+            OR rv.status IN ('approved', 'pending', 'published')
+          )
+      ) AS reviews,
       COALESCE(
         json_agg(
           DISTINCT jsonb_build_object(
@@ -296,6 +306,7 @@ export const getProductBySlug = async (
       p.search_vector,
       c.name, 
       c.slug,
+      sc.name,
       sc.slug,
       cat.min_offered_price, 
       cat.total_available_stock,
@@ -329,6 +340,7 @@ export const getRelatedProducts = async (
       cat.seller_name,
       p.category_id,
       c.slug AS category_slug,
+      sc.slug AS subcategory_slug,
       md.file_url AS image
     FROM store_products p
     LEFT JOIN (
@@ -343,6 +355,7 @@ export const getRelatedProducts = async (
       GROUP BY spc.product_id
     ) cat ON cat.product_id = p.id
     LEFT JOIN store_categories c ON c.id = p.category_id
+    LEFT JOIN store_subcategories sc ON sc.id = p.subcategory_id
     LEFT JOIN store_product_images pi 
       ON pi.product_id = p.id AND pi.is_primary = true
     LEFT JOIN media md ON md.media_id = pi.url::int
@@ -374,7 +387,10 @@ export const getProductReviews = async (productId: string, page = 1) => {
     FROM store_product_reviews r
     Left JOIN store_customers c ON r.customer_id = c.id
     WHERE r.product_id = $1
-      AND r.status = 'approved'
+      AND (
+        r.status IS NULL
+        OR r.status IN ('approved', 'pending', 'published')
+      )
     ORDER BY r.created_at DESC
     LIMIT $2 OFFSET $3
   `;
@@ -384,13 +400,21 @@ export const getProductReviews = async (productId: string, page = 1) => {
       COUNT(*)::int as total,
       ROUND(AVG(rating)::numeric, 1) as avg
     FROM store_product_reviews
-    WHERE product_id = $1 AND status = 'approved'
+    WHERE product_id = $1
+      AND (
+        status IS NULL
+        OR status IN ('approved', 'pending', 'published')
+      )
   `;
 
   const breakdownQuery = `
     SELECT rating, COUNT(*)::int as count
     FROM store_product_reviews
-    WHERE product_id = $1 AND status = 'approved'
+    WHERE product_id = $1
+      AND (
+        status IS NULL
+        OR status IN ('approved', 'pending', 'published')
+      )
     GROUP BY rating
   `;
 
