@@ -78,7 +78,7 @@ export const getProducts = async (filters: any) => {
       LEFT JOIN media md ON md.media_id = pi.url::int
       ORDER BY pi.product_id, pi.is_primary DESC, pi.id ASC
     ) img ON img.product_id = p.id
-    WHERE 1=1
+    WHERE p.status = 1
   `;
 
   if (saleOnly) {
