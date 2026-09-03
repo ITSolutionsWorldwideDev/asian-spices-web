@@ -4,6 +4,7 @@ import type { RecipeNutrient } from "@/lib/dbactions/recipeNutrition";
 type RecipeNutritionSectionProps = {
   nutrients: RecipeNutrient[];
   thumbnailUrl?: string | null;
+  recipeTitle?: string;
 };
 
 function formatValue(nutrient: RecipeNutrient) {
@@ -53,6 +54,7 @@ function splitIntoColumns(items: RecipeNutrient[], columns = 3) {
 export default function RecipeNutritionSection({
   nutrients,
   thumbnailUrl,
+  recipeTitle,
 }: RecipeNutritionSectionProps) {
   if (!nutrients.length) return null;
 
@@ -85,7 +87,11 @@ export default function RecipeNutritionSection({
             <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[42%] lg:block">
               <Image
                 src={thumbnailUrl}
-                alt=""
+                alt={
+                  recipeTitle
+                    ? `${recipeTitle} dish`
+                    : "Recipe dish"
+                }
                 fill
                 sizes="42vw"
                 className="object-cover object-center"

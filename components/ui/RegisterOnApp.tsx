@@ -220,11 +220,11 @@ const RegisterOnApp: React.FC = () => {
 
       <div className="relative z-20 grid grid-cols-1 lg:grid-cols-12 items-center gap-8 p-6 sm:p-10 lg:p-16 max-w-7xl mx-auto">
         <div className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start">
-          <h1 className="font-bold text-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
+          <h2 className="font-bold text-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
             Be the First to <span className="text-white">Experience</span>
             <br />
             Flavor at Your <span className="text-white">Fingertips.</span>
-          </h1>
+          </h2>
 
           <p className="mb-8 w-full sm:max-w-md md:max-w-lg font-medium text-white text-sm sm:text-base leading-relaxed">
             Sign up now and be the first to unlock our spice-powered app. Once

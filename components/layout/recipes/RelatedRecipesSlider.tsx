@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Clock3, ChefHat } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Keyboard } from "swiper/modules";
+import RecipeThumbnail from "@/components/layout/recipes/RecipeThumbnail";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -65,10 +65,8 @@ export default function RelatedRecipesSlider({
               className="group block h-full overflow-hidden rounded-3xl border bg-white transition duration-300 hover:shadow-xl"
             >
               <div className="relative h-[200px] overflow-hidden bg-gray-100">
-                <Image
-                  src={
-                    recipe.thumbnail_url || "/assets/alt-recipe-banner.jpg"
-                  }
+                <RecipeThumbnail
+                  src={recipe.thumbnail_url}
                   alt={recipe.title}
                   fill
                   sizes="(max-width: 640px) 80vw, (max-width: 1280px) 33vw, 25vw"

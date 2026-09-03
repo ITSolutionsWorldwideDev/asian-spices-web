@@ -56,16 +56,16 @@ export default function WhyChooseUs() {
                 >
                   <Image
                     src={`/assets/home/why_choose_us/${item.icon}`}
-                    alt=""
+                    alt={item.title}
                     width={24}
                     height={24}
                     className="h-6 w-6 object-contain brightness-0 invert"
                   />
                 </div>
                 <div className="min-w-0">
-                  <h4 className="text-[15px] font-bold leading-tight text-gray-900">
+                  <h3 className="text-[15px] font-bold leading-tight text-gray-900">
                     {item.title}
-                  </h4>
+                  </h3>
                   <p className="mt-1 text-xs leading-snug text-gray-500">
                     {item.desc}
                   </p>
@@ -87,7 +87,7 @@ export default function WhyChooseUs() {
               <div className="pointer-events-none absolute inset-0 opacity-[0.12]">
                 <Image
                   src="/assets/home/collections/collection-bg.webp"
-                  alt=""
+                  alt="Decorative spice pattern with star anise, cloves, and peppercorns"
                   fill
                   sizes="400px"
                   className="object-cover"

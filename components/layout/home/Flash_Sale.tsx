@@ -19,7 +19,7 @@ export default function FlashSale() {
       <div className="pointer-events-none absolute inset-0 opacity-20 sm:opacity-25">
         <Image
           src={`/assets/home/hot_sale/8357fc982c16b069a3bee90343077e780562649f.png`}
-          alt=""
+          alt="Illustration of Indian spices and herbs"
           fill
           sizes="(max-width: 768px) 100vw, 1200px"
           className="object-cover object-right"
@@ -33,7 +33,7 @@ export default function FlashSale() {
           <img
             className="h-8 w-11 object-contain sm:h-10 sm:w-14"
             src={`/assets/home/hot_sale/af61c09c418181db6f7977fb75c765cfd193908e.gif`}
-            alt=""
+            alt="Flash sale"
             loading="lazy"
             decoding="async"
           />

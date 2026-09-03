@@ -58,9 +58,8 @@ export default function ProductTabs({ product }: ProductTabsProps) {
         {/* 🔥 DESCRIPTION */}
         {activeTab === "Description" && (
           <>
+            <h2 className="mb-5 font-bold text-xl">Product Detail</h2>
             <p className="text-[#364153]">{description}</p>
-
-            <h4 className="mt-6 text-black">Product Details</h4>
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <Detail label="SKU" value={sku} />
@@ -74,7 +73,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
         {/* 🔥 HEALTH BENEFITS */}
         {activeTab === "Health Benefits" && (
           <>
-            <h1 className="mb-5 font-bold text-xl">Health Benefits</h1>
+            <h2 className="mb-5 font-bold text-xl">Health Benefits</h2>
             <p className="text-[#364153] whitespace-pre-line">{healthBenefits}</p>
           </>
         )}

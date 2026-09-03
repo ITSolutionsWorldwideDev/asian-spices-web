@@ -51,7 +51,7 @@ export default function AddressesPage() {
   return (
     <div>
       <div className="flex justify-between mb-6">
-        <h1 className="text-xl font-bold">My Addresses</h1>
+        <h2 className="text-xl font-bold">My Addresses</h2>
         <button onClick={() => setOpen(true)} className="btn-primary">
           + Add
         </button>

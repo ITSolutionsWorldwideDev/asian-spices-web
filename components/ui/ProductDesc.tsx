@@ -511,7 +511,7 @@ export default function ProductDesc({
 
           {/* Why choose us */}
           <section className="pt-2">
-            <h3 className="text-3xl font-bold text-gray-900">Why choose us?</h3>
+            <p className="text-3xl font-bold text-gray-900">Why choose us?</p>
             <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {whyChooseUs.map((item, idx) => (
                 <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">

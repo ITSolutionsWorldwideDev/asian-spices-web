@@ -145,9 +145,9 @@ export default function AddressForm({
     <div className="w-full">
       {/* HEADER */}
       <div className="mb-6 border-b pb-4">
-        <h2 className="text-xl font-semibold text-gray-900">
+        <h3 className="text-xl font-semibold text-gray-900">
           {isEdit ? "Edit Address" : "Add New Address"}
-        </h2>
+        </h3>
 
         <p className="text-sm text-gray-500 mt-1">
           Fill in your address details below.
@@ -273,9 +273,9 @@ export default function AddressForm({
 
         {/* ADDRESS TYPE */}
         <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-          <h3 className="text-sm font-semibold text-gray-800 mb-3">
+          <h4 className="text-sm font-semibold text-gray-800 mb-3">
             Address Type
-          </h3>
+          </h4>
 
           <div className="space-y-3">
             {/* SHIPPING */}

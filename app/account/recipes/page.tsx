@@ -114,7 +114,7 @@ export default function MyRecipesPage() {
       {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-bold">My Recipes</h1>
+          <h2 className="text-xl font-bold">My Recipes</h2>
           <p className="text-sm text-gray-500">Manage your submitted recipes</p>
         </div>
 

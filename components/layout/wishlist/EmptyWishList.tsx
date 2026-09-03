@@ -17,9 +17,9 @@ export default function EmptyWishList() {
             />
           </div>
 
-          <h2 className="mt-6 text-4xl font-bold text-gray-900">
+          <h1 className="mt-6 text-4xl font-bold text-gray-900">
             Your Wishlist is Empty
-          </h2>
+          </h1>
 
           <p className="mt-4 text-gray-500 text-center max-w-md">
             Start saving your favorite products and build your

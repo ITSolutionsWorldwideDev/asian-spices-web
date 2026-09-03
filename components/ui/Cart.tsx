@@ -70,7 +70,7 @@ export default function Cart() {
 
   if (cart.length === 0) {
     return (
-      <p className="text-gray-500 text-center mt-10">🛒 Your cart is empty</p>
+      <h1 className="text-gray-500 text-center mt-10">🛒 Your cart is empty</h1>
     );
   }
 
@@ -93,9 +93,9 @@ export default function Cart() {
         </div>
 
         <div className="mt-3 sm:mt-5">
-          <h1 className="font-bold text-lg sm:text-xl">
+          <h2 className="font-bold text-lg sm:text-xl">
             {itemInCart} items in your cart
-          </h1>
+          </h2>
         </div>
       </div>
 

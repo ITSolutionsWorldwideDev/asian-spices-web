@@ -65,9 +65,9 @@ export default function KickstartSales() {
       <div className="container mx-auto p-8 md:p-16 ">
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-4xl font-bold text-orange-600 mb-2">
+          <h2 className="text-4xl font-bold text-orange-600 mb-2">
             Kickstart your Sales in 7 steps
-          </h1>
+          </h2>
           <p className="text-gray-600">
             Ready to sell? Join Asian Spices and get started in a few easy
             steps.

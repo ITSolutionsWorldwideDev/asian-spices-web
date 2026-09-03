@@ -53,9 +53,9 @@ export default function ComingSoonCategory() {
             Coming Soon
           </p>
 
-          <h1 className="mt-8 text-2xl font-bold text-slate-900 sm:text-3xl md:text-4xl">
+          <h2 className="mt-8 text-2xl font-bold text-slate-900 sm:text-3xl md:text-4xl">
             Kitchen Appliances &amp; Cooking Tools
-          </h1>
+          </h2>
 
           <p className="mx-auto mt-5 max-w-2xl text-base font-medium text-slate-600 sm:text-lg">
             We&apos;re preparing an exciting collection of premium kitchen appliances
