@@ -26,6 +26,7 @@ import {
   applyDiscount,
   MIN_ORDER_AMOUNT_EUR,
   calculateRecipeLikeDiscountAmount,
+  SHIPPING_OPTIONS,
 } from "@/lib/pricing";
 import { useRecipeDiscountStore } from "@/store/useRecipeDiscountStore";
 
@@ -383,6 +384,13 @@ export default function Checkout() {
           shippingMethod: selectedOption
             ? selectedOption.name
             : "Standard Delivery",
+          // The rate this shipping method actually costs, in EUR, before any
+          // free-shipping discount is applied - saved so a later partial
+          // cancellation that drops the order back below the free-shipping
+          // threshold can re-charge the real rate instead of a guess.
+          shippingBaseAmount: selectedOption
+            ? selectedOption.price
+            : SHIPPING_OPTIONS.standard.price,
           payment_status: "pending",
           order_status: "pending",
         }),
