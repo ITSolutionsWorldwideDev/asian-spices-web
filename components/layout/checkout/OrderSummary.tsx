@@ -300,7 +300,7 @@ export default function OrderSummary({
                   )}
                   <span>
                     {symbol}
-                    {itemPrice.toFixed(2)} x {itemQuantity} =
+                    {(rate * itemPrice).toFixed(2)} x {itemQuantity} =
                   </span>
                   <span className="font-medium text-gray-900">
                     {symbol}

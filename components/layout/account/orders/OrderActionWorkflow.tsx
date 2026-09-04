@@ -19,7 +19,7 @@ export default function OrderActionWorkflow({
   onClose,
 }: Props) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const { symbol } = useCurrencyStore();
+  const { symbol, rate } = useCurrencyStore();
 
   // Form State
   const [selectedItems, setSelectedItems] = useState<
@@ -178,7 +178,7 @@ export default function OrderActionWorkflow({
               <p className="text-xs text-gray-400">Total Charged</p>
               <p className="font-semibold text-blue-600">
                 {symbol}
-                {order.total_amount}
+                {(rate * Number(order.total_amount || 0)).toFixed(2)}
               </p>
             </div>
           </div>
