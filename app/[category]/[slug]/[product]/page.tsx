@@ -9,9 +9,15 @@ import {
   getStoreCategoryBySlug,
   getStoreSubcategoryBySlug,
 } from "@/lib/dbactions/categories";
-import { getProductBySlug, getRelatedProducts } from "@/lib/dbactions/products";
+import {
+  getProductBySlug,
+  getProductReviewsSummary,
+  getRelatedProducts,
+} from "@/lib/dbactions/products";
 import { resolveCountry } from "@/lib/country";
 import { getProductMetadata } from "@/lib/product-metadata";
+import { getProductJsonLd } from "@/lib/schema";
+import JsonLd from "@/components/seo/JsonLd";
 
 interface PageProps {
   params: Promise<{ category: string; slug: string; product: string }>;
@@ -60,13 +66,19 @@ export default async function CategorySubcategoryProductPage({
     );
   }
 
-  const relatedProducts = await getRelatedProducts(product.category_id, country);
+  const [relatedProducts, reviewStats] = await Promise.all([
+    getRelatedProducts(product.category_id, country),
+    getProductReviewsSummary(product.id),
+  ]);
 
   return (
-    <ProductDescrption
-      product={JSON.parse(JSON.stringify(product))}
-      relatedProducts={JSON.parse(JSON.stringify(relatedProducts || []))}
-      category={product.category_name || category.name}
-    />
+    <>
+      <JsonLd data={getProductJsonLd(product, reviewStats)} />
+      <ProductDescrption
+        product={JSON.parse(JSON.stringify(product))}
+        relatedProducts={JSON.parse(JSON.stringify(relatedProducts || []))}
+        category={product.category_name || category.name}
+      />
+    </>
   );
 }

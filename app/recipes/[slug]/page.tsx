@@ -13,6 +13,8 @@ import {
 } from "@/lib/dbactions/recipeStats";
 import { getRecipeReviewsSummary } from "@/lib/dbactions/products";
 import { getRecipeNutrition } from "@/lib/dbactions/recipeNutrition";
+import { getRecipeJsonLd } from "@/lib/schema";
+import JsonLd from "@/components/seo/JsonLd";
 import { webAuthOptions } from "@/core/auth";
 import Footer from "@/components/ui/Footer";
 import RecipeDetailHeader from "@/components/layout/recipes/RecipeDetailHeader";
@@ -99,6 +101,7 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
 
   return (
     <div className="bg-[#faf7f2]">
+      <JsonLd data={getRecipeJsonLd(recipe, nutrition, reviewsSummary)} />
       <RecipeDetailHeader
         recipe={recipe}
         averageRating={reviewsSummary.average}

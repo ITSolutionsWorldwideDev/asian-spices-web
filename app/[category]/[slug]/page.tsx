@@ -18,12 +18,15 @@ import {
 import {
   getBrands,
   getProductBySlug,
+  getProductReviewsSummary,
   getProducts,
   getRelatedProducts,
   getSubcategories,
 } from "@/lib/dbactions/products";
 import { resolveCountry } from "@/lib/country";
 import { getProductMetadata } from "@/lib/product-metadata";
+import { getProductJsonLd } from "@/lib/schema";
+import JsonLd from "@/components/seo/JsonLd";
 
 type Filters = {
   category: string;
@@ -97,14 +100,20 @@ async function renderProductPage(
     );
   }
 
-  const relatedProducts = await getRelatedProducts(product.category_id, country);
+  const [relatedProducts, reviewStats] = await Promise.all([
+    getRelatedProducts(product.category_id, country),
+    getProductReviewsSummary(product.id),
+  ]);
 
   return (
-    <ProductDescrption
-      product={JSON.parse(JSON.stringify(product))}
-      relatedProducts={JSON.parse(JSON.stringify(relatedProducts || []))}
-      category={product.category_name || categoryLabel}
-    />
+    <>
+      <JsonLd data={getProductJsonLd(product, reviewStats)} />
+      <ProductDescrption
+        product={JSON.parse(JSON.stringify(product))}
+        relatedProducts={JSON.parse(JSON.stringify(relatedProducts || []))}
+        category={product.category_name || categoryLabel}
+      />
+    </>
   );
 }
 
