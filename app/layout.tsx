@@ -11,6 +11,9 @@ import GoogleTagManager, {
 import CountryChangeModal from "@/components/ui/CountryChangeModal";
 import CartToast from "@/components/ui/CartToast";
 import { getSiteBaseUrl } from "@/lib/sitemap-urls";
+import { getLocalBusinessJsonLd } from "@/lib/schema";
+import { getSiteReviewsSummary } from "@/lib/dbactions/products";
+import JsonLd from "@/components/seo/JsonLd";
 import "./globals.css";
 
 function normalizeCanonicalPath(pathname: string): string {
@@ -59,16 +62,22 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Overall store rating — shown on every page via LocalBusiness AggregateRating.
+  // Product pages still emit a separate Product schema with that product's rating only.
+  const siteReviews = await getSiteReviewsSummary();
+
   return (
     <html lang="en">
       <head>
         {/* GTM must be as high as possible in <head> for Search Console verification */}
         <GoogleTagManagerHead />
+        {/* Site-wide LocalBusiness + overall AggregateRating (schema.org) */}
+        <JsonLd data={getLocalBusinessJsonLd(siteReviews)} />
       </head>
       <body>
         {/* GTM noscript must be immediately after opening <body> */}

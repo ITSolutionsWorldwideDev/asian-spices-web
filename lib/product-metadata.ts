@@ -4,7 +4,7 @@ const SITE_NAME = "AsianSpices.online";
 const META_TITLE_MAX = 60;
 const META_DESCRIPTION_MAX = 160;
 
-function stripHtml(html: string): string {
+export function stripHtml(html: string): string {
   return html
     .replace(/<[^>]*>/g, " ")
     .replace(/&nbsp;/gi, " ")

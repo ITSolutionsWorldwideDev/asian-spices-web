@@ -3,10 +3,25 @@ import HeroSection from "@/components/layout/contact_us/HeroSection";
 import Footer from "@/components/ui/Footer";
 import Nav from "@/components/ui/Nav";
 import Image from "next/image";
+import faqsData from "@/components/layout/contact_us/faqsData.json";
+import { getFaqPageJsonLd, type FaqItem } from "@/lib/schema";
+import JsonLd from "@/components/seo/JsonLd";
+
+function getAllContactFaqs(): FaqItem[] {
+  const { sections } = faqsData;
+  return [
+    ...sections.general.faqs,
+    ...sections.category.categories.flatMap((c) => c.faqs),
+    ...sections.chatbot.topics.flatMap((t) => t.faqs),
+  ];
+}
 
 const ContactUs = () => {
+  const faqJsonLd = getFaqPageJsonLd(getAllContactFaqs());
+
   return (
     <div className="bg-[#f5f0ea]">
+      <JsonLd data={faqJsonLd} />
       <section className="relative">
         <div className="absolute inset-0 h-[420px] md:h-[460px]">
           <Image

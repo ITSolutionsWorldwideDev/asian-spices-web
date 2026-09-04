@@ -21,6 +21,8 @@ import {
   herbBenefitSlugs, 
   AllowedSlug 
 } from "@/data/healthyLivingData";
+import { getFaqPageJsonLd } from "@/lib/schema";
+import JsonLd from "@/components/seo/JsonLd";
 
 interface PageProps {
   params: Promise<{
@@ -68,6 +70,10 @@ export default async function HealthyLivingProductpage({
   const currentContent = slugContent[currentSlugTyped];
   const isHerbBenefitPage = herbBenefitSlugs.includes(currentSlugTyped);
   const isGrandmasPage = slug === "grandmas-kitchen-remedies";
+  const faqJsonLd =
+    isHerbBenefitPage && currentContent.faqs?.length
+      ? getFaqPageJsonLd(currentContent.faqs)
+      : null;
 
   const cleanArray = (val?: string) => {
     if (!val) return [];
@@ -94,6 +100,7 @@ export default async function HealthyLivingProductpage({
 
   return (
     <div>
+      <JsonLd data={faqJsonLd} />
       {/* 1. Banner Header */}
       <ProductHeader
         heading={currentContent.heading}

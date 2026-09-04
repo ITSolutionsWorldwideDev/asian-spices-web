@@ -432,6 +432,55 @@ export const getProductReviews = async (productId: string, page = 1) => {
   };
 };
 
+/** Lightweight rating summary for a product (used for schema.org AggregateRating). */
+export const getProductReviewsSummary = async (productId: string) => {
+  const { rows } = await pool.query(
+    `
+    SELECT
+      COUNT(*)::int AS total,
+      ROUND(AVG(rating)::numeric, 1) AS average
+    FROM store_product_reviews
+    WHERE product_id = $1
+      AND (
+        status IS NULL
+        OR status IN ('approved', 'pending', 'published')
+      )
+    `,
+    [productId],
+  );
+
+  return {
+    total: rows[0]?.total || 0,
+    average: Number(rows[0]?.average) || 0,
+  };
+};
+
+/**
+ * Site-wide overall rating across all product reviews.
+ * Used for LocalBusiness AggregateRating on every page.
+ */
+export const getSiteReviewsSummary = async () => {
+  const { rows } = await pool.query(
+    `
+    SELECT
+      COUNT(*)::int AS total,
+      ROUND(AVG(rating)::numeric, 1) AS average
+    FROM store_product_reviews
+    WHERE product_id IS NOT NULL
+      AND rating IS NOT NULL
+      AND (
+        status IS NULL
+        OR status IN ('approved', 'pending', 'published')
+      )
+    `,
+  );
+
+  return {
+    total: rows[0]?.total || 0,
+    average: Number(rows[0]?.average) || 0,
+  };
+};
+
 /** Review summary for a recipe from store_product_reviews (matched by recipe_id). */
 export const getRecipeReviewsSummary = async (recipeId: string) => {
   const { rows } = await pool.query(

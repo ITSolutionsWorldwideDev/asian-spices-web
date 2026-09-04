@@ -2,8 +2,14 @@
 
 import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";
-import { getProductBySlug, getRelatedProducts } from "@/lib/dbactions/products";
+import {
+  getProductBySlug,
+  getProductReviewsSummary,
+  getRelatedProducts,
+} from "@/lib/dbactions/products";
 import { getProductMetadata } from "@/lib/product-metadata";
+import { getProductJsonLd } from "@/lib/schema";
+import JsonLd from "@/components/seo/JsonLd";
 
 interface PageProps {
   params: Promise<{
@@ -37,13 +43,19 @@ export default async function SpicesDetailPage({ params }: PageProps) {
     );
   }
 
-  const relatedProducts = await getRelatedProducts(product.category_id);
+  const [relatedProducts, reviewStats] = await Promise.all([
+    getRelatedProducts(product.category_id),
+    getProductReviewsSummary(product.id),
+  ]);
 
   return (
-    <ProductDescrption
-      product={product}
-      relatedProducts={relatedProducts}
-      category="Kitchen Appliances"
-    />
+    <>
+      <JsonLd data={getProductJsonLd(product, reviewStats)} />
+      <ProductDescrption
+        product={product}
+        relatedProducts={relatedProducts}
+        category="Kitchen Appliances"
+      />
+    </>
   );
 }

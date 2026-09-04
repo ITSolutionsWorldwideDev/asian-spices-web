@@ -3,9 +3,15 @@
 import { cache } from "react";
 import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";
-import { getProductBySlug, getRelatedProducts } from "@/lib/dbactions/products";
+import {
+  getProductBySlug,
+  getProductReviewsSummary,
+  getRelatedProducts,
+} from "@/lib/dbactions/products";
 import { resolveCountry } from "@/lib/country";
 import { getProductMetadata } from "@/lib/product-metadata";
+import { getProductJsonLd } from "@/lib/schema";
+import JsonLd from "@/components/seo/JsonLd";
 
 interface PageProps {
   params: Promise<{
@@ -54,20 +60,23 @@ export default async function FoodAndBeveragesDetailPage({
     );
   }
 
-  const relatedProducts = await getRelatedProducts(
-    product.category_id,
-    country,
-  );
+  const [relatedProducts, reviewStats] = await Promise.all([
+    getRelatedProducts(product.category_id, country),
+    getProductReviewsSummary(product.id),
+  ]);
 
   const serializedProduct = JSON.parse(JSON.stringify(product));
   const serializedRelatedProducts = JSON.parse(JSON.stringify(relatedProducts || []));
 
   return (
-    <ProductDescrption
-      product={serializedProduct}
-      relatedProducts={serializedRelatedProducts}
-      category="Foods & Beverages"
-    />
+    <>
+      <JsonLd data={getProductJsonLd(product, reviewStats)} />
+      <ProductDescrption
+        product={serializedProduct}
+        relatedProducts={serializedRelatedProducts}
+        category="Foods & Beverages"
+      />
+    </>
   );
 }
 

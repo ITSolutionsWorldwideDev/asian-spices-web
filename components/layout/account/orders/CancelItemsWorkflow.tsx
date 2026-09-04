@@ -196,7 +196,7 @@ export default function CancelItemsWorkflow({
               <p className="text-xs text-gray-400">Total Charged</p>
               <p className="font-semibold text-blue-600">
                 {symbol}
-                {Number(order.total_amount || 0).toFixed(2)}
+                {(rate * Number(order.total_amount || 0)).toFixed(2)}
               </p>
             </div>
           </div>
