@@ -159,7 +159,7 @@ export default function OrderSummaryReadOnly({
                     </span>
                   )}
                   <span>
-                    {symbol}{itemPrice.toFixed(2)} x {itemQuantity} =
+                    {symbol}{(rate * itemPrice).toFixed(2)} x {itemQuantity} =
                   </span>
                   <span className="font-medium text-gray-900">
                     {symbol}{itemLineTotalConverted.toFixed(2)}

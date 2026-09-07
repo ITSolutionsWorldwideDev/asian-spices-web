@@ -25,7 +25,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
   const [isCancelActive, setIsCancelActive] = useState(false);
 
   const isPaid = order.payment_status === "paid";
-  const { symbol } = useCurrencyStore();
+  const { symbol, rate } = useCurrencyStore();
 
   // Real order-progress stage, combining payment/shipping fields the backend
   // actually sets (payment_status, fulfillment_status, shipping_status) -
@@ -223,7 +223,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
       <div className="mt-3 flex justify-between items-center">
         <p className="font-bold text-lg">
           {symbol}
-          {order.total_amount}
+          {(rate * Number(order.total_amount || 0)).toFixed(2)}
         </p>
 
         <button

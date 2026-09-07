@@ -13,17 +13,23 @@ export async function GET(req: NextRequest) {
     );
   }
   try {
+    // Rates must be read relative to the platform's base currency. The table
+    // has historically held rows against more than one base, so pin the base
+    // to the currency flagged is_base (EUR) rather than trusting there to be
+    // only one row per target.
     const result = await pool.query(
       `
-      SELECT cr.rate,c.symbol
+      SELECT cr.rate, tc.symbol
       FROM currency_rates cr
-      JOIN currencies c ON c.id = cr.target_currency_id
-      WHERE c.code = $1
+      JOIN currencies tc ON tc.id = cr.target_currency_id
+      JOIN currencies bc ON bc.id = cr.base_currency_id
+      WHERE tc.code = $1 AND bc.is_base = true
+      LIMIT 1
       `,
       [code],
     );
 
-    return NextResponse.json(result.rows[0]);
+    return NextResponse.json(result.rows[0] ?? { rate: 1 });
   } catch (error: any) {
     return NextResponse.json(
       { error: "Failed to fetch rate" },
