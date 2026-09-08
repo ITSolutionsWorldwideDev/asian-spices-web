@@ -204,3 +204,19 @@ a {
     display: unset;
   }
 } */
+
+/* Google Translate — hide banner; keep page layout stable */
+.goog-te-banner-frame,
+iframe.goog-te-banner-frame,
+.goog-te-balloon-frame,
+#goog-gt-tt,
+.goog-te-spinner-pos {
+  display: none !important;
+}
+body > .skiptranslate {
+  display: none !important;
+}
+html,
+body {
+  top: 0 !important;
+}

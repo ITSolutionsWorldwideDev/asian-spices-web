@@ -9,6 +9,7 @@ import ResponsiveNavigation from "../layout/navigation/ResponsiveNavigation";
 import CartandWhishBtn from "../layout/navigation/CartandWhishBtn";
 import ButtonsNavigation from "../layout/navigation/ButtonsNavigation";
 import UpperSelection from "../layout/navigation/UpperSelection";
+import GoogleTranslateButton from "../layout/navigation/GoogleTranslateButton";
 import NavSearch from "../layout/navigation/NavSearch";
 import { useCartStore } from "@/store/useCartStore";
 
@@ -43,6 +44,9 @@ const Nav: React.FC = () => {
 
       <span className="mx-1 h-5 w-px shrink-0 bg-gray-300" aria-hidden />
       <ButtonsNavigation />
+
+      <span className="mx-1 h-5 w-px shrink-0 bg-gray-300" aria-hidden />
+      <GoogleTranslateButton />
 
       <span className="mx-1 h-5 w-px shrink-0 bg-gray-300" aria-hidden />
       <UpperSelection />
@@ -80,6 +84,7 @@ const Nav: React.FC = () => {
         </div>
 
         <div className="flex shrink-0 items-center gap-2.5 sm:gap-3 md:gap-3.5">
+          <GoogleTranslateButton />
           <Link
             href="/wishlist"
             aria-label="Wishlist"
