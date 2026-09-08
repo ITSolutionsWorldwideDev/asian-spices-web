@@ -205,7 +205,7 @@ a {
   }
 } */
 
-/* Google Translate — hide banner; keep page layout stable */
+/* Google Translate — hide banner; keep page layout / clicks stable */
 .goog-te-banner-frame,
 iframe.goog-te-banner-frame,
 .goog-te-balloon-frame,
@@ -213,10 +213,30 @@ iframe.goog-te-banner-frame,
 .goog-te-spinner-pos {
   display: none !important;
 }
-body > .skiptranslate {
+body > .skiptranslate,
+.skiptranslate > iframe {
   display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  pointer-events: none !important;
 }
-html,
+html {
+  top: 0 !important;
+}
 body {
   top: 0 !important;
 }
+
+/* Google wraps translated text in <font> — keep flex/nav from breaking */
+font {
+  vertical-align: inherit !important;
+  max-width: 100%;
+  pointer-events: none;
+}
+button font,
+a font,
+[role="button"] font {
+  pointer-events: none;
+}
+

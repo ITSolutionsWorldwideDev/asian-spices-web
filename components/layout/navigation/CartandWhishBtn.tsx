@@ -15,8 +15,8 @@ const CartandWhishBtn = () => {
         aria-label="Wishlist"
         className="flex flex-col items-center px-2.5 py-1 text-gray-700 transition hover:text-orange-500"
       >
-        <Heart className="h-5 w-5" strokeWidth={1.75} />
-        <span className="mt-0.5 text-[10px] font-medium leading-none tracking-tight">
+        <Heart className="h-5 w-5 shrink-0" strokeWidth={1.75} />
+        <span className="mt-0.5 max-w-[3.75rem] truncate text-[10px] font-medium leading-none tracking-tight">
           Wishlist
         </span>
       </Link>
@@ -26,8 +26,8 @@ const CartandWhishBtn = () => {
         aria-label="Cart"
         className="relative flex flex-col items-center px-2.5 py-1 text-gray-700 transition hover:text-orange-500"
       >
-        <ShoppingCart className="h-5 w-5" strokeWidth={1.75} />
-        <span className="mt-0.5 text-[10px] font-medium leading-none tracking-tight">
+        <ShoppingCart className="h-5 w-5 shrink-0" strokeWidth={1.75} />
+        <span className="mt-0.5 max-w-[3.75rem] truncate text-[10px] font-medium leading-none tracking-tight">
           Cart
         </span>
         {itemInCart > 0 && (

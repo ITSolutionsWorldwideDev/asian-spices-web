@@ -635,10 +635,10 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
     <>
       {megaMenu}
 
-      <ul className="flex shrink-0 items-center">
+      <ul className="flex min-w-0 shrink items-center">
         {navLinks.map((link, idx) => (
           <React.Fragment key={link.name}>
-            <li className="relative">
+            <li className="relative min-w-0">
               {!link.children ? (
                 <Link
                   href={`/${(link.hreflink || link.name)
@@ -647,22 +647,22 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                     .trim()
                     .replace(/\s+/g, "")}`}
                   onClick={() => handleClick(link.name)}
-                  className={`flex items-center whitespace-nowrap px-3 py-1.5 text-sm font-semibold transition-colors duration-200 ${
+                  className={`flex max-w-[8.5rem] items-center px-2 py-1.5 text-sm font-semibold transition-colors duration-200 xl:max-w-[11rem] ${
                     activeLink === link.name ? "text-orange-500" : "text-gray-700 hover:text-orange-500"
                   }`}
                 >
-                  {link.name}
+                  <span className="truncate">{link.name}</span>
                 </Link>
               ) : (
                 <button
                   type="button"
                   onClick={() => handleClick(link.name)}
-                  className={`flex items-center whitespace-nowrap px-3 py-1.5 text-sm font-semibold transition-colors duration-200 ${
+                  className={`flex max-w-[8.5rem] items-center px-2 py-1.5 text-sm font-semibold transition-colors duration-200 xl:max-w-[11rem] ${
                     activeLink === link.name ? "text-orange-500" : "text-gray-700 hover:text-orange-500"
                   }`}
                 >
-                  {link.name}
-                  <ChevronDown className="ml-1 h-3.5 w-3.5" />
+                  <span className="truncate">{link.name}</span>
+                  <ChevronDown className="ml-1 h-3.5 w-3.5 shrink-0" />
                 </button>
               )}
             </li>

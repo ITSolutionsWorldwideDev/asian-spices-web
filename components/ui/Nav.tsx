@@ -33,7 +33,7 @@ const Nav: React.FC = () => {
   }, []);
 
   const desktopPill = (
-    <div className="relative z-10 inline-flex max-w-[min(100vw-10rem,72rem)] items-center gap-0 overflow-visible rounded-full bg-[#fdf8f1] px-2 py-1.5 shadow-md">
+    <div className="relative z-10 flex max-w-[min(100vw-1.5rem,90rem)] items-center gap-0 overflow-visible rounded-full bg-[#fdf8f1] px-2 py-1.5 shadow-md">
       <ResponsiveNavigation />
 
       <span className="mx-2 h-5 w-px shrink-0 bg-gray-300" aria-hidden />

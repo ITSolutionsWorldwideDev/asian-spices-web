@@ -25,20 +25,20 @@ const ButtonsNavigation = () => {
       {!session ? (
         <Link
           href="/login"
-          className="flex items-center gap-1.5 rounded-full border-2 border-orange-500 px-4 py-1.5 text-sm font-semibold text-gray-800 transition hover:bg-orange-50"
+          className="flex max-w-[6.5rem] items-center gap-1.5 rounded-full border-2 border-orange-500 px-3 py-1.5 text-sm font-semibold text-gray-800 transition hover:bg-orange-50"
         >
-          <CircleUserRound className="h-4 w-4" strokeWidth={1.75} />
-          Login
+          <CircleUserRound className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+          <span className="truncate">Login</span>
         </Link>
       ) : (
         <div className="relative">
           <button
             type="button"
             onClick={() => setOpen(!open)}
-            className="flex items-center gap-1.5 rounded-full border-2 border-orange-500 px-4 py-1.5 text-sm font-semibold text-gray-800 transition hover:bg-orange-50"
+            className="flex max-w-[6.5rem] items-center gap-1.5 rounded-full border-2 border-orange-500 px-3 py-1.5 text-sm font-semibold text-gray-800 transition hover:bg-orange-50"
           >
-            <CircleUserRound className="h-4 w-4" strokeWidth={1.75} />
-            Account
+            <CircleUserRound className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+            <span className="truncate">Account</span>
           </button>
 
           {open && (

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
 
 declare global {
@@ -112,26 +113,36 @@ function initGoogleTranslate() {
 export default function GoogleTranslateButton() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("en");
-  const ref = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [menuPos, setMenuPos] = useState<{ top: number; left: number } | null>(
+    null,
+  );
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setMounted(true);
     setSelected(readSelectedLang());
     initGoogleTranslate();
+  }, []);
 
-    const observer = new MutationObserver(hideGoogleTopBar);
-    observer.observe(document.body, { childList: true, subtree: true });
+  useLayoutEffect(() => {
+    if (!open || !btnRef.current) {
+      setMenuPos(null);
+      return;
+    }
+    const r = btnRef.current.getBoundingClientRect();
+    setMenuPos({ top: r.bottom + 8, left: r.right - 144 });
+  }, [open]);
 
+  useEffect(() => {
     const onClick = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
+      const t = e.target as Node;
+      if (btnRef.current?.contains(t) || menuRef.current?.contains(t)) return;
+      setOpen(false);
     };
     document.addEventListener("mousedown", onClick);
-
-    return () => {
-      observer.disconnect();
-      document.removeEventListener("mousedown", onClick);
-    };
+    return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
   const applyLanguage = (code: string) => {
@@ -143,7 +154,8 @@ export default function GoogleTranslateButton() {
       combo.value = code;
       combo.dispatchEvent(new Event("change"));
       setSelected(code);
-      hideGoogleTopBar();
+      requestAnimationFrame(hideGoogleTopBar);
+      setTimeout(hideGoogleTopBar, 300);
       return;
     }
 
@@ -152,39 +164,59 @@ export default function GoogleTranslateButton() {
   };
 
   const current =
-    LANGUAGES.find((l) => l.code === selected)?.label ?? "English";
+    LANGUAGES.find((l) => l.code === selected)?.label ?? "EN";
+
+  const menu =
+    mounted &&
+    open &&
+    menuPos &&
+    createPortal(
+      <div
+        ref={menuRef}
+        className="notranslate overflow-hidden rounded-lg border border-gray-200 bg-white py-1 shadow-xl"
+        translate="no"
+        style={{
+          position: "fixed",
+          top: menuPos.top,
+          left: Math.max(8, menuPos.left),
+          width: 144,
+          zIndex: 10000000,
+        }}
+      >
+        {LANGUAGES.map((lang) => (
+          <button
+            key={lang.code}
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => applyLanguage(lang.code)}
+            className={`flex w-full px-3 py-2.5 text-left text-xs hover:bg-gray-50 ${
+              selected === lang.code
+                ? "font-semibold text-gray-900"
+                : "text-gray-700"
+            }`}
+          >
+            {lang.label}
+          </button>
+        ))}
+      </div>,
+      document.body,
+    );
 
   return (
-    <div ref={ref} className="relative shrink-0">
+    <div className="relative shrink-0 notranslate" translate="no">
       <button
+        ref={btnRef}
         type="button"
+        onMouseDown={(e) => e.stopPropagation()}
         onClick={() => setOpen((v) => !v)}
         className="flex items-center gap-1 rounded-full bg-[#e8dfd0] px-2.5 py-1 text-xs font-semibold text-gray-800 transition hover:bg-[#ddd2c0]"
         aria-label="Translate page"
         aria-expanded={open}
       >
-        <span className="max-w-[4.5rem] truncate">{current}</span>
-        <ChevronDown className="h-3 w-3 text-gray-500" />
+        <span>{current}</span>
+        <ChevronDown className="h-3 w-3 shrink-0 text-gray-500" />
       </button>
-
-      {open && (
-        <div className="absolute right-0 top-full z-[1000] mt-2 w-40 overflow-hidden rounded-lg border border-gray-200 bg-white py-1 shadow-xl">
-          {LANGUAGES.map((lang) => (
-            <button
-              key={lang.code}
-              type="button"
-              onClick={() => applyLanguage(lang.code)}
-              className={`flex w-full px-3 py-2.5 text-left text-xs hover:bg-gray-50 ${
-                selected === lang.code
-                  ? "font-semibold text-gray-900"
-                  : "text-gray-700"
-              }`}
-            >
-              {lang.label}
-            </button>
-          ))}
-        </div>
-      )}
+      {menu}
     </div>
   );
 }
