@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import { anchorFromClick } from "@/lib/cart-toast-anchor";
 import { getProductPath } from "@/lib/product-path";
+import { resolveTaxRate } from "@/lib/tax";
 
 type Product = {
   id: string;
@@ -49,7 +50,7 @@ export default function ProductCard({
   disableSlicing = false,
 }: ProductCardProps) {
   const { symbol, rate } = useCurrencyStore();
-  const { taxRules } = useGlobalStore();
+  const { taxRules, taxRulesLoaded } = useGlobalStore();
 
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
@@ -63,8 +64,6 @@ export default function ProductCard({
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  const globalRule = taxRules.find((r) => r.category_id === null);
 
   const visibleProducts =
     disableSlicing || showAll ? products : products.slice(0, 20);
@@ -82,24 +81,22 @@ export default function ProductCard({
           // 1️⃣ Safe Numeric Extractions & Conversions
           // const currentPrice = Number(product.base_price || 0);
 
-          // Admin/catalog prices are net; apply existing taxRules for display + cart
+          // Wait for tax rules, then: category → global → 21%
           const netPrice = Number(
             product.min_offered_price || product.base_price || 0,
           );
-          const matchingRule = taxRules.find(
-            (r) => r.category_id === product.category_id,
-          );
-          const taxRate =
-            parseFloat(
-              matchingRule?.tax_rate ?? globalRule?.tax_rate ?? "21",
-            ) / 100;
-          const currentPrice = netPrice * (1 + taxRate);
+          const taxRate = taxRulesLoaded
+            ? resolveTaxRate(taxRules, product.category_id)
+            : null;
+          const currentPrice =
+            taxRate == null ? null : netPrice * (1 + taxRate);
 
           let originalPrice: number | null = null;
 
           const discountValue = Number(product.discount_value);
 
           if (
+            taxRate != null &&
             netPrice > 0 &&
             product.discount_value &&
             !isNaN(discountValue) &&
@@ -141,7 +138,7 @@ export default function ProductCard({
           let discountBadgeText: string | null = null;
           let calculatedSavings = 0;
 
-          if (originalPrice && originalPrice > currentPrice) {
+          if (originalPrice && currentPrice != null && originalPrice > currentPrice) {
             calculatedSavings = originalPrice - currentPrice;
 
             if (product.discount_type?.toLowerCase() === "fixed") {
@@ -255,17 +252,26 @@ export default function ProductCard({
                 </Link>
 
                 {/* Price Presentation Segment */}
-                <div className="flex items-baseline gap-2 mt-2">
-                  <span className="text-orange-500 font-bold text-xl">
-                    {symbol}
-                    {(currentPrice * rate).toFixed(2)}
-                  </span>
+                <div className="flex items-baseline gap-2 mt-2 min-h-[1.75rem]">
+                  {currentPrice == null ? (
+                    <span
+                      className="inline-block h-6 w-16 animate-pulse rounded bg-orange-100"
+                      aria-hidden
+                    />
+                  ) : (
+                    <>
+                      <span className="text-orange-500 font-bold text-xl">
+                        {symbol}
+                        {(currentPrice * rate).toFixed(2)}
+                      </span>
 
-                  {originalPrice && originalPrice > currentPrice && (
-                    <span className="text-gray-400 line-through text-sm font-medium">
-                      {symbol}
-                      {(originalPrice * rate).toFixed(2)}
-                    </span>
+                      {originalPrice && originalPrice > currentPrice && (
+                        <span className="text-gray-400 line-through text-sm font-medium">
+                          {symbol}
+                          {(originalPrice * rate).toFixed(2)}
+                        </span>
+                      )}
+                    </>
                   )}
                 </div>
 
@@ -322,6 +328,7 @@ export default function ProductCard({
                     aria-label={`Add ${product.name} to cart`}
                     className="cursor-pointer w-full h-[40px] bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white rounded-xl text-sm font-bold flex items-center justify-center transition shadow-sm active:scale-[0.99]"
                     onClick={(e) => {
+                      if (currentPrice == null) return;
                       addToCart(
                         {
                           id: product.id,
@@ -341,6 +348,7 @@ export default function ProductCard({
                         { anchor: anchorFromClick(e) },
                       );
                     }}
+                    disabled={currentPrice == null}
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     Add To Cart

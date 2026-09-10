@@ -17,6 +17,7 @@ import {
   FREE_SHIPPING_THRESHOLD,
   calculateRecipeLikeDiscountAmount,
 } from "@/lib/pricing";
+import { resolveTaxRate } from "@/lib/tax";
 
 interface Props {
   items: CartItem[];
@@ -65,10 +66,8 @@ export default function OrderSummary({
     : "standard";
 
   const { symbol, rate } = useCurrencyStore();
-  const { taxRules } = useGlobalStore();
+  const { taxRules, taxRulesLoaded } = useGlobalStore();
   const { appliedDiscount, clearDiscount } = useRecipeDiscountStore();
-
-  const globalRule = taxRules.find((r) => r.category_id === null);
 
   let derivedSubtotal = 0;
   let totalOrderSavings = 0;
@@ -122,12 +121,10 @@ export default function OrderSummary({
       }
     }
 
-    const matchingRule = taxRules.find(
-      (r) => r.category_id === item.category_id,
-    );
-    const rulePercent = matchingRule
-      ? matchingRule.tax_rate
-      : globalRule?.tax_rate || "21";
+    // category → global → 21% (after rules load)
+    const rulePercent = taxRulesLoaded
+      ? resolveTaxRate(taxRules, item.category_id, { loaded: true }) * 100
+      : null;
 
     return {
       ...item,
@@ -259,13 +256,10 @@ export default function OrderSummary({
             }
           }
 
-          // Find row category target label rule definition
-          const matchingRule = taxRules.find(
-            (r) => r.category_id === item.category_id,
-          );
-          const rulePercent = matchingRule
-            ? matchingRule.tax_rate
-            : globalRule?.tax_rate || "21";
+          // category → global → 21% (after rules load)
+          const rulePercent = taxRulesLoaded
+            ? resolveTaxRate(taxRules, item.category_id, { loaded: true }) * 100
+            : null;
 
           return (
             <div key={item.id} className="flex gap-4">
@@ -308,9 +302,11 @@ export default function OrderSummary({
                   </span>
                 </div>
 
-                <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-1">
-                  Includes {Number(rulePercent).toFixed(0)}%
-                </span>
+                {rulePercent != null && (
+                  <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-1">
+                    Includes {Number(rulePercent).toFixed(0)}%
+                  </span>
+                )}
               </div>
             </div>
           );

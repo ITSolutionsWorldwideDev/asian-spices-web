@@ -41,8 +41,7 @@ export async function POST(request: Request) {
       // 1. Validate Order Status and Eligibility
       const orderQuery = `
         SELECT order_status, payment_status, shipping_status, fulfillment_status, payment_method,
-               subtotal, shipping_amount, tax_amount, total_amount, shipping_provider,
-               shipping_base_amount
+               subtotal, shipping_amount, tax_amount, total_amount, shipping_provider
         FROM store_orders
         WHERE id = $1
         LIMIT 1;
@@ -63,11 +62,8 @@ export async function POST(request: Request) {
       const originalTax = Number(order.tax_amount || 0);
       const originalTotal = Number(order.total_amount || 0);
       const isPaid = order.payment_status === "paid";
-      // Re-charge the rate this order was actually quoted for standard
-      // shipping at checkout, not a guess - the constant is only a
-      // last-resort fallback for orders placed before this was tracked.
-      const standardBaseRate =
-        Number(order.shipping_base_amount) || SHIPPING_OPTIONS.standard.price;
+      // Column shipping_base_amount is not in DB yet — use standard rate fallback
+      const standardBaseRate = SHIPPING_OPTIONS.standard.price;
 
       if (order.order_status?.toLowerCase() === "cancelled") {
         throw new Error("This order has already been cancelled.");

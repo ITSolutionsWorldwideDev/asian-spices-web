@@ -36,6 +36,7 @@ export async function GET(req: Request) {
           sci.quantity,
           p.name AS title,
           p.slug,
+          p.category_id::text AS category_id,
           sci.price::numeric AS base_price,
           p.discount_type,
           p.discount_value,

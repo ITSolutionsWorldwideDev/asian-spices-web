@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import { SHIPPING_OPTIONS, ShippingMethod } from "@/lib/pricing";
+import { resolveTaxRate } from "@/lib/tax";
 
 interface Props {
   items: any[];
@@ -42,9 +43,7 @@ export default function OrderSummaryReadOnly({
   total,
 }: Props) {
   const { symbol, rate, selectedCurrency } = useCurrencyStore();
-
-  // 🌟 Extract multi-tier taxRules array instead of singular scalar values
-  const { taxRules } = useGlobalStore();
+  const { taxRules, taxRulesLoaded } = useGlobalStore();
 
   const safeSubtotal = safeNumber(subtotal);
   const safeTax = safeNumber(tax);
@@ -57,9 +56,6 @@ export default function OrderSummaryReadOnly({
   const totalConverted = convertPrice(safeTotal, rate, selectedCurrency);
 
   const isFreeShipping = shipping === 0;
-
-  // Global backup defaults if map fails to catch localized row constraints
-  const globalRule = taxRules.find((r) => r.category_id === null);
 
   let totalOrderSavings = 0;
 
@@ -101,18 +97,10 @@ export default function OrderSummaryReadOnly({
             }
           }
 
-          // 🌟 Match row item against its respective category tax parameters
-          const matchingRule = taxRules.find(
-            (r) => r.category_id === item?.category_id,
-          );
-          const rulePercent = matchingRule
-            ? matchingRule.tax_rate
-            : globalRule?.tax_rate || "21";
-
-            console.log('item?.category_id === ',item?.category_id);
-            console.log('matchingRule === ',matchingRule);
-            console.log('rulePercent === ',rulePercent);
-            console.log('taxRules === ',taxRules);
+          // category → global → 21% (after rules load)
+          const rulePercent = taxRulesLoaded
+            ? resolveTaxRate(taxRules, item?.category_id, { loaded: true }) * 100
+            : null;
 
           return (
             <div
@@ -166,9 +154,11 @@ export default function OrderSummaryReadOnly({
                   </span>
                 </div>
 
-                <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-1">
-                  Includes {Number(rulePercent).toFixed(0)}%
-                </span>
+                {rulePercent != null && (
+                  <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-1.5 py-0.5 font-medium inline-block mt-1">
+                    Includes {Number(rulePercent).toFixed(0)}%
+                  </span>
+                )}
               </div>
             </div>
           );

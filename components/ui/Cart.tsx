@@ -20,6 +20,7 @@ import {
   ShippingMethod,
   MIN_ORDER_AMOUNT_EUR,
 } from "@/lib/pricing";
+import { resolveTaxRate } from "@/lib/tax";
 
 const FALLBACK_IMAGE = "/images/placeholder.png";
 
@@ -35,6 +36,7 @@ export default function Cart() {
     countries,
     selectedCountry,
     taxRules,
+    taxRulesLoaded,
     fetchInitialData,
   } = useGlobalStore();
 
@@ -51,12 +53,13 @@ export default function Cart() {
 
   const currentShippingPrice = SHIPPING_OPTIONS[shippingMethod]?.price ?? 0;
 
-  // 🌟 Forward the full taxRules array down to the pricing calculator engine
+  // Wait for tax rules so guests don't briefly get the 21% fallback
   const { subtotal, tax, shipping, total } = calculateTotals(
     cart,
     currentShippingPrice,
     taxRules,
     shippingMethod,
+    taxRulesLoaded,
   );
 
   const itemInCart = cart.length;
@@ -73,9 +76,6 @@ export default function Cart() {
       <h1 className="text-gray-500 text-center mt-10">🛒 Your cart is empty</h1>
     );
   }
-
-  // Find country global backup if map fails to catch a local line assignment
-  const globalRule = taxRules.find((r) => r.category_id === null);
 
   return (
     <div className="bg-white p-8">
@@ -137,14 +137,12 @@ export default function Cart() {
             const singleItemTotal = rate * cleanPrice;
             const lineCombinedTotal = rate * (cleanPrice * cleanQuantity);
 
-            // 🌟 Locate specific row category identifier matching rule configurations
-            const matchingRule = taxRules.find(
-              (r) => r.category_id === item.category_id,
-            );
-
-            const rulePercent = matchingRule
-              ? matchingRule.tax_rate
-              : globalRule?.tax_rate || "21";
+            // Same as checkout: category → global → 21% (after rules load)
+            const rulePercent = taxRulesLoaded
+              ? resolveTaxRate(taxRules, item.category_id, {
+                  loaded: true,
+                }) * 100
+              : null;
 
             return (
               <div
@@ -199,12 +197,14 @@ export default function Cart() {
                         )}
                       </div>
 
-                      {/* 🌟 Dynamic tag highlighting the item's custom category tax rate */}
-                      <div className="mt-2">
-                        <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-2 py-0.5 font-medium">
-                          Includes {Number(rulePercent).toFixed(0)}%
-                        </span>
-                      </div>
+                      {/* Same as checkout: show once tax rules are ready */}
+                      {rulePercent != null && (
+                        <div className="mt-2">
+                          <span className="text-[10px] bg-gray-100 text-gray-600 rounded px-2 py-0.5 font-medium">
+                            Includes {Number(rulePercent).toFixed(0)}%
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     {/* <div className="sm:text-right text-sm">

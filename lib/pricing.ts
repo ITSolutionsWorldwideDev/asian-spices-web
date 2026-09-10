@@ -1,6 +1,7 @@
 // lib/pricing.ts
 
 import { CartItem } from "@/store/useCartStore";
+import { resolveTaxRate } from "@/lib/tax";
 
 export const FREE_SHIPPING_THRESHOLD = 50;
 export const MIN_ORDER_AMOUNT_EUR = 10;
@@ -26,26 +27,20 @@ export function calculateTotals(
   shippingCost: number,
   taxRules: any[],
   shippingCodeOrName?: string,
+  taxReady: boolean = true,
 ) {
   let totalCalculatedTax = 0;
   const lineItemFinancials: LineItemFinancials[] = [];
-
-  // 1️⃣ Find Global Rule fallback if any (where category_id is null)
-  const globalRule = taxRules.find((r) => r.category_id === null);
-  const globalRate = globalRule ? parseFloat(globalRule.tax_rate) / 100 : 0.21;
 
   const subtotal = cart.reduce((acc, item) => {
     const base_price = Number(item.base_price || 0);
     const quantity = Number(item.quantity || 1);
     const itemGrossTotal = base_price * quantity;
 
-    // 2️⃣ Find item category specific rule match
-    const matchingRule = taxRules.find(
-      (r) => r.category_id === item.category_id,
-    );
-    const activeRate = matchingRule
-      ? parseFloat(matchingRule.tax_rate) / 100
-      : globalRate;
+    // category → global → 21% (only after tax rules have loaded)
+    const activeRate = resolveTaxRate(taxRules, item.category_id, {
+      loaded: taxReady,
+    });
 
     // 3️⃣ Extract embedded tax amount from the gross price: Gross - (Gross / (1 + Rate))
     const extractedTaxAmount =

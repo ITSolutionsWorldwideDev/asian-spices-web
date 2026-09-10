@@ -58,7 +58,7 @@ export default function Checkout() {
   const { cart, clearCart } = useCartStore();
   const { rate, selectedCurrency } = useCurrencyStore();
 
-  const { taxRules, selectedCountry, setSelectedCountry, fetchInitialData } =
+  const { taxRules, taxRulesLoaded, selectedCountry, setSelectedCountry, fetchInitialData } =
     useGlobalStore();
 
   const [addresses, setAddresses] = useState<any[]>([]);
@@ -195,6 +195,7 @@ export default function Checkout() {
     currentShippingPrice,
     taxRules,
     selectedOption?.name || selectedOption?.code || shippingMethod,
+    taxRulesLoaded,
   );
 
   const convertedTotals = convertTotals(totals, rate || 1, selectedCurrency);

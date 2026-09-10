@@ -12,11 +12,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
+import { resolveTaxRate } from "@/lib/tax";
 
 export default function RelatedProductsSlider({ products }: any) {
   const { symbol, rate } = useCurrencyStore();
-  const { taxRules } = useGlobalStore();
-  const globalRule = taxRules.find((r) => r.category_id === null);
+  const { taxRules, taxRulesLoaded } = useGlobalStore();
 
   return (
     <div className="relative w-full px-2 sm:px-4">
@@ -55,14 +55,11 @@ export default function RelatedProductsSlider({ products }: any) {
           const netPrice = Number(
             product.min_offered_price || product.base_price || 0,
           );
-          const matchingRule = taxRules.find(
-            (r) => r.category_id === product.category_id,
-          );
-          const taxRate =
-            parseFloat(
-              matchingRule?.tax_rate ?? globalRule?.tax_rate ?? "21",
-            ) / 100;
-          const displayPrice = netPrice * (1 + taxRate);
+          const taxRate = taxRulesLoaded
+            ? resolveTaxRate(taxRules, product.category_id)
+            : null;
+          const displayPrice =
+            taxRate == null ? null : netPrice * (1 + taxRate);
 
           return (
           <SwiperSlide key={product.id} className="!h-aut py-10">
@@ -91,9 +88,18 @@ export default function RelatedProductsSlider({ products }: any) {
                   </p>
                 ) : null}
 
-                <p className="text-orange-500 font-bold text-sm mt-1">
-                  {symbol}
-                  {(displayPrice * rate).toFixed(2)}
+                <p className="text-orange-500 font-bold text-sm mt-1 min-h-[1.25rem]">
+                  {displayPrice == null ? (
+                    <span
+                      className="inline-block h-4 w-12 animate-pulse rounded bg-orange-100"
+                      aria-hidden
+                    />
+                  ) : (
+                    <>
+                      {symbol}
+                      {(displayPrice * rate).toFixed(2)}
+                    </>
+                  )}
                 </p>
               </div>
             </Link>

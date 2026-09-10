@@ -346,8 +346,7 @@ export async function POST(req: NextRequest) {
 
           shipping_latitude,
           shipping_longitude,
-          shipping_provider,
-          shipping_base_amount
+          shipping_provider
         )
 
         VALUES
@@ -362,7 +361,7 @@ export async function POST(req: NextRequest) {
 
           $9,$10,$11,$12,$13,$14,
 
-          $15,$16,$17,$18
+          $15,$16,$17
         )
 
         RETURNING *
@@ -388,7 +387,6 @@ export async function POST(req: NextRequest) {
         latitude,
         longitude,
         shippingMethod || "Standard Delivery",
-        Number(shippingBaseAmount) || null,
       ],
     );
 

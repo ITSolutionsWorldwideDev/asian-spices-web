@@ -13,11 +13,12 @@ export const useCartSync = () => {
   const { data: session, status } = useSession();
   const { selectedCountry } = useGlobalStore();
 
-  // const { cart, clearCart, setCart } = useCartStore();
-  const { cart, setCart, refreshGuestPrices } = useCartStore();
+  const { setCart, refreshGuestPrices } = useCartStore();
   const { items: wishlist, clearWishlist, setWishlist } = useWishlistStore();
 
   const hasSynced = useRef(false);
+  /** Skip the first guest price refresh so localStorage gross prices are kept on reload */
+  const guestCountryRef = useRef<string | null>(null);
 
   const currentCountryCode = selectedCountry || "NL";
 
@@ -36,6 +37,7 @@ export const useCartSync = () => {
               quantity: item.quantity,
               image: item.image || "",
               slug: item.slug || "",
+              category_id: item.category_id ? String(item.category_id) : "",
               category_slug: item.category_slug || "",
               subcategory_slug: item.subcategory_slug || "",
             }));
@@ -50,14 +52,21 @@ export const useCartSync = () => {
       return () => clearTimeout(t);
     }
 
-    // 🟢 CASE 2: If guest session, update the local memory array items directly from DB pricing mappings
+    // 🟢 CASE 2: Guest — only refresh prices when country changes (not on every reload)
     if (status === "unauthenticated") {
+      if (guestCountryRef.current === null) {
+        guestCountryRef.current = currentCountryCode;
+        return;
+      }
+      if (guestCountryRef.current === currentCountryCode) return;
+
+      guestCountryRef.current = currentCountryCode;
       const t = setTimeout(() => {
         refreshGuestPrices(currentCountryCode);
       }, 150);
       return () => clearTimeout(t);
     }
-  }, [status, currentCountryCode]);
+  }, [status, currentCountryCode, setCart, refreshGuestPrices]);
 
   useEffect(() => {
     if (status !== "authenticated" || hasSynced.current) return;
@@ -80,6 +89,7 @@ export const useCartSync = () => {
             quantity: item.quantity,
             image: item.image || "",
             slug: item.slug || "",
+            category_id: item.category_id ? String(item.category_id) : "",
             category_slug: item.category_slug || "",
             subcategory_slug: item.subcategory_slug || "",
           }));

@@ -22,6 +22,7 @@ import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import Link from "next/link";
 import { anchorFromClick } from "@/lib/cart-toast-anchor";
+import { resolveTaxRate } from "@/lib/tax";
 
 export default function ProductDesc({
   product,
@@ -33,16 +34,13 @@ export default function ProductDesc({
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
   const { symbol, rate } = useCurrencyStore();
-  const { taxRules } = useGlobalStore();
+  const { taxRules, taxRulesLoaded } = useGlobalStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();
   const { cart, addToCart, increaseQty, decreaseQty, setQty } = useCartStore();
 
-  const globalRule = taxRules.find((r) => r.category_id === null);
-  const matchingRule = taxRules.find(
-    (r) => r.category_id === product.category_id,
-  );
-  const taxRate =
-    parseFloat(matchingRule?.tax_rate ?? globalRule?.tax_rate ?? "21") / 100;
+  const taxRate = taxRulesLoaded
+    ? resolveTaxRate(taxRules, product.category_id)
+    : null;
 
   const cartItem = cart.find(
     (item) =>
@@ -119,13 +117,15 @@ export default function ProductDesc({
     if (originalPrice <= currentPrice) originalPrice = null;
   }
 
-  // Admin/catalog prices are net — show VAT-inclusive using existing taxRules
-  if (currentPrice > 0) {
+  // Admin/catalog prices are net — VAT once tax rules load (category → global → 21%)
+  if (taxRate != null && currentPrice > 0) {
     currentPrice = Number((currentPrice * (1 + taxRate)).toFixed(2));
   }
-  if (originalPrice != null) {
+  if (taxRate != null && originalPrice != null) {
     originalPrice = Number((originalPrice * (1 + taxRate)).toFixed(2));
   }
+
+  const priceReady = taxRate != null;
 
   const rawSave =
     originalPrice && originalPrice > currentPrice
@@ -191,6 +191,7 @@ export default function ProductDesc({
   const stockCount = Number((product as any)?.total_available_stock || 0);
 
   const addConfiguredQuantity = (e: React.MouseEvent<HTMLElement>) => {
+    if (!priceReady) return;
     const anchor = anchorFromClick(e);
     const quantityToAdd = Math.max(1, pendingQty);
     for (let i = 0; i < quantityToAdd; i += 1) {
@@ -328,26 +329,35 @@ export default function ProductDesc({
                 hasSale ? "rounded-xl border border-slate-200 px-4 py-3" : ""
               }`}
             >
-              {hasSale && originalPrice && (
-                <span className="text-5xl font-bold leading-none text-gray-500 line-through">
-                  {symbol}
-                  {(originalPrice * rate).toFixed(2)}
-                </span>
-              )}
-              <span
-                className={`font-extrabold leading-none text-orange-500 ${
-                  hasSale ? "text-6xl" : "text-5xl"
-                }`}
-              >
-                {symbol}
-                {(currentPrice * rate).toFixed(2)}
-              </span>
-              {hasSale && rawSave > 0 && (
-                <p className="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-2 text-lg font-bold text-green-700">
-                  <Clock3 size={18} />
-                  You save {symbol}
-                  {(rawSave * rate).toFixed(2)}
-                </p>
+              {!priceReady ? (
+                <span
+                  className="inline-block h-12 w-28 animate-pulse rounded bg-orange-100"
+                  aria-hidden
+                />
+              ) : (
+                <>
+                  {hasSale && originalPrice && (
+                    <span className="text-5xl font-bold leading-none text-gray-500 line-through">
+                      {symbol}
+                      {(originalPrice * rate).toFixed(2)}
+                    </span>
+                  )}
+                  <span
+                    className={`font-extrabold leading-none text-orange-500 ${
+                      hasSale ? "text-6xl" : "text-5xl"
+                    }`}
+                  >
+                    {symbol}
+                    {(currentPrice * rate).toFixed(2)}
+                  </span>
+                  {hasSale && rawSave > 0 && (
+                    <p className="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-2 text-lg font-bold text-green-700">
+                      <Clock3 size={18} />
+                      You save {symbol}
+                      {(rawSave * rate).toFixed(2)}
+                    </p>
+                  )}
+                </>
               )}
             </div>
           ) : (
