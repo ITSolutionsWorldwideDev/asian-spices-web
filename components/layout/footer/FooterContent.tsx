@@ -18,14 +18,13 @@ const TICKER_ITEMS = [
   "EST. 2026 - AMSTERDAM",
   "AUTHENTIC ASIAN FLAVORS",
   "FREE RECIPES INCLUDED",
-  "4,800+ HAPPY CUSTOMERS",
   "100% ORGANIC",
 ] as const;
 
 const SOCIAL_LINKS = [
   {
     label: "Facebook",
-    href: "https://www.facebook.com/profile.php?id=61591119970456",
+    href: "https://www.facebook.com/asianspices.online/",
     Icon: FaFacebookF,
   },
   {
@@ -46,7 +45,7 @@ const SOCIAL_LINKS = [
 ] as const;
 
 const QUICK_LINKS = [
-  { label: "About Us", href: "/about" },
+  { label: "About Us", href: "/about-us" }, // Updated from "/about" to "/about-us"
   { label: "Our Products", href: "/products" },
   { label: "Recipes", href: "/recipes" },
   { label: "Blog", href: "/recipes" },
@@ -54,11 +53,11 @@ const QUICK_LINKS = [
 ] as const;
 
 const CUSTOMER_SERVICE = [
-  { label: "Terms & Conditions", href: "/terms" },
-  { label: "Shipping Info", href: "/terms" },
-  { label: "Returns", href: "/terms" },
-  { label: "FAQ", href: "/contact-us" },
-  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms & Conditions", href: "/terms-and-conditions" }, // Updated
+  { label: "Shipping Info", href: "/terms-and-conditions" },     // Updated (ya apni zaroorat ke mutabiq change kar sakte hain)
+  { label: "Returns", href: "/terms-and-conditions" },          // Updated
+  { label: "FAQ", href: "/faqs" },
+  { label: "Privacy Policy", href: "/privacy-policy" },         // Updated from "/privacy" to "/privacy-policy"
 ] as const;
 
 function TickerBar() {
@@ -112,9 +111,7 @@ const FooterContent = () => {
               />
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-white/55">
-              Premium quality spices sourced directly from the finest farms
-              across Asia. Bringing authentic flavors to your kitchen since
-              1990.
+             Premium quality spices, sourced from trusted farms across Asia to bring authentic flavor to every kitchen.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
@@ -176,20 +173,6 @@ const FooterContent = () => {
               Get In Touch
             </h3>
             <ul className="space-y-4 text-sm text-white/55">
-              {/* Phone hidden for now
-              <li className="flex items-start gap-3">
-                <Phone
-                  className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
-                  aria-hidden
-                />
-                <a
-                  href="tel:+31107660786"
-                  className="transition hover:text-orange-400"
-                >
-                  +31 10 766 0786
-                </a>
-              </li>
-              */}
               <li className="flex items-start gap-3">
                 <Mail
                   className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
