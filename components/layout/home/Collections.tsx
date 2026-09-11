@@ -5,13 +5,22 @@ import CollectionAnimatedText from "./Collection_Animated_Text";
 import { getLatestRecipeCategories } from "@/lib/dbactions/recipes";
 
 const fallbackImages = [
-  "indian-spices.webp",
-  "chinese-spices.webp",
-  "thai-spices.webp",
-  "blend-spices.webp",
+  "Chicken_Recipes.webp",
+  "Cooking_Recipe.webp",
+  "Paneer.webp",
+  "Pasta.webp",
 ];
 
 const gradients = ["amber-300", "red-500", "green-600", "white"];
+
+function imageForCategory(name: string, slug: string, index: number) {
+  const key = `${slug} ${name}`.toLowerCase();
+  if (key.includes("chicken")) return "Chicken_Recipes.webp";
+  if (key.includes("cooking")) return "Cooking_Recipe.webp";
+  if (key.includes("paneer")) return "Paneer.webp";
+  if (key.includes("pasta")) return "Pasta.webp";
+  return fallbackImages[index % fallbackImages.length];
+}
 
 /** DB-backed category grid only — Flash Sale lives in Home for earlier paint. */
 export default async function Collections() {
@@ -21,7 +30,7 @@ export default async function Collections() {
     title: category.name,
     subtitle: `Explore our latest ${category.name.toLowerCase()} recipes`,
     products: category.recipe_count,
-    image: fallbackImages[index % fallbackImages.length],
+    image: imageForCategory(category.name, category.slug, index),
     gradient: gradients[index % gradients.length],
     slug: category.slug,
   }));

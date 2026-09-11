@@ -231,12 +231,15 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                         <div className="flex-1 space-y-0.5 overflow-y-auto px-2.5 pb-3">
                           {shopCategoryChildren.map((section, index) => {
                             const isActive = activeShopCategory === index;
+                            const categoryHref =
+                              section.category?.find((item) => item.name === "View all")
+                                ?.href || "products";
                             return (
-                              <button
+                              <Link
                                 key={index}
-                                type="button"
+                                href={`/${categoryHref}`}
                                 onMouseEnter={() => setActiveShopCategory(index)}
-                                onClick={() => setActiveShopCategory(index)}
+                                onClick={closeMegaMenu}
                                 className={`group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left transition-all duration-150 ${
                                   isActive
                                     ? "bg-white text-stone-900 shadow-sm ring-1 ring-orange-200/70"
@@ -257,7 +260,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                                       : "text-stone-300 group-hover:text-stone-400"
                                   }`}
                                 />
-                              </button>
+                              </Link>
                             );
                           })}
                         </div>

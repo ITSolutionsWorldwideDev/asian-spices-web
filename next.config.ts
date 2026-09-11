@@ -5,6 +5,15 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  async redirects() {
+    return [
+      {
+        source: "/foods-beverages",
+        destination: "/beverages",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     // Use original image URLs (no /_next/image?url=...).
     // Needed so image links aren't blocked by robots Disallow: /*?*

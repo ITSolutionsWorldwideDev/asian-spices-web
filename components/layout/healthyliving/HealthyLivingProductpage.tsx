@@ -24,6 +24,14 @@ import {
 import { getFaqPageJsonLd } from "@/lib/schema";
 import JsonLd from "@/components/seo/JsonLd";
 
+interface CatalogMatch {
+  categorySlug: string;
+  categoryName: string;
+  subcategoryId: string | null;
+  subcategorySlug: string | null;
+  subcategoryName: string | null;
+}
+
 interface PageProps {
   params: Promise<{
     slug: string;
@@ -36,6 +44,7 @@ interface PageProps {
     search?: string;
     page?: string;
   }>;
+  catalogMatch: CatalogMatch;
 }
 
 type Filters = {
@@ -51,24 +60,25 @@ type Filters = {
 export default async function HealthyLivingProductpage({
   params,
   searchParams,
+  catalogMatch,
 }: PageProps) {
   const resolvedParams = params ? await params : { slug: "" };
   const resolvedSearch = searchParams ? await searchParams : {};
   const slug = resolvedParams?.slug;
 
   const allowedSlugs = Object.keys(slugContent) as AllowedSlug[];
-
-  if (!allowedSlugs.includes(slug as AllowedSlug)) {
-    return (
-      <div className="p-10 text-center font-bold text-red-500">
-        Invalid slug
-      </div>
-    );
-  }
-
-  const currentSlugTyped = slug as AllowedSlug;
-  const currentContent = slugContent[currentSlugTyped];
-  const isHerbBenefitPage = herbBenefitSlugs.includes(currentSlugTyped);
+  const hasSlugContent = allowedSlugs.includes(slug as AllowedSlug);
+  const currentSlugTyped = hasSlugContent ? (slug as AllowedSlug) : null;
+  const currentContent = currentSlugTyped
+    ? slugContent[currentSlugTyped]
+    : {
+        heading: catalogMatch.subcategoryName || catalogMatch.categoryName,
+        text: `Shop ${catalogMatch.subcategoryName || catalogMatch.categoryName}`,
+        image: "capsules.png",
+      };
+  const isHerbBenefitPage = currentSlugTyped
+    ? herbBenefitSlugs.includes(currentSlugTyped)
+    : false;
   const isGrandmasPage = slug === "grandmas-kitchen-remedies";
   const faqJsonLd =
     isHerbBenefitPage && currentContent.faqs?.length
@@ -84,9 +94,15 @@ export default async function HealthyLivingProductpage({
       .filter((v) => v !== "" && v !== "null" && v !== "undefined");
   };
 
+  const urlSubcategories = cleanArray(resolvedSearch.subcategories);
   const filters: Filters = {
-    category: "healthy-living",
-    subcategories: cleanArray(resolvedSearch.subcategories),
+    category: catalogMatch.categorySlug,
+    subcategories:
+      urlSubcategories.length > 0
+        ? urlSubcategories
+        : catalogMatch.subcategoryId
+          ? [catalogMatch.subcategoryId]
+          : [],
     brands: cleanArray(resolvedSearch.brands),
     minPrice: resolvedSearch.min,
     maxPrice: resolvedSearch.max,
@@ -94,7 +110,7 @@ export default async function HealthyLivingProductpage({
     page: Number(resolvedSearch.page || 1),
   };
 
-  const subcategories = await getSubcategories("healthy-living", filters);
+  const subcategories = await getSubcategories(catalogMatch.categorySlug, filters);
   const brands: string[] = [];
   const products = await getProducts(filters);
 
