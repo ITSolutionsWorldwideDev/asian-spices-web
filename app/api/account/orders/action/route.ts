@@ -84,12 +84,12 @@ export async function POST(request: Request) {
         );
       }
 
-      const requestedItems: Array<{ itemId: string }> = Array.isArray(items)
-        ? items
-        : [];
+      const requestedItems: Array<{ itemId: string; quantity?: number }> =
+        Array.isArray(items) ? items : [];
 
       // 2a. Line-item cancellation path - customer selected specific products
-      // to cancel rather than the whole order.
+      // (and optionally a partial quantity of each) to cancel rather than
+      // the whole order.
       if (requestedItems.length > 0) {
         const activeItemsRes = await client.query(
           `SELECT product_id, quantity, price, tax_amount
@@ -102,31 +102,43 @@ export async function POST(request: Request) {
           activeItems.map((row) => [String(row.product_id), row]),
         );
 
-        const requestedIds = requestedItems.map((it) => String(it.itemId));
-        for (const id of requestedIds) {
-          if (!activeById.has(id)) {
+        // Resolve each requested line to the quantity actually being
+        // cancelled, clamped to what's still active on the order (e.g.
+        // cancel 5 of 20 units, not the whole line).
+        const requested = requestedItems.map((it) => {
+          const id = String(it.itemId);
+          const row = activeById.get(id);
+          if (!row) {
             throw new Error(
               `Item ${id} is not an active line item on this order.`,
             );
           }
-        }
+          const availableQty = Number(row.quantity);
+          const requestedQty = Math.min(
+            availableQty,
+            Math.max(1, Math.trunc(Number(it.quantity)) || availableQty),
+          );
+          return { id, row, requestedQty };
+        });
 
-        const cancelRows = requestedIds.map((id) => activeById.get(id)!);
-        const cancelAmount = cancelRows.reduce(
-          (sum, row) => sum + Number(row.price) * Number(row.quantity),
+        const cancelAmount = requested.reduce(
+          (sum, r) => sum + Number(r.row.price) * r.requestedQty,
           0,
         );
-        const cancelTax = cancelRows.reduce(
-          (sum, row) => sum + Number(row.tax_amount || 0),
-          0,
-        );
+        // tax_amount stored on store_order_items is the total tax for the
+        // full line quantity - prorate it down to the units being cancelled.
+        const cancelTax = requested.reduce((sum, r) => {
+          const rowQty = Number(r.row.quantity);
+          const rowTax = Number(r.row.tax_amount || 0);
+          const perUnitTax = rowQty > 0 ? rowTax / rowQty : 0;
+          return sum + perUnitTax * r.requestedQty;
+        }, 0);
 
         const subtotal = Number(order.subtotal || 0);
         const shippingAmount = Number(order.shipping_amount || 0);
         const taxAmount = Number(order.tax_amount || 0);
         const newSubtotal = Math.max(0, subtotal - cancelAmount);
-        const isFullCancel =
-          requestedIds.length === activeItems.length || newSubtotal <= 0;
+        const isFullCancel = newSubtotal <= 0;
 
         // Enforce the €10 minimum-order threshold: a partial cancellation
         // can never leave the order sitting at an uneconomical remainder.
@@ -137,14 +149,29 @@ export async function POST(request: Request) {
           newSubtotal < MIN_ORDER_AMOUNT_EUR
         ) {
           throw new Error(
-            `Cancelling the selected item(s) would leave a subtotal of €${newSubtotal.toFixed(2)}, below the €${MIN_ORDER_AMOUNT_EUR.toFixed(2)} minimum. Cancel the entire order instead, or keep enough items to stay at or above €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}.`,
+            `Cancelling the selected item(s) would leave a subtotal of €${newSubtotal.toFixed(2)}, below the €${MIN_ORDER_AMOUNT_EUR.toFixed(2)} minimum. Cancel the entire order instead, or keep enough units to stay at or above €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}.`,
           );
         }
 
-        await client.query(
-          `UPDATE store_order_items SET status = 'cancelled' WHERE order_id = $1 AND product_id = ANY($2::uuid[]);`,
-          [orderId, requestedIds],
-        );
+        // Apply the cancellation per line: drop the row entirely once its
+        // full quantity is cancelled, otherwise just shrink it in place.
+        for (const r of requested) {
+          const remainingQty = Number(r.row.quantity) - r.requestedQty;
+          if (remainingQty <= 0) {
+            await client.query(
+              `UPDATE store_order_items SET status = 'cancelled' WHERE order_id = $1 AND product_id = $2;`,
+              [orderId, r.id],
+            );
+          } else {
+            const rowQty = Number(r.row.quantity);
+            const rowTax = Number(r.row.tax_amount || 0);
+            const perUnitTax = rowQty > 0 ? rowTax / rowQty : 0;
+            await client.query(
+              `UPDATE store_order_items SET quantity = $3, tax_amount = $4 WHERE order_id = $1 AND product_id = $2;`,
+              [orderId, r.id, remainingQty, perUnitTax * remainingQty],
+            );
+          }
+        }
 
         if (isFullCancel) {
           await client.query(
