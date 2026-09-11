@@ -13,7 +13,7 @@ interface Props {
   onSubmit: (payload: {
     reason: string;
     comments: string;
-    items: { itemId: string }[];
+    items: { itemId: string; quantity: number }[];
   }) => Promise<void>;
   onClose: () => void;
 }
@@ -45,8 +45,18 @@ export default function CancelItemsWorkflow({
     [order],
   );
 
-  const [selected, setSelected] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(activeItems.map((item: any) => [item.id, true])),
+  // Checked by default, quantity defaults to the full purchased amount -
+  // matches the old "cancel everything unless unchecked" behaviour, but the
+  // quantity can now be brought down to cancel part of a line (e.g. 5 of 20).
+  const [selected, setSelected] = useState<
+    Record<string, { checked: boolean; quantity: number }>
+  >(() =>
+    Object.fromEntries(
+      activeItems.map((item: any) => [
+        item.id,
+        { checked: true, quantity: Number(item.quantity || 1) },
+      ]),
+    ),
   );
   const [reason, setReason] = useState("");
   const [comments, setComments] = useState("");
@@ -55,39 +65,62 @@ export default function CancelItemsWorkflow({
 
   if (!order) return null;
 
-  const lineTotal = (item: any) =>
-    Number(item?.price || 0) * Number(item?.quantity || 0);
+  const unitPrice = (item: any) => Number(item?.price || 0);
+  const lineTotal = (item: any) => unitPrice(item) * Number(item?.quantity || 0);
 
   const originalSubtotal = activeItems.reduce(
     (sum: number, item: any) => sum + lineTotal(item),
     0,
   );
-  const selectedItems = activeItems.filter((item: any) => selected[item.id]);
-  const cancelledSubtotal = selectedItems.reduce(
-    (sum: number, item: any) => sum + lineTotal(item),
+  const selectedEntries = activeItems
+    .map((item: any) => ({ item, sel: selected[item.id] }))
+    .filter((e: any) => e.sel?.checked && e.sel.quantity > 0);
+
+  const cancelledSubtotal = selectedEntries.reduce(
+    (sum: number, e: any) => sum + unitPrice(e.item) * e.sel.quantity,
     0,
   );
   const remainingSubtotal = Math.max(0, originalSubtotal - cancelledSubtotal);
   const isFullCancel =
-    selectedItems.length > 0 && selectedItems.length === activeItems.length;
+    selectedEntries.length > 0 &&
+    activeItems.every(
+      (item: any) =>
+        selected[item.id]?.checked &&
+        selected[item.id].quantity >= Number(item.quantity || 0),
+    );
   const belowMinimum =
     !isFullCancel &&
-    selectedItems.length > 0 &&
+    selectedEntries.length > 0 &&
     remainingSubtotal > 0 &&
     remainingSubtotal < MIN_ORDER_AMOUNT_EUR;
 
-  const toggleItem = (itemId: string) => {
-    setSelected((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+  const toggleItem = (item: any) => {
+    setSelected((prev) => ({
+      ...prev,
+      [item.id]: {
+        checked: !prev[item.id]?.checked,
+        quantity: prev[item.id]?.quantity || Number(item.quantity || 1),
+      },
+    }));
+  };
+
+  const changeQuantity = (item: any, value: number) => {
+    const maxQty = Number(item.quantity || 1);
+    const safeQty = Math.max(1, Math.min(maxQty, Math.trunc(value) || 1));
+    setSelected((prev) => ({
+      ...prev,
+      [item.id]: { checked: true, quantity: safeQty },
+    }));
   };
 
   const validateAndProceedToStep3 = () => {
-    if (selectedItems.length === 0) {
+    if (selectedEntries.length === 0) {
       setValidationError("Please select at least one item to cancel.");
       return;
     }
     if (belowMinimum) {
       setValidationError(
-        `Cancelling these item(s) would leave a subtotal of €${remainingSubtotal.toFixed(2)}, below the €${MIN_ORDER_AMOUNT_EUR.toFixed(2)} minimum. Cancel the entire order instead, or keep enough items to stay at or above €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}.`,
+        `Cancelling these item(s) would leave a subtotal of €${remainingSubtotal.toFixed(2)}, below the €${MIN_ORDER_AMOUNT_EUR.toFixed(2)} minimum. Cancel the entire order instead, or keep enough units to stay at or above €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}.`,
       );
       return;
     }
@@ -113,7 +146,10 @@ export default function CancelItemsWorkflow({
     const payload = {
       reason,
       comments,
-      items: selectedItems.map((item: any) => ({ itemId: item.id })),
+      items: selectedEntries.map((e: any) => ({
+        itemId: e.item.id,
+        quantity: e.sel.quantity,
+      })),
     };
 
     try {
@@ -126,6 +162,11 @@ export default function CancelItemsWorkflow({
       setIsSubmitting(false);
     }
   };
+
+  const cancelledUnitCount = selectedEntries.reduce(
+    (sum: number, e: any) => sum + e.sel.quantity,
+    0,
+  );
 
   return (
     <div className="space-y-6">
@@ -219,13 +260,17 @@ export default function CancelItemsWorkflow({
             <h3 className="text-base font-bold">Select Items to Cancel</h3>
             <p className="text-xs text-gray-500">
               Everything is checked by default (cancels the whole order).
-              Uncheck items you want to keep.
+              Uncheck items you want to keep, or lower the quantity to cancel
+              only part of a line (e.g. 5 of 20 units).
             </p>
           </div>
 
           <div className="divide-y border rounded-xl overflow-hidden bg-white">
             {activeItems.map((item: any) => {
-              const isChecked = !!selected[item.id];
+              const sel = selected[item.id];
+              const isChecked = !!sel?.checked;
+              const maxQty = Number(item.quantity || 1);
+              const cancelQty = sel?.quantity ?? maxQty;
 
               return (
                 <div
@@ -237,7 +282,7 @@ export default function CancelItemsWorkflow({
                       type="checkbox"
                       id={`cancel-check-${item.id}`}
                       checked={isChecked}
-                      onChange={() => toggleItem(item.id)}
+                      onChange={() => toggleItem(item)}
                       className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500 cursor-pointer"
                     />
 
@@ -258,11 +303,41 @@ export default function CancelItemsWorkflow({
                         {item.title}
                       </label>
                       <p className="text-xs text-gray-400">
-                        {item.quantity} unit(s) &middot; {symbol}
+                        Purchased: {maxQty} unit(s) &middot; {symbol}
                         {(rate * lineTotal(item)).toFixed(2)}
                       </p>
                     </div>
                   </div>
+
+                  {isChecked && (
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500 font-medium">
+                          Cancel qty:
+                        </span>
+                        <input
+                          type="number"
+                          min={1}
+                          max={maxQty}
+                          value={cancelQty}
+                          onChange={(e) =>
+                            changeQuantity(
+                              item,
+                              parseInt(e.target.value, 10) || 1,
+                            )
+                          }
+                          className="w-16 px-2 py-1 text-sm border rounded-lg text-center font-medium focus:ring-1 focus:ring-red-500 focus:outline-hidden"
+                        />
+                        <span className="text-xs text-gray-400">
+                          / {maxQty}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        {symbol}
+                        {(rate * unitPrice(item) * cancelQty).toFixed(2)}
+                      </p>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -287,7 +362,7 @@ export default function CancelItemsWorkflow({
               <AlertCircle size={16} className="shrink-0" />
               Cancelling these item(s) would leave a subtotal below the €
               {MIN_ORDER_AMOUNT_EUR.toFixed(2)} minimum. Cancel the entire
-              order instead, or keep enough items to stay at or above €
+              order instead, or keep enough units to stay at or above €
               {MIN_ORDER_AMOUNT_EUR.toFixed(2)}.
             </div>
           )}
@@ -301,7 +376,7 @@ export default function CancelItemsWorkflow({
             </button>
             <button
               onClick={validateAndProceedToStep3}
-              disabled={selectedItems.length === 0 || belowMinimum}
+              disabled={selectedEntries.length === 0 || belowMinimum}
               className="inline-flex items-center gap-2 bg-black text-white text-sm font-medium px-4 py-2.5 rounded-xl hover:bg-gray-800 transition disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Continue <ArrowRight size={16} />
@@ -378,7 +453,7 @@ export default function CancelItemsWorkflow({
                 ? "Processing..."
                 : isFullCancel
                   ? "Confirm Cancellation"
-                  : `Cancel ${selectedItems.length} Item(s)`}
+                  : `Cancel ${cancelledUnitCount} Unit(s)`}
             </button>
           </div>
         </div>

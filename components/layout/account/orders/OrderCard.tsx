@@ -103,7 +103,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
   const handleCancelSubmit = async (payload: {
     reason: string;
     comments: string;
-    items: { itemId: string }[];
+    items: { itemId: string; quantity: number }[];
   }) => {
     try {
       const response = await fetch("/api/account/orders/action", {
