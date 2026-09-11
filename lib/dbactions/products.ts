@@ -37,7 +37,9 @@ export const getProducts = async (filters: any) => {
       ? `GREATEST(
           ts_rank(COALESCE(p.search_vector, ''::tsvector), plainto_tsquery('english', $${searchParamIndex})),
           CASE WHEN p.name ILIKE '%' || $${searchParamIndex} || '%' THEN 1 ELSE 0 END,
-          CASE WHEN COALESCE(b.name, '') ILIKE '%' || $${searchParamIndex} || '%' THEN 0.9 ELSE 0 END
+          CASE WHEN COALESCE(b.name, '') ILIKE '%' || $${searchParamIndex} || '%' THEN 0.9 ELSE 0 END,
+          CASE WHEN CAST(p.weight AS TEXT) ILIKE '%' || $${searchParamIndex} || '%' THEN 0.8 ELSE 0 END,
+          CASE WHEN (COALESCE(p.name, '') || ' ' || COALESCE(CAST(p.weight AS TEXT), '')) ILIKE '%' || $${searchParamIndex} || '%' THEN 1 ELSE 0 END
         ) AS rank`
       : "0 as rank";
 
@@ -122,11 +124,23 @@ export const getProducts = async (filters: any) => {
   }
 
   if (searchParamIndex !== null) {
+    // Match name/brand/slug/weight, or all words across "name + weight"
+    // so "Samaara Premium Black Tea Jar 1kg" works when 1kg is only in weight
     query += ` AND (
       COALESCE(p.search_vector, ''::tsvector) @@ plainto_tsquery('english', $${searchParamIndex})
       OR p.name ILIKE '%' || $${searchParamIndex} || '%'
       OR COALESCE(b.name, '') ILIKE '%' || $${searchParamIndex} || '%'
       OR p.slug ILIKE '%' || $${searchParamIndex} || '%'
+      OR CAST(p.weight AS TEXT) ILIKE '%' || $${searchParamIndex} || '%'
+      OR (COALESCE(p.name, '') || ' ' || COALESCE(CAST(p.weight AS TEXT), '')) ILIKE '%' || $${searchParamIndex} || '%'
+      OR (
+        SELECT COALESCE(bool_and(
+          (COALESCE(p.name, '') || ' ' || COALESCE(CAST(p.weight AS TEXT), '') || ' ' || COALESCE(b.name, ''))
+            ILIKE '%' || w.word || '%'
+        ), false)
+        FROM unnest(regexp_split_to_array(trim($${searchParamIndex}), '[[:space:]]+')) AS w(word)
+        WHERE length(trim(w.word)) > 0
+      )
     )`;
   }
 
@@ -584,13 +598,23 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
     values.push(maxPrice);
   }
 
-  // 🔹 Text Search Constraint — name, brand, slug, or full-text vector
+  // 🔹 Text Search Constraint — name, brand, slug, weight, or full-text vector
   if (search) {
     index++;
     productConditions += ` AND (
       COALESCE(p.search_vector, ''::tsvector) @@ plainto_tsquery('english', $${index})
       OR p.name ILIKE '%' || $${index} || '%'
       OR p.slug ILIKE '%' || $${index} || '%'
+      OR CAST(p.weight AS TEXT) ILIKE '%' || $${index} || '%'
+      OR (COALESCE(p.name, '') || ' ' || COALESCE(CAST(p.weight AS TEXT), '')) ILIKE '%' || $${index} || '%'
+      OR (
+        SELECT COALESCE(bool_and(
+          (COALESCE(p.name, '') || ' ' || COALESCE(CAST(p.weight AS TEXT), ''))
+            ILIKE '%' || w.word || '%'
+        ), false)
+        FROM unnest(regexp_split_to_array(trim($${index}), '[[:space:]]+')) AS w(word)
+        WHERE length(trim(w.word)) > 0
+      )
       OR EXISTS (
         SELECT 1 FROM store_brands sb
         WHERE sb.brand_id = p.brand_id
@@ -661,6 +685,16 @@ export const getCategories = async (filters: any = {}) => {
       COALESCE(p.search_vector, ''::tsvector) @@ plainto_tsquery('english', $${index})
       OR p.name ILIKE '%' || $${index} || '%'
       OR p.slug ILIKE '%' || $${index} || '%'
+      OR CAST(p.weight AS TEXT) ILIKE '%' || $${index} || '%'
+      OR (COALESCE(p.name, '') || ' ' || COALESCE(CAST(p.weight AS TEXT), '')) ILIKE '%' || $${index} || '%'
+      OR (
+        SELECT COALESCE(bool_and(
+          (COALESCE(p.name, '') || ' ' || COALESCE(CAST(p.weight AS TEXT), ''))
+            ILIKE '%' || w.word || '%'
+        ), false)
+        FROM unnest(regexp_split_to_array(trim($${index}), '[[:space:]]+')) AS w(word)
+        WHERE length(trim(w.word)) > 0
+      )
     )`;
     values.push(search.trim());
   }
@@ -715,13 +749,23 @@ export const getBrands = async (category: string, filters: any = {}) => {
     values.push(maxPrice);
   }
 
-  // 🔹 Search — name, brand, slug, or full-text vector
+  // 🔹 Search — name, brand, slug, weight, or full-text vector
   if (search) {
     index++;
     productConditions += ` AND (
       COALESCE(p.search_vector, ''::tsvector) @@ plainto_tsquery('english', $${index})
       OR p.name ILIKE '%' || $${index} || '%'
       OR p.slug ILIKE '%' || $${index} || '%'
+      OR CAST(p.weight AS TEXT) ILIKE '%' || $${index} || '%'
+      OR (COALESCE(p.name, '') || ' ' || COALESCE(CAST(p.weight AS TEXT), '')) ILIKE '%' || $${index} || '%'
+      OR (
+        SELECT COALESCE(bool_and(
+          (COALESCE(p.name, '') || ' ' || COALESCE(CAST(p.weight AS TEXT), ''))
+            ILIKE '%' || w.word || '%'
+        ), false)
+        FROM unnest(regexp_split_to_array(trim($${index}), '[[:space:]]+')) AS w(word)
+        WHERE length(trim(w.word)) > 0
+      )
       OR EXISTS (
         SELECT 1 FROM store_brands sb
         WHERE sb.brand_id = p.brand_id
