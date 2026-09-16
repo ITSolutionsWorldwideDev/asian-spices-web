@@ -64,6 +64,14 @@ const HEALTHY_LIVING_SECTIONS = [
       { name: "Hair masks", href: "healthyliving/hair-masks" },
     ],
   },
+  {
+    heading: "Weight Loss",
+    description: "Natural metabolic support.",
+    image: "/assets/healtyliving/enhances-energy-levels.png",
+    category: [
+      { name: "Weight Loss", href: "healthyliving/weight-loss" },
+    ],
+  },
 ];
 
 interface NavCategoryItem {
@@ -324,7 +332,11 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                 <>
                   <div
                     className={`grid gap-8 p-6 ${
-                      activeDropdownLink.children.length >= 4 ? "grid-cols-4" : "grid-cols-3"
+                      activeDropdownLink.children.length >= 5
+                        ? "grid-cols-5"
+                        : activeDropdownLink.children.length >= 4
+                          ? "grid-cols-4"
+                          : "grid-cols-3"
                     }`}
                   >
                     {activeDropdownLink.children.map((section, index) => (

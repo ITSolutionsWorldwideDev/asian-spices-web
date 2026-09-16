@@ -3,6 +3,7 @@ export type AllowedSlug =
   | "immune-support"
   | "digestion-gut-health"
   | "joint-skin-hair-health"
+  | "weight-loss"
   | "grandmas-kitchen-remedies"
   | "capsules"
   | "powders"
@@ -39,6 +40,7 @@ export const herbBenefitSlugs: AllowedSlug[] = [
   "immune-support",
   "digestion-gut-health",
   "joint-skin-hair-health",
+  "weight-loss",
   "grandmas-kitchen-remedies",
 ];
 
@@ -194,6 +196,31 @@ export const slugContent: Record<AllowedSlug, SlugContentItem> = {
       { question: "Can these herbs be used on sensitive skin?", answer: "Always patch-test a topical herb like Calendula or Neem oil before wider use, especially if you have sensitive or reactive skin." },
       { question: "Is Calendula suitable for daily skincare use?", answer: "Calendula has a long tradition of gentle daily use in herbal skincare, though individual sensitivity varies." },
       { question: "Where does Himalayan Bhringraj come from?", answer: "Sourcing and harvest region details for Bhringraj are listed on the product page." },
+    ],
+  },
+  "weight-loss": {
+    heading: "Herbs for Balance: Natural Support for Weight & Metabolism",
+    text: "Traditional wellness often pairs mindful eating with botanicals long associated with digestion, metabolism and everyday vitality. Herbs such as green tea, ginger and fenugreek have a long history of use in routines aimed at supporting a balanced, active lifestyle.",
+    image: "enhances-energy-levels.png",
+    sectionImage: "h1.webp",
+    metaTitle: "Herbs for Weight Loss & Metabolism | Natural Balance",
+    metaDesc: "Shop traditional herbs for weight support and metabolism — green tea, ginger, fenugreek and more. Botanical wellness for an active, balanced lifestyle.",
+    sections: [
+      {
+        title: "Metabolic Support: Herbs Traditionally Used for Balance",
+        description: "Green tea, ginger and cayenne have long been used in traditional practices associated with warmth, circulation and everyday metabolic support. Himalayan and Ayurvedic kitchens also turn to spices like cumin and black pepper as part of digestion-focused meals.",
+      },
+      {
+        title: "Appetite & Digestion: Gentle Botanical Allies",
+        description: "Fenugreek, fennel and triphala appear frequently in traditional routines aimed at comfortable digestion and a sense of fullness after meals. These botanicals are typically used as teas, powders or capsules as part of a broader healthy lifestyle.",
+      },
+    ],
+    faqs: [
+      { question: "Can herbs help with weight management?", answer: "Some herbs have a long traditional association with digestion and metabolic support, but they work best alongside a balanced diet and regular activity — not as a standalone solution." },
+      { question: "What herbs are traditionally used for metabolism?", answer: "Green tea, ginger and cayenne are among the botanicals most often mentioned in traditional wellness for everyday metabolic support." },
+      { question: "Is fenugreek used for appetite support?", answer: "Fenugreek has a long traditional use in digestion-focused routines and is sometimes included in practices aimed at supporting a comfortable sense of fullness." },
+      { question: "Are weight-support herbs safe to take every day?", answer: "Many people use gentle herbs like green tea or ginger regularly, but follow product guidance and speak to a healthcare professional if you have a medical condition or take medication." },
+      { question: "Can I combine weight-support herbs with other supplements?", answer: "Many people do, but introduce one new herb at a time and check with a pharmacist or doctor if you take prescription medication." },
     ],
   },
   capsules: {

@@ -14,7 +14,10 @@ export const getShopCategories = async () => {
             sc.id AS subcategory_id, sc.name AS subcategory_name, sc.slug AS subcategory_slug
      FROM store_categories c
      LEFT JOIN store_subcategories sc ON sc.category_id = c.id
-     WHERE c.status = 1 AND LOWER(c.slug) <> 'healthy-living'
+     WHERE c.status = 1
+       AND LOWER(c.slug) <> 'healthy-living'
+       AND LOWER(c.slug) <> 'herbal-food-supplements'
+       AND LOWER(c.name) <> 'herbal food supplements'
      ORDER BY c.name ASC, sc.name ASC`,
   );
 

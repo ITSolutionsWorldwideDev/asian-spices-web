@@ -12,6 +12,16 @@ const nextConfig: NextConfig = {
         destination: "/beverages",
         permanent: true,
       },
+      {
+        source: "/spices/heera-neem-powder-100-g",
+        destination: "/spices/heera-neem-powder-100g",
+        permanent: true,
+      },
+      {
+        source: "/recipes/chickenpizzarecipe",
+        destination: "/recipes/chicken-jalfrezi",
+        permanent: true,
+      },
     ];
   },
   images: {

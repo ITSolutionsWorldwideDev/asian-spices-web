@@ -273,7 +273,7 @@ export async function GET(
     doc.setFontSize(10);
     doc.setTextColor("#111827");
     doc.text("#", colNo, currentY + 15);
-    doc.text("Article", colArticle, currentY + 15);
+    doc.text("Item", colArticle, currentY + 15);
     doc.text("Quantity", colQty, currentY + 15, { align: "right" });
     doc.text("Price per unit", colUnit, currentY + 15, { align: "right" });
     doc.text("VAT", colVat, currentY + 15, { align: "right" });
@@ -319,60 +319,52 @@ export async function GET(
     });
 
     // Summary sits above the footer so the bottom line cannot cut the VAT row.
-    const SUMMARY_BLOCK_HEIGHT = 90;
+    const SUMMARY_BLOCK_HEIGHT = 120;
     let sumTop = currentY + 36;
     if (sumTop + SUMMARY_BLOCK_HEIGHT > FOOTER_LINE_Y - 12) {
       doc.addPage();
       sumTop = 56;
     }
 
-    const leftLabelX = LEFT + 12;
-    const leftAmountX = 210;
+    const labelX = 380;
+    const amountX = RIGHT;
+    const rowGap = 16;
+    let rowY = sumTop;
+
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.setTextColor("#374151");
-    doc.text("Excl. VAT", leftLabelX, sumTop);
-    doc.text(euro(exclVatAmount), leftAmountX, sumTop, { align: "right" });
 
-    const vatRowY = sumTop + 18;
-    doc.text(`VAT ${vatPct}%`, leftLabelX, vatRowY);
-    doc.text(euro(taxAmount), leftAmountX, vatRowY, { align: "right" });
+    doc.text("Excl. VAT", labelX, rowY);
+    doc.text(euro(exclVatAmount), amountX, rowY, { align: "right" });
+    rowY += rowGap;
 
-    const summaryRuleY = vatRowY + 14;
-    doc.setDrawColor(209, 213, 219);
-    doc.setLineWidth(0.7);
-    doc.line(LEFT + 10, summaryRuleY, leftAmountX, summaryRuleY);
+    doc.text(`VAT ${vatPct}%`, labelX, rowY);
+    doc.text(euro(taxAmount), amountX, rowY, { align: "right" });
+    rowY += rowGap;
 
-    doc.setTextColor("#111827");
-    doc.setFont("helvetica", "bold");
-    doc.text("Total", leftLabelX, summaryRuleY + 18);
-    doc.text(euro(subtotalAmount), leftAmountX, summaryRuleY + 18, {
-      align: "right",
-    });
+    doc.text("Subtotal (incl. VAT)", labelX, rowY);
+    doc.text(euro(subtotalAmount), amountX, rowY, { align: "right" });
+    rowY += rowGap;
 
-    const rightLabelX = 380;
-    const rightAmountX = RIGHT;
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor("#374151");
-    doc.text("Subtotal (incl. VAT)", rightLabelX, sumTop);
-    doc.text(euro(subtotalAmount), rightAmountX, sumTop, { align: "right" });
-
-    doc.text(shippingProvider || "Shipping", rightLabelX, vatRowY);
-    doc.text(euro(shippingAmount), rightAmountX, vatRowY, {
-      align: "right",
-    });
+    doc.text(
+      shippingProvider ? `Shipping-${shippingProvider}` : "Shipping",
+      labelX,
+      rowY,
+    );
+    doc.text(euro(shippingAmount), amountX, rowY, { align: "right" });
+    rowY += 14;
 
     doc.setDrawColor("#111827");
     doc.setLineWidth(0.8);
-    doc.line(rightLabelX, summaryRuleY, RIGHT, summaryRuleY);
+    doc.line(labelX, rowY, RIGHT, rowY);
+    rowY += 18;
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
     doc.setTextColor("#111827");
-    doc.text("Total", rightLabelX, summaryRuleY + 20);
-    doc.text(euro(totalAmount), rightAmountX, summaryRuleY + 20, {
-      align: "right",
-    });
+    doc.text("Grand Total", labelX, rowY);
+    doc.text(euro(totalAmount), amountX, rowY, { align: "right" });
 
     // Footer at the very bottom of the last page, after totals.
     doc.setDrawColor("#111827");
