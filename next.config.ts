@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
         destination: "/recipes/chicken-jalfrezi",
         permanent: true,
       },
+      {
+        source: "/about",
+        destination: "/about-us",
+        permanent: true,
+      },
     ];
   },
   images: {
