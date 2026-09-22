@@ -243,8 +243,9 @@ export default function ProductCard({
                   href={getProductPath(product, "spices")}
                   className="block mt-4"
                 >
-                  <h3 className="font-semibold text-gray-800 text-base line-clamp-1">
+                  <h3 className="font-semibold text-gray-800 text-base">
                     {product.name}
+                    {product.weight ? ` ${product.weight}` : ""}
                   </h3>
                   <p className="text-xs text-gray-600 mt-0.5 line-clamp-2 min-h-[32px]">
                     {product.description || "No description available."}
@@ -523,12 +524,14 @@ export default function ProductCard({
                 href={getProductPath(product, "spices")}
                 className="block mt-4"
               >
-                <h3 className="font-semibold text-gray-800 text-base line-clamp-1">
+                <h3 className="font-semibold text-gray-800 text-base">
                   {product.name}
+                  {product.weight ? ` ${product.weight}` : ""}
                 </h3>
                 <span className="text-xs text-gray-400 mt-0.5 block line-clamp-2 min-h-[32px]">
-             
-                  {product.description?.split(" ").slice(0, 3).join(" ") || "No description available."}...
+                  {product.description?.split(" ").slice(0, 3).join(" ") ||
+                    "No description available."}
+                  ...
                 </span>
               </Link>
 
