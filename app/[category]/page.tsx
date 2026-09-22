@@ -82,6 +82,9 @@ export default async function CategoryPage({
         text={`Shop ${category.name}`}
         videoLink="/spices/Comp 1_10.mp4"
       />
+      <div className="container mx-auto px-5 pt-6 text-sm sm:text-base">
+        <p className="font-medium text-gray-900">{category.name}</p>
+      </div>
       <HeadingDescription
         heading="Explore Our Collection"
         text={`Shop By ${category.name}`}

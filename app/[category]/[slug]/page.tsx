@@ -2,6 +2,7 @@
 // e.g. /beverages/coffee  OR  /beverages/some-product-slug
 
 import { Suspense, cache } from "react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import Footer from "@/components/ui/Footer";
 import HeadingDescription from "@/components/ui/HeadingDescription";
@@ -178,6 +179,15 @@ export default async function CategorySlugPage({
           text={`Shop ${category.name}`}
           videoLink="/spices/Comp 1_10.mp4"
         />
+        <div className="container mx-auto flex flex-wrap items-center gap-x-2 gap-y-1 px-5 pt-6 text-sm sm:text-base">
+          <Link href={`/${category.slug}`} className="hover:underline">
+            <p className="whitespace-nowrap text-[#6A7282]">{category.name}</p>
+          </Link>
+          <span className="text-[#6A7282]">/</span>
+          <p className="whitespace-nowrap font-medium text-gray-900">
+            {subcategory.name}
+          </p>
+        </div>
         <HeadingDescription
           heading="Explore Our Collection"
           text={`Shop By ${subcategory.name}`}

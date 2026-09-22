@@ -220,8 +220,6 @@ export default function ProductDesc({
     <div className="container mx-auto p-6">
       {/* Breadcrumbs */}
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-6 text-sm sm:text-base">
-        <p className="text-[#6A7282] whitespace-nowrap">Home</p>
-        <span className="text-[#6A7282]">/</span>
         <Link
           href={`/${categorySlug}`}
           className="flex items-center gap-2 hover:underline"

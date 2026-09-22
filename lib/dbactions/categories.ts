@@ -14,7 +14,10 @@ export const getShopCategories = async () => {
             sc.id AS subcategory_id, sc.name AS subcategory_name, sc.slug AS subcategory_slug
      FROM store_categories c
      LEFT JOIN store_subcategories sc ON sc.category_id = c.id
-     WHERE c.status = 1 AND LOWER(c.slug) <> 'healthy-living'
+     WHERE c.status = 1
+       AND LOWER(c.slug) <> 'healthy-living'
+       AND LOWER(c.slug) <> 'herbal-food-supplements'
+       AND LOWER(c.name) <> 'herbal food supplements'
      ORDER BY c.name ASC, sc.name ASC`,
   );
 
@@ -53,6 +56,67 @@ export const getStoreCategoryBySlug = async (slug: string) => {
     [slug],
   );
   return rows[0] ?? null;
+};
+
+/** If slug matches a category or subcategory that has active products, return catalog info. */
+export const getCatalogMatchForSlug = async (slug: string) => {
+  const { rows: categoryRows } = await pool.query<{
+    id: string;
+    name: string;
+    slug: string;
+  }>(
+    `SELECT c.id, c.name, c.slug
+     FROM store_categories c
+     WHERE LOWER(c.slug) = LOWER($1) AND c.status = 1
+       AND EXISTS (
+         SELECT 1 FROM store_products p
+         WHERE p.category_id = c.id AND p.status = 1
+       )
+     LIMIT 1`,
+    [slug],
+  );
+
+  if (categoryRows[0]) {
+    return {
+      categorySlug: categoryRows[0].slug,
+      categoryName: categoryRows[0].name,
+      subcategoryId: null as string | null,
+      subcategorySlug: null as string | null,
+      subcategoryName: null as string | null,
+    };
+  }
+
+  const { rows: subcategoryRows } = await pool.query<{
+    id: string;
+    name: string;
+    slug: string;
+    category_slug: string;
+    category_name: string;
+  }>(
+    `SELECT sc.id, sc.name, sc.slug,
+            c.slug AS category_slug, c.name AS category_name
+     FROM store_subcategories sc
+     JOIN store_categories c ON c.id = sc.category_id
+     WHERE LOWER(sc.slug) = LOWER($1) AND c.status = 1
+       AND EXISTS (
+         SELECT 1 FROM store_products p
+         WHERE p.subcategory_id = sc.id AND p.status = 1
+       )
+     LIMIT 1`,
+    [slug],
+  );
+
+  if (subcategoryRows[0]) {
+    return {
+      categorySlug: subcategoryRows[0].category_slug,
+      categoryName: subcategoryRows[0].category_name,
+      subcategoryId: subcategoryRows[0].id,
+      subcategorySlug: subcategoryRows[0].slug,
+      subcategoryName: subcategoryRows[0].name,
+    };
+  }
+
+  return null;
 };
 
 export const getStoreSubcategoryBySlug = async (

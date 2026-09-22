@@ -1,5 +1,5 @@
 import HealthyLivingProductpage from "@/components/layout/healthyliving/HealthyLivingProductpage";
-import React from "react";
+import { getCatalogMatchForSlug } from "@/lib/dbactions/categories";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -14,9 +14,14 @@ interface PageProps {
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
+  const { slug } = await params;
+  const catalogMatch = await getCatalogMatchForSlug(slug);
+
   return (
-    <div>
-      <HealthyLivingProductpage params={params} searchParams={searchParams} />
-    </div>
+    <HealthyLivingProductpage
+      params={params}
+      searchParams={searchParams}
+      catalogMatch={catalogMatch}
+    />
   );
 }

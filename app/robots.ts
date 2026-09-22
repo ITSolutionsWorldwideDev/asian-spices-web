@@ -19,7 +19,6 @@ export default function robots(): MetadataRoute.Robots {
         "/reset-password",
         "/wishlist",
         "/site-access",
-        "/coming-soon",
         "/partner-registration/idin/",
         "/search",
         "/*?*",

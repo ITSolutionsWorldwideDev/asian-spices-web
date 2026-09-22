@@ -108,20 +108,34 @@ export default function LoginForm() {
           w-full
           min-w-0
           flex-col
+          overflow-hidden
           rounded-2xl
           border
           border-white/30
           bg-white/80
-          p-4
           shadow-[0_20px_80px_rgba(0,0,0,0.08)]
           backdrop-blur-xl
-          sm:p-5
           sm:rounded-3xl
-          md:p-7
-          lg:p-8
-          xl:p-10
         "
       >
+        {/* Partner / Customer tabs — top of page */}
+        <div className="flex border-b border-slate-200 bg-white/90">
+          <a
+            href="https://partner.asianspices.online/"
+            className="flex-1 py-3 text-center text-sm font-medium text-slate-500 transition hover:text-slate-800 sm:text-base"
+          >
+            Partner
+          </a>
+          <button
+            type="button"
+            className="flex-1 border-b-2 border-orange-500 py-3 text-center text-sm font-bold text-slate-900 sm:text-base"
+            aria-current="page"
+          >
+            Customer
+          </button>
+        </div>
+
+        <div className="flex flex-col p-4 sm:p-5 md:p-7 lg:p-8 xl:p-10">
         <Link
           href="/"
           className="group mb-3 inline-flex items-center gap-2 rounded-full border border-orange-100 bg-gradient-to-r from-orange-50 to-amber-50 px-3 py-1.5 text-xs font-semibold text-orange-700 shadow-sm transition-all duration-300 hover:border-orange-200 hover:from-orange-100 hover:to-amber-100 sm:mb-4 sm:text-sm sm:px-4 sm:py-2 md:mb-5"
@@ -143,6 +157,7 @@ export default function LoginForm() {
             />
           </Link>
         </div>
+
         <div className="mb-4 mt-2 text-center sm:mb-5 sm:mt-3 md:mb-6 md:mt-4">
           <h1 className="text-lg font-bold text-slate-900 sm:text-xl md:text-2xl lg:text-3xl">
             Welcome Back 👋
@@ -335,6 +350,7 @@ export default function LoginForm() {
         <p className="mt-3 text-[10px] text-gray-400 sm:mt-4 sm:text-xs md:mt-6">
           © 2026 ALL RIGHTS RESERVED
         </p>
+        </div>
       </div>
     </div>
   );

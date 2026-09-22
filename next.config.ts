@@ -5,6 +5,25 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  async redirects() {
+    return [
+      {
+        source: "/foods-beverages",
+        destination: "/beverages",
+        permanent: true,
+      },
+      {
+        source: "/spices/heera-neem-powder-100-g",
+        destination: "/spices/heera-neem-powder-100g",
+        permanent: true,
+      },
+      {
+        source: "/recipes/chickenpizzarecipe",
+        destination: "/recipes/chicken-jalfrezi",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     // Use original image URLs (no /_next/image?url=...).
     // Needed so image links aren't blocked by robots Disallow: /*?*
