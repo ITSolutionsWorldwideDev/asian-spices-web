@@ -31,7 +31,7 @@ export default async function AccountLayout({
       <div className="absolute inset-0 h-screen -z-10">
         <Image
           src={`/assets/home/homeheaderimages/a8de5a3724f7239b78cdee795f978b5faba485b4 (1).webp`}
-          alt="Asain Spices"
+          alt="Asain Spices online"
           fill
           className="object-cover w-full h-full"
         />
