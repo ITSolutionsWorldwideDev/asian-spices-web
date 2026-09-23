@@ -27,6 +27,12 @@ const nextConfig: NextConfig = {
         destination: "/about-us",
         permanent: true,
       },
+     
+      {
+        source: "/privacy",
+        destination: "/privacy-policy",
+        permanent: true,
+      },
     ];
   },
   images: {
