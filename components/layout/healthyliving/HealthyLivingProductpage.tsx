@@ -4,7 +4,7 @@ import HeadingDescription from "@/components/ui/HeadingDescription";
 import Footer from "@/components/ui/Footer";
 import Image from "next/image";
 import ComingSoonCategory from "@/components/ui/ComingSoonCategory";
-
+import GrandmasRemedyGrid from "@/components/ui/GrandmasRemedyGrid";
 import {
   getProducts,
   getSubcategories,
@@ -144,39 +144,9 @@ export default async function HealthyLivingProductpage({
       {/* 2. Herb Benefit Content — Cards Grid for Grandma's Page (5 per row) / Standard Layout for Others */}
       {isHerbBenefitPage && (currentContent.intro || currentContent.sections) && (
         <section className="container mx-auto px-5 py-16">
-          {isGrandmasPage ? (
-            /* --- GRANDMA'S PAGE: 10 Cards layout in 5-column grid rows --- */
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {currentContent.sections?.map((section, index) => (
-                <div
-                  key={index}
-                  className="p-5 rounded-2xl border border-neutral-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col justify-between transition-all duration-300 hover:shadow-md"
-                >
-                  <div>
-                    <span className="inline-block border border-[#f2ab92] text-[#d95325] text-[9px] font-bold tracking-wider px-2.5 py-1 rounded-full mb-3">
-                      REMEDY {index + 1}
-                    </span>
-                    <h3 className="text-base font-bold text-neutral-900 mb-2 leading-snug">
-                      {section.title}
-                    </h3>
-                  </div>
-
-                  {/* Popup / Expandable Details for full recipe and tradition */}
-                  <details className="group mt-4 pt-3 border-t border-neutral-100">
-                    <summary className="text-[#d95325] font-semibold text-xs cursor-pointer list-none flex items-center justify-between hover:underline">
-                      <span>View Recipe</span>
-                      <span className="transition-transform group-open:rotate-180 text-xs">
-                        ▼
-                      </span>
-                    </summary>
-                    <div className="mt-3 text-neutral-600 text-xs leading-relaxed whitespace-pre-line bg-neutral-50 p-3 rounded-xl border border-neutral-100">
-                      {section.description}
-                    </div>
-                  </details>
-                </div>
-              ))}
-            </div>
-          ) : (
+        {isGrandmasPage ? (
+  <GrandmasRemedyGrid sections={currentContent.sections ?? []} />
+) : (
             <div className="flex flex-col lg:flex-row items-stretch justify-between gap-12 lg:gap-16">
               {/* Left Side: Text Content */}
               <div className="flex-1 flex flex-col justify-between gap-10">

@@ -18,6 +18,7 @@ import { resolveCountry } from "@/lib/country";
 import { getProductMetadata } from "@/lib/product-metadata";
 import { getProductJsonLd } from "@/lib/schema";
 import JsonLd from "@/components/seo/JsonLd";
+import { subcategoryContentMap } from "@/data/categoryContent";
 
 interface PageProps {
   params: Promise<{ category: string; slug: string; product: string }>;

@@ -160,11 +160,11 @@ export default function LoginForm() {
 
         <div className="mb-4 mt-2 text-center sm:mb-5 sm:mt-3 md:mb-6 md:mt-4">
           <h1 className="text-lg font-bold text-slate-900 sm:text-xl md:text-2xl lg:text-3xl">
-            Welcome Back 👋
+            Welcome to Asian Spices👋
           </h1>
 
           <p className="mx-auto mt-1 max-w-sm text-xs text-slate-500 sm:mt-1.5 sm:text-sm md:mt-2 md:text-base">
-            Sign in to continue shopping your favorite Asian spices.
+            Great to see you. Sign in to access your account and get started.
           </p>
         </div>
 
@@ -309,7 +309,7 @@ export default function LoginForm() {
         </form>
 
         <p className="mt-3 text-center text-xs text-slate-500 sm:mt-4 sm:text-sm md:mt-6">
-          Don't have an account?{" "}
+          Dont have an account?{" "}
           <Link
             href="/signup"
             className="
