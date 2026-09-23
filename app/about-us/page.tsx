@@ -4,6 +4,8 @@ import Nav from "@/components/ui/Nav";
 import Link from "next/link";
 import Story from "@/components/layout/about_us/Story";
 import OurMission from "@/components/layout/about_us/OurMission";
+import WhatWeBring from "@/components/layout/about_us/WhatWeBring";
+import SupportFarmers from "@/components/layout/about_us/SupportFarmers";
 import QualityTrust from "@/components/layout/about_us/QualityTrust";
 import WhatWeOffer from "@/components/layout/about_us/WhatWeOffer";
 import ForEveryone from "@/components/layout/about_us/ForEveryone";
@@ -120,6 +122,8 @@ const AboutUs = () => {
 
       <Story />
       <OurMission />
+      <WhatWeBring />
+      <SupportFarmers />
       <QualityTrust />
       <WhatWeOffer />
       <ForEveryone />
