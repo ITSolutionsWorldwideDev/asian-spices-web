@@ -14,21 +14,7 @@ export const formatCurrency = (
 
 // core/shared/utils/youtube.ts
 export function extractYoutubeId(url: string) {
-  try {
-    const parsed = new URL(url);
-
-    if (parsed.hostname.includes("youtube.com")) {
-      return parsed.searchParams.get("v");
-    }
-
-    if (parsed.hostname.includes("youtu.be")) {
-      return parsed.pathname.slice(1);
-    }
-
-    return null;
-  } catch {
-    return null;
-  }
+  return extractYoutubeData(url)?.videoId || null;
 }
 
 export function extractYoutubeData(url: string) {
@@ -71,6 +57,15 @@ export function extractYoutubeData(url: string) {
     // youtube.com/shorts/abc123
     else if (parsed.pathname.startsWith("/shorts/")) {
       videoId = parsed.pathname.split("/shorts/")[1] || null;
+    }
+
+    // youtube.com/live/abc123
+    else if (parsed.pathname.startsWith("/live/")) {
+      videoId = parsed.pathname.split("/live/")[1] || null;
+    }
+
+    if (videoId) {
+      videoId = videoId.split(/[/?&#]/)[0] || null;
     }
 
     if (!videoId || videoId.length < 6) {

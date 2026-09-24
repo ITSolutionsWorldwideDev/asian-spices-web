@@ -41,7 +41,7 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="overflow-visible bg-[#f2f2f2] pt-10 pb-24 sm:pt-12 sm:pb-28 md:pt-14 md:pb-32">
+    <section className="overflow-visible pt-10 pb-24 sm:pt-12 sm:pb-28 md:pt-14 md:pb-32">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
           {/* Left — 2×3 feature cards */}
