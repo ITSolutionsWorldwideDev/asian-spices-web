@@ -4,9 +4,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { useCartStore } from "@/store/useCartStore";
 import { useSession } from "next-auth/react";
+import { getProductPath } from "@/lib/product-path";
+import { stripHtml } from "@/lib/product-metadata";
 
 import Flash_Sale_Hover_product_Card from "./Flash_Sale_Hover_product_Card";
 
@@ -63,12 +66,14 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
             oldPrice: basePrice, // Crossed out cost
             off: offBadge,
             save: `€${rawSave > 0 ? rawSave.toFixed(2) : "0.00"}`,
-            description: p.description || "",
-            qualities: p.health_benefits
-              ? [p.health_benefits]
-              : ["Premium Quality", "Intense Aroma", "Hand-Harvested"],
-            rating: 5,
-            rating_percentage: "100%",
+            description: stripHtml(p.description || ""),
+            qualities: Array.isArray(p.highlights) && p.highlights.length
+              ? p.highlights.map(String).filter(Boolean)
+              : p.health_benefits
+                ? [p.health_benefits]
+                : [],
+            rating: Number(p.avg_rating) || 0,
+            reviews: Number(p.reviews) || 0,
             seller_name: p.seller_name || null,
             slug: p.slug,
             category_slug: p.category_slug,
@@ -131,6 +136,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
       >
         {products.map((item, index) => {
           const cartItem = cart?.find((c) => c.id === item.id);
+          const productHref = getProductPath(item);
 
           return (
             <div
@@ -143,8 +149,9 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                   {item.off}
                 </span>
 
-                <div
-                  className="relative h-40 w-full cursor-pointer overflow-hidden rounded-xl bg-gray-50 sm:h-48"
+                <Link
+                  href={productHref}
+                  className="relative block h-40 w-full cursor-pointer overflow-hidden rounded-xl bg-gray-50 sm:h-48"
                   onMouseEnter={() => {
                     if (
                       typeof window !== "undefined" &&
@@ -166,17 +173,15 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                     className="object-contain transition-transform duration-300 hover:scale-110"
                     priority={index < 2}
                   />
-                </div>
+                </Link>
               </div>
 
-              <h3 className="mt-3 truncate text-base font-semibold text-gray-800 sm:mt-4 sm:text-lg">
-                {item.title}
-              </h3>
-              {item.seller_name ? (
-                <p className="mt-1 truncate text-xs font-medium text-orange-700">
-                  Sold by {item.seller_name}
-                </p>
-              ) : null}
+              <Link href={productHref}>
+                <h3 className="mt-3 truncate text-base font-semibold text-gray-800 sm:mt-4 sm:text-lg hover:text-orange-600">
+                  {item.title}
+                </h3>
+              </Link>
+              
 
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <span className="text-lg font-bold text-orange-500 sm:text-xl">

@@ -56,7 +56,7 @@ const banners: {
   {
     id: 3,
     src: "/assets/home/homeheaderimages/banner-1.jpg",
-    alt: "Asian Spices mobile app",
+    alt: "Asian Spices grocery products in a wheat field",
     overlay: {
       line1: "Asian Supermarket",
       line2: "Authentic Food from Across Asia",
@@ -83,6 +83,7 @@ export default function Header() {
   const current = banners[index];
   const overlay = current.overlay;
   const isLight = overlay?.theme === "light";
+  const HeadingTag = current.id === 1 ? "h1" : "h2";
 
   return (
     <section className="w-full bg-white px-3 pb-4 pt-1 sm:px-5 sm:pb-5 md:px-6 lg:px-8">
@@ -110,7 +111,7 @@ export default function Header() {
               className="relative z-10 flex h-full min-h-[inherit] items-center px-6 py-10 sm:px-10 sm:py-12 md:px-14 md:py-14 lg:px-16 lg:py-16"
             >
               <div className="w-full max-w-[min(100%,28rem)] animate-fade-in sm:max-w-md md:max-w-lg lg:max-w-xl">
-                <h1 className="text-[1.75rem] font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-5xl lg:text-[3.35rem]">
+                <HeadingTag className="text-[1.75rem] font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-5xl lg:text-[3.35rem]">
                   <span className="block text-[#EE9933]">{overlay.line1}</span>
                   <span className="mt-1 block sm:mt-1.5">
                     {overlay.line2Lead && (
@@ -120,7 +121,7 @@ export default function Header() {
                       {overlay.line2}
                     </span>
                   </span>
-                </h1>
+                </HeadingTag>
                 <p
                   className={`mt-4 max-w-md text-sm leading-relaxed sm:mt-5 sm:text-base md:mt-6 md:text-lg ${
                     isLight ? "text-zinc-800" : "text-white/95"

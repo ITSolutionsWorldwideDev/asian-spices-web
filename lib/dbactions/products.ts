@@ -55,6 +55,24 @@ export const getProducts = async (filters: any) => {
       cat.min_offered_price,
       cat.total_available_stock,
       cat.seller_name,
+      (
+        SELECT COUNT(*)::int
+        FROM store_product_reviews rv
+        WHERE rv.product_id = p.id
+          AND (
+            rv.status IS NULL
+            OR rv.status IN ('approved', 'pending', 'published')
+          )
+      ) AS reviews,
+      (
+        SELECT ROUND(AVG(rv.rating)::numeric, 1)
+        FROM store_product_reviews rv
+        WHERE rv.product_id = p.id
+          AND (
+            rv.status IS NULL
+            OR rv.status IN ('approved', 'pending', 'published')
+          )
+      ) AS avg_rating,
       ${rankField}
     FROM store_products p
     ${joinType} (

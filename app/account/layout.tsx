@@ -1,6 +1,7 @@
 // app/account/layout.tsx
 
 import { getServerSession } from "next-auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireAuth, webAuthOptions } from "@/core/auth";
 import Nav from "@/components/ui/Nav";
@@ -20,7 +21,8 @@ export default async function AccountLayout({
   const session = await getServerSession(webAuthOptions);
 
   if (!requireAuth(session)) {
-    redirect("/login");
+    const pathname = (await headers()).get("x-pathname") || "/account";
+    redirect(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
   }
 
   const user = session?.user;

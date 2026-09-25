@@ -131,7 +131,9 @@ const AboutUs = () => {
       <StoryBanner />
       <ReadyToCook />
 
-      <Footer />
+      <div className="[&>footer]:mt-0">
+        <Footer />
+      </div>
     </div>
   );
 };

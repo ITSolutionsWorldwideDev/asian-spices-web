@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { z } from "zod";
 import { useLoaderStore } from "@/store/useLoaderStore";
@@ -18,8 +18,15 @@ const loginSchema = z.object({
   password: z.string().min(6, "Password required"),
 });
 
+function safeCallbackUrl(value: string | null): string | null {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return null;
+  return value;
+}
+
 export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = safeCallbackUrl(searchParams.get("callbackUrl"));
 
   const { show, hide } = useLoaderStore();
 
@@ -79,14 +86,14 @@ export default function LoginForm() {
         return;
       }
 
-      // HANDLE CHECKOUT REDIRECT
+      // HANDLE CHECKOUT / CALLBACK REDIRECT
       const redirect = localStorage.getItem("checkout_redirect");
 
       if (redirect) {
         localStorage.removeItem("checkout_redirect");
         router.push(redirect);
       } else {
-        router.push("/");
+        router.push(callbackUrl || "/");
       }
     } catch (err) {
       console.error(err);
@@ -170,7 +177,7 @@ export default function LoginForm() {
 
         <GoogleSignInButton
           label="Continue with Google"
-          callbackUrl="/"
+          callbackUrl={callbackUrl || "/"}
           className="min-h-[44px] text-sm sm:text-base"
         />
 

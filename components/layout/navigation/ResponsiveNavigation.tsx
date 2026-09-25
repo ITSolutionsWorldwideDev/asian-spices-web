@@ -65,7 +65,7 @@ const HEALTHY_LIVING_SECTIONS = [
     ],
   },
   {
-    heading: "Weight Loss",
+    heading: "Herbal Weight Loss",
     description: "Natural metabolic support.",
     image: "/assets/healtyliving/enhances-energy-levels.png",
     category: [

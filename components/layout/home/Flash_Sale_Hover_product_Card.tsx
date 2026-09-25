@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+import { getProductPath } from "@/lib/product-path";
 
 interface FlashSaleProduct {
   id: string | number;
@@ -12,7 +14,11 @@ interface FlashSaleProduct {
   description: string;
   qualities: string[];
   rating: number;
+  reviews?: number;
   rating_percentage: string;
+  slug?: string;
+  category_slug?: string;
+  subcategory_slug?: string;
 }
 
 interface HoverCardProps {
@@ -35,9 +41,12 @@ const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
 );
 
 const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
-  const stars = [1, 2, 3, 4, 5].map((i) => i <= 4); // default structural rating score
+  const filledStars = Math.max(0, Math.min(5, Math.round(Number(item.rating) || 0)));
+  const stars = [1, 2, 3, 4, 5].map((i) => i <= filledStars);
+  const reviewCount = Number(item.reviews) || 0;
+  const productHref = item.slug ? getProductPath(item as { slug: string; category_slug?: string; subcategory_slug?: string }) : null;
 
-  return (
+  const content = (
     <div className="w-full bg-white text-left">
       {/* Header Info Block */}
       <div className="flex gap-4 mb-3 relative">
@@ -74,7 +83,7 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
                 <StarIcon key={index} filled={filled} />
               ))}
             </div>
-            <span className="text-xs text-gray-500 font-medium">(324)</span>
+            <span className="text-xs text-gray-500 font-medium">({reviewCount})</span>
           </div>
         </div>
       </div>
@@ -82,22 +91,34 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
       <hr className="border-gray-100 my-3" />
 
       {/* Feature Tags Container */}
-      <div className="flex flex-wrap gap-1.5 mb-3">
-        {item.qualities.flatMap(q => q.split(',')).slice(0, 4).map((tag, index) => (
-          <span
-            key={index}
-            className="px-2.5 py-0.5 text-[11px] font-medium text-gray-600 rounded-md bg-gray-100 border border-gray-200 truncate max-w-[150px]"
-          >
-            {tag.trim()}
-          </span>
-        ))}
-      </div>
+      {item.qualities.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {item.qualities.flatMap(q => q.split(',')).slice(0, 4).map((tag, index) => (
+            <span
+              key={index}
+              className="px-2.5 py-0.5 text-[11px] font-medium text-gray-600 rounded-md bg-gray-100 border border-gray-200 truncate max-w-[150px]"
+            >
+              {tag.trim()}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Shortened Description Blocks */}
-      <p className="text-gray-500 text-xs leading-relaxed line-clamp-4">
-        {item.description}
-      </p>
+      {item.description ? (
+        <p className="text-gray-500 text-xs leading-relaxed line-clamp-4">
+          {item.description}
+        </p>
+      ) : null}
     </div>
+  );
+
+  if (!productHref) return content;
+
+  return (
+    <Link href={productHref} className="block">
+      {content}
+    </Link>
   );
 };
 /* const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({
