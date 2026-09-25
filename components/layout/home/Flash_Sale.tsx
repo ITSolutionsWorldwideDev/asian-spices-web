@@ -1,3 +1,5 @@
+// components/ui/FlashSale.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -13,7 +15,8 @@ export default function FlashSale() {
 
   return (
     <section
-      className={`relative mx-auto mt-10 w-full max-w-full overflow-hidden rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 px-3 py-8 text-white sm:mt-14 sm:rounded-3xl sm:px-6 sm:py-10 md:mt-20 md:px-10 md:py-12 ${visible === null ? "hidden" : ""}`}
+      // Yahan margin-top ko bilkul kam (mt-1 sm:mt-2 md:mt-3) kar diya hai
+      className={`relative mx-auto mt-1 w-full max-w-full overflow-hidden rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 px-3 py-8 text-white sm:mt-2 sm:rounded-3xl sm:px-6 sm:py-10 md:mt-3 md:px-10 md:py-12 ${visible === null ? "hidden" : ""}`}
     >
       {/* Spice pattern background */}
       <div className="pointer-events-none absolute inset-0 opacity-20 sm:opacity-25">
@@ -62,15 +65,7 @@ export default function FlashSale() {
       </div>
 
       {/* Footer link */}
-      <div className="relative z-10 mt-6 flex justify-center sm:mt-8">
-        <Link
-          href="/spices"
-          className="inline-flex items-center gap-2 text-sm font-medium text-white transition hover:opacity-80"
-        >
-          View all flash deals
-          <span aria-hidden="true">→</span>
-        </Link>
-      </div>
+      
     </section>
   );
 }

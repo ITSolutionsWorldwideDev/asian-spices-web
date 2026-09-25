@@ -59,17 +59,20 @@ export default function QualityTrust() {
           {standards.map(({ title, description, icon: Icon, iconClass }) => (
             <article
               key={title}
-              className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm"
+              // Yahan flex layout use kiya hai taake icon aur text aamne-saamne aa jayein
+              className="flex items-start gap-4 rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F2ECE4]">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#F2ECE4]">
                 <Icon className={`h-6 w-6 ${iconClass}`} strokeWidth={1.75} />
               </div>
-              <h3 className="mt-5 text-base font-bold text-[#1A1A1A]">
-                {title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#666666]">
-                {description}
-              </p>
+              <div>
+                <h3 className="text-base font-bold text-[#1A1A1A]">
+                  {title}
+                </h3>
+                <p className="mt-1 text-sm leading-relaxed text-[#666666]">
+                  {description}
+                </p>
+              </div>
             </article>
           ))}
         </div>

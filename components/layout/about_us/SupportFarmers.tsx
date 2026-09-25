@@ -41,7 +41,8 @@ const cards = [
 
 export default function SupportFarmers() {
   return (
-    <section className="bg-white py-16 sm:py-20 lg:py-24">
+    // Yahan top padding ko bilkul minimum (pt-1 sm:pt-2 lg:pt-3) kar diya hai
+    <section className="bg-white pt-1 pb-16 sm:pt-2 sm:pb-20 lg:pt-3 lg:pb-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-container text-center">
           <h2 className="font-serif text-3xl font-bold text-[#1A1A1A] sm:text-4xl lg:text-[2.65rem]">

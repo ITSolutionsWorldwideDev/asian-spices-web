@@ -111,7 +111,7 @@ const FooterContent = () => {
               />
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-white/55">
-             Premium quality spices, sourced from trusted farms across Asia to bring authentic flavor to every kitchen.
+             Our Journey with Spices Began in 1970. Today, We Bring Decades of Experience and Authentic Asian Flavours to Your Kitchen.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (

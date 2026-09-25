@@ -26,20 +26,6 @@ const banners: {
 }[] = [
   {
     id: 1,
-    src: "/assets/home/homeheaderimages/banner-1.jpg",
-    alt: "Asian Spices mobile app",
-    overlay: {
-      line1: "Asian Supermarket",
-      line2: "Authentic Food from Across Asia",
-      description:
-        "Discover Asian spices, sauces, noodles, snacks, and everyday food essentials, bringing the authentic taste of Asia to your kitchen.",
-      ctaLabel: "Explore Asian Market",
-      ctaHref: "/products",
-      theme: "light",
-    },
-  },
-  {
-    id: 2,
     src: "/assets/home/homeheaderimages/banner-2.jpg",
     alt: "Asian Spices product collection",
     overlay: {
@@ -47,14 +33,14 @@ const banners: {
       line2Lead: "Delivered ",
       line2: "Across the Netherlands",
       description:
-        "Shop authentic Asian spices, groceries, and food online with nationwide delivery straight to your door.",
+        "Shop authentic Asian spices, groceries, and food products online with nationwide delivery straight to your door.",
       ctaLabel: "Explore our Products",
       ctaHref: "/products",
       theme: "dark",
     },
   },
   {
-    id: 3,
+    id: 2,
     src: "/assets/home/homeheaderimages/banner-3.jpg",
     alt: "Asian Spices grocery bag",
     overlay: {
@@ -65,6 +51,20 @@ const banners: {
       ctaLabel: "Explore Online Grocery",
       ctaHref: "/products",
       theme: "dark",
+    },
+  },
+  {
+    id: 3,
+    src: "/assets/home/homeheaderimages/banner-1.jpg",
+    alt: "Asian Spices mobile app",
+    overlay: {
+      line1: "Asian Supermarket",
+      line2: "Authentic Food from Across Asia",
+      description:
+        "Discover Asian spices, sauces, noodles, snacks, and everyday food essentials, bringing the authentic taste of Asia to your kitchen.",
+      ctaLabel: "Explore Asian Market",
+      ctaHref: "/products",
+      theme: "light",
     },
   },
 ];

@@ -48,7 +48,7 @@ const Story = () => {
         <div className="flex min-w-0 flex-col gap-6 sm:gap-8">
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-              Bringing Authentic Asian Flavors to Every Home
+              Bringing Authentic Asian spices to Every Home
             </h2>
             <p className="text-gray-600">
               Founded in 2026, Asian Spices is a modern online marketplace

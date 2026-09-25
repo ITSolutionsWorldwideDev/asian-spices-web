@@ -6,8 +6,7 @@ import ReviewsCard from "../layout/reviews/ReviewsCard";
 
 const Reviews = () => {
   return (
-    <section className="container mx-auto py-16 px-4 md:px-8">
-      <HeadingDescription
+<section className="container mx-auto -mt-8 pb-16 px-4 md:px-8">      <HeadingDescription
         heading="Customer Reviews"
         text="Loved by Food Enthusiasts"
         description="Join thousands of satisfied customers who trust Asian Spice for authentic flavors"
