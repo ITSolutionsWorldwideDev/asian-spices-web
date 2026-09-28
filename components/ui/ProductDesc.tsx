@@ -118,11 +118,29 @@ export default function ProductDesc({
   }
 
   // Admin/catalog prices are net — VAT once tax rules load (category → global → 21%)
-  if (taxRate != null && currentPrice > 0) {
-    currentPrice = Number((currentPrice * (1 + taxRate)).toFixed(2));
-  }
-  if (taxRate != null && originalPrice != null) {
-    originalPrice = Number((originalPrice * (1 + taxRate)).toFixed(2));
+  // Match flash sale: VAT the base first, then apply % / fixed on that
+  if (
+    taxRate != null &&
+    currentPrice > 0 &&
+    hasDiscountMeta &&
+    basePrice > 0 &&
+    (discountType === "fixed" ||
+      ((discountType === "percentage" || discountType === "bulk") &&
+        discountValue < 100))
+  ) {
+    const baseWithTax = Number((basePrice * (1 + taxRate)).toFixed(2));
+    originalPrice = baseWithTax;
+    currentPrice =
+      discountType === "fixed"
+        ? Number(Math.max(0, baseWithTax - discountValue).toFixed(2))
+        : Number((baseWithTax * (1 - discountValue / 100)).toFixed(2));
+  } else {
+    if (taxRate != null && currentPrice > 0) {
+      currentPrice = Number((currentPrice * (1 + taxRate)).toFixed(2));
+    }
+    if (taxRate != null && originalPrice != null) {
+      originalPrice = Number((originalPrice * (1 + taxRate)).toFixed(2));
+    }
   }
 
   const priceReady = taxRate != null;

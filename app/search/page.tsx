@@ -48,9 +48,13 @@ function mapProduct(p: any) {
     image: p.image,
     slug: p.slug,
     category_slug: p.category_slug,
-    base_price: basePrice,
+    // Keep catalog base_price (flash / ProductCard VAT + discount need this)
+    base_price: Number(p.base_price || 0),
     oldPrice: rawSave > 0 ? basePrice : null,
-    min_offered_price: salePrice,
+    min_offered_price:
+      p.min_offered_price != null && p.min_offered_price !== ""
+        ? Number(p.min_offered_price)
+        : null,
     tag: p.is_new ? "NEW" : "",
     off: offBadge,
     rating: Number(p.average_rating || 0),

@@ -10,6 +10,8 @@ import { useCartStore } from "@/store/useCartStore";
 import { useSession } from "next-auth/react";
 import { getProductPath } from "@/lib/product-path";
 import { stripHtml } from "@/lib/product-metadata";
+import { resolveTaxRate } from "@/lib/tax";
+import { useGlobalStore } from "@/store/useGlobalStore";
 
 import Flash_Sale_Hover_product_Card from "./Flash_Sale_Hover_product_Card";
 
@@ -26,6 +28,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
   const { cart, addToCart, increaseQty, decreaseQty, setQty } = useCartStore();
+  const { taxRules, taxRulesLoaded } = useGlobalStore();
 
   useEffect(() => {
     async function loadSaleItems() {
@@ -37,35 +40,39 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
 
         // Transform the DB structure to fit your design templates
         const mapped = (json.data || []).map((p: any) => {
-          const basePrice = Number(p.base_price);
-          const salePrice = Number(p.sale_price || basePrice);
-          const rawSave = basePrice - salePrice;
-          const discountPct =
-            basePrice > 0 ? Math.round((rawSave / basePrice) * 100) : 0;
+          const basePrice = Number(p.base_price) || 0;
+          const hasSalePrice =
+            p.sale_price !== undefined &&
+            p.sale_price !== null &&
+            p.sale_price !== "" &&
+            !Number.isNaN(Number(p.sale_price));
+          const salePriceFromDb = hasSalePrice ? Number(p.sale_price) : 0;
+          const discountValue = Number(p.discount_value);
+          const dtype = (p.discount_type || "").toLowerCase();
 
           let offBadge = "HOT DEAL";
-          if (p.discount_type === "percentage" || p.discount_type === "Bulk") {
-            const pct = Number(p.discount_value);
-            if (!isNaN(pct) && pct > 0) {
-              // Match mock: very strong deals can show HOT DEAL
-              offBadge = pct >= 50 ? "HOT DEAL" : `${pct}% OFF`;
-            } else if (discountPct > 0) {
-              offBadge = discountPct >= 50 ? "HOT DEAL" : `${discountPct}% OFF`;
+          if (dtype === "percentage" || dtype === "bulk") {
+            if (!Number.isNaN(discountValue) && discountValue > 0) {
+              offBadge =
+                discountValue >= 50 ? "HOT DEAL" : `${discountValue}% OFF`;
             }
-          } else if (p.discount_type === "fixed") {
-            offBadge = `€${p.discount_value} OFF`;
-          } else if (discountPct > 0) {
-            offBadge = discountPct >= 50 ? "HOT DEAL" : `${discountPct}% OFF`;
+          } else if (
+            dtype === "fixed" &&
+            !Number.isNaN(discountValue) &&
+            discountValue > 0
+          ) {
+            offBadge = `€${discountValue} OFF`;
           }
 
           return {
             id: p.id,
             title: p.name,
             image: p.image || "fallback-placeholder.jpg",
-            base_price: salePrice, // The actual cost to buy now
-            oldPrice: basePrice, // Crossed out cost
+            oldPrice: basePrice,
+            sale_price: salePriceFromDb,
+            discount_type: p.discount_type,
+            discount_value: p.discount_value,
             off: offBadge,
-            save: `€${rawSave > 0 ? rawSave.toFixed(2) : "0.00"}`,
             description: stripHtml(p.description || ""),
             qualities: Array.isArray(p.highlights) && p.highlights.length
               ? p.highlights.map(String).filter(Boolean)
@@ -138,12 +145,61 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
           const cartItem = cart?.find((c) => c.id === item.id);
           const productHref = getProductPath(item);
 
+          // Wait for tax rules so prices don't flash from net → VAT-inclusive
+          const taxRate = taxRulesLoaded
+            ? resolveTaxRate(taxRules, item.category_id)
+            : null;
+          const netBase = Number(item.oldPrice || 0);
+          const baseWithTax =
+            taxRate == null
+              ? null
+              : Number((netBase * (1 + taxRate)).toFixed(2));
+
+          const dtype = (item.discount_type || "").toLowerCase();
+          const discountValue = Number(item.discount_value);
+          const saleFromDb = Number(item.sale_price || 0);
+          const hasDiscountMeta =
+            !Number.isNaN(discountValue) && discountValue > 0;
+
+          let realPrice: number | null = baseWithTax;
+          let greenDbSale = 0;
+
+          if (baseWithTax != null) {
+            if (
+              hasDiscountMeta &&
+              (dtype === "percentage" || dtype === "bulk") &&
+              discountValue < 100
+            ) {
+              realPrice = Number(
+                (baseWithTax * (1 - discountValue / 100)).toFixed(2),
+              );
+            } else if (hasDiscountMeta && dtype === "fixed") {
+              realPrice = Number(
+                Math.max(0, baseWithTax - discountValue).toFixed(2),
+              );
+            } else if (saleFromDb > 0 && netBase > 0 && saleFromDb < netBase) {
+              realPrice = Number(
+                (baseWithTax * (saleFromDb / netBase)).toFixed(2),
+              );
+            }
+            // Green = exact sale amount (base − sale)
+            if (realPrice != null && realPrice < baseWithTax) {
+              greenDbSale = Number((baseWithTax - realPrice).toFixed(2));
+            }
+          }
+
+          const displayItem = {
+            ...item,
+            base_price: realPrice ?? 0,
+            oldPrice: baseWithTax ?? 0,
+            save: greenDbSale > 0 ? `€${greenDbSale.toFixed(2)}` : "",
+          };
+
           return (
             <div
               key={item.id}
               className="relative w-[min(280px,78vw)] max-w-[350px] flex-shrink-0 snap-center rounded-2xl border border-gray-50 bg-white p-4 text-black shadow-lg sm:w-[300px] sm:snap-start sm:p-5"
             >
-              {/* Image Box */}
               <div className="relative">
                 <span className="absolute left-2 top-2 z-20 rounded-md bg-red-600 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white sm:left-3 sm:top-3 sm:text-[11px]">
                   {item.off}
@@ -177,24 +233,34 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
               </div>
 
               <Link href={productHref}>
-                <h3 className="mt-3 truncate text-base font-semibold text-gray-800 sm:mt-4 sm:text-lg hover:text-orange-600">
+                <h3 className="mt-3 truncate text-base font-semibold text-gray-800 hover:text-orange-600 sm:mt-4 sm:text-lg">
                   {item.title}
                 </h3>
               </Link>
-              
 
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                <span className="text-lg font-bold text-orange-500 sm:text-xl">
-                  €{item.base_price.toFixed(2)}
-                </span>
-                <span className="text-sm text-gray-400 line-through">
-                  €{item.oldPrice.toFixed(2)}
-                </span>
+              <div className="mt-2 flex flex-wrap items-center gap-2 min-h-[1.75rem]">
+                {realPrice == null || baseWithTax == null ? (
+                  <span
+                    className="inline-block h-6 w-28 animate-pulse rounded bg-orange-100"
+                    aria-hidden
+                  />
+                ) : (
+                  <>
+                    <span className="text-lg font-bold text-orange-500 sm:text-xl">
+                      €{realPrice.toFixed(2)}
+                    </span>
+                    <span className="text-sm text-gray-400 line-through">
+                      €{baseWithTax.toFixed(2)}
+                    </span>
+                  </>
+                )}
               </div>
 
-              <p className="mt-1.5 text-xs font-semibold text-green-600">
-                You save {item.save}
-              </p>
+              {realPrice != null && greenDbSale > 0 ? (
+                <p className="mt-1.5 text-xs font-semibold text-green-600">
+                  €{greenDbSale.toFixed(2)}
+                </p>
+              ) : null}
 
               {cartItem ? (
                 <div className="mt-4 flex h-[44px] items-center justify-between overflow-hidden rounded-xl border border-gray-200">
@@ -225,13 +291,14 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
               ) : (
                 <button
                   onClick={() => {
+                    if (realPrice == null || baseWithTax == null) return;
                     addToCart(
                       {
                         id: item.id,
                         title: item.title,
-                        base_price: Number(item.base_price || 0),
-                        oldPrice: Number(item.base_price || 0),
-                        discount_value: Number(item.oldPrice || 0),
+                        base_price: realPrice,
+                        oldPrice: baseWithTax,
+                        discount_value: Number(item.discount_value || 0),
                         discount_type: item.discount_type,
                         image: item.image,
                         slug: item.slug,
@@ -243,20 +310,20 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                       isLoggedIn,
                     );
                   }}
-                  className="mt-4 h-[44px] w-full cursor-pointer rounded-xl bg-orange-500 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98]"
+                  disabled={realPrice == null}
+                  className="mt-4 h-[44px] w-full cursor-pointer rounded-xl bg-orange-500 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Grab This Now
                 </button>
               )}
 
-              {/* Desktop hover overlay only */}
               {hoveredId === item.id && (
                 <div
                   className="absolute -left-2 -right-2 -top-2 z-50 hidden rounded-2xl border border-gray-100 bg-white p-4 shadow-2xl md:block md:min-w-[320px] lg:min-w-[340px]"
                   onMouseLeave={() => setHoveredId(null)}
                 >
                   <Flash_Sale_Hover_product_Card
-                    item={item}
+                    item={displayItem}
                     setHoveredId={setHoveredId}
                   />
                 </div>

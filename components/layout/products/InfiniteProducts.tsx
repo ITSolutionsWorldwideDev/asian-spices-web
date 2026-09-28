@@ -38,7 +38,12 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
         id: p.id,
         name: p.name,
         image: p.image,
-        base_price: salePrice,
+        // Keep catalog base_price (flash / ProductCard VAT + discount need this)
+        base_price: Number(p.base_price || 0),
+        min_offered_price:
+          p.min_offered_price != null && p.min_offered_price !== ""
+            ? Number(p.min_offered_price)
+            : null,
         oldPrice: rawSave > 0 ? basePrice : null,
         off: offBadge,
         description: p.description || "",

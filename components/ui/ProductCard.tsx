@@ -79,59 +79,48 @@ export default function ProductCard({
           );
 
           // 1️⃣ Safe Numeric Extractions & Conversions
-          // const currentPrice = Number(product.base_price || 0);
-
-          // Wait for tax rules, then: category → global → 21%
+          // Match flash sale / ProductDesc: VAT the base first, then apply % / fixed
+          const basePrice = Number(product.base_price || 0);
           const netPrice = Number(
             product.min_offered_price || product.base_price || 0,
           );
           const taxRate = taxRulesLoaded
             ? resolveTaxRate(taxRules, product.category_id)
             : null;
-          const currentPrice =
-            taxRate == null ? null : netPrice * (1 + taxRate);
+          const discountValue = Number(product.discount_value);
+          const discountType = (product.discount_type || "").toLowerCase();
+          const hasDiscountMeta =
+            !!product.discount_value &&
+            !isNaN(discountValue) &&
+            discountValue > 0;
 
+          let currentPrice: number | null = null;
           let originalPrice: number | null = null;
 
-          const discountValue = Number(product.discount_value);
-
-          if (
-            taxRate != null &&
-            netPrice > 0 &&
-            product.discount_value &&
-            !isNaN(discountValue) &&
-            discountValue > 0
-          ) {
-            let netOriginal: number | null = null;
-            switch ((product.discount_type || "").toLowerCase()) {
-              case "percentage":
-              case "bulk":
-                netOriginal = netPrice / (1 - discountValue / 100);
-                break;
-
-              case "fixed":
-                netOriginal = netPrice + discountValue;
-                break;
-
-              default:
-                netOriginal = null;
-            }
-
-            if (netOriginal !== null) {
-              originalPrice = Number((netOriginal * (1 + taxRate)).toFixed(2));
+          if (taxRate != null && netPrice > 0) {
+            if (
+              hasDiscountMeta &&
+              basePrice > 0 &&
+              (discountType === "fixed" ||
+                ((discountType === "percentage" || discountType === "bulk") &&
+                  discountValue < 100))
+            ) {
+              const baseWithTax = Number(
+                (basePrice * (1 + taxRate)).toFixed(2),
+              );
+              originalPrice = baseWithTax;
+              currentPrice =
+                discountType === "fixed"
+                  ? Number(
+                      Math.max(0, baseWithTax - discountValue).toFixed(2),
+                    )
+                  : Number(
+                      (baseWithTax * (1 - discountValue / 100)).toFixed(2),
+                    );
+            } else {
+              currentPrice = Number((netPrice * (1 + taxRate)).toFixed(2));
             }
           }
-          // const originalPrice = product.oldPrice
-          //   ? Number(product.oldPrice)
-          //   : null;
-
-          // if(product.id === 'eafdb67e-3323-49cb-887b-201695df0c3c'){
-
-          //   console.log('currentPrice === ',currentPrice);
-          //   console.log('originalPrice === ',originalPrice);
-          //   console.log('product.discount_value === ',product.discount_value);
-          //   console.log('product.discount_type === ',product.discount_type);
-          // }
 
           // 2️⃣ Dynamic Discount/Savings Math Engine with NaN Guards
           // let discountBadgeText = null;
@@ -141,8 +130,8 @@ export default function ProductCard({
           if (originalPrice && currentPrice != null && originalPrice > currentPrice) {
             calculatedSavings = originalPrice - currentPrice;
 
-            if (product.discount_type?.toLowerCase() === "fixed") {
-              discountBadgeText = `${symbol}${(discountValue * rate).toFixed(2)} OFF`;
+            if (discountType === "fixed") {
+              discountBadgeText = `${symbol}${discountValue.toFixed(2)} OFF`;
             } else {
               discountBadgeText = `${discountValue}% OFF`;
             }
