@@ -53,11 +53,11 @@ const QUICK_LINKS = [
 ] as const;
 
 const CUSTOMER_SERVICE = [
-  { label: "Terms & Conditions", href: "/terms-and-conditions" }, // Updated
-  { label: "Shipping Info", href: "/terms-and-conditions" },     // Updated (ya apni zaroorat ke mutabiq change kar sakte hain)
-  { label: "Returns", href: "/terms-and-conditions" },          // Updated
+  { label: "Terms & Conditions", href: "/terms-conditions" },
+  { label: "Shipping Info", href: "/terms-conditions" },
+  { label: "Returns", href: "/terms-conditions" },
   { label: "FAQ", href: "/faqs" },
-  { label: "Privacy Policy", href: "/privacy-policy" },         // Updated from "/privacy" to "/privacy-policy"
+  { label: "Privacy Policy", href: "/privacy-policy" },
 ] as const;
 
 function TickerBar() {

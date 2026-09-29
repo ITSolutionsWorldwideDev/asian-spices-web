@@ -79,7 +79,20 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const email = userId ? userEmail : customer.email;
+    const email = (
+      (userId ? userEmail : customer?.email) ||
+      customer?.email ||
+      body?.email ||
+      userEmail ||
+      ""
+    ).trim().toLowerCase();
+
+    if (!email) {
+      return errorResponse(
+        "Please provide a valid email address.",
+        "MISSING_EMAIL",
+      );
+    }
 
     const { latitude, longitude, country } = shippingAddress;
 

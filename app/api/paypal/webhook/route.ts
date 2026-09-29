@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";
 import { assignNextStore, logOrderEvent, ORDER_EVENTS } from "@/core/order-routing";
+import { sendOrderConfirmationEmail } from "@/core/email-templates";
 
 // PayPal Webhook verification endpoint
 const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
@@ -110,6 +111,10 @@ export async function POST(req: NextRequest) {
           // ⚡ EXECUTE ASYNCHRONOUS ENGINE HANDOFF ⚡
           await assignNextStore(client, orderId);
           console.log(`Webhook fallback process successfully routed Order #${orderId} out to store networks.`);
+
+          sendOrderConfirmationEmail(orderId).catch((err) =>
+            console.error("[Email Trigger Error PayPal Webhook]:", err),
+          );
         }
 
         await client.query("COMMIT");

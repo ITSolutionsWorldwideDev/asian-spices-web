@@ -31,10 +31,23 @@ interface ContactFormEmailOptions {
 
 export async function sendOrderConfirmationEmail(orderId: string) {
   try {
-    // 1️⃣ Fetch complete payload variables for the email
+    // 1️⃣ Fetch complete payload variables for the email (with fallback to linked customer/user profiles)
     const orderQuery = await pool.query(
-      `SELECT order_number, customer_email, total_amount, shipping_provider, shipping_city 
-       FROM store_orders WHERE id = $1`,
+      `SELECT 
+         o.id,
+         o.order_number, 
+         COALESCE(
+           NULLIF(TRIM(o.customer_email), ''), 
+           NULLIF(TRIM(c.email), ''), 
+           NULLIF(TRIM(u.email), '')
+         ) AS customer_email, 
+         o.total_amount, 
+         o.shipping_provider, 
+         o.shipping_city 
+       FROM store_orders o
+       LEFT JOIN store_customers c ON o.customer_id = c.id
+       LEFT JOIN users u ON c.user_id = u.id
+       WHERE o.id = $1`,
       [orderId],
     );
 
@@ -42,6 +55,19 @@ export async function sendOrderConfirmationEmail(orderId: string) {
       return { success: false, error: "Order context missing" };
 
     const order = orderQuery.rows[0];
+    const recipientEmail = order.customer_email?.trim();
+
+    if (!recipientEmail) {
+      console.error(`[Email Skipped] Order ${orderId} has no customer_email in store_orders or customer records`);
+      return { success: false, error: "customer_email is null or missing" };
+    }
+
+    // Ensure store_orders.customer_email is backfilled if it was previously empty
+    await pool.query(
+      `UPDATE store_orders SET customer_email = $1 WHERE id = $2 AND (customer_email IS NULL OR TRIM(customer_email) = '')`,
+      [recipientEmail, orderId],
+    ).catch(() => {});
+
     const deliveryWindow =
       DELIVERY_DAYS_MAP[order.shipping_provider] || "3 - 5 business days";
 
@@ -71,7 +97,7 @@ export async function sendOrderConfirmationEmail(orderId: string) {
 
     // 3️⃣ Dispatch
     await sendEmail({
-      to: order.customer_email,
+      to: recipientEmail,
       bcc: ["sales@asianspices.online", "order@asianspices.online", "cheila.lopes@itsolutionshub2010.com", "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com", "ahmad.raza@itsolutionsworldwide.com"],
       subject: `Order Confirmed! 🎉 (Ref: ${order.order_number})`,
       html: emailHtml,

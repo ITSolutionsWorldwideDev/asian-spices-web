@@ -125,14 +125,8 @@ export default function LoginForm() {
           sm:rounded-3xl
         "
       >
-        {/* Partner / Customer tabs — top of page */}
+        {/* Customer / Partner tabs — top of page */}
         <div className="flex border-b border-slate-200 bg-white/90">
-          <a
-            href="https://partner.asianspices.online/"
-            className="flex-1 py-3 text-center text-sm font-medium text-slate-500 transition hover:text-slate-800 sm:text-base"
-          >
-            Partner
-          </a>
           <button
             type="button"
             className="flex-1 border-b-2 border-orange-500 py-3 text-center text-sm font-bold text-slate-900 sm:text-base"
@@ -140,6 +134,12 @@ export default function LoginForm() {
           >
             Customer
           </button>
+          <a
+            href="https://partner.asianspices.online/"
+            className="flex-1 py-3 text-center text-sm font-medium text-slate-500 transition hover:text-slate-800 sm:text-base"
+          >
+            Partner
+          </a>
         </div>
 
         <div className="flex flex-col p-4 sm:p-5 md:p-7 lg:p-8 xl:p-10">

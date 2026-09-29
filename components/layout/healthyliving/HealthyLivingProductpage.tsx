@@ -2,9 +2,9 @@ import React from "react";
 import ProductHeader from "./ProductHeader";
 import HeadingDescription from "@/components/ui/HeadingDescription";
 import Footer from "@/components/ui/Footer";
-import Image from "next/image";
 import ComingSoonCategory from "@/components/ui/ComingSoonCategory";
 import GrandmasRemedyGrid from "@/components/ui/GrandmasRemedyGrid";
+import CategoryGuideSection from "@/components/layout/category/CategoryGuideSection";
 import {
   getProducts,
   getSubcategories,
@@ -141,45 +141,16 @@ export default async function HealthyLivingProductpage({
         imageLink={currentContent.image}
       />
 
-      {/* 2. Herb Benefit Content — Cards Grid for Grandma's Page (5 per row) / Standard Layout for Others */}
+      {/* 2. Herb Benefit Content */}
       {isHerbBenefitPage && (currentContent.intro || currentContent.sections) && (
-        <section className="container mx-auto px-5 py-16">
-        {isGrandmasPage ? (
-  <GrandmasRemedyGrid sections={currentContent.sections ?? []} />
-) : (
-            <div className="flex flex-col lg:flex-row items-stretch justify-between gap-12 lg:gap-16">
-              {/* Left Side: Text Content */}
-              <div className="flex-1 flex flex-col justify-between gap-10">
-                {currentContent.sections?.map((section, index) => (
-                  <div key={index} className="flex flex-col items-start">
-                    <span className="inline-block border border-[#f2ab92] text-[#d95325] text-[10px] font-bold tracking-wider px-3.5 py-1.5 rounded-full mb-3">
-                      WELLNESS GUIDE
-                    </span>
-
-                    <h2 className="text-xl md:text-2xl font-bold text-[#111111] leading-snug mb-3">
-                      {section.title}
-                    </h2>
-
-                    <p className="text-[#666666] text-xs md:text-sm leading-relaxed mb-3 whitespace-pre-line">
-                      {section.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Right Side: Image matching full text height */}
-              <div className="w-full lg:w-[45%] flex">
-                <div className="relative w-full h-full min-h-[400px] rounded-[20px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.06)] bg-neutral-100">
-                  <Image
-                    src={`/assets/herbs/${currentContent.sectionImage || currentContent.image}`}
-                    alt="Herbal ingredients"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 45vw"
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            </div>
+        <section className="container mx-auto px-5 py-10">
+          {isGrandmasPage ? (
+            <GrandmasRemedyGrid sections={currentContent.sections ?? []} />
+          ) : (
+            <CategoryGuideSection
+              sections={currentContent.sections ?? []}
+              categoryName={slug}
+            />
           )}
         </section>
       )}

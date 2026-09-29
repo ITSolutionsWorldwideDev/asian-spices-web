@@ -1,5 +1,6 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
-import Image from "next/image";
+
 import { notFound } from "next/navigation";
 import Footer from "@/components/ui/Footer";
 import HeadingDescription from "@/components/ui/HeadingDescription";
@@ -10,6 +11,7 @@ import SortDropdown from "@/components/layout/product_filter_search/SortDropdown
 import { getStoreCategoryBySlug } from "@/lib/dbactions/categories";
 import { getBrands, getProducts, getSubcategories } from "@/lib/dbactions/products";
 import { categoryContent } from "@/data/categoryContent"; // Content data import kiya
+import CategoryGuideSection from "@/components/layout/category/CategoryGuideSection";
 
 type Filters = {
   category: string;
@@ -21,6 +23,47 @@ type Filters = {
   page: number;
   sort: string;
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ category: string }>;
+}): Promise<Metadata> {
+  const { category: slug } = await params;
+
+  if (slug === "spices") {
+    return {
+      title: "Buy Asian Spices Online | Heera & Premium Brands - NL",
+      description:
+        "Browse our full range of authentic Asian spices - whole, ground & blended. Trusted brands like Heera, delivered fast across the Netherlands.",
+      alternates: {
+        canonical: "/spices",
+      },
+    };
+  }
+
+  if (slug === "foods-beverages") {
+    return {
+      title: "Asian Groceries & Foods Online | Rice, Lentils, Snacks - NL",
+      description:
+        "Shop authentic Asian food & beverages online: rice, lentils, flours, snacks and more. Trusted Indian & Asian grocery brands delivered in the Netherlands.",
+      alternates: {
+        canonical: "/foods-beverages",
+      },
+    };
+  }
+
+  const category = await getStoreCategoryBySlug(slug);
+  if (!category) return {};
+
+  return {
+    title: `${category.name} | Asian Spices Online`,
+    description: `Shop authentic ${category.name} online at Asian Spices. Quality ingredients, fast delivery across the Netherlands.`,
+    alternates: {
+      canonical: `/${slug}`,
+    },
+  };
+}
 
 async function ProductSection({ filters, slug }: { filters: Filters; slug: string }) {
   const [subcategories, brands, products] = await Promise.all([
@@ -94,43 +137,13 @@ export default async function CategoryPage({
         <p className="font-medium text-gray-900">{category.name}</p>
       </div>
 
-      {/* 2. SECTION 2 (Hero ke foran baad - Intro Content & Image) */}
+      {/* 2. SECTION 2 — Collapsible Guide + Image */}
       {currentContent && currentContent.sections && (
-        <section className="container mx-auto px-5 py-12">
-          <div className="flex flex-col lg:flex-row items-stretch justify-between gap-12 lg:gap-16">
-            {/* Left Side: Text Content */}
-            <div className="flex-1 flex flex-col justify-between gap-6">
-              {currentContent.sections.map((section: { title: string; description: string }, index: number) => (
-                <div key={index} className="flex flex-col items-start">
-                  <span className="inline-block border border-[#f2ab92] text-[#d95325] text-[10px] font-bold tracking-wider px-3.5 py-1.5 rounded-full mb-3">
-                    GUIDE
-                  </span>
-                  <h2 className="text-xl md:text-2xl font-bold text-[#111111] leading-snug mb-3">
-                    {section.title}
-                  </h2>
-                  <p className="text-[#666666] text-xs md:text-sm leading-relaxed mb-3 whitespace-pre-line">
-                    {section.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* Right Side: Image */}
-            {currentContent.image && (
-              <div className="w-full lg:w-[45%] flex">
-                <div className="relative w-full h-full min-h-[350px] rounded-[20px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.06)] bg-neutral-100">
-                  <Image
-                    src={currentContent.image}
-                    alt={category.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 45vw"
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
+        <CategoryGuideSection
+          sections={currentContent.sections}
+          image={currentContent.image}
+          categoryName={category.name}
+        />
       )}
 
       {/* 3. Explore Our Collection */}

@@ -39,115 +39,108 @@ export default function IdentityVerification({
   /**
    * STEP 1: START IDIN
    */
-  const handleIDIN = async () => {
-    try {
-      if (!selectedBank) {
-        throw {
-          message: "Please select a bank",
-          code: "BANK_SELECTION",
-        };
-        // return;
-      }
+  // const handleIDIN = async () => {
+  //   try {
+  //     if (!selectedBank) {
+  //       throw {
+  //         message: "Please select a bank",
+  //         code: "BANK_SELECTION",
+  //       };
+  //       // return;
+  //     }
+  //
+  //     setLoading(true);
+  //     show("iDIN Verification in Process...");
+  //
+  //     setVerificationState("pending");
+  //
+  //     localStorage.setItem(
+  //       "partner_registration",
+  //       JSON.stringify({ formData, activeStep, completedSteps }),
+  //     );
+  //
+  //     // 1️⃣ create tenant
+  //     const tenant_res = await fetch("/api/adyen/tenants/create", {
+  //       method: "POST",
+  //       body: JSON.stringify({
+  //         name: formData.store_name,
+  //         email: formData.email,
+  //       }),
+  //     });
+  //
+  //     const tenant = await tenant_res.json();
+  //     setTenantId(tenant.id);
+  //
+  //     // 2️⃣ start IDIN
+  //     const res = await fetch("/api/partner-registration/idin/start", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         bank: selectedBank,
+  //         tenantId: tenant.id,
+  //       }),
+  //     });
+  //
+  //     const data = await res.json();
+  //
+  //     // store for recovery
+  //     localStorage.setItem(
+  //       "idin_transaction",
+  //       JSON.stringify({
+  //         tenantId: tenant.id,
+  //         transactionId: data.transactionId,
+  //       }),
+  //     );
+  //
+  //     // 🚀 open bank in NEW TAB (best UX)
+  //     window.open(data.redirectUrl, "_blank");
+  //
+  //     // start polling
+  //     startPolling(tenant.id);
+  //   } catch (err: any) {
+  //     console.error(err);
+  //     setVerificationState("failed");
+  //     setLoading(false);
+  //
+  //     if (err.code === "BANK_SELECTION") {
+  //       setApiError("Please select a bank");
+  //     }
+  //   } finally {
+  //     hide();
+  //   }
+  // };
 
-      setLoading(true);
-      show("iDIN Verification in Process...");
-
-      setVerificationState("pending");
-
-      localStorage.setItem(
-        "partner_registration",
-        JSON.stringify({ formData, activeStep, completedSteps }),
-      );
-
-      // 1️⃣ create tenant
-      const tenant_res = await fetch("/api/adyen/tenants/create", {
-        method: "POST",
-        body: JSON.stringify({
-          name: formData.store_name,
-          email: formData.email,
-        }),
-      });
-
-      const tenant = await tenant_res.json();
-      setTenantId(tenant.id);
-
-      // 2️⃣ start IDIN
-      const res = await fetch("/api/partner-registration/idin/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bank: selectedBank,
-          tenantId: tenant.id,
-        }),
-      });
-
-      const data = await res.json();
-
-      // store for recovery
-      localStorage.setItem(
-        "idin_transaction",
-        JSON.stringify({
-          tenantId: tenant.id,
-          transactionId: data.transactionId,
-        }),
-      );
-
-      // 🚀 open bank in NEW TAB (best UX)
-      window.open(data.redirectUrl, "_blank");
-
-      // start polling
-      startPolling(tenant.id);
-    } catch (err: any) {
-      console.error(err);
-      setVerificationState("failed");
-      setLoading(false);
-
-      if (err.code === "BANK_SELECTION") {
-        setApiError("Please select a bank");
-      }
-    } finally {
-      hide();
-    }
-  };
-
-  /**
-   * STEP 2: POLLING (DB state via webhook)
-   */
-  const startPolling = (tenantId: string) => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-
-    intervalRef.current = setInterval(async () => {
-      try {
-        show("Checking for iDIN satus...");
-        const res = await fetch(
-          `/api/partner-registration/idin/status?tenantId=${tenantId}`,
-        );
-        const data = await res.json();
-
-        if (data.status === "success") {
-          clearInterval(intervalRef.current!);
-          setVerificationState("success");
-          setLoading(false);
-
-          setCompletedSteps((prev: number[]) => [
-            ...new Set([...prev, activeStep]),
-          ]);
-
-          setActiveStep(activeStep + 1);
-        }
-
-        if (data.status === "failed") {
-          clearInterval(intervalRef.current!);
-          setVerificationState("failed");
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error("poll error", err);
-      } finally {
-        hide();
-      }
-    }, 3000);
-  };
+  // /**
+  //  * STEP 2: POLLING (DB state via webhook) — disabled until iDIN is fixed
+  //  */
+  // const startPolling = (tenantId: string) => {
+  //   if (intervalRef.current) clearInterval(intervalRef.current);
+  //   intervalRef.current = setInterval(async () => {
+  //     try {
+  //       show("Checking for iDIN satus...");
+  //       const res = await fetch(
+  //         `/api/partner-registration/idin/status?tenantId=${tenantId}`,
+  //       );
+  //       const data = await res.json();
+  //       if (data.status === "success") {
+  //         clearInterval(intervalRef.current!);
+  //         setVerificationState("success");
+  //         setLoading(false);
+  //         setCompletedSteps((prev: number[]) => [...new Set([...prev, activeStep])]);
+  //         setActiveStep(activeStep + 1);
+  //       }
+  //       if (data.status === "failed") {
+  //         clearInterval(intervalRef.current!);
+  //         setVerificationState("failed");
+  //         setLoading(false);
+  //       }
+  //     } catch (err) {
+  //       console.error("poll error", err);
+  //     } finally {
+  //       hide();
+  //     }
+  //   }, 3000);
+  // };
 
   /**
    * CLEANUP
@@ -161,11 +154,6 @@ export default function IdentityVerification({
   // const handleSubmit = async () => {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
-    if (!formData.selected_bank) {
-      setApiError("Please select a bank");
-      return;
-    }
 
     try {
       show("Setting up for Partner Store Registration...");
@@ -262,9 +250,8 @@ export default function IdentityVerification({
             {banks.map((bank) => (
               <button
                 key={bank.name}
-                type="button" // ✅ prevent form submission
+                type="button"
                 onClick={() => {
-                  // setSelectedBank(bank);
                   setFormData((prev: any) => ({
                     ...prev,
                     selected_bank: bank.issuer,
@@ -301,6 +288,7 @@ export default function IdentityVerification({
             You will be redirected to your bank's secure environment
           </p>
         </div>
+
 
         {/* Privacy Section */}
         <div className="bg-white rounded-xl shadow-sm border p-6 space-y-3">

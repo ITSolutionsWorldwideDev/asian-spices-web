@@ -236,9 +236,11 @@ export default function ProductCard({
                     {product.name}
                     {product.weight ? ` ${product.weight}` : ""}
                   </h3>
-                  <p className="text-xs text-gray-600 mt-0.5 line-clamp-2 min-h-[32px]">
-                    {product.description || "No description available."}
-                  </p>
+                <p className="text-xs text-gray-600 mt-0.5 line-clamp-2 min-h-[32px]">
+                  {product.description
+                    ? product.description.replace(/<[^>]*>/g, "").trim() || "No description available."
+                    : "No description available."}
+                </p>
                 </Link>
 
                 {/* Price Presentation Segment */}

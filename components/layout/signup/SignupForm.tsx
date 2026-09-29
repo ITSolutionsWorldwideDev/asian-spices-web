@@ -170,47 +170,47 @@ export default function SignupForm() {
 
         {signupType === "selection" ? (
           <div className="space-y-4 mt-8">
+            <button
+              onClick={() => setSignupType("customer")}
+              className="
+                w-full rounded-2xl p-5
+                bg-gradient-to-r from-orange-500 to-amber-500
+                hover:scale-[1.02]
+                transition-all duration-300
+                shadow-lg hover:shadow-xl
+              "
+            >
+              <div className="text-left">
+                <p className="text-lg font-bold text-black">
+                  👤 Sign up as Customer
+                </p>
+                <p className="text-sm text-black/70">
+                  Order authentic Asian spices online
+                </p>
+              </div>
+            </button>
+
             <Link href="/partner-registration">
               <button
                 className="
-                  w-full rounded-2xl p-5
-                  bg-gradient-to-r from-orange-500 to-amber-500
+                  w-full rounded-2xl p-5 mt-4
+                  bg-white border border-slate-200
+                  hover:border-orange-400
                   hover:scale-[1.02]
                   transition-all duration-300
-                  shadow-lg hover:shadow-xl
+                  shadow-md hover:shadow-lg
                 "
               >
                 <div className="text-left">
-                  <p className="text-lg font-bold text-black">
+                  <p className="text-lg font-bold text-slate-800">
                     🚀 Sign up as Partner
                   </p>
-                  <p className="text-sm text-black/70">
+                  <p className="text-sm text-slate-500">
                     Grow your business with Asian Spices
                   </p>
                 </div>
               </button>
             </Link>
-
-            <button
-              onClick={() => setSignupType("customer")}
-              className="
-                w-full rounded-2xl p-5 mt-4
-                bg-white border border-slate-200
-                hover:border-orange-400
-                hover:scale-[1.02]
-                transition-all duration-300
-                shadow-md hover:shadow-lg
-              "
-            >
-              <div className="text-left">
-                <p className="text-lg font-bold text-slate-800">
-                  👤 Sign up as Customer
-                </p>
-                <p className="text-sm text-slate-500">
-                  Order authentic Asian spices online
-                </p>
-              </div>
-            </button>
 
             <div className="my-4 flex items-center">
               <div className="h-px flex-1 bg-slate-200" />

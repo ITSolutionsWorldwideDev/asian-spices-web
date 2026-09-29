@@ -2,7 +2,6 @@
 // e.g. /beverages/coffee  OR  /beverages/some-product-slug
 
 import { Suspense, cache } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Footer from "@/components/ui/Footer";
@@ -30,6 +29,8 @@ import { getProductMetadata } from "@/lib/product-metadata";
 import { getProductJsonLd } from "@/lib/schema";
 import JsonLd from "@/components/seo/JsonLd";
 import { subcategoryContentMap } from "@/data/categoryContent";
+import CategoryGuideSection from "@/components/layout/category/CategoryGuideSection";
+
 
 type Filters = {
   category: string;
@@ -197,43 +198,13 @@ export default async function CategorySlugPage({
           </p>
         </div>
 
-        {/* 2. SECTION 2 (Hero ke foran baad - Intro Content & Image) */}
+        {/* 2. SECTION 2 — Collapsible Guide */}
         {subContent && subContent.sections && (
-          <section className="container mx-auto px-5 py-12">
-            <div className="flex flex-col lg:flex-row items-stretch justify-between gap-12 lg:gap-16">
-              {/* Left Side: Text Content */}
-              <div className="flex-1 flex flex-col justify-between gap-6">
-                {subContent.sections.map((section: { title: string; description: string }, index: number) => (
-                  <div key={index} className="flex flex-col items-start">
-                    <span className="inline-block border border-[#f2ab92] text-[#d95325] text-[10px] font-bold tracking-wider px-3.5 py-1.5 rounded-full mb-3">
-                      GUIDE
-                    </span>
-                    <h2 className="text-xl md:text-2xl font-bold text-[#111111] leading-snug mb-3">
-                      {section.title}
-                    </h2>
-                    <p className="text-[#666666] text-xs md:text-sm leading-relaxed mb-3 whitespace-pre-line">
-                      {section.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Right Side: Image */}
-              {subContent.image && (
-                <div className="w-full lg:w-[45%] flex">
-                  <div className="relative w-full h-full min-h-[350px] rounded-[20px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.06)] bg-neutral-100">
-                    <Image
-                      src={subContent.image}
-                      alt={subcategory.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 45vw"
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
+          <CategoryGuideSection
+            sections={subContent.sections}
+            image={subContent.image}
+            categoryName={subcategory.name}
+          />
         )}
 
         {/* 3. Explore Our Collection */}

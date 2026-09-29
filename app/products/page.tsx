@@ -1,9 +1,19 @@
 // app/products/page.tsx
 
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Footer from "@/components/ui/Footer";
 import HeadingDescription from "@/components/ui/HeadingDescription";
 import ProductPageHeader from "@/components/ui/ProductPageHeader";
+
+export const metadata: Metadata = {
+  title: "Shop All Products | Asian Spices & Groceries - Netherlands",
+  description:
+    "Explore our full product range - spices, rice, lentils, snacks and pantry staples. Authentic Asian groceries delivered across the Netherlands.",
+  alternates: {
+    canonical: "/products",
+  },
+};
 
 import FilterSidebar from "@/components/layout/products/FilterSidebar";
 import InfiniteProducts from "@/components/layout/products/InfiniteProducts";

@@ -3,6 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";
 import { assignNextStore } from "@/core/order-routing";
+import { sendOrderConfirmationEmail } from "@/core/email-templates";
 
 const PAYNL_API_TOKEN = process.env.PAYNL_API_TOKEN;
 
@@ -91,6 +92,10 @@ export async function POST(req: NextRequest) {
 
           // ⚡ INVOKE CORRESPONDING DECENTRALIZED ASSIGNMENT SYSTEM HERE TOO ⚡
           await assignNextStore(client, confirmedOrder.id);
+
+          sendOrderConfirmationEmail(confirmedOrder.id).catch((err) =>
+            console.error("[Email Trigger Error PayNL Webhook]:", err),
+          );
         }
 
         if (paymentStatus === "paid") {
