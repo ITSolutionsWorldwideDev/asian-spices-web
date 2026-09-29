@@ -8,7 +8,7 @@ import { useGlobalStore } from "@/store/useGlobalStore";
 import { ArrowLeft, ArrowRight, Building2, MapPin } from "lucide-react";
 import { useLoaderStore } from "@/store/useLoaderStore";
 
-import ReadAloudBtn from "./ReadAloudBtn";
+// import ReadAloudBtn from "./ReadAloudBtn";
 import { z } from "zod";
 
 export default function BusinessVerification({
@@ -134,9 +134,9 @@ export default function BusinessVerification({
 
   return (
     <div id="business-verification">
+      {/* Company Registration search section
       <div className="bg-gray-100 flex items-start justify-center pt-10 px-4 sm:px-6 lg:px-10">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 w-full  p-6 sm:p-8">
-          {/* Header */}
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-2">
             Company Registration
           </h1>
@@ -145,26 +145,14 @@ export default function BusinessVerification({
             Commerce number.
           </p>
 
-          {/* Read aloud */}
           <ReadAloudBtn ID={"business-verification"} />
 
-          {/* Search Field */}
           <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
-            {/* KVK Number */}Chamber of Commerce Number.
+            Chamber of Commerce Number.
           </label>
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <div className="flex-1">
               <input
-                // onKeyDown={(e) => {
-                //   const allowedKeys = [
-                //     "Backspace",
-                //     "Delete",
-                //     "ArrowLeft",
-                //     "ArrowRight",
-                //     "Tab",
-                //   ];
-                // }}
-                // onKeyDown={handleKeyDown}
                 onChange={(e) => {
                   const value = e.target.value.replace(/[^0-9]/g, "");
                   handleChange("kvk_number", value);
@@ -193,7 +181,6 @@ export default function BusinessVerification({
               </button>
             </div>
           </div>
-          {/* ✅ Error */}
           {errors.kvk_number && (
             <p className="text-red-500 text-xs mt-1">
               field is required Please Enter a valid input
@@ -235,10 +222,6 @@ export default function BusinessVerification({
                         </p>
                       </div>
                     </div>
-
-                    {/* <div className="bg-orange-500 text-white rounded-full p-1.5">
-                      <ArrowRight size={16} />
-                    </div> */}
                   </button>
                 ))}
               </div>
@@ -246,6 +229,7 @@ export default function BusinessVerification({
           )}
         </div>
       </div>
+      */}
 
       {/* {results.length > 0 && (
             <div className="mb-4">

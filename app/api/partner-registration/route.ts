@@ -94,21 +94,32 @@ export async function POST(req: NextRequest) {
 
     const existing = await client.query(
       `
-      SELECT partner_id
+      SELECT
+        CASE
+          WHEN ($1::text IS NOT NULL AND $1 <> '' AND (kvk_number = $1 OR chamber_of_commerce_number = $1))
+            OR ($2::text IS NOT NULL AND $2 <> '' AND (kvk_number = $2 OR chamber_of_commerce_number = $2))
+            THEN 'chamber_of_commerce'
+          WHEN ($3::text IS NOT NULL AND $3 <> '' AND vat_number = $3)
+            THEN 'vat'
+        END AS conflict_field
       FROM partner_registration
-      WHERE kvk_number = $1
+      WHERE
+        ($1::text IS NOT NULL AND $1 <> '' AND (kvk_number = $1 OR chamber_of_commerce_number = $1))
+        OR ($2::text IS NOT NULL AND $2 <> '' AND (kvk_number = $2 OR chamber_of_commerce_number = $2))
+        OR ($3::text IS NOT NULL AND $3 <> '' AND vat_number = $3)
       LIMIT 1
       `,
-      [kvk_number],
+      [kvk_number, chamber_of_commerce_number, vat_number],
     );
 
     if (existing.rows.length > 0) {
-      return NextResponse.json(
-        {
-          error: "A registration with this KVK number already exists",
-        },
-        { status: 409 },
-      );
+      const conflict = existing.rows[0].conflict_field;
+      const error =
+        conflict === "vat"
+          ? "A registration with this VAT number already exists. Please use a different VAT number or contact support if you need help."
+          : "A registration with this Chamber of Commerce number already exists. Please use a different number or contact support if you need help.";
+
+      return NextResponse.json({ error }, { status: 409 });
     }
 
     /* ---------------- START TRANSACTION ---------------- */

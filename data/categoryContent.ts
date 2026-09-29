@@ -22,8 +22,7 @@ export const categoryContent: Record<string, CategoryContentItem> = {
           "• Flavoured Milk Powder: Badam, saffron, rose and everyday flavours for a comforting glass of milk.\n" +
           "• Refreshers: Rose and fruit sharbat syrups, squash concentrates and summer coolers.\n" +
           "• Soft Drinks: Ready-to-drink carbonated sodas in classic and fruit flavours.\n" +
-          "• Tea: Everyday black tea, masala chai blends and speciality teas.\n\n" +
-          "*(Note: 'Tea' here refers to mainstream/culinary tea like black tea and masala chai, which is distinct from the wellness herbal teas under Herbal Food Supplements > Teas).*",
+          "• Tea: Everyday black tea, masala chai blends and speciality teas.",
       },
     ],
     image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&q=80&w=1000",
@@ -99,8 +98,7 @@ export const categoryContent: Record<string, CategoryContentItem> = {
           "Browse Flour by Type:\n" +
           "• Gram Flour: Besan (chickpea flour) for pakoras, dhokla, laddoo and traditional batters.\n" +
           "• Wheat Flour: Atta for daily roti and chapati, plus maida and other wheat-based flours.\n" +
-          "• Other Flour Products: Rice flour, corn flour, semolina (sooji/rava) and millet flours for regional dishes and gluten-free cooking.\n\n" +
-          "*(Note: Gram Flour (Besan) also appears as an ingredient on the Herbal Skin Products > Cleansers page (Besan Cleanser), since it's traditionally used as a skin cleanser as well as a cooking ingredient — consider cross-linking between the two for shoppers who search Besan for either purpose.)*",
+          "• Other Flour Products: Rice flour, corn flour, semolina (sooji/rava) and millet flours for regional dishes and gluten-free cooking.",
       },
     ],
 image: "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&q=80&w=1000",    faqs: [
@@ -257,8 +255,7 @@ image: "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format
           "• Instant Noodles: Packet and cup noodles for a fast meal or snack.\n" +
           "• Other Condiments: Instant condiment powders — chaat masala, raita mix and similar (see Sauces, Pickles & Condiments for ready-made jarred condiments).\n" +
           "• Other Instant Foods: Instant breakfast and snack mixes — idli, dosa, poha, upma and more.\n" +
-          "• Quick Meals: Ready-prep meal kits — biryani, pulao and curry mixes you finish at home.\n\n" +
-          "*(Note: Chutney and Other Condiments in this category are specifically the powder/mix-to-prepare versions — the ready-made jarred/bottled versions live under Sauces, Pickles & Condiments. Cross-link between the matching pairs so shoppers searching either 'chutney powder' or 'ready-made chutney' land in the right place.)*",
+          "• Quick Meals: Ready-prep meal kits — biryani, pulao and curry mixes you finish at home.",
       },
     ],
 image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&q=80&w=1000",    faqs: [
@@ -332,8 +329,7 @@ image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format
           "A pot of dal is one of the most common dishes on a South Asian table — comforting, protein-rich and endlessly variable by region and household. Our Lentils & Beans range covers the everyday split lentils used for daily dal, alongside the whole beans and legumes used for curries like Rajma and Chana.\n\n" +
           "Browse by Type:\n" +
           "• Lentils: Split dal varieties — Toor, Masoor, Moong, Chana and Urad — for everyday cooking.\n" +
-          "• Beans: Whole beans and legumes — Rajma, Chana, Lobia and more — for curries and hearty mains.\n\n" +
-          "*(Note: Each bullet above links to its corresponding subcategory page.)*",
+          "• Beans: Whole beans and legumes — Rajma, Chana, Lobia and more — for curries and hearty mains.",
       },
     ],
 image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?auto=format&fit=crop&q=80&w=1000",    faqs: [
@@ -408,8 +404,7 @@ image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?auto=format
           "The right fat is the starting point for almost every South Asian dish — from the pungent bite of mustard oil in Bengali and Punjabi cooking to a spoonful of ghee finishing off a dal. Our Oil & Ghee range covers the everyday cooking oils and traditional ghee used across South Asian kitchens.\n\n" +
           "Browse by Type:\n" +
           "• Cooking Oil: Mustard, sunflower, sesame, coconut and other everyday cooking oils.\n" +
-          "• Ghee: Traditional cow and buffalo ghee, plus vegetable ghee (vanaspati).\n\n" +
-          "*(Note: Each bullet above links to its corresponding subcategory page.)*",
+          "• Ghee: Traditional cow and buffalo ghee, plus vegetable ghee (vanaspati).",
       },
     ],
     image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&q=80&w=1000",
@@ -488,8 +483,7 @@ image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?auto=format
           "• Other Condiments: Ready-made condiments like tamarind concentrate, vinegar and pickled extras.\n" +
           "• Pastes: Ginger-garlic, tamarind and chili pastes for everyday cooking shortcuts.\n" +
           "• Pickles: Classic South Asian pickles — mango, lime, mixed vegetable and more.\n" +
-          "• Sauces: Ready-made sauces including chili garlic, soy and Indo-Chinese style sauces.\n\n" +
-          "*(Note: Chutney and Other Condiments here are specifically ready-to-eat, jarred/bottled products — cross-link the matching pairs both ways with Instant Foods & Mixes so shoppers land correctly whether they search 'ready-made chutney' or 'chutney powder'.)*",
+          "• Sauces: Ready-made sauces including chili garlic, soy and Indo-Chinese style sauces.",
       },
     ],
     image: "https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&q=80&w=1000",
@@ -567,8 +561,7 @@ image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?auto=format
           "• Mouth Fresheners: Saunf and mukhwas blends traditionally enjoyed after a meal.\n" +
           "• Namkeen: Savoury fried and roasted snack mixes — sev, bhujia, chivda and more.\n" +
           "• Snacks: Papad, chips and other everyday savoury snacks.\n" +
-          "• Sweets: Ready-to-eat mithai — barfi, ladoo, rasgulla and more.\n\n" +
-          "*(Note: Sweets here are ready-to-eat mithai; powder/mix-to-prepare desserts live under Instant Foods & Mixes — cross-link where a product overlaps so they don't compete as duplicate content.)*",
+          "• Sweets: Ready-to-eat mithai — barfi, ladoo, rasgulla and more.",
       },
     ],
     image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&q=80&w=1000",   faqs: [
@@ -647,8 +640,7 @@ image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?auto=format
           "• Spice Mix: Ready-blended masalas — garam masala, curry powder, tandoori masala and more.\n" +
           "• Aromas & Colours: Saffron, rose and kewra water, food colour and edible silver leaf.\n" +
           "• Salt: Table, black, rock and pink Himalayan salt.\n" +
-          "• Other Spices: Asafoetida, dried fenugreek leaves, dried mango powder and more.\n\n" +
-          "*(Note: Spice Mix here covers standalone masala blends only — meal-kit versions live under Instant Foods & Mixes > Quick Meals; cross-link where the same masala appears in both contexts.)*",
+          "• Other Spices: Asafoetida, dried fenugreek leaves, dried mango powder and more.",
       },
     ],
     image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=1000",

@@ -13,6 +13,7 @@ import {
 } from "@/core/order-routing";
 import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
 import { validatePromo } from "@/app/api/checkout/promo/route";
+import { sendGuestAccountCreatedEmail } from "@/core/email-templates";
 
 export async function POST(req: NextRequest) {
   const client = await pool.connect();
@@ -106,6 +107,7 @@ export async function POST(req: NextRequest) {
     await client.query("BEGIN");
 
     let customer_id: string;
+    let guestTempPassword: string | null = null;
 
     // ====================================================
     // 1️⃣ CUSTOMER
@@ -238,6 +240,8 @@ export async function POST(req: NextRequest) {
             `UPDATE store_customers SET user_id = $1 WHERE id = $2`,
             [newUserId, customer_id],
           );
+
+          guestTempPassword = tempPassword;
         }
       }
     }
@@ -504,6 +508,23 @@ export async function POST(req: NextRequest) {
     });
 
     await client.query("COMMIT");
+
+    if (guestTempPassword) {
+      // Await on Vercel — fire-and-forget can be killed after the response is sent.
+      const emailResult = await sendGuestAccountCreatedEmail({
+        email,
+        password: guestTempPassword,
+        firstName: customer?.firstName,
+      });
+
+      if (!emailResult.success) {
+        console.error(
+          "[Guest Account Email Failed]",
+          email,
+          emailResult.error,
+        );
+      }
+    }
 
     return NextResponse.json({
       success: true,
