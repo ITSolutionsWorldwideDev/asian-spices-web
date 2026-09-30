@@ -110,6 +110,20 @@ export default function ContactDetails({
         const data = await response.json().catch(() => ({}));
 
         if (!response.ok || !data.valid) {
+          // VIES outage should not permanently block registration
+          if (response.status === 503 || data.code === "SERVICE_UNAVAILABLE") {
+            setFormData((prev: any) => ({
+              ...prev,
+              vat_verified: true,
+              vat_registered_name: "",
+            }));
+            setErrors((prev: any) => ({ ...prev, vat_number: undefined }));
+            setVatMessage(
+              "VAT service is temporarily unavailable. You can continue; we will verify later.",
+            );
+            return;
+          }
+
           setFormData((prev: any) => ({
             ...prev,
             vat_verified: false,
@@ -139,17 +153,16 @@ export default function ContactDetails({
         );
       } catch (error: any) {
         if (error?.name === "AbortError") return;
+        // Network / unexpected failure — allow continue with a soft notice
         setFormData((prev: any) => ({
           ...prev,
-          vat_verified: false,
+          vat_verified: true,
           vat_registered_name: "",
         }));
-        setErrors((prev: any) => ({
-          ...prev,
-          vat_number: [
-            "The EU VAT service is temporarily unavailable. Please try again.",
-          ],
-        }));
+        setErrors((prev: any) => ({ ...prev, vat_number: undefined }));
+        setVatMessage(
+          "VAT service is temporarily unavailable. You can continue; we will verify later.",
+        );
       } finally {
         if (!controller.signal.aborted) {
           setCheckingVat(false);
@@ -164,6 +177,13 @@ export default function ContactDetails({
   }, [formData.vat_number, formData.country]);
 
   const canContinue = agree && !!formData.vat_verified && !checkingVat;
+  const continueHint = !agree
+    ? "Accept the terms and conditions to continue."
+    : checkingVat
+      ? "Checking VAT number..."
+      : !formData.vat_verified
+        ? "Enter a valid VAT number (e.g. NL123456789B01). It is checked automatically."
+        : "";
 
   return (
     <div className=" bg-gray-100 flex justify-center p-6" id="contact">
@@ -381,7 +401,7 @@ export default function ContactDetails({
             </div>
           </div>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-end gap-4">
           <button
             type="button"
             className="px-5 py-2 border rounded-lg text-gray-600 hover:bg-gray-100"
@@ -390,45 +410,52 @@ export default function ContactDetails({
             ← Back
           </button>
 
-          <button
-            disabled={!canContinue}
-            type="button"
-            className={`px-6 py-2 rounded-lg text-white transition ${
-              canContinue
-                ? "bg-orange-500 hover:bg-orange-600"
-                : "bg-gray-300 cursor-not-allowed"
-            }`}
-            onClick={() => {
-              const result = contactSchema.safeParse(formData);
+          <div className="flex flex-col items-end gap-1">
+            {continueHint && (
+              <p className="text-xs text-gray-500 max-w-xs text-right">
+                {continueHint}
+              </p>
+            )}
+            <button
+              disabled={!canContinue}
+              type="button"
+              className={`px-6 py-2 rounded-lg text-white transition ${
+                canContinue
+                  ? "bg-orange-500 hover:bg-orange-600"
+                  : "bg-gray-300 cursor-not-allowed"
+              }`}
+              onClick={() => {
+                const result = contactSchema.safeParse(formData);
 
-              if (!result.success) {
-                const fieldErrors = result.error.flatten().fieldErrors;
-                setErrors(fieldErrors);
-                return;
-              }
+                if (!result.success) {
+                  const fieldErrors = result.error.flatten().fieldErrors;
+                  setErrors(fieldErrors);
+                  return;
+                }
 
-              if (!formData.vat_verified) {
-                setErrors((prev: any) => ({
-                  ...prev,
-                  vat_number: ["Enter a valid VAT number to continue."],
-                }));
-                return;
-              }
+                if (!formData.vat_verified) {
+                  setErrors((prev: any) => ({
+                    ...prev,
+                    vat_number: ["Enter a valid VAT number to continue."],
+                  }));
+                  return;
+                }
 
-              if (!agree) {
-                alert("You must accept terms and conditions");
-                return;
-              }
+                if (!agree) {
+                  alert("You must accept terms and conditions");
+                  return;
+                }
 
-              setCompletedSteps((prev: number[]) => [
-                ...new Set([...prev, activeStep]),
-              ]);
+                setCompletedSteps((prev: number[]) => [
+                  ...new Set([...prev, activeStep]),
+                ]);
 
-              setActiveStep(activeStep + 1);
-            }}
-          >
-            Continue →
-          </button>
+                setActiveStep(activeStep + 1);
+              }}
+            >
+              Continue →
+            </button>
+          </div>
         </div>
       </div>
     </div>

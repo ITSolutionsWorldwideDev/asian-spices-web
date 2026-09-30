@@ -286,9 +286,21 @@ export default function BusinessVerification({
                 label="Chamber of Commerce Number"
                 value={formData.chamber_of_commerce_number || ""}
                 // value={formData.ChamberOfCommerceNumber}
-                onChange={(e) =>
-                  handleChange("chamber_of_commerce_number", e.target.value)
-                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Keep kvk_number in sync — KVK search UI is currently hidden,
+                  // but Continue validation and the API still expect kvk_number.
+                  setFormData((prev: any) => ({
+                    ...prev,
+                    chamber_of_commerce_number: value,
+                    kvk_number: value,
+                  }));
+                  setErrors((prev: any) => ({
+                    ...prev,
+                    chamber_of_commerce_number: undefined,
+                    kvk_number: undefined,
+                  }));
+                }}
                 error={errors.chamber_of_commerce_number?.[0]}
 
                 // value="12345678"
@@ -414,12 +426,35 @@ export default function BusinessVerification({
               className="flex items-center justify-center gap-2 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 w-full sm:w-auto"
               type="button"
               onClick={() => {
-                const result = businessSchema.safeParse(formData);
+                const dataToValidate = {
+                  ...formData,
+                  kvk_number:
+                    formData.kvk_number ||
+                    formData.chamber_of_commerce_number ||
+                    "",
+                  chamber_of_commerce_number:
+                    formData.chamber_of_commerce_number ||
+                    formData.kvk_number ||
+                    "",
+                };
+
+                const result = businessSchema.safeParse(dataToValidate);
 
                 if (!result.success) {
                   const fieldErrors = result.error.flatten().fieldErrors;
                   setErrors(fieldErrors);
                   return;
+                }
+
+                // Persist synced KVK so later submit has it
+                if (
+                  !formData.kvk_number &&
+                  formData.chamber_of_commerce_number
+                ) {
+                  setFormData((prev: any) => ({
+                    ...prev,
+                    kvk_number: prev.chamber_of_commerce_number,
+                  }));
                 }
 
                 // ✅ mark step 2 complete
