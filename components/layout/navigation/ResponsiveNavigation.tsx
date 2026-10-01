@@ -401,10 +401,10 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
         <button
           type="button"
           onClick={openMenu}
-          className="relative z-50 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-800 transition focus:outline-none focus:ring-2 focus:ring-amber-400 active:scale-95 sm:h-[3.25rem] sm:w-[3.25rem] md:h-14 md:w-14 lg:h-16 lg:w-16"
+          className="relative z-50 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm transition hover:bg-gray-50 focus:outline-none active:scale-95 sm:h-11 sm:w-11"
           aria-label="Open menu"
         >
-          <Menu className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" strokeWidth={2} />
+          <Menu className="h-5 w-5 text-gray-700 sm:h-5.5 sm:w-5.5" strokeWidth={2} />
         </button>
 
         {mobileMenu &&

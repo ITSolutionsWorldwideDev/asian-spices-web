@@ -99,7 +99,7 @@ export default function Prerequisites({
                 </div>
 
                 {/* Item 4 */}
-                <div className="flex gap-4">
+                {/* <div className="flex gap-4">
                   <div className="w-10 h-10 bg-[#FFCAA4] rounded-full flex items-center justify-center">
                     <CircleCheck className="text-[#FF6900]" />
                   </div>
@@ -110,7 +110,7 @@ export default function Prerequisites({
                       through your bank.
                     </p>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Item 5 */}
                 <div className="flex gap-4">

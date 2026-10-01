@@ -173,17 +173,17 @@ export default function NavSearch({ variant = "desktop" }: NavSearchProps) {
     >
       <form onSubmit={handleSubmit} className="relative w-full">
         {isMobile && (
-          <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500 sm:left-5 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
         )}
         <input
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => suggestions.length > 0 && setOpen(true)}
-          placeholder={isMobile ? "Search spices, herbs..." : "Search Here....."}
+          placeholder={isMobile ? "Search spices, herbs, recipes..." : "Search Here....."}
           className={
             isMobile
-              ? "w-full rounded-full border-0 bg-white py-3.5 pl-12 pr-14 text-sm text-gray-700 shadow-sm outline-none placeholder:text-gray-400 sm:py-4 md:pl-14 md:pr-16 md:text-base lg:py-[1.125rem] lg:text-lg"
+              ? "w-full rounded-full border border-gray-200/90 bg-gray-50/80 py-2.5 pl-10 pr-10 text-xs sm:text-sm text-gray-800 shadow-sm outline-none placeholder:text-gray-400 focus:bg-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all"
               : "w-full rounded-full border border-gray-200 bg-white py-2 pl-4 pr-12 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-orange-300"
           }
           aria-label="Search products and recipes"
@@ -194,11 +194,11 @@ export default function NavSearch({ variant = "desktop" }: NavSearchProps) {
             type="button"
             aria-label={listening ? "Stop voice search" : "Search by voice"}
             onClick={handleVoiceSearch}
-            className={`absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full text-gray-600 transition sm:h-11 sm:w-11 md:h-12 md:w-12 ${
-              listening ? "bg-orange-100 text-orange-600" : "hover:bg-gray-100"
+            className={`absolute right-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-gray-500 transition active:scale-95 ${
+              listening ? "bg-orange-100 text-orange-600" : "hover:bg-gray-200/70"
             }`}
           >
-            <Mic className="h-5 w-5 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+            <Mic className="h-4 w-4" />
           </button>
         ) : (
           <button

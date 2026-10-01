@@ -30,6 +30,7 @@ import { getProductJsonLd } from "@/lib/schema";
 import JsonLd from "@/components/seo/JsonLd";
 import { subcategoryContentMap } from "@/data/categoryContent";
 import CategoryGuideSection from "@/components/layout/category/CategoryGuideSection";
+import { parseCategoryGuide } from "@/lib/category-helpers";
 
 
 type Filters = {
@@ -177,45 +178,33 @@ export default async function CategorySlugPage({
 
     // Subcategory ka optional content fetch karna agar map mein maujood ho
     const subContent = subcategoryContentMap[slug] || null;
+    const guideData = parseCategoryGuide(subContent, subcategory.name);
 
     return (
       <div>
         {/* 1. Header Banner — Full Width Across Viewport */}
         <div className="w-full">
           <ProductPageHeader
-            heading={subcategory.name}
-            text={`Shop ${category.name}`}
+            heading={guideData.bannerHeading}
+            text={guideData.bannerText}
             imageSrc="/assets/categories/cat-banner.webp"
           />
         </div>
 
         {/* Container wrapper for padded content */}
         <div className="container mx-auto px-5">
-          {/* Breadcrumb / Title */}
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-6 text-sm sm:text-base">
-            <Link href={`/${category.slug}`} className="hover:underline">
-              <p className="whitespace-nowrap text-[#6A7282]">{category.name}</p>
-            </Link>
-            <span className="text-[#6A7282]">/</span>
-            <p className="whitespace-nowrap font-medium text-gray-900">
-              {subcategory.name}
-            </p>
-          </div>
-
           {/* 2. SECTION 2 — Collapsible Guide */}
-          {subContent && subContent.sections && (
+          {guideData.guideSections.length > 0 && (
             <CategoryGuideSection
-              sections={subContent.sections}
-              image={subContent.image}
+              sections={guideData.guideSections}
+              image={subContent?.image}
               categoryName={subcategory.name}
             />
           )}
 
           {/* 3. Explore Our Collection */}
           <HeadingDescription
-            heading="Explore Our Collection"
-            text={`Shop By ${subcategory.name}`}
-            description={`Discover products in ${subcategory.name}`}
+            heading={`Explore Our ${subcategory.name}`}
           />
         </div>
 

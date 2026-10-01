@@ -86,11 +86,13 @@ export default function Header() {
   const HeadingTag = current.id === 1 ? "h1" : "h2";
 
   return (
-    <section className="w-full bg-white px-3 pb-4 pt-1 sm:px-5 sm:pb-5 md:px-6 lg:px-8">
+    /* Flash Sale section ke sath exact side padding match kar di hai */
+    <section className="w-full bg-white px-3 pt-1 pb-2 sm:px-6 md:px-10">
       <Nav />
 
-      <div className="relative mx-auto w-full max-w-[90rem] overflow-hidden rounded-[1.25rem] bg-[#f6d7cf] shadow-lg sm:rounded-[1.75rem] md:rounded-[2rem] lg:rounded-[2.5rem]">
-        <div className="relative min-h-[280px] w-full sm:min-h-[320px] md:min-h-[400px] lg:min-h-[480px]">
+      <div className="relative isolate mx-auto w-full max-w-[90rem] overflow-hidden rounded-[1.25rem] bg-[#f6d7cf] shadow-lg sm:rounded-[1.75rem] md:rounded-[2rem] lg:rounded-[2.5rem]">
+        {/* Mobile par height kam (h-[260px]) aur desktop par original rakhi hai */}
+        <div className="relative h-[260px] w-full sm:h-[320px] md:h-[400px] lg:h-[480px]">
           {banners.map((banner, i) => (
             <Image
               key={banner.id}
@@ -99,29 +101,29 @@ export default function Header() {
               fill
               priority={i === 0}
               sizes="100vw"
-              className={`pointer-events-none absolute inset-0 z-0 object-cover scale-[1.14] transition-opacity duration-700 ${
+              className={`absolute inset-0 z-0 h-full w-full scale-[1.25] sm:scale-[1.08] object-cover object-center transition-opacity duration-700 ${
                 i === index ? "opacity-100" : "opacity-0"
               }`}
             />
           ))}
 
-          {/* Mobile-only gradient overlay for dark banners (1 & 2); Banner 3 (light) has natural contrast with black text */}
+          {/* Mobile-only gradient overlay for dark banners */}
           <div
             aria-hidden
             className={`pointer-events-none absolute inset-0 z-[1] transition-all duration-700 ${
               isLight
                 ? "hidden"
-                : "bg-gradient-to-r from-black/75 via-black/55 to-black/25 md:hidden"
+                : "bg-gradient-to-r from-black/80 via-black/50 to-transparent md:hidden"
             }`}
           />
 
           {overlay && (
             <div
               key={current.id}
-              className="relative z-10 flex h-full min-h-[inherit] items-center px-5 py-8 pb-12 sm:px-10 sm:py-12 md:px-14 md:py-14 lg:px-16 lg:py-16"
+              className="relative z-10 flex h-full items-center px-4 py-4 sm:px-10 md:px-14 lg:px-16"
             >
-              <div className="w-full max-w-[min(100%,28rem)] animate-fade-in sm:max-w-md md:max-w-lg lg:max-w-xl">
-                <HeadingTag className="text-[1.5rem] font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-5xl lg:text-[3.35rem]">
+              <div className="w-full max-w-[min(100%,25rem)] animate-fade-in sm:max-w-md md:max-w-lg lg:max-w-xl">
+                <HeadingTag className="text-[1.15rem] font-bold leading-[1.15] tracking-tight sm:text-3xl md:text-4xl lg:text-[3.35rem]">
                   <span
                     className={`block text-[#EE9933] ${
                       isLight
@@ -131,7 +133,7 @@ export default function Header() {
                   >
                     {overlay.line1}
                   </span>
-                  <span className="mt-1 block sm:mt-1.5">
+                  <span className="mt-0.5 block sm:mt-1.5">
                     {overlay.line2Lead && (
                       <span
                         className={`text-[#EE9933] ${
@@ -154,8 +156,9 @@ export default function Header() {
                     </span>
                   </span>
                 </HeadingTag>
+
                 <p
-                  className={`mt-3 max-w-md text-xs font-medium leading-relaxed sm:mt-5 sm:text-base sm:font-normal md:mt-6 md:text-lg ${
+                  className={`mt-1.5 max-w-sm text-[11px] font-medium leading-relaxed sm:mt-3 sm:text-base sm:font-normal md:mt-6 md:text-lg ${
                     isLight
                       ? "text-zinc-800"
                       : "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] sm:text-white/95 sm:drop-shadow-none"
@@ -163,9 +166,10 @@ export default function Header() {
                 >
                   {overlay.description}
                 </p>
+
                 <Link
                   href={overlay.ctaHref}
-                  className={`mt-5 inline-flex rounded-full px-6 py-2.5 text-xs font-bold transition sm:mt-8 sm:px-8 sm:py-3.5 sm:text-base sm:font-semibold ${
+                  className={`mt-2.5 inline-flex rounded-full px-4 py-2 text-[11px] font-bold transition sm:mt-5 sm:px-8 sm:py-3.5 sm:text-base sm:font-semibold ${
                     isLight
                       ? "bg-[#D34827] text-white hover:bg-[#c03f20]"
                       : "bg-[#EE9933] text-[#1a1208] hover:bg-[#e08a28]"
@@ -176,23 +180,23 @@ export default function Header() {
               </div>
             </div>
           )}
-        </div>
 
-        {/* Slide dots */}
-        <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2 sm:bottom-5">
-          {banners.map((banner, i) => (
-            <button
-              key={banner.id}
-              type="button"
-              aria-label={`Go to banner ${i + 1}`}
-              onClick={() => setIndex(i)}
-              className={`h-2 rounded-full transition-all ${
-                i === index
-                  ? "w-6 bg-[#EE9933]"
-                  : "w-2 bg-white/50 hover:bg-white/80"
-              }`}
-            />
-          ))}
+          {/* Slide dots cleanly positioned */}
+          <div className="absolute bottom-2.5 left-1/2 z-20 flex -translate-x-1/2 gap-1.5 sm:bottom-4">
+            {banners.map((banner, i) => (
+              <button
+                key={banner.id}
+                type="button"
+                aria-label={`Go to banner ${i + 1}`}
+                onClick={() => setIndex(i)}
+                className={`h-1.5 rounded-full transition-all sm:h-2 ${
+                  i === index
+                    ? "w-5 bg-[#EE9933] sm:w-6"
+                    : "w-1.5 bg-white/50 hover:bg-white/85 sm:w-2"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

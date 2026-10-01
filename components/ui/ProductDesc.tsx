@@ -180,10 +180,10 @@ export default function ProductDesc({
   }
 
   const whyChooseUs = [
-    "Free Shipping on $50+",
-    "100% Pure & Natural",
-    "Quality Guarantee",
-    "30- Day Returns",
+    "Reliable Delivery",
+    "Warranty Protection",
+    "Easy Returns",
+    "Wide Product Selection",
   ];
   const highlights = product?.highlights || [];
   const [pendingQty, setPendingQty] = useState(1);

@@ -78,7 +78,7 @@ export async function sendOrderConfirmationEmail(orderId: string) {
     await pool.query(
       `UPDATE store_orders SET customer_email = $1 WHERE id = $2 AND (customer_email IS NULL OR TRIM(customer_email) = '')`,
       [recipientEmail, orderId],
-    ).catch(() => {});
+    ).catch(() => { });
 
     const deliveryWindow =
       DELIVERY_DAYS_MAP[order.shipping_provider] || "3 - 5 business days";
@@ -102,9 +102,8 @@ export async function sendOrderConfirmationEmail(orderId: string) {
           <p style="margin: 0;"><strong>Estimated Delivery:</strong> ${deliveryWindow}</p>
         </div>
 
-        ${
-          guestPassword
-            ? `
+        ${guestPassword
+        ? `
         <div style="background-color: #fff7ed; border: 1px solid #fed7aa; padding: 18px; border-radius: 10px; margin: 20px 0;">
           <h3 style="color: #ea580c; margin: 0 0 8px 0; font-size: 16px;">🎉 Your Asian Spices Account Has Been Created!</h3>
           <p style="margin: 0 0 12px 0; color: #4b5563; font-size: 14px; line-height: 1.5;">
@@ -124,8 +123,8 @@ export async function sendOrderConfirmationEmail(orderId: string) {
           </p>
         </div>
             `
-            : ""
-        }
+        : ""
+      }
 
         <p>Our team is currently preparing your parcel for selection and dynamic routing. Once your tracking code registers out of the hub for delivery to <strong>${order.shipping_city}</strong>, we'll send a follow-up link immediately.</p>
         
@@ -237,11 +236,10 @@ export async function sendCancellationEmail(
           <p style="margin: 0 0 8px 0;"><strong>Refund Amount:</strong> ${fmt(refundAmount)}</p>
           <p style="margin: 0 0 8px 0;"><strong>Shipping Method:</strong> ${escapeEmailText(order.shipping_provider || "—")}</p>
           <p style="margin: 0 0 8px 0;"><strong>Cancellation Reason:</strong> ${safeReason}</p>
-          ${
-            safeComments
-              ? `<p style="margin: 0;"><strong>Comments:</strong> ${safeComments}</p>`
-              : ""
-          }
+          ${safeComments
+        ? `<p style="margin: 0;"><strong>Comments:</strong> ${safeComments}</p>`
+        : ""
+      }
         </div>
 
         <p>${refundNote}</p>
@@ -319,7 +317,7 @@ export async function sendPartnerRegistrationEmail({
 
     await sendEmail({
       to: email,
-      cc: [ "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com"],
+      cc: ["ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com"],
       subject: `Your Asian Spices Partner Application - ${applicationId}`,
       html: emailHtml,
       fromAccount: "partners",
@@ -769,20 +767,62 @@ export async function sendContactFormEmail({
   message,
 }: ContactFormEmailOptions) {
   try {
+    const safeName = escapeEmailText(fullName);
+    const safeEmail = escapeEmailText(email);
+    const safeSubject = escapeEmailText(subject);
+    const safeMessage = escapeEmailText(message);
+
     const notificationHtml = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
-        <h2 style="color: #111827; margin-top: 0; margin-bottom: 20px; font-size: 22px; font-weight: 800;">
-          New Contact Form Submission
+        <h2 style="color: #111827; margin-top: 0; margin-bottom: 8px; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;">
+          NEW CONTACT FORM SUBMISSION
         </h2>
+        <p style="margin: 0 0 20px 0; color: #4b5563; font-size: 14px; line-height: 1.5;">
+          A new message has been submitted through the Asian Spices website contact form.
+        </p>
 
-        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px;">
-          <p style="margin: 0 0 8px 0;"><strong>Name:</strong> ${fullName}</p>
-          <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${email}</p>
-          <p style="margin: 0;"><strong>Subject:</strong> ${subject}</p>
+        <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">
+            CUSTOMER DETAILS
+          </h3>
+          <p style="margin: 0 0 10px 0; font-size: 14px; color: #111827;">
+            <strong style="color: #4b5563; display: block; font-size: 12px; text-transform: uppercase; margin-bottom: 2px;">Name:</strong>
+            ${safeName}
+          </p>
+          <p style="margin: 0 0 10px 0; font-size: 14px; color: #111827;">
+            <strong style="color: #4b5563; display: block; font-size: 12px; text-transform: uppercase; margin-bottom: 2px;">Email:</strong>
+            <a href="mailto:${safeEmail}" style="color: #ea580c; text-decoration: underline;">${safeEmail}</a>
+          </p>
+          <p style="margin: 0; font-size: 14px; color: #111827;">
+            <strong style="color: #4b5563; display: block; font-size: 12px; text-transform: uppercase; margin-bottom: 2px;">Subject:</strong>
+            ${safeSubject}
+          </p>
         </div>
 
-        <p style="margin: 0 0 8px 0; font-weight: 600;">Message:</p>
-        <p style="white-space: pre-wrap; color: #374151;">${message}</p>
+        <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 10px 0; font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">
+            MESSAGE
+          </h3>
+          <p style="margin: 0; white-space: pre-wrap; font-size: 14px; color: #1f2937; line-height: 1.6;">${safeMessage}</p>
+        </div>
+
+        <div style="background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 14px 16px; border-radius: 6px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 6px 0; font-size: 13px; font-weight: 700; color: #9a3412; text-transform: uppercase; letter-spacing: 0.05em;">
+            SUPPORT ACTION
+          </h3>
+          <p style="margin: 0 0 8px 0; font-size: 13px; color: #7c2d12; line-height: 1.5;">
+            Please review the customer's message and respond directly to the customer's email address.
+          </p>
+          <p style="margin: 0; font-size: 13px; color: #9a3412; font-style: italic; line-height: 1.5;">
+            * Please respond to customer complaints within 4 hours and general queries within 8 hours of receiving the message.
+          </p>
+        </div>
+
+        <p style="margin: 0 0 4px 0; font-size: 14px; color: #4b5563;">Regards,</p>
+        <p style="margin: 0 0 2px 0; font-size: 14px; font-weight: 700; color: #111827;">Asian Spices Support Team</p>
+        <p style="margin: 0; font-size: 14px;">
+          <a href="mailto:support@asianspices.online" style="color: #ea580c; text-decoration: none;">support@asianspices.online</a>
+        </p>
 
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
         <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
@@ -791,11 +831,40 @@ export async function sendContactFormEmail({
       </div>
     `;
 
+    const notificationText = `NEW CONTACT FORM SUBMISSION
+
+A new message has been submitted through the Asian Spices website contact form.
+
+CUSTOMER DETAILS
+
+Name:
+${fullName}
+
+Email:
+${email}
+
+Subject:
+${subject}
+
+MESSAGE
+
+${message}
+
+SUPPORT ACTION
+
+Please review the customer's message and respond directly to the customer's email address.
+* They need to respond within 4 hours for complaints and within 8 hours for general queries.
+
+Regards,
+Asian Spices Support Team
+support@asianspices.online`;
+
     await sendEmail({
       to: "support@asianspices.online",
       replyTo: email,
-      subject: `[Contact Form] ${subject}`,
+      subject: `New Contact Form Submission – ${subject}`,
       html: notificationHtml,
+      text: notificationText,
       fromAccount: "support",
     });
 
@@ -842,7 +911,7 @@ export async function sendContactFormEmail({
 export async function sendNewsletterWelcomeEmail(email: string) {
   try {
     // const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3002";
-    const siteUrl ="https://www.asianspices.online/";
+    const siteUrl = "https://www.asianspices.online/";
 
     const emailHtml = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">

@@ -150,6 +150,7 @@ export default async function HealthyLivingProductpage({
             <CategoryGuideSection
               sections={currentContent.sections ?? []}
               categoryName={slug}
+              hideReadMore={true}
             />
           )}
         </section>

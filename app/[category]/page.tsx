@@ -12,6 +12,7 @@ import { getStoreCategoryBySlug } from "@/lib/dbactions/categories";
 import { getBrands, getProducts, getSubcategories } from "@/lib/dbactions/products";
 import { categoryContent } from "@/data/categoryContent"; // Content data import kiya
 import CategoryGuideSection from "@/components/layout/category/CategoryGuideSection";
+import { parseCategoryGuide } from "@/lib/category-helpers";
 
 type Filters = {
   category: string;
@@ -104,6 +105,7 @@ export default async function CategoryPage({
 
   // Category ke mutabiq content fetch karna (jaise "beverages")
   const currentContent = categoryContent[slug] || null;
+  const guideData = parseCategoryGuide(currentContent, category.name);
 
   const query = await searchParams;
   const clean = (val?: string) =>
@@ -128,33 +130,26 @@ export default async function CategoryPage({
       {/* 1. Header Banner — Full Width Across Viewport */}
       <div className="w-full">
         <ProductPageHeader
-          heading={category.name}
-          text={`Shop ${category.name}`}
+          heading={guideData.bannerHeading}
+          text={guideData.bannerText}
           imageSrc="/assets/categories/cat-banner.webp"
         />
       </div>
 
       {/* Container wrapper for padded content */}
       <div className="container mx-auto px-5">
-        {/* Breadcrumb / Title */}
-        <div className="pt-6 text-sm sm:text-base">
-          <p className="font-medium text-gray-900">{category.name}</p>
-        </div>
-
         {/* 2. SECTION 2 — Collapsible Guide + Image */}
-        {currentContent && currentContent.sections && (
+        {guideData.guideSections.length > 0 && (
           <CategoryGuideSection
-            sections={currentContent.sections}
-            image={currentContent.image}
+            sections={guideData.guideSections}
+            image={currentContent?.image}
             categoryName={category.name}
           />
         )}
 
         {/* 3. Explore Our Collection */}
         <HeadingDescription
-          heading="Explore Our Collection"
-          text={`Shop By ${category.name}`}
-          description={`Discover products in ${category.name}`}
+          heading={`Explore Our ${category.name}`}
         />
       </div>
 

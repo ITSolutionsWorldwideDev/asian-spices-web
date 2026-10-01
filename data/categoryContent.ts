@@ -708,6 +708,84 @@ image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?auto=format
     ],
   },
 
+  rice: {
+    sections: [
+      {
+        title: "Explore Rice",
+        description:
+          "Rice is the everyday staple behind most South Asian meals, and the right variety matters — a fragrant long-grain Basmati for biryani, a parboiled Sella for perfectly separate grains, or a shorter-grain Sona Masoori for everyday South Indian cooking. Our Rice range covers the varieties used across the region.\n\n" +
+          "Browse Rice by Type:\n" +
+          "• Basmati Rice: Aromatic long-grain rice for biryani, pulao and everyday meals.\n" +
+          "• Brown Rice: Whole-grain rice for a heartier texture and additional fibre.\n" +
+          "• Sella Rice: Parboiled Basmati that cooks up firm and separate, ideal for biryani.\n" +
+          "• Sona Masoori Rice: A lighter, medium-grain rice popular for everyday South Indian meals.\n" +
+          "• Other Rice Products: Vermicelli, puffed rice, broken rice and idli rice.",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "Do you deliver rice across the Netherlands?",
+        answer: "Yes — AsianSpices.online currently ships across the Netherlands, with further European markets planned as those regions come online.",
+      },
+      {
+        question: "What's the difference between Basmati and Sona Masoori rice?",
+        answer: "Basmati is a long-grain, highly aromatic rice traditionally used for biryani and pulao, while Sona Masoori is a lighter, medium-grain rice more commonly used for everyday South Indian meals.",
+      },
+      {
+        question: "What is Sella rice?",
+        answer: "Sella rice is parboiled Basmati rice — partially boiled in the husk before milling, which helps the grains stay firmer, longer and more separate after cooking, making it especially popular for biryani.",
+      },
+      {
+        question: "How should I store rice?",
+        answer: "Store in an airtight container in a cool, dry place; properly stored, rice can last a long time, though very old rice may have a slightly different texture when cooked.",
+      },
+      {
+        question: "Is rice naturally gluten-free?",
+        answer: "Yes — all plain rice varieties are naturally gluten-free.",
+      },
+      {
+        question: "What's the water ratio for cooking rice?",
+        answer: "This varies by rice type — check the individual product page for specific water-to-rice ratios and cooking method, as Basmati, Brown and Sona Masoori all cook slightly differently.",
+      },
+      {
+        question: "Does aged Basmati rice taste different from new-crop rice?",
+        answer: "Yes — aged Basmati is generally considered more aromatic and firmer after cooking, which is why some brands specifically market aged rice; check the individual product page for ageing details.",
+      },
+      {
+        question: "Is Brown Rice healthier than white rice?",
+        answer: "Brown rice retains its bran layer, offering more fibre than white rice — exact nutritional comparisons depend on the specific products; consult a nutritionist for advice specific to your dietary needs.",
+      },
+      {
+        question: "Can I buy rice in bulk bags?",
+        answer: "Bulk pack sizes vary by product — check the individual product page for available sizes.",
+      },
+      {
+        question: "Do you sell organic rice?",
+        answer: "Organic certification availability varies by product — check the individual product page.",
+      },
+      {
+        question: "What rice is best for biryani?",
+        answer: "Aged Basmati or Sella rice are traditionally preferred for biryani, valued for producing long, separate grains that hold up well during the layered cooking process.",
+      },
+      {
+        question: "How long does rice take to cook?",
+        answer: "This varies by type — white Basmati typically cooks in 15–20 minutes, while Brown Rice generally takes longer, around 30–40 minutes. Check individual product guidance.",
+      },
+      {
+        question: "Should I rinse rice before cooking?",
+        answer: "Rinsing rice before cooking is commonly recommended to remove excess surface starch, which helps achieve separate, less sticky grains — particularly for Basmati.",
+      },
+      {
+        question: "Is rice suitable for a vegan or vegetarian diet?",
+        answer: "Yes — plain rice is naturally vegan and vegetarian.",
+      },
+      {
+        question: "Do you sell pre-cooked or parboiled rice for convenience?",
+        answer: "Sella rice is a parboiled option; check the site for any additional pre-cooked or instant rice products.",
+      },
+    ],
+  },
 };
 
 
@@ -3047,5 +3125,676 @@ image: "https://images.unsplash.com/photo-1564894809611-1742fc40ed80?auto=format
       },
     ],
   },
+
+  "basmati-rice": {
+    sections: [
+      {
+        title: "Explore Basmati Rice",
+        description:
+          "Basmati is the rice most associated with South Asian cooking — long, slender grains with a distinctive aroma that elongate further when cooked. It's the go-to choice for biryani, pulao, and a simple bowl of steamed rice alongside dal or curry.\n\n" +
+          "Everyday Basmati:\n" +
+          "Standard Basmati Rice is an everyday staple, suited to steamed rice, pulao and simpler preparations where a good balance of aroma, texture and value matters most.\n\n" +
+          "Aged & Premium Basmati:\n" +
+          "Aged Basmati Rice is stored for a period (often a year or more) before sale, which is generally considered to enhance aroma and produce firmer, more separate grains — the preferred choice for biryani and special-occasion dishes.\n\n" +
+          "Shop Basmati Rice:\n" +
+          "• Basmati Rice (Everyday)\n" +
+          "• Aged Basmati Rice (1121)\n" +
+          "• Extra Long Grain Basmati Rice",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What makes Basmati rice different from other long-grain rice?",
+        answer: "Basmati is known for its distinctive aroma, extra-long slender grains, and the way it elongates (rather than widens) when cooked, giving it a light, fluffy texture.",
+      },
+      {
+        question: "What is aged Basmati rice?",
+        answer: "Aged Basmati is rice that has been stored, typically for a year or more, before being sold — a process generally considered to intensify its aroma and improve grain separation after cooking.",
+      },
+      {
+        question: "What's the correct water ratio for cooking Basmati rice?",
+        answer: "A common ratio is around 1.5 to 1.75 cups of water per cup of rice, though this varies by brand and cooking method — check the individual product's packaging for specific guidance.",
+      },
+      {
+        question: "Should I soak Basmati rice before cooking?",
+        answer: "Soaking Basmati for 20–30 minutes before cooking is commonly recommended, as it can help the grains cook more evenly and elongate further.",
+      },
+      {
+        question: "What's the difference between 1121 Basmati and regular Basmati?",
+        answer: "1121 refers to a specific Basmati variety known for its extra-long grain length; check the individual product page for the specific variety and grain length details.",
+      },
+      {
+        question: "Is Basmati rice gluten-free?",
+        answer: "Yes — Basmati rice is naturally gluten-free.",
+      },
+      {
+        question: "What dishes is Basmati rice best suited for?",
+        answer: "Basmati is the traditional choice for biryani, pulao and steamed rice served alongside curries and dal.",
+      },
+      {
+        question: "How should I store Basmati rice?",
+        answer: "Store in an airtight container in a cool, dry place, away from moisture and pests.",
+      },
+      {
+        question: "Why does my cooked Basmati rice sometimes turn out sticky?",
+        answer: "This can result from too much water, insufficient rinsing before cooking, or over-stirring during cooking — rinse the rice well and avoid excessive stirring for fluffier, separate grains.",
+      },
+      {
+        question: "Is Basmati rice suitable for a low-glycemic diet?",
+        answer: "Basmati rice generally has a somewhat lower glycemic index compared to some other white rice varieties, but consult a healthcare professional or dietitian for advice specific to your dietary needs.",
+      },
+      {
+        question: "Can I use Basmati rice for fried rice or other non-South Asian dishes?",
+        answer: "Yes — Basmati's fluffy, separate texture works well for a variety of rice dishes beyond traditional South Asian cooking.",
+      },
+      {
+        question: "What's the shelf life of Basmati rice?",
+        answer: "Properly stored, dry Basmati rice has a long shelf life, often a year or more — check the individual product's best-before date.",
+      },
+      {
+        question: "Do you sell Basmati rice in large bulk bags?",
+        answer: "Bulk pack sizes vary by product — check the individual product page for available sizes, as Basmati is often bought in larger quantities as a household staple.",
+      },
+      {
+        question: "Is Basmati rice more expensive than regular rice?",
+        answer: "Basmati, particularly aged varieties, is generally priced higher than standard long-grain rice due to its distinct aroma, ageing process and quality grading.",
+      },
+      {
+        question: "Can Basmati rice be cooked in a rice cooker?",
+        answer: "Yes — Basmati rice cooks well in a rice cooker; follow the appliance's rice-to-water guidelines or the product's specific instructions.",
+      },
+    ],
+  },
+
+  "brown-rice": {
+    sections: [
+      {
+        title: "Explore Brown Rice",
+        description:
+          "Brown Rice retains its bran layer during milling, giving it a heartier texture, nuttier flavour and additional fibre compared to white rice — a popular choice for those looking for a whole-grain option in everyday South Asian cooking.\n\n" +
+          "Everyday Whole-Grain Rice:\n" +
+          "Brown Rice works well as a straightforward substitute for white rice in most everyday meals, offering a heartier bite and nuttier flavour alongside dal or curry.\n\n" +
+          "Brown Basmati:\n" +
+          "Brown Basmati Rice combines the aromatic qualities of Basmati with the added fibre of whole-grain milling, suited to those wanting the classic Basmati flavour profile in a whole-grain form.\n\n" +
+          "Shop Brown Rice:\n" +
+          "• Brown Rice\n" +
+          "• Brown Basmati Rice",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What's the difference between Brown Rice and white rice?",
+        answer: "Brown rice retains its outer bran layer, which is removed in white rice — this gives brown rice a heartier texture, nuttier flavour and generally more fibre.",
+      },
+      {
+        question: "How long does Brown Rice take to cook compared to white rice?",
+        answer: "Brown rice generally takes longer to cook than white rice, often around 30–40 minutes, due to its retained bran layer — check the individual product's packaging for exact timing.",
+      },
+      {
+        question: "What's the water ratio for cooking Brown Rice?",
+        answer: "Brown rice typically requires more water than white rice, often around 2 to 2.5 cups of water per cup of rice — check the individual product's packaging for specific guidance.",
+      },
+      {
+        question: "Is Brown Rice healthier than white rice?",
+        answer: "Brown rice retains more fibre and nutrients from the bran layer than white rice — exact nutritional comparisons depend on the specific products; consult a nutritionist or dietitian for advice specific to your dietary needs.",
+      },
+      {
+        question: "Is Brown Basmati as aromatic as white Basmati?",
+        answer: "Brown Basmati retains much of the characteristic Basmati aroma, though the bran layer can slightly alter the flavour and texture compared to white Basmati.",
+      },
+      {
+        question: "Can I substitute Brown Rice for white rice in any recipe?",
+        answer: "Yes, though you'll need to adjust cooking time and water ratio, and the final texture and flavour will be heartier and nuttier than with white rice.",
+      },
+      {
+        question: "Is Brown Rice gluten-free?",
+        answer: "Yes — Brown Rice is naturally gluten-free.",
+      },
+      {
+        question: "How should I store Brown Rice?",
+        answer: "Store in an airtight container in a cool, dry place; brown rice's natural oils in the bran layer mean it may have a shorter shelf life than white rice, so check the best-before date and consider refrigeration for longer storage.",
+      },
+      {
+        question: "Does Brown Rice need to be soaked before cooking?",
+        answer: "Soaking Brown Rice for 30 minutes or longer before cooking can help reduce cooking time and improve texture.",
+      },
+      {
+        question: "Can Brown Rice be used for biryani?",
+        answer: "While white Basmati or Sella is traditional for biryani, some people do use Brown Basmati for a whole-grain version, adjusting cooking time and liquid accordingly.",
+      },
+      {
+        question: "Is Brown Rice suitable for a diabetic-friendly diet?",
+        answer: "Brown rice generally has a somewhat lower glycemic impact compared to some white rice varieties due to its fibre content, but consult a healthcare professional or dietitian for advice specific to your health needs.",
+      },
+      {
+        question: "Why does Brown Rice sometimes taste slightly bitter?",
+        answer: "This can happen if the rice is old or the bran layer has started to turn rancid — check the product's freshness and store properly to avoid this.",
+      },
+      {
+        question: "Can Brown Rice be cooked in a rice cooker or pressure cooker?",
+        answer: "Yes — both methods work well for Brown Rice, though cooking times will generally be longer than for white rice; check your appliance's specific settings for brown rice if available.",
+      },
+      {
+        question: "Is Brown Rice suitable for vegans?",
+        answer: "Yes — plain Brown Rice is naturally vegan.",
+      },
+      {
+        question: "What dishes pair well with Brown Rice?",
+        answer: "Brown Rice works well alongside dal, curries, and stir-fried vegetable dishes, offering a heartier base than white rice.",
+      },
+    ],
+  },
+
+  "sella-rice": {
+    sections: [
+      {
+        title: "Explore Sella Rice",
+        description:
+          "Sella Rice is Basmati that's been parboiled — partially boiled in the husk before milling. This process locks in nutrients and gives the grains a firmer bite that holds up especially well during the layered cooking and steaming process used for biryani.\n\n" +
+          "Why Choose Sella Rice:\n" +
+          "Sella's parboiling process makes the grains more resistant to breaking and overcooking, which is exactly what's needed for biryani's dum (steam-sealed) cooking method, where rice is layered and cooked with meat, vegetables and spices without becoming mushy.\n\n" +
+          "Golden Sella & Steamed Basmati:\n" +
+          "Golden Sella Rice (with its characteristic golden hue from the parboiling process) is the most widely recognised type, while Steamed Basmati Rice refers to a similar parboiling process used across various Basmati grades.\n\n" +
+          "Shop Sella Rice:\n" +
+          "• Golden Sella Basmati Rice\n" +
+          "• Steamed Basmati Rice",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is Sella rice and how is it different from regular Basmati?",
+        answer: "Sella rice is Basmati that's been parboiled (partially boiled in the husk) before milling, which gives it a firmer texture and makes the grains less likely to break or turn mushy during cooking, compared to regular white Basmati.",
+      },
+      {
+        question: "Why is Sella rice used for biryani specifically?",
+        answer: "Sella's firmer, more resilient grains hold up especially well during biryani's layered, slow-steamed cooking method, staying separate and intact rather than becoming sticky or mushy.",
+      },
+      {
+        question: "Why does Sella rice have a golden or yellowish colour?",
+        answer: "The golden hue comes naturally from the parboiling process, where the husk's pigments are absorbed into the grain before milling — this is a normal characteristic, not an additive.",
+      },
+      {
+        question: "How long does Sella rice take to cook?",
+        answer: "Sella rice generally takes slightly longer to cook than regular Basmati, often around 20–25 minutes — check the individual product's packaging for specific guidance.",
+      },
+      {
+        question: "Should I soak Sella rice before cooking?",
+        answer: "Soaking Sella rice for 30 minutes to an hour before cooking is commonly recommended to help it cook more evenly.",
+      },
+      {
+        question: "Is Sella rice more nutritious than regular white Basmati?",
+        answer: "The parboiling process can help retain more nutrients from the bran layer compared to standard milling, but exact nutritional comparisons depend on the specific products — consult a nutritionist for advice specific to your dietary needs.",
+      },
+      {
+        question: "Is Sella rice gluten-free?",
+        answer: "Yes — Sella rice is naturally gluten-free.",
+      },
+      {
+        question: "What's the water ratio for cooking Sella rice?",
+        answer: "This varies slightly from regular Basmati due to the parboiling process — check the individual product's packaging for specific water-to-rice ratio guidance.",
+      },
+      {
+        question: "Can I use Sella rice for dishes other than biryani?",
+        answer: "Yes — Sella rice works well for pulao and any dish where firm, separate grains are desired, not just biryani.",
+      },
+      {
+        question: "Why do my Sella rice grains sometimes feel slightly firmer than expected?",
+        answer: "This is a natural characteristic of parboiled rice — Sella grains are generally firmer by design, which is part of why they're preferred for biryani.",
+      },
+      {
+        question: "How should I store Sella rice?",
+        answer: "Store in an airtight container in a cool, dry place, similar to other rice varieties.",
+      },
+      {
+        question: "Is Sella rice more expensive than regular Basmati?",
+        answer: "Pricing varies by brand and grade — Sella can be priced similarly to or slightly differently from regular Basmati depending on quality and ageing.",
+      },
+      {
+        question: "Can Sella rice be cooked in a rice cooker?",
+        answer: "Yes — Sella rice can be cooked in a rice cooker; adjust water ratio and timing according to the specific product's guidance.",
+      },
+      {
+        question: "Is aged Sella rice available, similar to aged Basmati?",
+        answer: "Ageing practices vary by brand — check the individual product page for specific ageing or grade information.",
+      },
+      {
+        question: "Can I substitute regular Basmati for Sella rice in a biryani recipe?",
+        answer: "Yes, though the texture will be softer and grains may be more prone to breaking during the layered cooking process compared to using Sella specifically.",
+      },
+    ],
+  },
+
+  "sona-masoori-rice": {
+    sections: [
+      {
+        title: "Explore Sona Masoori Rice",
+        description:
+          "Sona Masoori is a lightweight, medium-grain rice widely used across South Indian households for everyday meals. It's less aromatic than Basmati but prized for its light texture and how well it complements dal, sambar and curries.\n\n" +
+          "Why Choose Sona Masoori:\n" +
+          "Sona Masoori's shorter, lighter grains cook up soft and slightly sticky — different from Basmati's long, separate grains — making it a favourite for everyday South Indian meals like curd rice, sambar rice and simple steamed rice.\n\n" +
+          "Everyday & Premium Grades:\n" +
+          "Standard Sona Masoori Rice is the everyday household choice, while Aged Sona Masoori Rice undergoes a similar ageing process to Basmati, valued by some for a slightly improved texture.\n\n" +
+          "Shop Sona Masoori Rice:\n" +
+          "• Sona Masoori Rice (Everyday)\n" +
+          "• Aged Sona Masoori Rice",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is Sona Masoori rice?",
+        answer: "Sona Masoori is a lightweight, medium-grain rice variety widely grown and consumed in South India, valued for its light texture and everyday versatility.",
+      },
+      {
+        question: "What's the difference between Sona Masoori and Basmati rice?",
+        answer: "Sona Masoori has shorter, lighter grains and a milder aroma than Basmati, and cooks up slightly softer and stickier — it's typically used for everyday South Indian meals rather than dishes like biryani.",
+      },
+      {
+        question: "What dishes is Sona Masoori best suited for?",
+        answer: "Sona Masoori is commonly used for everyday steamed rice, curd rice, sambar rice, and other South Indian dishes where a lighter, softer grain is preferred.",
+      },
+      {
+        question: "What's the water ratio for cooking Sona Masoori rice?",
+        answer: "A common ratio is around 1.5 to 2 cups of water per cup of rice, though this varies by brand — check the individual product's packaging for specific guidance.",
+      },
+      {
+        question: "Is Sona Masoori rice gluten-free?",
+        answer: "Yes — Sona Masoori rice is naturally gluten-free.",
+      },
+      {
+        question: "How long does Sona Masoori rice take to cook?",
+        answer: "Sona Masoori generally cooks in around 15–20 minutes, similar to other white rice varieties — check the individual product's packaging for exact timing.",
+      },
+      {
+        question: "Can I use Sona Masoori rice for biryani?",
+        answer: "While possible, Sona Masoori's softer, stickier texture makes it less traditional for biryani compared to Basmati or Sella, which are better suited to holding separate grains during the layered cooking process.",
+      },
+      {
+        question: "Should I soak Sona Masoori rice before cooking?",
+        answer: "A brief soak of 15–20 minutes can help, though it's less commonly required compared to Basmati — check individual product guidance.",
+      },
+      {
+        question: "How should I store Sona Masoori rice?",
+        answer: "Store in an airtight container in a cool, dry place, away from moisture and pests, similar to other rice varieties.",
+      },
+      {
+        question: "Is aged Sona Masoori rice different from regular Sona Masoori?",
+        answer: "Aged Sona Masoori undergoes a storage/ageing process similar to Basmati, which some consider to improve texture and reduce stickiness slightly.",
+      },
+      {
+        question: "Is Sona Masoori rice suitable for a rice cooker?",
+        answer: "Yes — Sona Masoori cooks well in a rice cooker; follow the appliance's rice-to-water guidelines or the product's specific instructions.",
+      },
+      {
+        question: "What's the shelf life of Sona Masoori rice?",
+        answer: "Properly stored, dry Sona Masoori rice has a long shelf life, similar to other white rice varieties — check the individual product's best-before date.",
+      },
+      {
+        question: "Is Sona Masoori rice suitable for vegans?",
+        answer: "Yes — plain Sona Masoori rice is naturally vegan.",
+      },
+      {
+        question: "Why is Sona Masoori rice sometimes described as 'diet rice'?",
+        answer: "Sona Masoori is sometimes marketed this way due to its lighter grain and lower processing compared to some other varieties, but exact nutritional comparisons depend on the specific product — consult a nutritionist for advice specific to your dietary needs.",
+      },
+      {
+        question: "Can I substitute Sona Masoori for Basmati in a recipe?",
+        answer: "Yes, though the texture and aroma will differ noticeably — Sona Masoori is softer and less fragrant, so results will vary from a recipe specifically designed around Basmati's characteristics.",
+      },
+    ],
+  },
+
+  "other-rice-products": {
+    sections: [
+      {
+        title: "Explore Other Rice Products",
+        description:
+          "Beyond whole-grain rice, this category covers rice-based products used across South Asian cooking — from delicate vermicelli for desserts, to puffed rice for a quick snack, to specialty rice used for idli.\n\n" +
+          "Vermicelli & Puffed Rice:\n" +
+          "Rice Vermicelli (Semiya) is a thin, dried noodle used in both sweet dishes (like semiya kheer) and savoury upma-style preparations, while Puffed Rice (Murmura) is a light, airy snack base used for bhel puri and other quick snacks.\n\n" +
+          "Specialty Rice Products:\n" +
+          "Broken Rice is a more affordable, smaller-grain rice used in various regional dishes, and Idli Rice is a specific parboiled rice variety traditionally used, alongside urad dal, to make the fermented batter for idli and dosa.\n\n" +
+          "Shop Other Rice Products:\n" +
+          "• Rice Vermicelli (Semiya)\n" +
+          "• Puffed Rice (Murmura)\n" +
+          "• Broken Rice\n" +
+          "• Idli Rice",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is Rice Vermicelli (Semiya) used for?",
+        answer: "Rice Vermicelli is used in both sweet dishes, like semiya kheer, and savoury dishes, like vermicelli upma — a thin, dried noodle made from rice.",
+      },
+      {
+        question: "What is Puffed Rice (Murmura) used for?",
+        answer: "Puffed rice is a light, airy, puffed grain commonly used as the base for snacks like bhel puri, or eaten on its own as a light snack.",
+      },
+      {
+        question: "What is Idli Rice and how is it different from regular rice?",
+        answer: "Idli Rice is a specific parboiled rice variety traditionally used, ground together with urad dal, to make the fermented batter for idli and dosa — it's chosen for its specific fermentation and texture properties.",
+      },
+      {
+        question: "What is Broken Rice and why is it cheaper than whole rice?",
+        answer: "Broken rice consists of rice grains that fractured during milling — it's generally more affordable than whole-grain rice and is used in various regional dishes, sometimes valued for its different texture.",
+      },
+      {
+        question: "How do I prepare Rice Vermicelli?",
+        answer: "Rice Vermicelli is typically lightly roasted, then boiled or steamed briefly, depending on the specific dish — check individual packaging for preparation guidance.",
+      },
+      {
+        question: "Is Puffed Rice ready to eat, or does it need cooking?",
+        answer: "Puffed Rice is pre-puffed and ready to eat straight from the pack, commonly mixed with other ingredients for snacks like bhel puri without further cooking.",
+      },
+      {
+        question: "Are these rice products gluten-free?",
+        answer: "Yes — plain rice-based products like vermicelli, puffed rice and idli rice are naturally gluten-free (check for cross-contamination information if you have celiac disease, as processing facilities can vary).",
+      },
+      {
+        question: "Can I use regular rice instead of Idli Rice for making idli?",
+        answer: "Idli Rice is specifically suited to the fermentation process used for idli and dosa batter; regular rice may not ferment or texture the same way, so it's generally recommended to use Idli Rice specifically for best results.",
+      },
+      {
+        question: "How should I store Rice Vermicelli and Puffed Rice?",
+        answer: "Store in an airtight container in a cool, dry place; puffed rice in particular can lose its crispness if exposed to moisture.",
+      },
+      {
+        question: "Is Rice Vermicelli the same as wheat vermicelli?",
+        answer: "No — Rice Vermicelli is made from rice and is naturally gluten-free, while wheat vermicelli (sometimes used in other South Asian desserts) contains gluten. Check the individual product's ingredient list to confirm which type you're purchasing.",
+      },
+      {
+        question: "What's the shelf life of these rice products?",
+        answer: "This varies by product — check the best-before date on individual packaging, generally several months to a year for properly stored dried products.",
+      },
+      {
+        question: "Can Broken Rice be used the same way as whole rice?",
+        answer: "Yes, though it may cook slightly faster and have a different texture — broken rice is used in various regional dishes and can generally substitute for whole rice with some adjustment to cooking time.",
+      },
+      {
+        question: "Are these rice products vegan?",
+        answer: "Yes — plain rice vermicelli, puffed rice, broken rice and idli rice are all naturally vegan.",
+      },
+      {
+        question: "How do I make bhel puri with Puffed Rice?",
+        answer: "Puffed rice is mixed with chopped vegetables, chutneys and crunchy toppings — check recipe resources or product packaging for a specific bhel puri method.",
+      },
+      {
+        question: "Can I soak Idli Rice the same way as regular rice for batter?",
+        answer: "Idli Rice is typically soaked for several hours (often alongside urad dal) before grinding into a batter — check individual product guidance for specific soaking times and ratios.",
+      },
+    ],
+  },
+
+  "namkeen": {
+    sections: [
+      {
+        title: "Explore Namkeen",
+        description:
+          "A bowl of namkeen alongside a cup of chai is a familiar ritual across South Asian households — crunchy, savoury, and endlessly varied by region and recipe.\n\n" +
+          "Classic Namkeen Varieties:\n" +
+          "Sev (thin, crunchy chickpea flour noodles) and Bhujia (a spiced, sev-like snack, notably associated with Bikaner) are two of the most iconic namkeen varieties, eaten on their own or as a topping for chaat.\n\n" +
+          "Mixed Namkeen & Chivda:\n" +
+          "Chivda (a flattened-rice-based mix) and general Mixture blends combine several namkeen elements — nuts, lentils, sev and spices — into one varied, crunchy snack.\n\n" +
+          "Shop Namkeen:\n" +
+          "• Sev\n" +
+          "• Bhujia\n" +
+          "• Chivda\n" +
+          "• Mixture\n" +
+          "• Chakli",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is namkeen?",
+        answer: "Namkeen refers to savoury, often fried snack mixes made from ingredients like gram flour, rice flakes, lentils and spices, traditionally eaten as a snack with tea.",
+      },
+      {
+        question: "What's the difference between Sev and Bhujia?",
+        answer: "Both are thin, fried gram flour snacks, but Bhujia is typically more heavily spiced and associated with a specific regional style (notably Bikaneri Bhujia), while Sev is often plainer and used as a topping.",
+      },
+      {
+        question: "What is Chivda made from?",
+        answer: "Chivda is typically made from flattened rice (poha), roasted and mixed with nuts, spices and sometimes dried fruit for a crunchy, savoury snack.",
+      },
+      {
+        question: "Is namkeen spicy?",
+        answer: "Spice level varies significantly by product — check the individual product description, as some namkeen varieties are mild while others are quite spicy.",
+      },
+      {
+        question: "Are namkeen snacks gluten-free?",
+        answer: "This varies — gram flour-based sev and bhujia are often gluten-free, but some mixture blends may include wheat-based elements. Check the individual product's ingredient list.",
+      },
+      {
+        question: "Do namkeen snacks contain nuts?",
+        answer: "Many mixture and chivda blends contain nuts like peanuts or cashews — check the individual product's allergen information.",
+      },
+      {
+        question: "How should I store namkeen to keep it crunchy?",
+        answer: "Store in an airtight container in a cool, dry place; exposure to humidity will cause namkeen to lose its crunch.",
+      },
+      {
+        question: "Is namkeen deep fried?",
+        answer: "Traditionally, most namkeen varieties are deep fried; some brands may offer roasted or baked alternatives — check the individual product page.",
+      },
+      {
+        question: "What's the shelf life of packaged namkeen?",
+        answer: "Unopened namkeen typically has a shelf life of several months — check the best-before date on individual packaging.",
+      },
+      {
+        question: "Are these snacks suitable for vegetarians?",
+        answer: "Yes — namkeen snacks are traditionally vegetarian.",
+      },
+      {
+        question: "Can I use Sev as a topping for other dishes?",
+        answer: "Yes — Sev is commonly used as a crunchy topping for chaat dishes, salads and other snacks, in addition to being eaten on its own.",
+      },
+      {
+        question: "Is namkeen high in sodium?",
+        answer: "Namkeen snacks are generally seasoned with salt and can be higher in sodium — check the individual product's nutrition label for specific values.",
+      },
+      {
+        question: "What is Chakli?",
+        answer: "Chakli is a spiral-shaped, deep-fried savoury snack made from a rice and gram flour dough, distinct in shape and texture from sev or bhujia.",
+      },
+      {
+        question: "Can I buy namkeen in bulk packs?",
+        answer: "Bulk or multi-pack options vary by product — check the individual product page for available sizes.",
+      },
+      {
+        question: "Are there mild, less spicy namkeen options for children?",
+        answer: "Some namkeen varieties are milder than others — check the individual product description, and offer smaller amounts if serving to young children.",
+      },
+    ],
+  },
+
+  "spice-mix": {
+    sections: [
+      {
+        title: "Explore Spice Mix",
+        description:
+          "A good masala blend saves you from measuring out a dozen individual spices every time you cook a familiar dish. This category covers standalone spice blends — the base seasoning itself, distinct from the full meal kits with cooking instructions found under Instant Foods & Mixes > Quick Meals.\n\n" +
+          "Everyday Masala Blends:\n" +
+          "Garam Masala is the most widely used blend across North Indian and Pakistani cooking, while Curry Powder offers a versatile, milder everyday option suited to a wide range of dishes.\n\n" +
+          "Regional & Dish-Specific Blends:\n" +
+          "Tandoori Masala, Sambar Masala and Pav Bhaji Masala are formulated for specific regional dishes, each with its own distinct, traditional spice combination.\n\n" +
+          "Shop Spice Mix:\n" +
+          "• Garam Masala\n" +
+          "• Curry Powder\n" +
+          "• Tandoori Masala\n" +
+          "• Sambar Masala\n" +
+          "• Pav Bhaji Masala\n" +
+          "• Chana Masala",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is Garam Masala made from?",
+        answer: "Garam Masala is a blend of warming whole spices — typically including cinnamon, cardamom, cloves, cumin and black pepper — ground together, though exact recipes vary by region and brand.",
+      },
+      {
+        question: "When should I add Garam Masala to a dish?",
+        answer: "Garam Masala is often added toward the end of cooking, to preserve its aromatic qualities, though some recipes also use it earlier in the cooking process — check the specific recipe you're following.",
+      },
+      {
+        question: "What's the difference between Garam Masala and Curry Powder?",
+        answer: "Garam Masala is a specific North Indian/Pakistani spice blend without turmeric as a defining ingredient in traditional recipes, while Curry Powder is a broader, often milder blend that typically includes turmeric, giving it a characteristic yellow colour.",
+      },
+      {
+        question: "What is Sambar Masala used for?",
+        answer: "Sambar Masala is a South Indian spice blend specifically formulated for making sambar, a lentil-and-vegetable stew, with a distinct combination of spices and lentils roasted and ground together.",
+      },
+      {
+        question: "What is Tandoori Masala used for?",
+        answer: "Tandoori Masala is a blend used to marinate meat or paneer for tandoori-style dishes, typically combined with yogurt before cooking.",
+      },
+      {
+        question: "What's the difference between this Spice Mix and the masala under Instant Foods & Mixes > Quick Meals?",
+        answer: "This category carries the standalone spice blend itself; the Quick Meals versions bundle the same type of masala with a full meal-kit method and serving guidance for a complete dish.",
+      },
+      {
+        question: "Are spice mixes gluten-free?",
+        answer: "This varies by blend — check the individual product's ingredient list, as some spice mixes include anti-caking agents or other additives that may contain gluten.",
+      },
+      {
+        question: "How long do spice mixes stay fresh once opened?",
+        answer: "Ground spice blends are generally best used within about a year of opening for optimal flavour — check the individual product's best-before date.",
+      },
+      {
+        question: "What is Pav Bhaji Masala?",
+        answer: "Pav Bhaji Masala is a specific spice blend formulated for pav bhaji, a spiced vegetable mash served with bread, with a distinct tangy, warming flavour profile.",
+      },
+      {
+        question: "Can I make my own Garam Masala instead of buying it pre-made?",
+        answer: "Yes, though pre-made blends offer convenience and consistency — many households do make their own using whole spices from our Whole Spices category, roasted and ground fresh.",
+      },
+      {
+        question: "Are these masalas spicy in terms of heat, or just flavourful?",
+        answer: "Most spice mixes like Garam Masala are more about warmth and aromatic complexity than chili heat, though some blends (like certain Chana Masala recipes) include chili for spiciness — check individual product descriptions.",
+      },
+      {
+        question: "Do spice mixes contain allergens?",
+        answer: "This varies by blend — check the individual product's ingredient list, as some blends may contain mustard, celery or other declared allergens under EU food labelling rules.",
+      },
+      {
+        question: "Are these spice mixes suitable for vegetarians and vegans?",
+        answer: "Most spice mixes are vegetarian and vegan, but check the individual product's ingredient list to confirm, as a small number of blends may include non-vegan additives.",
+      },
+      {
+        question: "How much Garam Masala should I add to a dish?",
+        answer: "This varies by recipe and personal taste — a small amount (around 1/2 to 1 teaspoon per serving) is typical, added toward the end of cooking.",
+      },
+      {
+        question: "Can I buy spice mixes in bulk?",
+        answer: "Bulk pack sizes vary by product — check the individual product page for available sizes.",
+      },
+    ],
+  },
+
+  "spice-powder": {
+    sections: [
+      {
+        title: "Explore Spice Powder",
+        description:
+          "Ground spice powders are the everyday convenience option — quick to measure and mix straight into a dish. This category covers single-ingredient powders (see Spice Mix for ready-blended masalas).\n\n" +
+          "Everyday Base Powders:\n" +
+          "Turmeric Powder, Red Chili Powder, Coriander Powder and Cumin Powder form the base of most everyday curries, used in nearly every savoury South Asian dish.\n\n" +
+          "Additional Ground Spices:\n" +
+          "Black Pepper Powder, Dried Ginger Powder (Sonth) and Cinnamon Powder round out the everyday ground spice essentials for both savoury and sweet cooking.\n\n" +
+          "Shop Spice Powder:\n" +
+          "• Turmeric Powder\n" +
+          "• Red Chili Powder\n" +
+          "• Coriander Powder\n" +
+          "• Cumin Powder\n" +
+          "• Black Pepper Powder\n" +
+          "• Dried Ginger Powder (Sonth)\n" +
+          "• Cinnamon Powder",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What's the difference between spice powder and a spice mix (masala)?",
+        answer: "Spice powder is a single ground spice (like turmeric or coriander powder), while a spice mix combines several spices into one ready-to-use blend, like garam masala.",
+      },
+      {
+        question: "How long does ground spice powder stay fresh?",
+        answer: "Ground spice powder is generally best used within about a year for optimal flavour, as it loses potency faster than whole spices once exposed to air.",
+      },
+      {
+        question: "How should I store spice powder?",
+        answer: "Store in an airtight container away from direct light, heat and moisture, which can all accelerate flavour loss.",
+      },
+      {
+        question: "Is Red Chili Powder very spicy?",
+        answer: "Heat level varies by product and the specific chili variety used — check the individual product description, as some blends are milder (like Kashmiri chili powder) and others are hotter.",
+      },
+      {
+        question: "What's the difference between Kashmiri chili powder and regular chili powder?",
+        answer: "Kashmiri chili powder is known for its vibrant red colour and milder heat compared to standard red chili powder — check the individual product page for the specific variety.",
+      },
+      {
+        question: "Can I substitute ground spice powder for whole spices in a recipe?",
+        answer: "Generally yes, though flavour intensity and cooking method may differ slightly — ground spices are typically added at a different stage of cooking than whole spices used for tempering.",
+      },
+      {
+        question: "Are these spice powders gluten-free?",
+        answer: "Most single-ingredient spice powders are naturally gluten-free, but check the individual product's ingredient list to confirm, as some may include anti-caking agents.",
+      },
+      {
+        question: "Why does Turmeric Powder stain everything it touches?",
+        answer: "Turmeric contains curcumin, a natural pigment with strong staining properties — this is a normal characteristic and not a quality issue, though it can stain surfaces, clothing and hands.",
+      },
+      {
+        question: "Is Coriander Powder made from coriander seeds or leaves?",
+        answer: "Coriander Powder is made from ground coriander seeds, which have a different, warmer flavour than fresh coriander (cilantro) leaves.",
+      },
+      {
+        question: "Are your spice powders adulterated or pure?",
+        answer: "Purity and any additive information should be listed on the individual product's ingredient label — check this for specific product details.",
+      },
+      {
+        question: "Can I buy spice powder in bulk?",
+        answer: "Bulk pack sizes vary by product — check the individual product page for available sizes.",
+      },
+      {
+        question: "What's Dried Ginger Powder (Sonth) used for?",
+        answer: "Sonth is used in both savoury cooking and traditional preparations, and is a common ingredient in some spice blends and traditional home remedies.",
+      },
+      {
+        question: "How much Turmeric Powder should I use in a curry?",
+        answer: "This varies by recipe and personal taste — a small amount (around 1/4 to 1/2 teaspoon per serving) is typical, as turmeric has a strong flavour and colour even in small quantities.",
+      },
+      {
+        question: "Are these powders suitable for vegans?",
+        answer: "Yes — plain, single-ingredient spice powders are naturally vegan.",
+      },
+      {
+        question: "Why does my spice powder sometimes clump together?",
+        answer: "This is usually caused by moisture exposure — store powders in a fully sealed, airtight container and use a dry spoon each time to prevent clumping.",
+      },
+    ],
+  },
 };
+
+// Aliases for slug variations
+if (subcategoryContentMap["basmati-rice"]) subcategoryContentMap["basmati"] = subcategoryContentMap["basmati-rice"];
+if (subcategoryContentMap["brown-rice"]) subcategoryContentMap["brown"] = subcategoryContentMap["brown-rice"];
+if (subcategoryContentMap["sella-rice"]) subcategoryContentMap["sella"] = subcategoryContentMap["sella-rice"];
+if (subcategoryContentMap["sona-masoori-rice"]) subcategoryContentMap["sona-masoori"] = subcategoryContentMap["sona-masoori-rice"];
+if (subcategoryContentMap["other-rice-products"]) subcategoryContentMap["other-rice"] = subcategoryContentMap["other-rice-products"];
+if (subcategoryContentMap["spice-mix"]) {
+  subcategoryContentMap["masala"] = subcategoryContentMap["spice-mix"];
+  subcategoryContentMap["spice-mixes"] = subcategoryContentMap["spice-mix"];
+}
+if (subcategoryContentMap["spice-powder"]) {
+  subcategoryContentMap["spice-powders"] = subcategoryContentMap["spice-powder"];
+  subcategoryContentMap["ground-spices"] = subcategoryContentMap["spice-powder"];
+}
+
 
