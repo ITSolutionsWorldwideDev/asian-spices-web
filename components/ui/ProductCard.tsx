@@ -519,8 +519,9 @@ export default function ProductCard({
                   {product.name}
                 </h3>
                 <span className="text-xs text-gray-400 mt-0.5 block line-clamp-2 min-h-[32px]">
-             
-                  {product.description?.split(" ").slice(0, 3).join(" ") || "No description available."}...
+                  {product.description
+                    ? product.description.replace(/<[^>]*>/g, "").trim().split(" ").slice(0, 3).join(" ") + "..."
+                    : "No description available."}
                 </span>
               </Link>
 

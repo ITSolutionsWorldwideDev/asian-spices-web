@@ -49,7 +49,13 @@ export async function sendOrderConfirmationEmail(orderId: string) {
          ) AS customer_email, 
          o.total_amount, 
          o.shipping_provider, 
-         o.shipping_city 
+         o.shipping_city,
+         (
+           SELECT metadata->>'guest_temp_password'
+           FROM order_events
+           WHERE order_id = o.id AND event_type = 'created'
+           LIMIT 1
+         ) AS guest_temp_password
        FROM store_orders o
        LEFT JOIN store_customers c ON o.customer_id = c.id
        LEFT JOIN users u ON c.user_id = u.id
@@ -77,6 +83,11 @@ export async function sendOrderConfirmationEmail(orderId: string) {
     const deliveryWindow =
       DELIVERY_DAYS_MAP[order.shipping_provider] || "3 - 5 business days";
 
+    const guestPassword = order.guest_temp_password?.trim() || null;
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://asianspices.online";
+    const loginUrl = `${siteUrl.replace(/\/$/, "")}/login`;
+
     // 2️⃣ Build modern HTML Email Structure
     const emailHtml = `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #f0f0f0; padding: 20px; border-radius: 12px;">
@@ -90,6 +101,31 @@ export async function sendOrderConfirmationEmail(orderId: string) {
           <p style="margin: 0 0 8px 0;"><strong>Shipping Choice:</strong> ${order.shipping_provider}</p>
           <p style="margin: 0;"><strong>Estimated Delivery:</strong> ${deliveryWindow}</p>
         </div>
+
+        ${
+          guestPassword
+            ? `
+        <div style="background-color: #fff7ed; border: 1px solid #fed7aa; padding: 18px; border-radius: 10px; margin: 20px 0;">
+          <h3 style="color: #ea580c; margin: 0 0 8px 0; font-size: 16px;">🎉 Your Asian Spices Account Has Been Created!</h3>
+          <p style="margin: 0 0 12px 0; color: #4b5563; font-size: 14px; line-height: 1.5;">
+            An <strong>Asian Spices</strong> account has been automatically created for you so you can easily track your order, view order history, and reorder anytime.
+          </p>
+          <div style="background-color: #ffffff; border: 1px solid #fed7aa; padding: 12px 16px; border-radius: 8px; font-size: 14px;">
+            <p style="margin: 0 0 6px 0; color: #1f2937;"><strong>Email:</strong> ${escapeEmailText(recipientEmail)}</p>
+            <p style="margin: 0; color: #1f2937;"><strong>Your Password:</strong> <code style="font-size: 16px; color: #ea580c; font-weight: 700; background: #fff1e6; padding: 2px 8px; border-radius: 4px;">${escapeEmailText(guestPassword)}</code></p>
+          </div>
+          <div style="text-align: center; margin-top: 16px;">
+            <a href="${loginUrl}" style="display: inline-block; background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 10px 22px; border-radius: 9999px; font-weight: 700; font-size: 13px;">
+              Log in to your account
+            </a>
+          </div>
+          <p style="margin: 10px 0 0 0; font-size: 12px; color: #6b7280; text-align: center;">
+            For your security, please update your password after logging in.
+          </p>
+        </div>
+            `
+            : ""
+        }
 
         <p>Our team is currently preparing your parcel for selection and dynamic routing. Once your tracking code registers out of the hub for delivery to <strong>${order.shipping_city}</strong>, we'll send a follow-up link immediately.</p>
         
@@ -634,6 +670,92 @@ Need help? Contact us at support@asianspices.online
   } catch (error) {
     console.error(
       `[Guest Account Email Fail] Target recipient: ${email}`,
+      error,
+    );
+    return { success: false, error };
+  }
+}
+
+interface AccountWelcomeEmailOptions {
+  email: string;
+  name?: string;
+}
+
+export async function sendAccountWelcomeEmail({
+  email,
+  name,
+}: AccountWelcomeEmailOptions) {
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://asianspices.online";
+  const loginUrl = `${siteUrl.replace(/\/$/, "")}/login`;
+  const safeName = name?.trim() ? escapeEmailText(name.trim()) : "";
+  const greeting = safeName ? `Hello ${safeName},` : "Hello,";
+
+  const emailHtml = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <span style="background-color: #ea580c15; color: #ea580c; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 14px; display: inline-block; border-radius: 9999px; border: 1px solid #ea580c30;">
+          Welcome to Asian Spices
+        </span>
+      </div>
+
+      <h2 style="color: #111827; text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
+        Your Account Has Been Created!
+      </h2>
+
+      <p>${greeting}</p>
+      <p>Welcome to <strong>Asian Spices</strong>! Your account has been successfully created. We are thrilled to have you join our community and look forward to bringing authentic Asian flavors straight to your doorstep.</p>
+
+      <div style="background-color: #f9fafb; padding: 16px; border-radius: 8px; margin: 20px 0; font-size: 14px; color: #4b5563;">
+        <p style="margin: 0 0 8px 0;"><strong>Registered Email:</strong> ${escapeEmailText(email)}</p>
+        <p style="margin: 0;">You can now log in anytime to track your orders, manage saved delivery addresses, and enjoy faster checkout.</p>
+      </div>
+
+      <div style="text-align: center; margin: 28px 0;">
+        <a href="${loginUrl}" style="display: inline-block; background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 9999px; font-weight: 700; font-size: 14px;">
+          Log In to Asian Spices
+        </a>
+      </div>
+
+      <p style="font-size: 14px; color: #6b7280;">
+        If you have any questions or need help with your account, please reply directly to this email or contact us at support@asianspices.online.
+      </p>
+
+      <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
+      <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
+        © 2026 Asian Spices Online. All rights reserved.<br>
+        Need help? Contact us at support@asianspices.online
+      </p>
+    </div>
+  `;
+
+  const emailText = `Welcome to Asian Spices!
+
+${greeting}
+
+Your account has been created in Asian Spices.
+
+Registered Email: ${email}
+Log In: ${loginUrl}
+
+You can now log in anytime to track your orders, save delivery addresses, and enjoy faster checkout.
+
+Need help? Contact us at support@asianspices.online
+© 2026 Asian Spices Online. All rights reserved.`;
+
+  try {
+    await sendEmail({
+      to: email,
+      subject: "Your Asian Spices account has been created 🎉",
+      html: emailHtml,
+      text: emailText,
+      fromAccount: "support",
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error(
+      `[Account Welcome Email Fail] Target recipient: ${email}`,
       error,
     );
     return { success: false, error };

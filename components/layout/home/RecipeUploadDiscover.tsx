@@ -84,7 +84,7 @@ export default function RecipeUploadDiscover() {
   }, []);
 
   return (
-    <section className="w-full min-w-0 max-w-full py-8 sm:py-10 md:py-12">
+    <section className="w-full min-w-0 max-w-full pb-0 pt-8 sm:pt-10 md:pt-12">
       <div className="grid min-w-0 gap-5 sm:gap-6 lg:grid-cols-2 lg:gap-8">
         {/* Upload card */}
         <div className="flex min-w-0 flex-col rounded-3xl bg-white p-4 shadow-md ring-1 ring-[#E6DEC9] sm:p-6 md:p-8">
@@ -144,79 +144,79 @@ export default function RecipeUploadDiscover() {
           >
             {reels.length === 0
               ? Array.from({ length: 3 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="aspect-[3/5] w-[46%] min-w-[150px] shrink-0 animate-pulse rounded-2xl bg-stone-200 sm:w-[160px] md:w-auto md:min-w-0"
-                  />
-                ))
+                <div
+                  key={i}
+                  className="aspect-[3/5] w-[46%] min-w-[150px] shrink-0 animate-pulse rounded-2xl bg-stone-200 sm:w-[160px] md:w-auto md:min-w-0"
+                />
+              ))
               : reels.map((reel) => {
-                  const isPlaying = playingSlug === reel.slug && !!reel.videoId;
+                const isPlaying = playingSlug === reel.slug && !!reel.videoId;
 
-                  return (
-                    <div
-                      key={reel.slug}
-                      className="group relative aspect-[3/5] w-[46%] min-w-[150px] shrink-0 overflow-hidden rounded-2xl bg-stone-900 shadow-sm sm:w-[160px] md:w-auto md:min-w-0"
-                    >
-                      {isPlaying ? (
-                        <div className="absolute inset-0 overflow-hidden bg-black">
-                          <iframe
-                            src={`https://www.youtube.com/embed/${reel.videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&controls=0&fs=0`}
-                            title={`${reel.title} video`}
-                            className="absolute left-1/2 top-1/2 h-[135%] w-[175%] max-w-none -translate-x-[48%] -translate-y-1/2 border-0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          />
-                        </div>
-                      ) : (
-                        <>
-                          <RecipeThumbnail
-                            src={reel.image}
-                            alt={reel.title}
-                            fill
-                            sizes="(max-width: 1024px) 30vw, 12vw"
-                            className="object-cover"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (reel.videoId) setPlayingSlug(reel.slug);
-                            }}
-                            disabled={!reel.videoId}
-                            aria-label={`Play ${reel.title}`}
-                            className="absolute inset-0 z-10 flex items-center justify-center disabled:cursor-default"
-                          >
-                            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/80 shadow-md backdrop-blur-[1px] transition group-hover:bg-white/95">
-                              <Play className="ml-0.5 h-5 w-5 fill-stone-900 text-stone-900" />
-                            </span>
-                          </button>
-                        </>
-                      )}
-
-                      {/* Always keep overlays visible (including while playing) */}
-                      <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-black/75 via-transparent to-black/20" />
-
-                      {reel.duration && (
-                        <span className="pointer-events-none absolute left-2 top-2 z-30 rounded-md bg-black/55 px-1.5 py-0.5 text-[10px] font-medium text-white">
-                          {reel.duration}
-                        </span>
-                      )}
-
-                      {reel.viewsLabel && (
-                        <span className="pointer-events-none absolute right-2 top-2 z-30 rounded-md bg-orange-500 px-1.5 py-0.5 text-[10px] font-semibold text-white">
-                          {reel.viewsLabel}
-                        </span>
-                      )}
-
-                      <div className="pointer-events-none absolute bottom-2.5 left-2 right-2 z-30">
-                        <p className="truncate text-[11px] font-semibold text-white drop-shadow">
-                          {reel.handle}
-                        </p>
-                        <span className="mt-1 inline-block max-w-full truncate rounded-md bg-black/55 px-2 py-0.5 text-[11px] font-medium text-white">
-                          {reel.title}
-                        </span>
+                return (
+                  <div
+                    key={reel.slug}
+                    className="group relative aspect-[3/5] w-[46%] min-w-[150px] shrink-0 overflow-hidden rounded-2xl bg-stone-900 shadow-sm sm:w-[160px] md:w-auto md:min-w-0"
+                  >
+                    {isPlaying ? (
+                      <div className="absolute inset-0 overflow-hidden bg-black">
+                        <iframe
+                          src={`https://www.youtube.com/embed/${reel.videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&controls=0&fs=0`}
+                          title={`${reel.title} video`}
+                          className="absolute left-1/2 top-1/2 h-[135%] w-[175%] max-w-none -translate-x-[48%] -translate-y-1/2 border-0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        />
                       </div>
+                    ) : (
+                      <>
+                        <RecipeThumbnail
+                          src={reel.image}
+                          alt={reel.title}
+                          fill
+                          sizes="(max-width: 1024px) 30vw, 12vw"
+                          className="object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (reel.videoId) setPlayingSlug(reel.slug);
+                          }}
+                          disabled={!reel.videoId}
+                          aria-label={`Play ${reel.title}`}
+                          className="absolute inset-0 z-10 flex items-center justify-center disabled:cursor-default"
+                        >
+                          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/80 shadow-md backdrop-blur-[1px] transition group-hover:bg-white/95">
+                            <Play className="ml-0.5 h-5 w-5 fill-stone-900 text-stone-900" />
+                          </span>
+                        </button>
+                      </>
+                    )}
+
+                    {/* Always keep overlays visible (including while playing) */}
+                    <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-black/75 via-transparent to-black/20" />
+
+                    {reel.duration && (
+                      <span className="pointer-events-none absolute left-2 top-2 z-30 rounded-md bg-black/55 px-1.5 py-0.5 text-[10px] font-medium text-white">
+                        {reel.duration}
+                      </span>
+                    )}
+
+                    {reel.viewsLabel && (
+                      <span className="pointer-events-none absolute right-2 top-2 z-30 rounded-md bg-orange-500 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                        {reel.viewsLabel}
+                      </span>
+                    )}
+
+                    <div className="pointer-events-none absolute bottom-2.5 left-2 right-2 z-30">
+                      <p className="truncate text-[11px] font-semibold text-white drop-shadow">
+                        {reel.handle}
+                      </p>
+                      <span className="mt-1 inline-block max-w-full truncate rounded-md bg-black/55 px-2 py-0.5 text-[11px] font-medium text-white">
+                        {reel.title}
+                      </span>
                     </div>
-                  );
-                })}
+                  </div>
+                );
+              })}
           </div>
 
           <Link

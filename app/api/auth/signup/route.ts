@@ -3,6 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { runQuery } from "@/core/db";
+import { sendAccountWelcomeEmail } from "@/core/email-templates";
 
 export async function POST(req: NextRequest) {
   try {
@@ -44,6 +45,16 @@ export async function POST(req: NextRequest) {
        RETURNING id, email`,
       [email, hash, name || null],
     );
+
+    // Send welcome email (awaited for Vercel/serverless runtime stability)
+    try {
+      await sendAccountWelcomeEmail({
+        email,
+        name: name || undefined,
+      });
+    } catch (emailErr) {
+      console.error("[Signup Welcome Email Error]:", emailErr);
+    }
 
     return NextResponse.json({
       success: true,

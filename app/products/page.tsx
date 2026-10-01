@@ -96,7 +96,7 @@ export default async function AllProductsPage({ searchParams }: PageProps) {
       <ProductPageHeader
         heading="Every Grain, A Burst of Taste"
         text="Discover our full collection"
-        videoLink="/spices/Comp 1_10.mp4"
+        imageSrc="/assets/categories/cat-banner.webp"
       />
 
       <HeadingDescription

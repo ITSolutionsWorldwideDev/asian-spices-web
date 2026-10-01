@@ -171,7 +171,32 @@ export async function POST(req: NextRequest) {
         `SELECT id FROM users WHERE email = $1 LIMIT 1`,
         [email],
       );
-      const linkedUserId = userCheck.rowCount ? userCheck.rows[0].id : null;
+      let linkedUserId = userCheck.rowCount ? userCheck.rows[0].id : null;
+
+      // If user profile doesn't exist in users table, automatically generate account with a random password
+      if (!linkedUserId) {
+        const bcrypt = require("bcryptjs");
+        const chars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789";
+        let tempPassword = "AS";
+        for (let i = 0; i < 8; i++) {
+          tempPassword += chars.charAt(
+            Math.floor(Math.random() * chars.length),
+          );
+        }
+        const hash = await bcrypt.hash(tempPassword, 10);
+        const fullName =
+          [customer?.firstName, customer?.lastName]
+            .filter(Boolean)
+            .join(" ")
+            .trim() || null;
+
+        const newUser = await client.query(
+          `INSERT INTO users (email, password_hash, name) VALUES ($1, $2, $3) RETURNING id`,
+          [email, hash, fullName],
+        );
+        linkedUserId = newUser.rows[0].id;
+        guestTempPassword = tempPassword;
+      }
 
       if (existingCustomer.rowCount) {
         customer_id = existingCustomer.rows[0].id;
@@ -184,65 +209,25 @@ export async function POST(req: NextRequest) {
           );
         }
       } else {
-        // Customer row doesn't exist yet. Create it.
-        if (linkedUserId) {
-          // Email belongs to a registered user checking out as guest
-          const result = await client.query(
-            `
-              INSERT INTO store_customers 
-              (user_id, first_name, last_name, email, phone, city, postcode)
-              VALUES ($1, $2, $3, $4, $5, $6, $7)
-              RETURNING id
-            `,
-            [
-              linkedUserId,
-              customer.firstName,
-              customer.lastName,
-              email,
-              customer.phone,
-              shippingAddress.city,
-              shippingAddress.postal_code,
-            ],
-          );
-          customer_id = result.rows[0].id;
-        } else {
-          // Absolute guest user: profile doesn't exist, auth record doesn't exist
-          const result = await client.query(
-            `
-              INSERT INTO store_customers 
-              (first_name, last_name, email, phone, city, postcode)
-              VALUES ($1, $2, $3, $4, $5, $6)
-              RETURNING id
-            `,
-            [
-              customer.firstName,
-              customer.lastName,
-              email,
-              customer.phone,
-              shippingAddress.city,
-              shippingAddress.postal_code,
-            ],
-          );
-          customer_id = result.rows[0].id;
-
-          // Execute your optional auto-account creation flow
-          const bcrypt = require("bcryptjs");
-          const tempPassword = Math.random().toString(36).slice(-8);
-          const hash = await bcrypt.hash(tempPassword, 10);
-
-          const newUser = await client.query(
-            `INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id`,
-            [email, hash],
-          );
-          const newUserId = newUser.rows[0].id;
-
-          await client.query(
-            `UPDATE store_customers SET user_id = $1 WHERE id = $2`,
-            [newUserId, customer_id],
-          );
-
-          guestTempPassword = tempPassword;
-        }
+        // Customer row doesn't exist yet. Create and link.
+        const result = await client.query(
+          `
+            INSERT INTO store_customers 
+            (user_id, first_name, last_name, email, phone, city, postcode)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING id
+          `,
+          [
+            linkedUserId,
+            customer?.firstName || "",
+            customer?.lastName || "",
+            email,
+            customer?.phone || null,
+            shippingAddress?.city || null,
+            shippingAddress?.postal_code || null,
+          ],
+        );
+        customer_id = result.rows[0].id;
       }
     }
 
@@ -504,8 +489,22 @@ export async function POST(req: NextRequest) {
       eventType: ORDER_EVENTS.CREATED,
       message:
         "Order authorization records generated. Awaiting confirmation of client transaction settlement.",
-      metadata: { item_count: cartItems.length },
+      metadata: {
+        item_count: cartItems.length,
+        ...(guestTempPassword
+          ? { guest_temp_password: guestTempPassword }
+          : {}),
+      },
     });
+
+    if (guestTempPassword) {
+      await client
+        .query(
+          `UPDATE store_orders SET guest_temp_password = $1 WHERE id = $2`,
+          [guestTempPassword, order_id],
+        )
+        .catch(() => {});
+    }
 
     await client.query("COMMIT");
 

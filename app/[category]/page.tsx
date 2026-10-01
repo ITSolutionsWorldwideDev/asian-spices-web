@@ -125,71 +125,78 @@ export default async function CategoryPage({
 
   return (
     <div>
-      {/* 1. Header Banner */}
-      <ProductPageHeader
-        heading={category.name}
-        text={`Shop ${category.name}`}
-        videoLink="/spices/Comp 1_10.mp4"
-      />
-
-      {/* Breadcrumb / Title */}
-      <div className="container mx-auto px-5 pt-6 text-sm sm:text-base">
-        <p className="font-medium text-gray-900">{category.name}</p>
+      {/* 1. Header Banner — Full Width Across Viewport */}
+      <div className="w-full">
+        <ProductPageHeader
+          heading={category.name}
+          text={`Shop ${category.name}`}
+          imageSrc="/assets/categories/cat-banner.webp"
+        />
       </div>
 
-      {/* 2. SECTION 2 — Collapsible Guide + Image */}
-      {currentContent && currentContent.sections && (
-        <CategoryGuideSection
-          sections={currentContent.sections}
-          image={currentContent.image}
-          categoryName={category.name}
-        />
-      )}
+      {/* Container wrapper for padded content */}
+      <div className="container mx-auto px-5">
+        {/* Breadcrumb / Title */}
+        <div className="pt-6 text-sm sm:text-base">
+          <p className="font-medium text-gray-900">{category.name}</p>
+        </div>
 
-      {/* 3. Explore Our Collection */}
-      <HeadingDescription
-        heading="Explore Our Collection"
-        text={`Shop By ${category.name}`}
-        description={`Discover products in ${category.name}`}
-      />
+        {/* 2. SECTION 2 — Collapsible Guide + Image */}
+        {currentContent && currentContent.sections && (
+          <CategoryGuideSection
+            sections={currentContent.sections}
+            image={currentContent.image}
+            categoryName={category.name}
+          />
+        )}
+
+        {/* 3. Explore Our Collection */}
+        <HeadingDescription
+          heading="Explore Our Collection"
+          text={`Shop By ${category.name}`}
+          description={`Discover products in ${category.name}`}
+        />
+      </div>
 
       {/* Products Section */}
       <Suspense fallback={<div className="text-center py-20 text-gray-500">Loading products...</div>}>
         <ProductSection filters={filters} slug={category.slug} />
       </Suspense>
 
-      {/* 4. Frequently Asked Questions (Products ke baad) */}
-      {currentContent && currentContent.faqs && currentContent.faqs.length > 0 && (
-        <section className="container mx-auto px-5 py-16 max-w-4xl">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-extrabold text-neutral-900 mb-2">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-neutral-500 text-sm">
-              Got questions? Weve got answers.
-            </p>
-          </div>
+      <div className="container mx-auto px-5">
+        {/* 4. Frequently Asked Questions (Products ke baad) */}
+        {currentContent && currentContent.faqs && currentContent.faqs.length > 0 && (
+          <section className="py-16 max-w-4xl mx-auto">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-extrabold text-neutral-900 mb-2">
+                Frequently Asked Questions
+              </h2>
+              <p className="text-neutral-500 text-sm">
+                Got questions? We've got answers.
+              </p>
+            </div>
 
-          <div className="space-y-4">
-            {currentContent.faqs.map((faq: { question: string; answer: string }, index: number) => (
-              <details
-                key={index}
-                className="group p-6 rounded-2xl border border-neutral-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-all"
-              >
-                <summary className="font-bold text-base md:text-lg text-neutral-900 cursor-pointer list-none flex justify-between items-center outline-none">
-                  <span>{faq.question}</span>
-                  <span className="w-8 h-8 rounded-full bg-[#fff4ee] flex items-center justify-center text-[#ff7733] transition-transform duration-300 group-open:rotate-180 shrink-0 ml-4">
-                    ⌄
-                  </span>
-                </summary>
-                <p className="text-neutral-600 text-sm md:text-base mt-4 pt-4 border-t border-neutral-100 leading-relaxed font-normal">
-                  {faq.answer}
-                </p>
-              </details>
-            ))}
-          </div>
-        </section>
-      )}
+            <div className="space-y-4">
+              {currentContent.faqs.map((faq: { question: string; answer: string }, index: number) => (
+                <details
+                  key={index}
+                  className="group p-6 rounded-2xl border border-neutral-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-all"
+                >
+                  <summary className="font-bold text-base md:text-lg text-neutral-900 cursor-pointer list-none flex justify-between items-center outline-none">
+                    <span>{faq.question}</span>
+                    <span className="w-8 h-8 rounded-full bg-[#fff4ee] flex items-center justify-center text-[#ff7733] transition-transform duration-300 group-open:rotate-180 shrink-0 ml-4">
+                      ⌄
+                    </span>
+                  </summary>
+                  <p className="text-neutral-600 text-sm md:text-base mt-4 pt-4 border-t border-neutral-100 leading-relaxed font-normal">
+                    {faq.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
 
       <Footer />
     </div>
