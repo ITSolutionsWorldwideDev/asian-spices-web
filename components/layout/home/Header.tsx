@@ -90,7 +90,7 @@ export default function Header() {
       <Nav />
 
       <div className="relative mx-auto w-full max-w-[90rem] overflow-hidden rounded-[1.25rem] bg-[#f6d7cf] shadow-lg sm:rounded-[1.75rem] md:rounded-[2rem] lg:rounded-[2.5rem]">
-        <div className="relative min-h-[240px] w-full sm:min-h-[320px] md:min-h-[400px] lg:min-h-[480px]">
+        <div className="relative min-h-[280px] w-full sm:min-h-[320px] md:min-h-[400px] lg:min-h-[480px]">
           {banners.map((banner, i) => (
             <Image
               key={banner.id}
@@ -105,33 +105,67 @@ export default function Header() {
             />
           ))}
 
+          {/* Mobile-only gradient overlay for dark banners (1 & 2); Banner 3 (light) has natural contrast with black text */}
+          <div
+            aria-hidden
+            className={`pointer-events-none absolute inset-0 z-[1] transition-all duration-700 ${
+              isLight
+                ? "hidden"
+                : "bg-gradient-to-r from-black/75 via-black/55 to-black/25 md:hidden"
+            }`}
+          />
+
           {overlay && (
             <div
               key={current.id}
-              className="relative z-10 flex h-full min-h-[inherit] items-center px-6 py-10 sm:px-10 sm:py-12 md:px-14 md:py-14 lg:px-16 lg:py-16"
+              className="relative z-10 flex h-full min-h-[inherit] items-center px-5 py-8 pb-12 sm:px-10 sm:py-12 md:px-14 md:py-14 lg:px-16 lg:py-16"
             >
               <div className="w-full max-w-[min(100%,28rem)] animate-fade-in sm:max-w-md md:max-w-lg lg:max-w-xl">
-                <HeadingTag className="text-[1.75rem] font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-5xl lg:text-[3.35rem]">
-                  <span className="block text-[#EE9933]">{overlay.line1}</span>
+                <HeadingTag className="text-[1.5rem] font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-5xl lg:text-[3.35rem]">
+                  <span
+                    className={`block text-[#EE9933] ${
+                      isLight
+                        ? ""
+                        : "drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
+                    }`}
+                  >
+                    {overlay.line1}
+                  </span>
                   <span className="mt-1 block sm:mt-1.5">
                     {overlay.line2Lead && (
-                      <span className="text-[#EE9933]">{overlay.line2Lead}</span>
+                      <span
+                        className={`text-[#EE9933] ${
+                          isLight
+                            ? ""
+                            : "drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
+                        }`}
+                      >
+                        {overlay.line2Lead}
+                      </span>
                     )}
-                    <span className={isLight ? "text-zinc-900" : "text-white"}>
+                    <span
+                      className={
+                        isLight
+                          ? "text-zinc-900"
+                          : "text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
+                      }
+                    >
                       {overlay.line2}
                     </span>
                   </span>
                 </HeadingTag>
                 <p
-                  className={`mt-4 max-w-md text-sm leading-relaxed sm:mt-5 sm:text-base md:mt-6 md:text-lg ${
-                    isLight ? "text-zinc-800" : "text-white/95"
+                  className={`mt-3 max-w-md text-xs font-medium leading-relaxed sm:mt-5 sm:text-base sm:font-normal md:mt-6 md:text-lg ${
+                    isLight
+                      ? "text-zinc-800"
+                      : "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] sm:text-white/95 sm:drop-shadow-none"
                   }`}
                 >
                   {overlay.description}
                 </p>
                 <Link
                   href={overlay.ctaHref}
-                  className={`mt-6 inline-flex rounded-full px-7 py-3 text-sm font-semibold transition sm:mt-8 sm:px-8 sm:py-3.5 sm:text-base ${
+                  className={`mt-5 inline-flex rounded-full px-6 py-2.5 text-xs font-bold transition sm:mt-8 sm:px-8 sm:py-3.5 sm:text-base sm:font-semibold ${
                     isLight
                       ? "bg-[#D34827] text-white hover:bg-[#c03f20]"
                       : "bg-[#EE9933] text-[#1a1208] hover:bg-[#e08a28]"

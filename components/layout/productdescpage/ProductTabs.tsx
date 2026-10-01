@@ -24,10 +24,15 @@ export default function ProductTabs({ product }: ProductTabsProps) {
 
   const [activeTab, setActiveTab] = useState<Tab>("Description");
 
-  // 🔥 SAFE FALLBACKS
-  const description = product?.description || "No description available";
-  const healthBenefits =
-    product?.health_benefits || "No health benefits available";
+  // 🔥 SAFE FALLBACKS & SANITIZATION (strips raw HTML tags e.g. <span style="..."> while preserving formatting)
+  const description = cleanProductText(
+    product?.description,
+    "No description available"
+  );
+  const healthBenefits = cleanProductText(
+    product?.health_benefits,
+    "No health benefits available"
+  );
   const sku = product?.sku || "N/A";
   const weight = product?.weight || "N/A";
   const category = product?.category_name || "N/A";
@@ -59,7 +64,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
         {activeTab === "Description" && (
           <>
             <h2 className="mb-5 font-bold text-xl">Product Detail</h2>
-            <p className="text-[#364153]">{description}</p>
+            <p className="text-[#364153] whitespace-pre-line">{description}</p>
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <Detail label="SKU" value={sku} />
@@ -117,3 +122,26 @@ function Detail({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+
+function cleanProductText(
+  text?: string | null,
+  fallback = "No description available"
+): string {
+  if (!text) return fallback;
+  const cleaned = text
+    .replace(/<br\s*[\/]?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n\n")
+    .replace(/<\/div>/gi, "\n")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\r\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  return cleaned || fallback;
+}
+

@@ -45,7 +45,7 @@ export default function WhyChooseUs() {
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
           {/* Left — 2×3 feature cards */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4">
+          <div className="order-2 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4 lg:order-1">
             {features.map((item) => (
               <div
                 key={item.title}
@@ -74,16 +74,16 @@ export default function WhyChooseUs() {
             ))}
           </div>
 
-          {/* Right — matches left height; spices overflow below card only */}
-          <div className="relative mx-auto w-full max-w-[400px] lg:mx-0 lg:max-w-none">
+          {/* Right — matches left height on desktop; on mobile shown first without huge empty gap */}
+          <div className="relative order-1 mx-auto mb-20 w-full max-w-[360px] sm:mb-24 sm:max-w-[400px] lg:order-2 lg:mx-0 lg:mb-0 lg:max-w-none">
             {/* Amber plate behind */}
             <div
               aria-hidden
               className="absolute inset-0 rounded-2xl bg-[#e8b86d] rotate-[7deg]"
             />
 
-            {/* Black card — stretches with left column */}
-            <div className="relative z-10 flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl bg-neutral-950 shadow-xl lg:min-h-0">
+            {/* Black card — compact height on mobile to eliminate dead space; stretches on desktop */}
+            <div className="relative z-10 flex h-[200px] flex-col overflow-hidden rounded-2xl bg-neutral-950 shadow-xl sm:h-[220px] lg:h-full lg:min-h-0">
               <div className="pointer-events-none absolute inset-0 opacity-[0.12]">
                 <Image
                   src="/assets/home/collections/collection-bg.webp"
@@ -95,8 +95,8 @@ export default function WhyChooseUs() {
                 />
               </div>
 
-              <div className="relative z-10 px-5 pt-8 text-center sm:pt-10 lg:pt-12">
-                <h2 className="text-[1.75rem] font-bold leading-[1.15] sm:text-3xl lg:text-[2.15rem]">
+              <div className="relative z-10 px-5 pt-6 text-center sm:pt-8 lg:pt-12">
+                <h2 className="text-2xl font-bold leading-[1.15] sm:text-3xl lg:text-[2.15rem]">
                   <span className="block text-orange-400">Why Choose</span>
                   <span className="block text-white">Asian Spices</span>
                 </h2>
@@ -112,7 +112,7 @@ export default function WhyChooseUs() {
                 alt="Assortment of spices"
                 width={640}
                 height={520}
-                className="h-auto w-[95%] max-w-[400px] object-contain"
+                className="h-auto w-[92%] max-w-[380px] object-contain sm:w-[95%] sm:max-w-[400px]"
                 loading="lazy"
               />
             </div>

@@ -298,7 +298,11 @@ export default function SignupForm() {
                 // className="w-full mt-1 rounded-lg border border-gray-300 px-4 py-3 text-sm
                 //            focus:outline-none focus:ring-2 focus:ring-gray-300"
               />
-              {errors.email && <p className="error">{errors.email}</p>}
+              {errors.email && (
+                <p className="mt-1 text-xs font-medium text-red-500">
+                  {errors.email}
+                </p>
+              )}
             </div>
 
             <div>
@@ -310,11 +314,12 @@ export default function SignupForm() {
                 placeholder="Phone"
                 value={form.phone}
                 onChange={(e) => handleChange("phone", e.target.value)}
-                className="
+                className={`
                   w-full
                   mt-2
                   rounded-xl
-                  border border-slate-200
+                  border
+                  ${errors.phone ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"}
                   bg-white
                   px-4 py-3
                   text-sm
@@ -322,13 +327,14 @@ export default function SignupForm() {
                   duration-200
                   focus:border-orange-400
                   focus:ring-4
-                  focus:ring-orange-100
                   focus:outline-none
-                  "
-                // className="w-full mt-1 rounded-lg border border-gray-300 px-4 py-3 text-sm
-                //            focus:outline-none focus:ring-2 focus:ring-gray-300"
+                `}
               />
-              {errors.phone && <p className="error">{errors.phone}</p>}
+              {errors.phone && (
+                <p className="mt-1 text-xs font-medium text-red-500">
+                  {errors.phone}
+                </p>
+              )}
             </div>
 
             <div>
@@ -340,11 +346,12 @@ export default function SignupForm() {
                 placeholder="Password"
                 value={form.password}
                 onChange={(e) => handleChange("password", e.target.value)}
-                className="
+                className={`
                   w-full
                   mt-2
                   rounded-xl
-                  border border-slate-200
+                  border
+                  ${errors.password ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"}
                   bg-white
                   px-4 py-3
                   text-sm
@@ -352,13 +359,14 @@ export default function SignupForm() {
                   duration-200
                   focus:border-orange-400
                   focus:ring-4
-                  focus:ring-orange-100
                   focus:outline-none
-                  "
-                // className="w-full mt-1 rounded-lg border border-gray-300 px-4 py-3 text-sm
-                //            focus:outline-none focus:ring-2 focus:ring-gray-300"
+                `}
               />
-              {errors.password && <p className="error">{errors.password}</p>}
+              {errors.password && (
+                <p className="mt-1 text-xs font-medium text-red-500">
+                  {errors.password}
+                </p>
+              )}
             </div>
 
             <div>
@@ -372,11 +380,12 @@ export default function SignupForm() {
                 onChange={(e) =>
                   handleChange("confirmPassword", e.target.value)
                 }
-                className="
+                className={`
                   w-full
                   mt-2
                   rounded-xl
-                  border border-slate-200
+                  border
+                  ${errors.confirmPassword ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"}
                   bg-white
                   px-4 py-3
                   text-sm
@@ -384,14 +393,13 @@ export default function SignupForm() {
                   duration-200
                   focus:border-orange-400
                   focus:ring-4
-                  focus:ring-orange-100
                   focus:outline-none
-                  "
-                // className="w-full mt-1 rounded-lg border border-gray-300 px-4 py-3 text-sm
-                //            focus:outline-none focus:ring-2 focus:ring-gray-300"
+                `}
               />
               {errors.confirmPassword && (
-                <p className="error">{errors.confirmPassword}</p>
+                <p className="mt-1 text-xs font-medium text-red-500">
+                  {errors.confirmPassword}
+                </p>
               )}
             </div>
 
@@ -428,7 +436,9 @@ export default function SignupForm() {
               </span>
             </label>
             {errors.acceptedTerms && (
-              <p className="error">{errors.acceptedTerms}</p>
+              <p className="mt-1 text-xs font-medium text-red-500">
+                {errors.acceptedTerms}
+              </p>
             )}
 
             <button

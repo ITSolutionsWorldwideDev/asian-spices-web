@@ -2,15 +2,8 @@
 
 import React, { Suspense } from "react";
 import Image from "next/image";
-import { getServerSession } from "next-auth";
 import Header from "./Header";
 // import AnnouncementBar from "./Announcement_Bar";
-import RecipeLikeDiscountBanner from "@/components/layout/recipes/RecipeLikeDiscountBanner";
-import { webAuthOptions } from "@/core/auth";
-import {
-  formatRecipeLikeDiscountLabel,
-  getEligibleRecipeLikeDiscountsForUser,
-} from "@/lib/dbactions/recipeLikeDiscounts";
 // import Collections from "./Collections";
 import FlashSale from "./Flash_Sale";
 import ExploreTheCollection from "./ExploreTheCollection";
@@ -36,12 +29,7 @@ function SectionSkeleton({ className = "h-64" }: { className?: string }) {
   );
 }
 
-export default async function Homei() {
-  const session = await getServerSession(webAuthOptions);
-  const likeDiscounts = session?.user?.id
-    ? await getEligibleRecipeLikeDiscountsForUser(session.user.id)
-    : [];
-
+export default function Homei() {
   return (
     <div className="bg-white">
       {/* Hero + nav paint first — nothing DB-related above the fold */}
@@ -58,29 +46,8 @@ export default async function Homei() {
           priority={false}
         />
         <div className="relative bg-white/80">
-          {likeDiscounts.length > 0 && (
-            <div className="space-y-3 py-4">
-              {likeDiscounts.map((likeDiscount) => (
-                <RecipeLikeDiscountBanner
-                  key={likeDiscount.id}
-                  recipeId={likeDiscount.recipe_id}
-                  recipeTitle={likeDiscount.recipe_title || ""}
-                  likesCount={
-                    likeDiscount.favorite_count ?? likeDiscount.likes_count
-                  }
-                  discount={{
-                    id: likeDiscount.id,
-                    discount_type: likeDiscount.discount_type,
-                    discount_value: likeDiscount.discount_value,
-                    label: formatRecipeLikeDiscountLabel(likeDiscount),
-                  }}
-                />
-              ))}
-            </div>
-          )}
-
           {/* Flash sale shell is static; product cards fetch client-side inside */}
-          <div className="px-3 py-10 sm:px-4 sm:py-14 md:py-20">
+          <div className="px-3 pt-10 pb-2 sm:px-4 sm:pt-14 sm:pb-4 md:pt-20 md:pb-6">
             <div className="min-w-0 max-w-full px-4">
               {/* <HeadingDescription
                 heading="Explore Our Collection"

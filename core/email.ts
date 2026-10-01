@@ -17,96 +17,103 @@ interface EmailOptions {
   }>;
 }
 
+function cleanVal(v?: string) {
+  return (v || "").replace(/^['"]|['"]$/g, "").trim();
+}
+
+const SMTP_HOST = cleanVal(process.env.SMTP_HOST) || "mail.asianspices.online";
+const SMTP_PORT = Number(cleanVal(process.env.SMTP_PORT)) || 587;
+const IS_SECURE = SMTP_PORT === 465;
+
 const SMTP_PROFILES = {
   default: {
-    host: "mail.asianspices.online",
-    port: 465,
-    secure: true,
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: IS_SECURE,
     auth: {
-      user: process.env.SMTP_ORDER_USER || "order@asianspices.online",
-      pass: process.env.SMTP_ORDER_PASS || "",
+      user: cleanVal(process.env.SMTP_ORDER_USER) || "order@asianspices.online",
+      pass: cleanVal(process.env.SMTP_ORDER_PASS),
     },
     fromAddress: '"Asian Spices Orders" <order@asianspices.online>',
   },
   order: {
-    host: "mail.asianspices.online",
-    port: 465,
-    secure: true,
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: IS_SECURE,
     auth: {
-      user: process.env.SMTP_ORDER_USER || "order@asianspices.online",
-      pass: process.env.SMTP_ORDER_PASS || "",
+      user: cleanVal(process.env.SMTP_ORDER_USER) || "order@asianspices.online",
+      pass: cleanVal(process.env.SMTP_ORDER_PASS),
     },
     fromAddress: '"Asian Spices Orders" <order@asianspices.online>',
   },
   billing: {
-    host: "mail.asianspices.online",
-    port: 465,
-    secure: true,
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: IS_SECURE,
     auth: {
-      user: process.env.SMTP_FINANCE_USER || "finance@asianspices.online",
-      pass: process.env.SMTP_FINANCE_PASS || "",
+      user: cleanVal(process.env.SMTP_FINANCE_USER) || "finance@asianspices.online",
+      pass: cleanVal(process.env.SMTP_FINANCE_PASS),
     },
     fromAddress: '"Asian Spices Finance" <finance@asianspices.online>',
   },
 
   partners: {
-    host: "mail.asianspices.online",
-    port: 465,
-    secure: true,
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: IS_SECURE,
     auth: {
-      user: process.env.SMTP_PARTNERS_USER || "partners@asianspices.online",
-      pass: process.env.SMTP_PARTNERS_PASS || "",
+      user: cleanVal(process.env.SMTP_PARTNERS_USER) || "partners@asianspices.online",
+      pass: cleanVal(process.env.SMTP_PARTNERS_PASS),
     },
     fromAddress: '"Asian Spices Partners" <partners@asianspices.online>',
   },
   
   support: {
-    host: "mail.asianspices.online",
-    port: 465,
-    secure: true,
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: IS_SECURE,
     auth: {
-      user: process.env.SMTP_SUPPORT_USER || "support@asianspices.online",
-      pass: process.env.SMTP_SUPPORT_PASS || "",
+      user: cleanVal(process.env.SMTP_SUPPORT_USER) || "support@asianspices.online",
+      pass: cleanVal(process.env.SMTP_SUPPORT_PASS),
     },
     fromAddress: '"Asian Spices Support" <support@asianspices.online>',
   },
 
   noreply: {
-    host: "mail.asianspices.online",
-    port: 465,
-    secure: true,
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: IS_SECURE,
     auth: {
-      user: process.env.SMTP_NOREPLY_USER || "no-reply@asianspices.online",
-      pass: process.env.SMTP_NOREPLY_PASS || "",
+      user: cleanVal(process.env.SMTP_NOREPLY_USER) || "no-reply@asianspices.online",
+      pass: cleanVal(process.env.SMTP_NOREPLY_PASS),
     },
     fromAddress: '"Asian Spices" <no-reply@asianspices.online>',
   },
 };
 
 type ProfileKey = keyof typeof SMTP_PROFILES;
-const transporterCache = new Map<string, nodemailer.Transporter>();
 
 function getTransporter(profileKey: ProfileKey) {
   const profile = SMTP_PROFILES[profileKey] || SMTP_PROFILES.default;
 
-  if (!transporterCache.has(profileKey)) {
-    const transporter = nodemailer.createTransport({
-      host: profile.host,
-      port: profile.port,
-      secure: profile.secure,
-      auth: {
-        user: profile.auth.user,
-        pass: profile.auth.pass,
-      },
-      pool: true,
-      maxConnections: 5,
-      maxMessages: 100,
-    });
-    transporterCache.set(profileKey, transporter);
-  }
+  const transporter = nodemailer.createTransport({
+    host: profile.host,
+    port: profile.port,
+    secure: profile.secure,
+    auth: {
+      user: profile.auth.user,
+      pass: profile.auth.pass,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+    connectionTimeout: 8000,
+    greetingTimeout: 5000,
+    socketTimeout: 10000,
+  });
 
   return {
-    transporter: transporterCache.get(profileKey)!,
+    transporter,
     fromAddress: profile.fromAddress,
   };
 }
