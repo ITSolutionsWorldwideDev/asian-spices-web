@@ -28,10 +28,12 @@ const banners: {
     id: 1,
     src: "/assets/home/homeheaderimages/banner-2.jpg",
     alt: "Asian Spices product collection",
+    
+ 
     overlay: {
       line1: "Asian Grocery Shop",
-      line2Lead: "Delivered ",
-      line2: "Across the Netherlands",
+      line2Lead: "Spices, Snacks ",
+      line2: "& Everyday Essentials",
       description:
         "Shop authentic Asian spices, groceries, and food products online with nationwide delivery straight to your door.",
       ctaLabel: "Explore our Products",

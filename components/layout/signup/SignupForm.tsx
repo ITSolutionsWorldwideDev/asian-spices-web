@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
+import { Eye, EyeOff } from "lucide-react";
 import { useLoaderStore } from "@/store/useLoaderStore";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 
@@ -43,6 +44,8 @@ export default function SignupForm() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { show, hide } = useLoaderStore();
 
@@ -341,25 +344,49 @@ export default function SignupForm() {
               <label className="text-sm font-bold text-gray-600">
                 Password
               </label>
+<<<<<<< HEAD
+              <div className="relative mt-2">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={form.password}
+                  onChange={(e) => handleChange("password", e.target.value)}
+                  className="
+=======
               <input
                 type="password"
                 placeholder="Password"
                 value={form.password}
                 onChange={(e) => handleChange("password", e.target.value)}
                 className={`
+>>>>>>> c01522460653da92dab132ccdb95a033e9e264cf
                   w-full
-                  mt-2
                   rounded-xl
                   border
                   ${errors.password ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"}
                   bg-white
                   px-4 py-3
+                  pr-11
                   text-sm
                   transition-all
                   duration-200
                   focus:border-orange-400
                   focus:ring-4
                   focus:outline-none
+<<<<<<< HEAD
+                  "
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {errors.password && <p className="error">{errors.password}</p>}
+=======
                 `}
               />
               {errors.password && (
@@ -367,12 +394,24 @@ export default function SignupForm() {
                   {errors.password}
                 </p>
               )}
+>>>>>>> c01522460653da92dab132ccdb95a033e9e264cf
             </div>
 
             <div>
               <label className="text-sm font-bold text-gray-600">
                 Confirm Password
               </label>
+<<<<<<< HEAD
+              <div className="relative mt-2">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  value={form.confirmPassword}
+                  onChange={(e) =>
+                    handleChange("confirmPassword", e.target.value)
+                  }
+                  className="
+=======
               <input
                 type="password"
                 placeholder="Confirm Password"
@@ -381,21 +420,44 @@ export default function SignupForm() {
                   handleChange("confirmPassword", e.target.value)
                 }
                 className={`
+>>>>>>> c01522460653da92dab132ccdb95a033e9e264cf
                   w-full
-                  mt-2
                   rounded-xl
                   border
                   ${errors.confirmPassword ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"}
                   bg-white
                   px-4 py-3
+                  pr-11
                   text-sm
                   transition-all
                   duration-200
                   focus:border-orange-400
                   focus:ring-4
                   focus:outline-none
+<<<<<<< HEAD
+                  "
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  aria-label={
+                    showConfirmPassword
+                      ? "Hide confirm password"
+                      : "Show confirm password"
+                  }
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
+                </button>
+              </div>
+=======
                 `}
               />
+>>>>>>> c01522460653da92dab132ccdb95a033e9e264cf
               {errors.confirmPassword && (
                 <p className="mt-1 text-xs font-medium text-red-500">
                   {errors.confirmPassword}
