@@ -4,13 +4,14 @@ import React, { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
-import { Heart, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import ResponsiveNavigation from "../layout/navigation/ResponsiveNavigation";
 import CartandWhishBtn from "../layout/navigation/CartandWhishBtn";
 import ButtonsNavigation from "../layout/navigation/ButtonsNavigation";
 import UpperSelection from "../layout/navigation/UpperSelection";
 import GoogleTranslateButton from "../layout/navigation/GoogleTranslateButton";
 import NavSearch from "../layout/navigation/NavSearch";
+import MobileBottomNav from "../layout/navigation/MobileBottomNav";
 import { useCartStore } from "@/store/useCartStore";
 
 const subscribeToClient = () => () => {};
@@ -86,13 +87,6 @@ const Nav: React.FC = () => {
         <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
           <GoogleTranslateButton />
           <Link
-            href="/wishlist"
-            aria-label="Wishlist"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm transition hover:bg-gray-50 active:scale-95 sm:h-11 sm:w-11"
-          >
-            <Heart className="h-5 w-5 text-gray-700 sm:h-5.5 sm:w-5.5" strokeWidth={1.8} />
-          </Link>
-          <Link
             href="/cart"
             aria-label="Cart"
             className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm transition hover:bg-gray-50 active:scale-95 sm:h-11 sm:w-11"
@@ -167,7 +161,23 @@ const Nav: React.FC = () => {
     <>
       {/* Reserves header height so content does not jump under the fixed bar */}
       <div className="h-[6.5rem] shrink-0 sm:h-[7rem] md:h-[7.5rem] xl:h-28" aria-hidden />
-      {mounted ? createPortal(bar, document.body) : null}
+      {mounted ? (
+        <>
+          {createPortal(bar, document.body)}
+          {createPortal(
+            <>
+              {/* Pushes page content above the floating mobile bottom nav */}
+              <div
+                className="h-[4.75rem] shrink-0 xl:hidden"
+                style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+                aria-hidden
+              />
+              <MobileBottomNav />
+            </>,
+            document.body,
+          )}
+        </>
+      ) : null}
     </>
   );
 };

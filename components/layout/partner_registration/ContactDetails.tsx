@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import ReadAloudBtn from "./ReadAloudBtn";
 import { useFormValidator } from "@/hooks/FormValidator";
+import { useLoaderStore } from "@/store/useLoaderStore";
 import { z } from "zod";
 
 const VAT_READY = /^[A-Z]{2}[A-Z0-9]{6,12}$/;
@@ -19,7 +20,11 @@ export default function ContactDetails({
 }: any) {
   const [agree, setAgree] = useState(false);
   const [checkingVat, setCheckingVat] = useState(false);
+  const [checkingEmail, setCheckingEmail] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [vatMessage, setVatMessage] = useState("");
+  const { show, hide } = useLoaderStore();
   const contactSchema = z.object({
     first_name: z
       .string()
@@ -57,6 +62,9 @@ export default function ContactDetails({
       ...(field === "vat_number"
         ? { vat_verified: false, vat_registered_name: "" }
         : {}),
+      ...(field === "business_email_address"
+        ? { email_allowed: false }
+        : {}),
     }));
     setErrors((prev: any) => ({
       ...prev,
@@ -74,6 +82,96 @@ export default function ContactDetails({
     "vat_number",
   ];
   const { validateForm } = useFormValidator(requiredFields, formData);
+
+  useEffect(() => {
+    const email = String(formData.business_email_address || "").trim();
+    const emailLooksValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    if (!emailLooksValid) {
+      setCheckingEmail(false);
+      return;
+    }
+
+    if (formData.email_allowed) {
+      setCheckingEmail(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setCheckingEmail(true);
+
+      try {
+        const response = await fetch(
+          "/api/partner-registration/email/validate",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+            signal: controller.signal,
+          },
+        );
+
+        const data = await response.json().catch(() => ({}));
+
+        if (data.allowed === false || response.status === 409) {
+          setFormData((prev: any) => ({
+            ...prev,
+            email_allowed: false,
+          }));
+          setErrors((prev: any) => ({
+            ...prev,
+            business_email_address: [
+              data.error || "this email already exist for this role",
+            ],
+          }));
+          return;
+        }
+
+        if (!response.ok) {
+          // Unexpected API failure — do not permanently block registration
+          setFormData((prev: any) => ({
+            ...prev,
+            email_allowed: true,
+          }));
+          setErrors((prev: any) => ({
+            ...prev,
+            business_email_address: undefined,
+          }));
+          return;
+        }
+
+        setFormData((prev: any) => ({
+          ...prev,
+          email_allowed: true,
+        }));
+        setErrors((prev: any) => ({
+          ...prev,
+          business_email_address: undefined,
+        }));
+      } catch (error: any) {
+        if (error?.name === "AbortError") return;
+        // Network failure should not permanently block registration
+        setFormData((prev: any) => ({
+          ...prev,
+          email_allowed: true,
+        }));
+        setErrors((prev: any) => ({
+          ...prev,
+          business_email_address: undefined,
+        }));
+      } finally {
+        if (!controller.signal.aborted) {
+          setCheckingEmail(false);
+        }
+      }
+    }, 600);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [formData.business_email_address]);
 
   useEffect(() => {
     const vat = String(formData.vat_number || "");
@@ -176,14 +274,27 @@ export default function ContactDetails({
     };
   }, [formData.vat_number, formData.country]);
 
-  const canContinue = agree && !!formData.vat_verified && !checkingVat;
+  const canContinue =
+    agree &&
+    !!formData.vat_verified &&
+    !checkingVat &&
+    !!formData.email_allowed &&
+    !checkingEmail &&
+    !errors.business_email_address &&
+    !submitting;
   const continueHint = !agree
     ? "Accept the terms and conditions to continue."
-    : checkingVat
-      ? "Checking VAT number..."
-      : !formData.vat_verified
-        ? "Enter a valid VAT number (e.g. NL123456789B01). It is checked automatically."
-        : "";
+    : checkingEmail
+      ? "Checking business email..."
+      : errors.business_email_address
+        ? ""
+        : !formData.email_allowed
+          ? "Enter a business email that is not already used by an admin account."
+          : checkingVat
+            ? "Checking VAT number..."
+            : !formData.vat_verified
+              ? "Enter a valid VAT number (e.g. NL123456789B01). It is checked automatically."
+              : "";
 
   return (
     <div className=" bg-gray-100 flex justify-center p-6" id="contact">
@@ -300,7 +411,12 @@ export default function ContactDetails({
             <p className="text-xs text-gray-500 mt-2">
               My billing email is the same as my business email
             </p>
-            {errors.business_email_address && (
+            {checkingEmail && (
+              <p className="text-blue-500 text-xs mt-1">
+                Checking business email...
+              </p>
+            )}
+            {errors.business_email_address && !checkingEmail && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.business_email_address[0]}
               </p>
@@ -411,7 +527,12 @@ export default function ContactDetails({
           </button>
 
           <div className="flex flex-col items-end gap-1">
-            {continueHint && (
+            {submitError && (
+              <p className="text-xs text-red-500 max-w-xs text-right">
+                {submitError}
+              </p>
+            )}
+            {continueHint && !submitError && (
               <p className="text-xs text-gray-500 max-w-xs text-right">
                 {continueHint}
               </p>
@@ -424,12 +545,22 @@ export default function ContactDetails({
                   ? "bg-orange-500 hover:bg-orange-600"
                   : "bg-gray-300 cursor-not-allowed"
               }`}
-              onClick={() => {
+              onClick={async () => {
                 const result = contactSchema.safeParse(formData);
 
                 if (!result.success) {
                   const fieldErrors = result.error.flatten().fieldErrors;
                   setErrors(fieldErrors);
+                  return;
+                }
+
+                if (!formData.email_allowed) {
+                  setErrors((prev: any) => ({
+                    ...prev,
+                    business_email_address: [
+                      "this email already exist for this role",
+                    ],
+                  }));
                   return;
                 }
 
@@ -446,14 +577,52 @@ export default function ContactDetails({
                   return;
                 }
 
-                setCompletedSteps((prev: number[]) => [
-                  ...new Set([...prev, activeStep]),
-                ]);
+                setSubmitError(null);
+                setSubmitting(true);
+                show("Setting up for Partner Store Registration...");
 
-                setActiveStep(activeStep + 1);
+                try {
+                  const response = await fetch("/api/partner-registration", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                  });
+
+                  const data = await response.json();
+                  if (!response.ok) {
+                    throw new Error(data.error || "Submission failed");
+                  }
+
+                  setFormData({
+                    ...formData,
+                    ...data.data,
+                    application_id: data.application_id,
+                    submitted_at:
+                      data.data?.created_at || new Date().toISOString(),
+                  });
+
+                  setCompletedSteps((prev: number[]) => [
+                    ...new Set([...prev, activeStep]),
+                  ]);
+
+                  localStorage.removeItem("partner_registration");
+                  localStorage.removeItem("idin_transaction");
+                  setActiveStep(activeStep + 1);
+                } catch (err: any) {
+                  console.error("Partner registration submit error:", err);
+                  setSubmitError(
+                    err.message ||
+                      "An unexpected error occurred during submission.",
+                  );
+                } finally {
+                  hide();
+                  setSubmitting(false);
+                }
               }}
             >
-              Continue →
+              {submitting ? "Submitting..." : "Submit"}
             </button>
           </div>
         </div>

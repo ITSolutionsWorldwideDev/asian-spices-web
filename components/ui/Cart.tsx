@@ -7,9 +7,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Heart, Trash2, ShieldCheck, Truck, ArrowRight } from "lucide-react";
+import { Trash2, ShieldCheck, Truck, ArrowRight } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
-import { useWishlistStore } from "@/store/useWishlistStore";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import { useSession } from "next-auth/react";
@@ -29,7 +28,6 @@ export default function Cart() {
     useCartStore();
 
   const { symbol, rate = 1 } = useCurrencyStore();
-  const { addToWishlist } = useWishlistStore();
 
   // 🌟 Grab taxRules collection array rather than individual scalar values
   const {
@@ -181,21 +179,13 @@ export default function Cart() {
                           {item.title}
                         </h3>
                       </Link>
-                      {/*  <span className="inline-block mt-1 text-xs px-2 py-1 rounded-full bg-green-100 text-green-600">
-                        In Stock
-                      </span> */}
-                      <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                        <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-600 font-medium">
-                          In Stock
-                        </span>
-
-                        {/* 2️⃣ Render Active Discount Badges inside the line wrapper */}
-                        {activeBadge && (
+                      {activeBadge && (
+                        <div className="mt-1.5 flex items-center gap-2 flex-wrap">
                           <span className="inline-block text-[10px] px-2 py-0.5 rounded-full bg-red-100 text-red-600 font-bold uppercase tracking-wide">
                             {activeBadge}
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      )}
 
                       {/* Same as checkout: show once tax rules are ready */}
                       {rulePercent != null && (
@@ -282,9 +272,6 @@ export default function Cart() {
                     </div>
 
                     <div className="flex items-center gap-4 text-gray-500 flex-wrap">
-                      <button className="flex items-center gap-1 cursor-pointer hover:text-black transition-colors">
-                        <Heart size={16} /> Save
-                      </button>
                       <button
                         onClick={() => removeFromCart(item.id, isLoggedIn)}
                         className="flex items-center gap-1 text-red-500 cursor-pointer hover:text-red-700 transition-colors"

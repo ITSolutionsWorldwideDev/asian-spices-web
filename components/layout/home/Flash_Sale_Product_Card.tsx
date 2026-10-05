@@ -104,12 +104,14 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
 
   const scroll = (direction: "left" | "right") => {
     if (sliderRef.current) {
-      const { scrollLeft, clientWidth } = sliderRef.current;
+      const el = sliderRef.current;
+      const { scrollLeft, clientWidth, scrollWidth } = el;
+      const maxScroll = Math.max(0, scrollWidth - clientWidth);
       const scrollTo =
         direction === "left"
-          ? scrollLeft - clientWidth
-          : scrollLeft + clientWidth;
-      sliderRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
+          ? Math.max(0, scrollLeft - clientWidth)
+          : Math.min(maxScroll, scrollLeft + clientWidth);
+      el.scrollTo({ left: scrollTo, behavior: "smooth" });
     }
   };
 
@@ -138,7 +140,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
       {/* Horizontal Scroll Box */}
       <div
         ref={sliderRef}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-8 py-3 scrollbar-hide sm:gap-4 sm:px-10 sm:py-4 md:justify-center md:gap-6 md:px-12"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-8 py-3 scrollbar-hide sm:gap-4 sm:px-10 sm:py-4 md:gap-6 md:px-12"
         style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
       >
         {products.map((item, index) => {
@@ -198,7 +200,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
           return (
             <div
               key={item.id}
-              className="relative w-[min(280px,78vw)] max-w-[350px] flex-shrink-0 snap-center rounded-2xl border border-gray-50 bg-white p-4 text-black shadow-lg sm:w-[300px] sm:snap-start sm:p-5"
+              className="relative w-[min(280px,78vw)] max-w-[350px] flex-shrink-0 snap-start rounded-2xl border border-gray-50 bg-white p-4 text-black shadow-lg sm:w-[300px] sm:p-5"
             >
               <div className="relative">
                 <span className="absolute left-2 top-2 z-20 rounded-md bg-red-600 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white sm:left-3 sm:top-3 sm:text-[11px]">

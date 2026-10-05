@@ -4,6 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/core/db";
 import { sendPartnerRegistrationEmail } from "@/core/email-templates";
 import { checkEuVatNumber } from "@/core/vies";
+import {
+  isPrivilegedEmail,
+  PRIVILEGED_EMAIL_ERROR,
+} from "@/core/partner-registration/check-privileged-email";
 
 const generateApplicationId = () => {
   const date = new Date();
@@ -54,6 +58,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { error: "Business email is required" },
       { status: 400 },
+    );
+  }
+
+  if (await isPrivilegedEmail(String(business_email_address))) {
+    return NextResponse.json(
+      { error: PRIVILEGED_EMAIL_ERROR, code: "PRIVILEGED_EMAIL" },
+      { status: 409 },
     );
   }
 

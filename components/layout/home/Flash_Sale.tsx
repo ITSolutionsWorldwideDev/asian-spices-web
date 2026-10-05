@@ -15,6 +15,7 @@ export default function FlashSale() {
 
   return (
     <section
+      id="flash-sale"
       className={`relative mx-auto mt-1 w-full max-w-full overflow-hidden rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 px-3 py-3 text-white sm:mt-2 sm:rounded-3xl sm:px-6 sm:py-5 md:mt-3 md:px-10 md:py-6 ${visible === null ? "hidden" : ""}`}
     >
       {/* Spice pattern background */}
