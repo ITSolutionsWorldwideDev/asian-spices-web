@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import Footer from "@/components/ui/Footer";
-import HeadingDescription from "@/components/ui/HeadingDescription";
-import ProductPageHeader from "@/components/ui/ProductPageHeader";
+import Nav from "@/components/ui/Nav";
 import FilterSidebar from "@/components/layout/products/FilterSidebar";
 import InfiniteProducts from "@/components/layout/products/InfiniteProducts";
 import SortDropdown from "@/components/layout/product_filter_search/SortDropdown";
@@ -13,6 +13,16 @@ import { getBrands, getProducts, getSubcategories } from "@/lib/dbactions/produc
 import { categoryContent } from "@/data/categoryContent"; // Content data import kiya
 import CategoryGuideSection from "@/components/layout/category/CategoryGuideSection";
 import { parseCategoryGuide } from "@/lib/category-helpers";
+
+function formatHeroHeading(heading: string, fallbackName: string) {
+  const trimmed = heading?.trim();
+  if (!trimmed) return `Explore Our ${fallbackName}`;
+  if (/^explore\s+our\s+/i.test(trimmed)) return trimmed;
+  if (/^explore\s+/i.test(trimmed)) {
+    return trimmed.replace(/^explore\s+/i, "Explore Our ");
+  }
+  return `Explore Our ${trimmed}`;
+}
 
 type Filters = {
   category: string;
@@ -126,31 +136,50 @@ export default async function CategoryPage({
   };
 
   return (
-    <div>
-      {/* 1. Header Banner — Full Width Across Viewport */}
-      <div className="w-full">
-        <ProductPageHeader
-          heading={guideData.bannerHeading}
-          text={guideData.bannerText}
-          imageSrc="/assets/categories/cat-banner.webp"
-        />
-      </div>
+    <div className="bg-white min-h-screen">
+      {/* Top Floating / Fixed Nav */}
+      <Nav />
 
-      {/* Container wrapper for padded content */}
-      <div className="container mx-auto px-5">
-        {/* 2. SECTION 2 — Collapsible Guide + Image */}
+      {/* 1. Dedicated Hero Section Wrapper */}
+      <section className="relative w-full bg-gradient-to-b from-[#fbf9f5] via-[#faf7f2]/50 to-white -mt-2 sm:-mt-1 md:mt-0 pt-1.5 sm:pt-2 md:pt-3 xl:pt-4 pb-2.5 sm:pb-4 border-b border-gray-100/60">
+        <div className="container mx-auto px-4 sm:px-6">
+          {/* Breadcrumb: Home Page > {category.name} */}
+          <nav aria-label="Breadcrumb" className="mb-1 text-[11px] sm:text-xs text-gray-500">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <Link href="/" className="hover:text-gray-900 transition font-normal">
+                Home Page
+              </Link>
+              <span className="text-gray-400">&gt;</span>
+              <span className="text-gray-700 font-medium">{category.name}</span>
+            </div>
+          </nav>
+
+          {/* Hero Content */}
+          <div className="text-center max-w-5xl lg:max-w-6xl mx-auto pt-0 pb-0.5">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-extrabold tracking-tight text-red-600 leading-tight">
+              {formatHeroHeading(guideData.bannerHeading, category.name)}
+            </h1>
+            {guideData.bannerText && (
+              <p className="mt-1.5 text-xs sm:text-sm md:text-base text-gray-800 max-w-4xl lg:max-w-5xl mx-auto leading-relaxed font-normal">
+                {guideData.bannerText}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content Container (Section 2 & Products) */}
+      <div className="container mx-auto px-4 sm:px-6">
+        {/* 2. SECTION 2 — Collapsible Guide (Faded / subtle styling) */}
         {guideData.guideSections.length > 0 && (
-          <CategoryGuideSection
-            sections={guideData.guideSections}
-            image={currentContent?.image}
-            categoryName={category.name}
-          />
+          <div className="mt-4 mb-4">
+            <CategoryGuideSection
+              sections={guideData.guideSections}
+              image={currentContent?.image}
+              categoryName={category.name}
+            />
+          </div>
         )}
-
-        {/* 3. Explore Our Collection */}
-        <HeadingDescription
-          heading={`Explore Our ${category.name}`}
-        />
       </div>
 
       {/* Products Section */}

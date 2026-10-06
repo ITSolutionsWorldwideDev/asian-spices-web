@@ -61,15 +61,8 @@ export async function proxy(req: NextRequest) {
       );
 
       if (!isPublicRoute) {
-        // Allow important APIs/webhooks
-        if (
-          !(
-            pathname.startsWith("/api/paypal") ||
-            pathname.startsWith("/api/paynl") ||
-            pathname.startsWith("/api/webhook") ||
-            pathname.startsWith("/api/auth")
-          )
-        ) {
+        // Allow all API endpoints and webhooks
+        if (!pathname.startsWith("/api")) {
           // Check access cookie
           const cookie = req.cookies.get(COOKIE_NAME);
 

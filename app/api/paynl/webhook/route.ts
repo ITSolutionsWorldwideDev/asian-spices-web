@@ -93,9 +93,11 @@ export async function POST(req: NextRequest) {
           // ⚡ INVOKE CORRESPONDING DECENTRALIZED ASSIGNMENT SYSTEM HERE TOO ⚡
           await assignNextStore(client, confirmedOrder.id);
 
-          sendOrderConfirmationEmail(confirmedOrder.id).catch((err) =>
-            console.error("[Email Trigger Error PayNL Webhook]:", err),
-          );
+          try {
+            await sendOrderConfirmationEmail(confirmedOrder.id, client);
+          } catch (emailErr) {
+            console.error("[Email Trigger Error PayNL Webhook]:", emailErr);
+          }
         }
 
         if (paymentStatus === "paid") {

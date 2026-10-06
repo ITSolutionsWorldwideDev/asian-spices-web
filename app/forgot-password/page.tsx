@@ -49,37 +49,40 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-orange-50 via-white to-amber-50">
-      <div className="w-full max-w-lg rounded-3xl bg-white/80 backdrop-blur-xl border border-white/30 p-10 shadow-xl">
-        <div className="flex justify-center mb-6">
+    <div className="min-h-dvh flex items-center justify-center px-3 py-6 sm:px-6 sm:py-10 bg-gradient-to-br from-orange-50 via-white to-amber-50">
+      <div className="w-full max-w-md rounded-2xl sm:rounded-3xl bg-white/90 backdrop-blur-xl border border-white/40 p-4 sm:p-6 md:p-8 shadow-xl">
+        <div className="flex justify-center mb-4 sm:mb-6">
           <Link href="/">
             <Image
               src="/assets/logo/Group 87.png"
               alt="Logo"
-              width={70}
-              height={70}
+              width={140}
+              height={50}
+              className="h-9 w-auto object-contain sm:h-11 cursor-pointer"
             />
           </Link>
         </div>
 
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Reset Password</h1>
-          <p className="mt-2 text-slate-500">
+        <div className="text-center mb-6">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900">
+            Reset Password
+          </h1>
+          <p className="mt-1.5 text-xs sm:text-sm text-slate-500 max-w-xs mx-auto">
             Enter your email to receive a 6-digit verification code.
           </p>
         </div>
 
         {status && (
           <div
-            className={`p-4 rounded-xl text-sm mb-6 ${status.type === "success" ? "bg-green-50 text-green-800 border border-green-100" : "bg-red-50 text-red-800 border border-red-100"}`}
+            className={`p-3.5 rounded-xl text-xs sm:text-sm mb-5 ${status.type === "success" ? "bg-green-50 text-green-800 border border-green-100" : "bg-red-50 text-red-800 border border-red-100"}`}
           >
             {status.message}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="text-sm text-gray-600 font-bold">
+          <div className="text-left">
+            <label className="text-xs sm:text-sm text-gray-700 font-semibold">
               Email Address
             </label>
             <input
@@ -88,32 +91,24 @@ export default function ForgotPasswordPage() {
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full mt-2 px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+              className="w-full mt-1.5 px-3.5 py-3 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:shadow-xl transition-all duration-300 disabled:opacity-60"
+            className="w-full min-h-[48px] py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 shadow-md hover:shadow-lg active:scale-[0.99] transition-all duration-200 disabled:opacity-60 cursor-pointer text-sm sm:text-base"
           >
             {loading ? "Sending code..." : "Send Verification Code"}
           </button>
         </form>
 
-        <p className="text-center text-sm text-slate-500 mt-6">
-          Have a code?{" "}
-          <Link
-            href={`/reset-password?email=${encodeURIComponent(email)}`}
-            className="font-semibold text-orange-600 hover:text-orange-700"
-          >
-            Enter it here
-          </Link>
-          {" · "}
-          Remembered your password?{" "}
+        <p className="text-center text-xs sm:text-sm text-slate-500 mt-6 space-y-1 sm:space-y-0">
+          <span>Remembered your password? </span>
           <Link
             href="/login"
-            className="font-semibold text-orange-600 hover:text-orange-700"
+            className="font-bold text-orange-600 hover:text-orange-700 hover:underline inline-block min-h-[44px] sm:min-h-0 py-2 sm:py-0"
           >
             Sign In
           </Link>

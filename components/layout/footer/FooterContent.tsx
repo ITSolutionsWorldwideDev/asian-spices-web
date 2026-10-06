@@ -18,7 +18,6 @@ const TICKER_ITEMS = [
   "EST. 2026 - AMSTERDAM",
   "AUTHENTIC ASIAN FLAVORS",
   "FREE RECIPES INCLUDED",
-  "100% ORGANIC",
 ] as const;
 
 const SOCIAL_LINKS = [
@@ -54,10 +53,11 @@ const QUICK_LINKS = [
 
 const CUSTOMER_SERVICE = [
   { label: "Terms & Conditions", href: "/terms-conditions" },
-  { label: "Shipping Info", href: "/terms-conditions" },
-  { label: "Returns", href: "/terms-conditions" },
-  { label: "FAQ", href: "/faqs" },
+  { label: "Shipping Info", href: "/shipping-info" },
+  { label: "Returns & Refunds", href: "/return-&-refund-policy" },
   { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Cookie Policy", href: "/cookie-policy" },
+  { label: "FAQ", href: "/faqs" },
 ] as const;
 
 function TickerBar() {
@@ -122,7 +122,7 @@ const FooterContent = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-sm text-white transition hover:border-orange-500/50 hover:bg-orange-500 hover:text-white active:scale-95"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-sm text-white transition hover:border-orange-500/50 hover:bg-orange-500 hover:text-white active:scale-95"
                 >
                   <Icon />
                 </a>

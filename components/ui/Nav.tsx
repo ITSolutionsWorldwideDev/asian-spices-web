@@ -68,8 +68,8 @@ const Nav: React.FC = () => {
 
   const mobileHeader = (
     <div className="pointer-events-auto w-full bg-white shadow-sm border-b border-gray-100 xl:hidden">
-      <div className="flex min-h-[3.25rem] items-center justify-between gap-2 px-3.5 pt-2 pb-1.5 sm:px-5 sm:pt-2.5">
-        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+      <div className="flex min-h-[3.25rem] items-center justify-between gap-1.5 px-2.5 pt-2 pb-1.5 sm:gap-2 sm:px-5 sm:pt-2.5">
+        <div className="flex min-w-0 items-center gap-1.5 sm:gap-3">
           <ResponsiveNavigation mobileOnly />
           <Link href="/" className="flex shrink-0 items-center">
             <Image
@@ -79,17 +79,17 @@ const Nav: React.FC = () => {
               height={48}
               priority
               fetchPriority="high"
-              className="h-8 w-auto object-contain sm:h-9 md:h-10"
+              className="h-7.5 w-auto object-contain sm:h-9 md:h-10"
             />
           </Link>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
           <GoogleTranslateButton />
           <Link
             href="/cart"
             aria-label="Cart"
-            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm transition hover:bg-gray-50 active:scale-95 sm:h-11 sm:w-11"
+            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm transition hover:bg-gray-50 active:scale-95"
           >
             <ShoppingCart className="h-5 w-5 text-gray-700 sm:h-5.5 sm:w-5.5" strokeWidth={1.8} />
             {itemInCart > 0 && (
@@ -101,7 +101,7 @@ const Nav: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-3.5 pb-2.5 pt-0.5 sm:px-5 sm:pb-3">
+      <div className="px-2.5 pb-2.5 pt-0.5 sm:px-5 sm:pb-3">
         <NavSearch variant="mobile" />
       </div>
     </div>

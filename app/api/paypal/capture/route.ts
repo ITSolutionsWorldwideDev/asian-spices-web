@@ -193,9 +193,11 @@ async function markPayPalOrderPaid(
   }
 
   if (shouldSendEmail) {
-    sendOrderConfirmationEmail(orderId).catch((err) =>
-      console.error("[Email Trigger Error Background Execution]:", err),
-    );
+    try {
+      await sendOrderConfirmationEmail(orderId);
+    } catch (emailErr) {
+      console.error("[Email Trigger Error Background Execution]:", emailErr);
+    }
   }
 }
 

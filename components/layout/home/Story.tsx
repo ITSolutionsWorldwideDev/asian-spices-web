@@ -14,8 +14,8 @@ const Story = ({ className = "" }: { className?: string }) => {
           {/* Full 100% Organic banner — whole image, no empty bg */}
           <div className="relative w-full overflow-hidden rounded-2xl">
             <Image
-              src="/assets/home/our_story/organic-100-banner.png"
-              alt="100% Organic"
+              src="/assets/home/our_story/organic-banner.png"
+              alt="Organic"
               width={510}
               height={306}
               sizes="(max-width: 1280px) 100vw, 50vw"
@@ -123,8 +123,8 @@ const Story = ({ className = "" }: { className?: string }) => {
                 />
               </div>
               <div className="min-w-0">
-                <p className="text-lg font-bold text-gray-900 sm:text-2xl">15+</p>
-                <p className="text-xs text-orange-500 sm:text-sm">Years Experience</p>
+                <p className="text-lg font-bold text-gray-900 sm:text-2xl">150+</p>
+                <p className="text-xs text-orange-500 sm:text-sm">Orders Dilevered</p>
               </div>
             </div>
 

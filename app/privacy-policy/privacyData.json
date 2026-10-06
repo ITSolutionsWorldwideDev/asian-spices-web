@@ -3,8 +3,8 @@
     "badge": "Juridisch",
     "title": "Privacyverklaring",
     "subtitle": "Deze privacyverklaring regelt hoe Asian Spices Online B.V. omgaat met persoonsgegevens van bezoekers, klanten en partners van onze website, webshop en app.",
-    "lastUpdated": "14 juli 2026",
-    "effectiveFrom": "14 juli 2026"
+    "lastUpdated": "16 september 2026",
+    "effectiveFrom": "16 september 2026"
   },
   "support": {
     "heading": "Privacyverzoeken?",
@@ -665,28 +665,32 @@
           "text": "Wij bewaren persoonsgegevens niet langer dan nodig is voor het doel waarvoor zij zijn verzameld, tenzij een wettelijke bewaarplicht of een andere gerechtvaardigde noodzaak een langere termijn vereist. Hieronder vind je de belangrijkste bewaartermijnen. Na afloop verwijderen of anonimiseren wij de gegevens, tenzij een uitzondering van toepassing is."
         },
         {
-          "type": "list",
-          "items": [
-            "Facturen en fiscale basisadministratie: 7 jaar. Voor gegevens die onder een toepasselijke OSS- of IOSS-verplichting vallen, kan een termijn van 10 jaar gelden.",
-            "Routinematige chatbot- en contactformuliergegevens: 6 maanden.",
-            "Formele klachten, technische escalaties en factureringskwesties: 24 maanden na definitieve afhandeling; langer wanneer een klacht, onderzoek of juridisch geschil nog loopt.",
-            "E-mailverzendlogs in cPanel: 30 dagen.",
-            "Cloud database- en deploymentback-ups: 30 dagen volgens een doorlopende, versleutelde back-upcyclus.",
-            "Klantaccount: Tot 24 maanden na de laatste activiteit. Daarna verwijderen of anonimiseren wij de accountgegevens, behalve gegevens die wettelijk langer moeten worden bewaard.",
-            "Bestelgeschiedenis in klantaccount: Zichtbaar zolang het account actief is. Na accountverwijdering niet meer zichtbaar voor de klant; fiscale gegevens blijven intern 7 jaar of, indien van toepassing, 10 jaar bewaard.",
-            "Niet-fiscale gastbestelgegevens: 24 maanden na voltooiing van de bestelling. Daarna verwijderen of anonimiseren wij de niet-fiscale gegevens, tenzij een langere termijn nodig is voor een klacht, terugroepactie, geschil of wettelijke verplichting.",
-            "Winkelwagen gast: 30 dagen na de laatste activiteit, tenzij de winkelwagen eerder wordt geleegd of de lokale opslag eerder wordt verwijderd.",
-            "Winkelwagen ingelogde klant: 90 dagen na de laatste activiteit, of totdat de bestelling wordt afgerond of de winkelwagen wordt leeggemaakt.",
-            "Applicatie- en foutlogs: 30 dagen.",
-            "Toegangs- en beveiligingslogs: 90 dagen. Relevante logs kunnen langer worden bewaard wanneer dit nodig is voor een beveiligingsincident of onderzoek.",
-            "Beheer- en auditlogs: 12 maanden.",
-            "Mailboxinhoud en reguliere e-mails: Routinematige klantcommunicatie: 12 maanden na afhandeling. Formele klachten of geschillen: 24 maanden na afhandeling. E-mails die onderdeel zijn van de fiscale of wettelijke administratie: 7 jaar.",
-            "Nieuwsbriefinschrijving en toestemmingsbewijs: Zolang de inschrijving actief is. Na afmelding bewaren wij beperkt bewijs van toestemming gedurende 5 jaar. Een minimale suppressieregistratie bewaren wij zolang dit nodig is om de afmelding te respecteren.",
-            "Cookiekeuze en toestemmingsbewijs: 6 maanden. Bij belangrijke wijzigingen in cookies, doeleinden of leveranciers vragen wij eerder opnieuw om een keuze.",
-            "Reviews: Zolang de review gepubliceerd is. Gegevens voor beoordelingsuitnodigingen en verificatie: maximaal 24 maanden, tenzij een klacht of geschil langer bewaren noodzakelijk maakt.",
-            "Telefoonopnames: Routinematige opnames voor kwaliteit, training en beveiliging: maximaal 3 maanden. Wanneer een opname onderdeel is van een formele klacht of een geschil: maximaal 24 maanden na afhandeling, of langer zolang de procedure loopt.",
-            "Afgewezen partneraanvragen: 6 maanden na de definitieve afwijzing, tenzij langer bewaren nodig is voor een klacht of geschil.",
-            "Partneraccount na beëindiging: Toegang wordt direct beëindigd. Niet-financiële account- en profielgegevens worden maximaal 12 maanden bewaard. Financiële en fiscale gegevens worden gedurende de wettelijke termijn bewaard."
+          "type": "table",
+          "headers": ["Gegevenscategorie", "Bewaartermijn"],
+          "rows": [
+            ["Facturen en fiscale basisadministratie", "7 jaar (10 jaar bij toepasselijke OSS-/IOSS-verplichting)"],
+            ["Routinematige chatbot- en contactformuliergegevens", "6 maanden"],
+            ["Formele klachten, technische escalaties, factureringskwesties", "24 maanden na definitieve afhandeling (langer bij lopend geschil)"],
+            ["E-mailverzendlogs in cPanel", "30 dagen"],
+            ["Back-ups (cloud database- en deployment)", "30 dagen (doorlopende, versleutelde cyclus)"],
+            ["Klantaccount", "Tot 24 maanden na laatste activiteit"],
+            ["Bestelgeschiedenis in klantaccount", "Zichtbaar zolang account actief is; fiscale gegevens intern 7 (of 10) jaar"],
+            ["Niet-fiscale gastbestelgegevens", "24 maanden na voltooiing bestelling"],
+            ["Winkelwagen (gast)", "30 dagen na laatste activiteit"],
+            ["Winkelwagen (ingelogde klant)", "90 dagen na laatste activiteit, of tot afronding/lediging"],
+            ["Applicatie- en foutlogs", "30 dagen"],
+            ["Toegangs- en beveiligingslogs", "90 dagen (langer bij incident/onderzoek)"],
+            ["Beheer- en auditlogs", "12 maanden"],
+            ["Mailboxinhoud (routinematig)", "12 maanden na afhandeling"],
+            ["Mailboxinhoud (formele klachten/geschillen)", "24 maanden na afhandeling"],
+            ["Mailboxinhoud (fiscaal/wettelijk)", "7 jaar"],
+            ["Nieuwsbriefinschrijving en toestemmingsbewijs", "Zolang actief; na afmelding 5 jaar bewijs"],
+            ["Cookiekeuze en toestemmingsbewijs", "6 maanden"],
+            ["Reviews", "Zolang gepubliceerd; uitnodigings-/verificatiegegevens max. 24 maanden"],
+            ["Telefoonopnames (routinematig)", "Max. 3 maanden"],
+            ["Telefoonopnames (formele klacht/geschil)", "Max. 24 maanden na afhandeling, of langer"],
+            ["Afgewezen partneraanvragen", "6 maanden na definitieve afwijzing"],
+            ["Partneraccount na beëindiging", "Niet-financieel: max. 12 maanden; financieel/fiscaal: wettelijke termijn"]
           ]
         }
       ]

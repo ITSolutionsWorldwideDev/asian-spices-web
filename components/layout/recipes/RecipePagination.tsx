@@ -48,7 +48,7 @@ export default function RecipePagination({
       {currentPage > 1 && (
         <Link
           href={buildHref(currentPage - 1, searchParams)}
-          className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50"
+          className="min-h-[44px] h-11 px-4 flex items-center justify-center rounded-xl border bg-white hover:bg-gray-50 text-sm font-medium transition active:scale-95"
           scroll={false}
         >
           Previous
@@ -62,10 +62,10 @@ export default function RecipePagination({
             key={page}
             href={buildHref(page, searchParams)}
             scroll={false}
-            className={`w-10 h-10 flex items-center justify-center rounded-xl border transition ${
+            className={`min-h-[44px] min-w-[44px] h-11 w-11 flex items-center justify-center rounded-xl border transition text-sm font-medium active:scale-95 ${
               active
-                ? "bg-orange-600 text-white border-orange-600"
-                : "bg-white hover:bg-gray-50"
+                ? "bg-orange-600 text-white border-orange-600 font-semibold"
+                : "bg-white hover:bg-gray-50 text-gray-700"
             }`}
             aria-current={active ? "page" : undefined}
           >
@@ -77,7 +77,7 @@ export default function RecipePagination({
       {currentPage < totalPages && (
         <Link
           href={buildHref(currentPage + 1, searchParams)}
-          className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50"
+          className="min-h-[44px] h-11 px-4 flex items-center justify-center rounded-xl border bg-white hover:bg-gray-50 text-sm font-medium transition active:scale-95"
           scroll={false}
         >
           Next

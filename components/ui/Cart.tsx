@@ -76,8 +76,8 @@ export default function Cart() {
   }
 
   return (
-    <div className="bg-white p-8">
-      <div className="p-4 sm:p-6 container mx-auto">
+    <div className="bg-white px-2.5 py-6 sm:p-8">
+      <div className="px-2 py-3 sm:p-6 container mx-auto">
         <div className="flex flex-wrap items-center gap-1 text-sm sm:text-base">
           <Link href={"/"}>
             <p className="text-[#6A7282]">Home</p>
@@ -86,18 +86,18 @@ export default function Cart() {
           <p className="text-[#6A7282]">Shopping Cart</p>
         </div>
 
-        <div className="mt-4 sm:mt-5">
-          <h1 className="font-bold text-3xl sm:text-5xl">Shopping Cart</h1>
+        <div className="mt-3 sm:mt-5">
+          <h1 className="font-bold text-2xl sm:text-5xl">Shopping Cart</h1>
         </div>
 
-        <div className="mt-3 sm:mt-5">
-          <h2 className="font-bold text-lg sm:text-xl">
+        <div className="mt-2 sm:mt-5">
+          <h2 className="font-bold text-base sm:text-xl">
             {itemInCart} items in your cart
           </h2>
         </div>
       </div>
 
-      <div className="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8 bg-white">
+      <div className="container mx-auto px-1 py-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 bg-white">
         <div className="lg:col-span-2 space-y-6">
           {cart.map((item) => {
             const cleanPrice = Number(item.base_price || 0);
@@ -145,7 +145,7 @@ export default function Cart() {
             return (
               <div
                 key={item.id}
-                className="bg-white border-2 border-gray-200 rounded-2xl p-5 flex flex-col sm:flex-row gap-5"
+                className="bg-white border-2 border-gray-200 rounded-2xl p-3.5 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-5"
               >
                 <div className="h-30 w-full sm:w-24 rounded-xl overflow-hidden bg-gray-100 shrink-0">
                   <Link
@@ -245,38 +245,45 @@ export default function Cart() {
                   </div>
 
                   <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div className="flex items-center border rounded-lg w-fit">
+                    <div className="flex items-center border border-gray-200 rounded-lg w-fit h-[44px] overflow-hidden">
                       <button
+                        type="button"
+                        aria-label={`Decrease quantity of ${item.title}`}
                         onClick={() => decreaseQty(item.id, isLoggedIn)}
-                        className="px-3 py-1 text-lg hover:bg-gray-100 cursor-pointer rounded-lg"
+                        className="w-11 min-w-[44px] h-full flex items-center justify-center text-lg hover:bg-gray-100 active:bg-gray-200 transition cursor-pointer select-none"
                       >
                         −
                       </button>
                       <input
                         type="number"
                         min={1}
+                        aria-label={`Quantity of ${item.title}`}
                         value={cleanQuantity}
                         onChange={(e) => {
                           const value = Number(e.target.value);
                           if (isNaN(value)) return;
                           setQty(item.id, value, isLoggedIn);
                         }}
-                        className="w-16 text-center outline-none"
+                        className="w-14 text-center outline-none font-semibold text-sm"
                       />
                       <button
+                        type="button"
+                        aria-label={`Increase quantity of ${item.title}`}
                         onClick={() => increaseQty(item.id, isLoggedIn)}
-                        className="px-3 py-1 text-lg hover:bg-gray-100 cursor-pointer rounded-lg"
+                        className="w-11 min-w-[44px] h-full flex items-center justify-center text-lg hover:bg-gray-100 active:bg-gray-200 transition cursor-pointer select-none"
                       >
                         +
                       </button>
                     </div>
 
                     <div className="flex items-center gap-4 text-gray-500 flex-wrap">
+
                       <button
+                        type="button"
                         onClick={() => removeFromCart(item.id, isLoggedIn)}
-                        className="flex items-center gap-1 text-red-500 cursor-pointer hover:text-red-700 transition-colors"
+                        className="inline-flex min-h-[44px] items-center gap-1.5 py-2 px-1 text-sm font-medium text-red-500 cursor-pointer hover:text-red-700 transition-colors"
                       >
-                        <Trash2 size={16} /> Remove
+                        <Trash2 size={18} /> Remove
                       </button>
                     </div>
                   </div>

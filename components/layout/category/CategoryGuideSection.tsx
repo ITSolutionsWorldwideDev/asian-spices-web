@@ -27,8 +27,8 @@ export default function CategoryGuideSection({
   if (!sections || sections.length === 0) return null;
 
   return (
-    <section className="w-full py-6">
-      <div className="flex flex-col gap-5">
+    <section className="w-full py-2 sm:py-3">
+      <div className="flex flex-col gap-3 sm:gap-4">
         {sections.map((section, index) => {
           const isExpanded = expandedIndex === index;
           const displayTitle = cleanDashes(section.title);
@@ -37,20 +37,22 @@ export default function CategoryGuideSection({
           return (
             <div
               key={index}
-              className="bg-white border border-neutral-100 rounded-2xl shadow-[0_2px_16px_rgba(0,0,0,0.05)] overflow-hidden"
+              className="bg-gradient-to-b from-white to-[#faf8f5] border border-neutral-200/80 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] hover:border-neutral-300/80 transition-all overflow-hidden"
             >
-              <div className="px-6 pt-6 pb-5">
+              <div className="px-5 py-4 sm:px-6 sm:py-5">
                 {/* Title + chevron row */}
                 <div className="flex items-start justify-between gap-4">
-                  <h2 className="text-lg md:text-xl font-bold text-[#111111] leading-snug">
+                  <h2 className="text-base sm:text-lg font-bold text-neutral-800 leading-snug">
                     {displayTitle}
                   </h2>
 
                   {!hideReadMore && displayDesc && (
                     <button
+                      type="button"
                       onClick={() => setExpandedIndex(isExpanded ? null : index)}
                       aria-expanded={isExpanded}
-                      className={`shrink-0 w-8 h-8 rounded-full bg-[#fff4ee] flex items-center justify-center text-[#ff7733] transition-transform duration-300 focus:outline-none ${
+                      aria-label={isExpanded ? "Collapse guide section" : "Expand guide section"}
+                      className={`shrink-0 w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200/80 flex items-center justify-center text-neutral-500 hover:text-neutral-800 transition-all duration-300 focus:outline-none active:scale-95 cursor-pointer ${
                         isExpanded ? "rotate-180" : "rotate-0"
                       }`}
                     >
@@ -59,33 +61,39 @@ export default function CategoryGuideSection({
                   )}
                 </div>
 
-                {/* Description — 2-line clamp when collapsed, full when expanded or hideReadMore */}
+                {/* Description with soft bottom fade when collapsed */}
                 {displayDesc && (
-                  <>
-                    <p
-                      className={`mt-3 text-[#555555] text-xs md:text-sm leading-relaxed whitespace-pre-line transition-all duration-300 ${
-                        hideReadMore || isExpanded ? "" : "line-clamp-2"
+                  <div className="relative mt-2.5">
+                    <div
+                      className={`text-neutral-600 text-xs sm:text-sm leading-relaxed whitespace-pre-line transition-all duration-300 ${
+                        hideReadMore || isExpanded ? "" : "max-h-[50px] overflow-hidden"
                       }`}
                     >
-                      {displayDesc}
-                    </p>
+                      <p>{displayDesc}</p>
+                    </div>
+
+                    {/* Soft fade overlay for collapsed text */}
+                    {!hideReadMore && !isExpanded && (
+                      <div className="pointer-events-none absolute inset-x-0 bottom-6 h-8 bg-gradient-to-t from-[#faf8f5] via-[#faf8f5]/80 to-transparent" />
+                    )}
 
                     {/* Read more / Show less */}
                     {!hideReadMore && (
                       <button
+                        type="button"
                         onClick={() => setExpandedIndex(isExpanded ? null : index)}
-                        className="mt-3 inline-flex items-center gap-1 text-[#d95325] text-xs font-semibold hover:text-[#b84320] transition-colors focus:outline-none"
+                        className="mt-2 inline-flex items-center gap-1.5 py-1 text-xs sm:text-sm font-semibold text-neutral-600 hover:text-red-600 transition-colors focus:outline-none cursor-pointer"
                       >
-                        {isExpanded ? "Show less" : "Read more"}
+                        <span>{isExpanded ? "Show less" : "Read more"}</span>
                         <ChevronDown
                           size={13}
                           className={`transition-transform duration-300 ${
-                            isExpanded ? "rotate-180" : "rotate-0"
+                            isExpanded ? "rotate-180 text-red-600" : "text-neutral-400"
                           }`}
                         />
                       </button>
                     )}
-                  </>
+                  </div>
                 )}
               </div>
             </div>

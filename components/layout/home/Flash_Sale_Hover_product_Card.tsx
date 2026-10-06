@@ -5,6 +5,7 @@ import { getProductPath } from "@/lib/product-path";
 interface FlashSaleProduct {
   id: string | number;
   title: string;
+  weight?: string | number | null;
   image: string;
   base_price: number;
   oldPrice: number;
@@ -58,7 +59,7 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
         <div className="w-24 h-24 relative shrink-0 border border-gray-100 rounded-lg overflow-hidden bg-gray-50">
           <img
             src={item.image.startsWith("http") ? item.image : `/assets/home/hot_sale/${item.image}`}
-            alt={item.title}
+            alt={item.weight ? `${item.title} ${item.weight}` : item.title}
             className="w-full h-full object-contain"
           />
         </div>
@@ -66,6 +67,12 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
         <div className="flex flex-col justify-between py-1 min-w-0">
           <h2 className="text-base font-semibold text-gray-800 leading-tight line-clamp-2">
             {item.title}
+            {item.weight &&
+            !item.title
+              .toLowerCase()
+              .includes(String(item.weight).toLowerCase().trim())
+              ? ` ${item.weight}`
+              : ""}
           </h2>
 
           <div className="flex items-baseline space-x-1.5 my-1">

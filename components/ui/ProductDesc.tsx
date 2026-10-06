@@ -9,7 +9,10 @@ import {
   Heart,
   AlertCircle,
   Clock3,
+  ShoppingCart,
+  Zap,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import ProductTabs from "../layout/productdescpage/ProductTabs";
 import ProductImageGallery from "../layout/productdescpage/ProductImageGallery";
@@ -31,6 +34,7 @@ export default function ProductDesc({
   product: Product;
   category: string;
 }) {
+  const router = useRouter();
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
   const { symbol, rate } = useCurrencyStore();
@@ -235,9 +239,9 @@ export default function ProductDesc({
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-6">
       {/* Breadcrumbs */}
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-6 text-sm sm:text-base">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-4 sm:mb-6 text-xs sm:text-sm">
         <Link
           href={`/${categorySlug}`}
           className="flex items-center gap-2 hover:underline"
@@ -265,7 +269,7 @@ export default function ProductDesc({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
         {/* Left Gallery */}
         <div>
           <ProductImageGallery
@@ -280,27 +284,27 @@ export default function ProductDesc({
         </div>
 
         {/* Right Info Details */}
-        <div className="space-y-5" data-cart-anchor>
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+        <div className="space-y-4 sm:space-y-5" data-cart-anchor>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight">
             {product.name}
             {product.weight ? ` ${product.weight}` : ""}
           </h1>
           {product.seller_name ? (
             showSeller ? (
-              <p className="text-sm font-medium text-orange-700">
+              <p className="text-xs sm:text-sm font-medium text-orange-700">
                 Sold by {product.seller_name}
               </p>
             ) : (
               <button
                 type="button"
                 onClick={() => setShowSeller(true)}
-                className="text-sm font-medium text-orange-700 underline-offset-2 hover:underline"
+                className="text-xs sm:text-sm font-medium text-orange-700 underline-offset-2 hover:underline"
               >
                 View seller
               </button>
             )
           ) : null}
-          <p className="text-base text-gray-500">
+          <p className="text-sm sm:text-base text-gray-500">
             Origin: {product.country_of_origin || "International"}
           </p>
 
@@ -312,7 +316,7 @@ export default function ProductDesc({
                 .map((_, i) => (
                   <Star
                     key={i}
-                    size={16}
+                    size={15}
                     className={
                       i < Math.round(Math.max(0, Math.min(5, numericRating)))
                         ? "text-yellow-400"
@@ -327,13 +331,13 @@ export default function ProductDesc({
                 ))}
             </div>
             {displayedRating ? (
-              <span className="text-sm font-semibold text-gray-700">
+              <span className="text-xs sm:text-sm font-semibold text-gray-700">
                 {displayedRating}
               </span>
             ) : (
-              <span className="text-sm text-gray-500">No rating yet</span>
+              <span className="text-xs sm:text-sm text-gray-500">No rating yet</span>
             )}
-            <span className="text-sm font-semibold text-orange-500">
+            <span className="text-xs sm:text-sm font-semibold text-orange-500">
               ({displayedReviews} reviews)
             </span>
           </div>
@@ -341,34 +345,34 @@ export default function ProductDesc({
           {/* Price / savings */}
           {isPriceAvailable ? (
             <div
-              className={`flex flex-wrap items-center gap-4 ${
-                hasSale ? "rounded-xl border border-slate-200 px-4 py-3" : ""
+              className={`flex flex-wrap items-center gap-3 sm:gap-4 ${
+                hasSale ? "rounded-xl border border-slate-200 p-3 sm:px-4 sm:py-3 bg-white" : ""
               }`}
             >
               {!priceReady ? (
                 <span
-                  className="inline-block h-12 w-28 animate-pulse rounded bg-orange-100"
+                  className="inline-block h-10 sm:h-12 w-28 animate-pulse rounded bg-orange-100"
                   aria-hidden
                 />
               ) : (
                 <>
                   {hasSale && originalPrice && (
-                    <span className="text-5xl font-bold leading-none text-gray-500 line-through">
+                    <span className="text-2xl sm:text-3xl lg:text-5xl font-bold leading-none text-gray-400 line-through">
                       {symbol}
                       {(originalPrice * rate).toFixed(2)}
                     </span>
                   )}
                   <span
                     className={`font-extrabold leading-none text-orange-500 ${
-                      hasSale ? "text-6xl" : "text-5xl"
+                      hasSale ? "text-3xl sm:text-4xl lg:text-6xl" : "text-3xl sm:text-4xl lg:text-5xl"
                     }`}
                   >
                     {symbol}
                     {(currentPrice * rate).toFixed(2)}
                   </span>
                   {hasSale && rawSave > 0 && (
-                    <p className="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-2 text-lg font-bold text-green-700">
-                      <Clock3 size={18} />
+                    <p className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-green-100 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm lg:text-lg font-bold text-green-700">
+                      <Clock3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px]" />
                       You save {symbol}
                       {(rawSave * rate).toFixed(2)}
                     </p>
@@ -377,7 +381,7 @@ export default function ProductDesc({
               )}
             </div>
           ) : (
-            <div className="flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-amber-800">
+            <div className="flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50 p-3.5 sm:p-4 text-amber-800">
               <AlertCircle className="mt-0.5 size-5 shrink-0 text-amber-600" />
               <div>
                 <p className="text-sm font-semibold">Pricing Unavailable</p>
@@ -390,7 +394,7 @@ export default function ProductDesc({
 
           {/* Availability */}
           <div
-            className={`rounded-lg px-4 py-3 text-sm font-semibold ${
+            className={`rounded-lg px-3.5 py-2.5 text-xs sm:text-sm font-semibold ${
               stockCount > 0
                 ? "bg-green-50 text-green-700"
                 : "bg-red-50 text-red-700"
@@ -406,10 +410,10 @@ export default function ProductDesc({
 
           {/* Quantity */}
           {isPriceAvailable && (
-            <div className="space-y-3">
-              <p className="text-2xl font-semibold text-gray-900">Quantity</p>
+            <div className="space-y-2.5 sm:space-y-3">
+              <p className="text-base sm:text-lg font-semibold text-gray-900">Quantity</p>
               {cartItem ? (
-                <div className="inline-flex h-12 items-center overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div className="inline-flex h-11 sm:h-12 items-center overflow-hidden rounded-xl border border-gray-200 bg-white">
                   <button
                     onClick={() => decreaseQty(product.id, isLoggedIn)}
                     className="h-full px-4 text-lg font-semibold transition hover:bg-gray-100 cursor-pointer"
@@ -425,7 +429,7 @@ export default function ProductDesc({
                       if (isNaN(value) || value < 1) return;
                       setQty(product.id, value, isLoggedIn);
                     }}
-                    className="w-12 text-center text-base font-semibold outline-none"
+                    className="w-12 text-center text-sm sm:text-base font-semibold outline-none"
                   />
                   <button
                     onClick={(e) =>
@@ -439,7 +443,7 @@ export default function ProductDesc({
                   </button>
                 </div>
               ) : (
-                <div className="inline-flex h-12 items-center overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div className="inline-flex h-11 sm:h-12 items-center overflow-hidden rounded-xl border border-gray-200 bg-white">
                   <button
                     onClick={() => setPendingQty((prev) => Math.max(1, prev - 1))}
                     className="h-full px-4 text-lg font-semibold transition hover:bg-gray-100 cursor-pointer"
@@ -455,7 +459,7 @@ export default function ProductDesc({
                       if (isNaN(value) || value < 1) return;
                       setPendingQty(value);
                     }}
-                    className="w-12 text-center text-base font-semibold outline-none"
+                    className="w-12 text-center text-sm sm:text-base font-semibold outline-none"
                   />
                   <button
                     onClick={() => setPendingQty((prev) => prev + 1)}
@@ -467,8 +471,8 @@ export default function ProductDesc({
               )}
 
               {product.weight ? (
-                <div className="flex flex-wrap gap-3">
-                  <span className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                <div className="flex flex-wrap gap-2.5">
+                  <span className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-700">
                     {product.weight} per unit
                   </span>
                 </div>
@@ -478,8 +482,8 @@ export default function ProductDesc({
 
           {/* Primary actions */}
           {isPriceAvailable && (
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
+            <div className="space-y-2.5 sm:space-y-3 pt-2">
+              <div className="flex items-center gap-2.5 sm:gap-3">
                 {cartItem ? (
                   <button
                     onClick={(e) =>
@@ -487,16 +491,18 @@ export default function ProductDesc({
                         anchor: anchorFromClick(e),
                       })
                     }
-                    className="h-14 flex-1 rounded-xl bg-zinc-800 text-lg font-bold text-white transition hover:bg-black cursor-pointer"
+                    className="h-12 sm:h-14 flex-1 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-sm sm:text-base lg:text-lg shadow-lg shadow-orange-500/25 hover:shadow-orange-500/35 active:scale-[0.99] flex items-center justify-center gap-2 transition cursor-pointer"
                   >
-                    In Cart ({cartItem.quantity})
+                    <ShoppingCart className="h-5 w-5 shrink-0" />
+                    <span>In Cart ({cartItem.quantity}) — Add More</span>
                   </button>
                 ) : (
                   <button
                     onClick={addConfiguredQuantity}
-                    className="h-14 flex-1 rounded-xl bg-zinc-800 text-lg font-bold text-white transition hover:bg-black cursor-pointer"
+                    className="h-12 sm:h-14 flex-1 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-sm sm:text-base lg:text-lg shadow-lg shadow-orange-500/25 hover:shadow-orange-500/35 active:scale-[0.99] flex items-center justify-center gap-2 transition cursor-pointer"
                   >
-                    Add to Cart
+                    <ShoppingCart className="h-5 w-5 shrink-0" />
+                    <span>Add to Cart</span>
                   </button>
                 )}
                 <button
@@ -514,30 +520,38 @@ export default function ProductDesc({
                       isLoggedIn,
                     )
                   }
-                  className={`inline-flex h-14 w-14 items-center justify-center rounded-xl border transition cursor-pointer ${
+                  className={`inline-flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl border transition cursor-pointer shadow-sm ${
                     isInWishlist(product.id)
                       ? "border-red-500 bg-red-500 text-white"
-                      : "border-gray-300 bg-white text-gray-700 hover:border-red-500 hover:text-red-500"
+                      : "border-gray-200 bg-white text-gray-700 hover:border-red-400 hover:text-red-500"
                   }`}
                   aria-label="Toggle wishlist"
                 >
                   <Heart
-                    className={`h-6 w-6 ${isInWishlist(product.id) ? "fill-white text-white" : ""}`}
+                    className={`h-5 w-5 sm:h-6 sm:w-6 ${isInWishlist(product.id) ? "fill-white text-white" : ""}`}
                   />
                 </button>
               </div>
-              <Link
-                href="/checkout"
-                className="inline-flex h-14 w-full items-center justify-center rounded-xl bg-red-500 text-lg font-bold text-white transition hover:bg-red-600"
+              <button
+                type="button"
+                onClick={(e) => {
+                  if (!priceReady) return;
+                  if (!cartItem) {
+                    addConfiguredQuantity(e);
+                  }
+                  router.push("/checkout");
+                }}
+                className="inline-flex h-12 sm:h-14 w-full items-center justify-center gap-2 rounded-2xl bg-stone-900 text-sm sm:text-base lg:text-lg font-bold text-white transition hover:bg-black shadow-md shadow-black/15 active:scale-[0.99] cursor-pointer ring-1 ring-stone-800/10"
               >
-                Checkout Now
-              </Link>
+                <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-amber-400 fill-amber-400" />
+                <span>Buy Now</span>
+              </button>
             </div>
           )}
 
           {/* Why choose us */}
           <section className="pt-2">
-            <p className="text-3xl font-bold text-gray-900">Why choose us?</p>
+            <p className="text-xl sm:text-2xl font-bold text-gray-900">Why choose us?</p>
             <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {whyChooseUs.map((item, idx) => (
                 <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">
