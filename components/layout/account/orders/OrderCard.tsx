@@ -74,7 +74,9 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
 
     setDownloading(true);
     try {
-      const response = await fetch(`/api/account/orders/${order.id}/invoice`);
+      const response = await fetch(`/api/account/orders/${order.id}/invoice`, {
+        cache: "no-store",
+      });
 
       if (!response.ok) {
         const errData = await response.json();
@@ -85,7 +87,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = downloadUrl;
-      link.download = `Invoice-${order.order_number}.pdf`;
+      link.download = `Invoice-${order.order_number?.replace(/^#+\s*/, "")}.pdf`;
 
       document.body.appendChild(link);
       link.click();
@@ -173,7 +175,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
     >
       <div className="flex justify-between items-center">
         <div>
-          <p className="font-semibold">#{order.order_number}</p>
+          <p className="font-semibold">{order.order_number?.replace(/^#+\s*/, "")}</p>
           <p className="text-sm text-gray-500">
             {new Date(order.created_at).toLocaleDateString()}
           </p>
@@ -348,7 +350,9 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
 
     setDownloading(true);
     try {
-      const response = await fetch(`/api/account/orders/${order.id}/invoice`);
+      const response = await fetch(`/api/account/orders/${order.id}/invoice`, {
+        cache: "no-store",
+      });
 
       if (!response.ok) {
         const errData = await response.json();
@@ -359,7 +363,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = downloadUrl;
-      link.download = `Invoice-${order.order_number}.pdf`;
+      link.download = "Invoice-" + order.order_number + ".pdf";
 
       document.body.appendChild(link);
       link.click();

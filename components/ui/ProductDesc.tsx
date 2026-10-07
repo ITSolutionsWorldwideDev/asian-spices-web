@@ -266,6 +266,7 @@ export default function ProductDesc({
         <span className="text-[#6A7282]">/</span>
         <p className="text-gray-900 font-medium wrap-break-word">
           {product.name}
+          {product.weight ? ` ${product.weight}` : ""}
         </p>
       </div>
 
@@ -274,7 +275,7 @@ export default function ProductDesc({
         <div>
           <ProductImageGallery
             images={images}
-            name={product.name}
+            name={`${product.name}${product.weight ? ` ${product.weight}` : ""}`}
             badge={
               (product as any).category_name ||
               category ||

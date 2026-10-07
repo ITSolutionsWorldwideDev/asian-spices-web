@@ -124,6 +124,7 @@ export function getProductMetadata(
   product: {
     name: string;
     slug: string;
+    weight?: string | number | null;
     description?: string | null;
     category_name?: string | null;
     category_slug?: string | null;
@@ -132,10 +133,13 @@ export function getProductMetadata(
   categoryFallback?: string,
 ): Metadata {
   const category = product.category_name || categoryFallback || "Products";
+  const fullName = product.weight
+    ? `${product.name} ${product.weight}`
+    : product.name;
 
   return {
-    title: buildProductMetaTitle(product.name, category),
-    description: buildProductMetaDescription(product.name, product.description),
+    title: buildProductMetaTitle(fullName, category),
+    description: buildProductMetaDescription(fullName, product.description),
     alternates: {
       canonical: getProductCanonicalPath(product),
     },

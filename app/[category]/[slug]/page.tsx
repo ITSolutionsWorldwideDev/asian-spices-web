@@ -38,7 +38,7 @@ import { getProductMetadata } from "@/lib/product-metadata";
 import { getProductJsonLd } from "@/lib/schema";
 import JsonLd from "@/components/seo/JsonLd";
 import { subcategoryContentMap } from "@/data/categoryContent";
-import CategoryGuideSection from "@/components/layout/category/CategoryGuideSection";
+import CategoryHeroDescription from "@/components/layout/category/CategoryHeroDescription";
 import { parseCategoryGuide } from "@/lib/category-helpers";
 
 
@@ -195,10 +195,10 @@ export default async function CategorySlugPage({
         <Nav />
 
         {/* 1. Dedicated Hero Section Wrapper */}
-        <section className="relative w-full bg-gradient-to-b from-[#fbf9f5] via-[#faf7f2]/50 to-white -mt-2 sm:-mt-1 md:mt-0 pt-1.5 sm:pt-2 md:pt-3 xl:pt-4 pb-2.5 sm:pb-4 border-b border-gray-100/60">
+        <section className="relative w-full bg-gradient-to-b from-[#fbf9f5] via-[#faf7f2]/50 to-white pt-2 sm:pt-2 md:pt-3 xl:pt-4 pb-2 sm:pb-4 border-b border-gray-100/60">
           <div className="container mx-auto px-4 sm:px-6">
             {/* Breadcrumb: Home Page > {category.name} > {subcategory.name} */}
-            <nav aria-label="Breadcrumb" className="mb-1 text-[11px] sm:text-xs text-gray-500">
+            <nav aria-label="Breadcrumb" className="mb-0.5 sm:mb-1 text-[11px] sm:text-xs text-gray-500">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <Link href="/" className="hover:text-gray-900 transition font-normal">
                   Home Page
@@ -217,28 +217,13 @@ export default async function CategorySlugPage({
               <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-extrabold tracking-tight text-red-600 leading-tight">
                 {formatHeroHeading(guideData.bannerHeading, subcategory.name)}
               </h1>
-              {guideData.bannerText && (
-                <p className="mt-1.5 text-xs sm:text-sm md:text-base text-gray-800 max-w-4xl lg:max-w-5xl mx-auto leading-relaxed font-normal">
-                  {guideData.bannerText}
-                </p>
-              )}
+              <CategoryHeroDescription
+                initialText={guideData.bannerText}
+                extendedText={guideData.extendedText}
+              />
             </div>
           </div>
         </section>
-
-        {/* Main Content Container (Section 2 & Products) */}
-        <div className="container mx-auto px-4 sm:px-6">
-          {/* 2. SECTION 2 — Collapsible Guide (Faded / subtle styling) */}
-          {guideData.guideSections.length > 0 && (
-            <div className="mt-4 mb-4">
-              <CategoryGuideSection
-                sections={guideData.guideSections}
-                image={subContent?.image}
-                categoryName={subcategory.name}
-              />
-            </div>
-          )}
-        </div>
 
         {/* Products Section */}
         <Suspense

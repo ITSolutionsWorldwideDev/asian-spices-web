@@ -188,7 +188,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
   );
 
   const activeDropdownLink = navLinks.find(
-    (link) => link.children && activeLink === link.name && isMenuOpen,
+     (link) => link.children && activeLink === link.name && isMenuOpen,
   );
 
   const selectedShopCategory =

@@ -104,7 +104,7 @@ const Nav: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-2.5 pb-2.5 pt-0.5 sm:px-5 sm:pb-3">
+      <div className="px-2.5 pb-1.5 pt-0.5 sm:px-5 sm:pb-3">
         <NavSearch variant="mobile" />
       </div>
     </div>
@@ -163,7 +163,7 @@ const Nav: React.FC = () => {
   return (
     <>
       {/* Reserves header height so content does not jump under the fixed bar */}
-      <div className="h-[6.5rem] shrink-0 sm:h-[7rem] md:h-[7.5rem] xl:h-28" aria-hidden />
+      <div className="h-[7rem] shrink-0 sm:h-[7.5rem] md:h-[8rem] xl:h-28" aria-hidden />
       {mounted ? (
         <>
           {createPortal(bar, document.body)}

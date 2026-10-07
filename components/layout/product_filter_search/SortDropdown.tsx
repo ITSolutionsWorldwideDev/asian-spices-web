@@ -85,7 +85,7 @@ export default function SortDropdown() {
       {/* =========================
           🔽 SORT DROPDOWN
       ========================= */}
-      <div className="relative w-full sm:w-auto shrink-0">
+      <div className="relative w-full sm:w-auto shrink-0 hidden sm:block">
         <div className="relative flex items-center">
           <ArrowUpDown className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4 pointer-events-none" />
           <select
