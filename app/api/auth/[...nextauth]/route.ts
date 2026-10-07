@@ -5,4 +5,12 @@ import { webAuthOptions } from "@/core/auth";
 
 const handler = NextAuth(webAuthOptions);
 
-export { handler as GET, handler as POST };
+export async function GET(req: any, ctx: any) {
+  const params = await ctx?.params;
+  return handler(req, { ...ctx, params });
+}
+
+export async function POST(req: any, ctx: any) {
+  const params = await ctx?.params;
+  return handler(req, { ...ctx, params });
+}

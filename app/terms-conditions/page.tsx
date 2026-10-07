@@ -28,7 +28,7 @@ export default function TermsPage() {
           <Nav />
         </div>
 
-        <div className=" h-[300px] md:h-[340px] w-full overflow-hidden">
+        <div className="relative h-[300px] md:h-[340px] w-full overflow-hidden">
           <Image
             src="/assets/home/homeheaderimages/a8de5a3724f7239b78cdee795f978b5faba485b4 (1).webp"
             alt="Asian Spices"

@@ -378,10 +378,13 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
 
   // ── Mobile-only: white drawer matching design (existing options only) ──
   if (mobileOnly) {
+    const [expandedShopCategory, setExpandedShopCategory] = useState<number | null>(null);
+
     const closeMobileMenu = () => {
       setMobileMenu(false);
       setActiveLink("");
       setActiveSection(null);
+      setExpandedShopCategory(null);
     };
 
     const openMenu = () => {
@@ -394,14 +397,14 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
     const healthyExpanded = activeLink === "Healthy Living";
 
     const linkRow =
-      "flex w-full items-center gap-3.5 border-b border-gray-100 px-5 py-[1.125rem] text-left transition active:bg-gray-50";
+      "flex w-full items-center gap-3.5 border-b border-gray-100 px-5 py-3 text-left transition active:bg-gray-50";
 
     return (
-      <>
+      <div className="notranslate" translate="no">
         <button
           type="button"
           onClick={openMenu}
-          className="relative z-50 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm transition hover:bg-gray-50 focus:outline-none active:scale-95 sm:h-11 sm:w-11"
+          className="relative z-50 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm transition hover:bg-gray-50 focus:outline-none active:scale-95"
           aria-label="Open menu"
         >
           <Menu className="h-5 w-5 text-gray-700 sm:h-5.5 sm:w-5.5" strokeWidth={2} />
@@ -409,7 +412,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
 
         {mobileMenu &&
           createPortal(
-            <>
+            <div className="notranslate" translate="no">
               <div
                 className="fixed inset-0 z-[1000000] bg-black/35 xl:hidden"
                 onClick={closeMobileMenu}
@@ -421,17 +424,17 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                 aria-label="Mobile menu"
               >
                 {/* Header */}
-                <div className="sticky top-0 z-10 flex items-center justify-between bg-white px-5 py-4">
+                <div className="sticky top-0 z-10 flex items-center justify-between bg-white px-5 py-3.5 border-b border-gray-100">
                   <span className="text-[1.125rem] font-bold text-[#1c2b22]">
                     Asian Spices
                   </span>
                   <button
                     type="button"
                     onClick={closeMobileMenu}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-800"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 text-gray-800 transition hover:bg-gray-50 active:scale-95"
                     aria-label="Close menu"
                   >
-                    <X className="h-[18px] w-[18px]" strokeWidth={2} />
+                    <X className="h-5 w-5" strokeWidth={2} />
                   </button>
                 </div>
 
@@ -443,7 +446,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                     <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" strokeWidth={2} />
                   </Link>
 
-                  {/* Shop By Categories — existing shop categories */}
+                  {/* Shop By Categories — expandable categories & subcategories */}
                   <button
                     type="button"
                     onClick={() =>
@@ -467,21 +470,59 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                         <p className="px-5 py-3 text-sm text-gray-400">Loading...</p>
                       ) : (
                         shopCategoryChildren.map((child, ind) => {
-                          const categoryHref =
-                            child.category?.find((item) => item.name === "View all")?.href ||
-                            "products";
+                          const subItems = child.category || [];
+                          const viewAllItem = subItems.find((item) => item.name === "View all");
+                          const specificSubcategories = subItems.filter((item) => item.name !== "View all");
+                          const isCategoryOpen = expandedShopCategory === ind;
+
                           return (
-                            <Link
-                              key={ind}
-                              href={`/${categoryHref}`}
-                              onClick={closeMobileMenu}
-                              className="flex items-center gap-3 border-b border-gray-50 px-5 py-3.5 last:border-b-0"
-                            >
-                              <span className="flex-1 text-[14px] font-medium text-gray-800">
-                                {child.heading}
-                              </span>
-                              <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" />
-                            </Link>
+                            <div key={ind} className="border-b border-gray-50 last:border-b-0">
+                              <div className="flex items-center justify-between px-5 py-3 hover:bg-gray-50/80 transition">
+                                <Link
+                                  href={`/${viewAllItem?.href || "products"}`}
+                                  onClick={closeMobileMenu}
+                                  className="flex-1 text-[14px] font-medium text-gray-800 hover:text-black"
+                                >
+                                  {child.heading}
+                                </Link>
+                                {specificSubcategories.length > 0 && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setExpandedShopCategory(isCategoryOpen ? null : ind)}
+                                    className="p-1.5 -mr-1 text-gray-400 hover:text-gray-700 transition"
+                                    aria-label={`Toggle ${child.heading} subcategories`}
+                                  >
+                                    <ChevronDown
+                                      className={`h-4 w-4 transition-transform ${isCategoryOpen ? "rotate-180 text-amber-600" : ""}`}
+                                    />
+                                  </button>
+                                )}
+                              </div>
+
+                              {isCategoryOpen && specificSubcategories.length > 0 && (
+                                <div className="bg-gray-50/80 py-1.5 pl-6 pr-4 border-t border-gray-100/70 space-y-0.5">
+                                  <Link
+                                    href={`/${viewAllItem?.href || "products"}`}
+                                    onClick={closeMobileMenu}
+                                    className="flex items-center justify-between py-2 px-3 text-[13px] font-semibold text-amber-700 hover:text-amber-800 rounded-lg hover:bg-amber-50/60"
+                                  >
+                                    <span>View all {child.heading}</span>
+                                    <ChevronRight className="h-3.5 w-3.5" />
+                                  </Link>
+                                  {specificSubcategories.map((sub, sIdx) => (
+                                    <Link
+                                      key={sIdx}
+                                      href={`/${sub.href}`}
+                                      onClick={closeMobileMenu}
+                                      className="flex items-center justify-between py-2 px-3 text-[13px] text-gray-600 hover:text-black rounded-lg hover:bg-gray-100/80 transition"
+                                    >
+                                      <span>{sub.name}</span>
+                                      <ChevronRight className="h-3 w-3 text-gray-400" />
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
                           );
                         })
                       )}
@@ -494,7 +535,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                     onClick={() =>
                       setActiveLink(healthyExpanded ? "" : "Healthy Living")
                     }
-                    className="flex w-full items-center gap-3.5 border-b border-gray-100 px-5 py-[1.125rem] text-left transition active:bg-gray-50"
+                    className="flex w-full items-center gap-3.5 border-b border-gray-100 px-5 py-3 text-left transition active:bg-gray-50"
                   >
                     <span className="flex-1 text-[12px] font-semibold uppercase tracking-[0.06em] text-gray-400">
                       Healthy Living
@@ -517,22 +558,22 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                               onClick={() =>
                                 setActiveSection(sectionOpen ? null : section.heading)
                               }
-                              className="flex w-full items-center gap-3.5 px-5 py-3.5 text-left active:bg-gray-50"
+                              className="flex w-full items-center gap-3.5 px-5 py-3 text-left active:bg-gray-50"
                             >
-                              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-gray-100">
+                              <div className="relative h-13 w-13 shrink-0 overflow-hidden rounded-xl bg-gray-100">
                                 <Image
                                   src={section.image}
                                   alt={section.heading}
                                   fill
-                                  sizes="56px"
+                                  sizes="52px"
                                   className="object-cover"
                                 />
                               </div>
                               <div className="min-w-0 flex-1">
-                                <p className="text-[15px] font-semibold leading-snug text-gray-900">
+                                <p className="text-[14px] font-semibold leading-snug text-gray-900">
                                   {section.heading}
                                 </p>
-                                <p className="mt-0.5 text-[13px] leading-snug text-gray-400">
+                                <p className="mt-0.5 text-[12.5px] leading-snug text-gray-400">
                                   {section.description}
                                 </p>
                               </div>
@@ -551,9 +592,9 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                                     key={item.href}
                                     href={`/${item.href}`}
                                     onClick={closeMobileMenu}
-                                    className="flex items-center gap-3 px-5 py-3 pl-[5.25rem] active:bg-gray-100"
+                                    className="flex items-center gap-3 px-5 py-2.5 pl-[5.25rem] active:bg-gray-100"
                                   >
-                                    <span className="flex-1 text-[14px] text-gray-700">
+                                    <span className="flex-1 text-[13.5px] text-gray-700">
                                       {item.name}
                                     </span>
                                     <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-300" />
@@ -638,16 +679,16 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
                   )}
                 </div>
               </nav>
-            </>,
+            </div>,
             document.body,
           )}
-      </>
+      </div>
     );
   }
 
   // ── Desktop: nav links rendered inside the pill bar ──
   return (
-    <>
+    <div className="notranslate" translate="no">
       {megaMenu}
 
       <ul className="flex min-w-0 shrink items-center">
@@ -687,7 +728,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
           </React.Fragment>
         ))}
       </ul>
-    </>
+    </div>
   );
 };
 

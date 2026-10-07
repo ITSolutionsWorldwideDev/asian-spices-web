@@ -145,7 +145,7 @@ export default function LoginForm() {
         <div className="flex flex-col p-4 sm:p-5 md:p-7 lg:p-8 xl:p-10">
         <Link
           href="/"
-          className="group mb-3 inline-flex items-center gap-2 rounded-full border border-orange-100 bg-gradient-to-r from-orange-50 to-amber-50 px-3 py-1.5 text-xs font-semibold text-orange-700 shadow-sm transition-all duration-300 hover:border-orange-200 hover:from-orange-100 hover:to-amber-100 sm:mb-4 sm:text-sm sm:px-4 sm:py-2 md:mb-5"
+          className="group mb-3 inline-flex min-h-[44px] items-center gap-2 rounded-full border border-orange-100 bg-gradient-to-r from-orange-50 to-amber-50 px-3.5 py-2 text-xs font-semibold text-orange-700 shadow-sm transition-all duration-300 hover:border-orange-200 hover:from-orange-100 hover:to-amber-100 sm:mb-4 sm:text-sm sm:px-4 sm:py-2 md:mb-5"
         >
           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white text-orange-600 shadow-sm sm:h-7 sm:w-7">
             <ArrowLeft size={14} strokeWidth={2.5} />
@@ -272,6 +272,11 @@ export default function LoginForm() {
               <Link
                 href="/forgot-password"
                 className="
+                  inline-flex
+                  min-h-[44px]
+                  items-center
+                  py-2
+                  px-1
                   text-sm
                   text-orange-600
                   hover:text-orange-700

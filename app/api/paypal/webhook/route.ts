@@ -112,9 +112,11 @@ export async function POST(req: NextRequest) {
           await assignNextStore(client, orderId);
           console.log(`Webhook fallback process successfully routed Order #${orderId} out to store networks.`);
 
-          sendOrderConfirmationEmail(orderId).catch((err) =>
-            console.error("[Email Trigger Error PayPal Webhook]:", err),
-          );
+          try {
+            await sendOrderConfirmationEmail(orderId);
+          } catch (emailErr) {
+            console.error("[Email Trigger Error PayPal Webhook]:", emailErr);
+          }
         }
 
         await client.query("COMMIT");

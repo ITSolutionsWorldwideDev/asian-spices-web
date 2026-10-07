@@ -13,12 +13,15 @@ interface Props {
     token?: string;
     id?: string;
     statusAction?: string;
+    orderStatusId?: string;
   }>;
 }
 
 export default async function Page({ searchParams }: Props) {
   const params = await searchParams;
-  const { orderId, token, id, statusAction } = params;
+  const { orderId, token, id, statusAction, orderStatusId } = params;
+  const effectiveStatusAction =
+    statusAction || (orderStatusId === "100" ? "paid" : orderStatusId ? "failed" : undefined);
 
   return (
     <div className="min-h-screen bg-white">
@@ -49,11 +52,11 @@ export default async function Page({ searchParams }: Props) {
         <div className="space-y-6">
             {token ? (
               <PayPalCaptureHandler orderId={orderId} token={token} />
-            ) : statusAction ? (
+            ) : effectiveStatusAction ? (
               <PaynlReturnHandler
                 orderId={orderId}
                 transactionId={id}
-                statusAction={statusAction}
+                statusAction={effectiveStatusAction}
               />
             ) : (
               <CheckoutStatus orderId={orderId} />

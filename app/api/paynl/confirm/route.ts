@@ -73,9 +73,11 @@ export async function POST(req: NextRequest) {
         await client.query("COMMIT");
 
         if (shouldSendEmail) {
-          sendOrderConfirmationEmail(orderId).catch((err) =>
-            console.error("[Email Trigger Error PayNL Workflow]:", err),
-          );
+          try {
+            await sendOrderConfirmationEmail(orderId, client);
+          } catch (emailErr) {
+            console.error("[Email Trigger Error PayNL Workflow]:", emailErr);
+          }
         }
 
         return NextResponse.json({

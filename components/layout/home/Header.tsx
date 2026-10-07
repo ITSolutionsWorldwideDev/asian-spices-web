@@ -171,7 +171,7 @@ export default function Header() {
 
                 <Link
                   href={overlay.ctaHref}
-                  className={`mt-2.5 inline-flex rounded-full px-4 py-2 text-[11px] font-bold transition sm:mt-5 sm:px-8 sm:py-3.5 sm:text-base sm:font-semibold ${
+                  className={`mt-2.5 inline-flex min-h-[44px] items-center justify-center rounded-full px-5 py-2.5 text-xs font-bold transition sm:mt-5 sm:min-h-0 sm:px-8 sm:py-3.5 sm:text-base sm:font-semibold ${
                     isLight
                       ? "bg-[#D34827] text-white hover:bg-[#c03f20]"
                       : "bg-[#EE9933] text-[#1a1208] hover:bg-[#e08a28]"
@@ -183,20 +183,24 @@ export default function Header() {
             </div>
           )}
 
-          {/* Slide dots cleanly positioned */}
-          <div className="absolute bottom-2.5 left-1/2 z-20 flex -translate-x-1/2 gap-1.5 sm:bottom-4">
+          {/* Slide dots cleanly positioned with touch-friendly tap area */}
+          <div className="absolute bottom-1.5 left-1/2 z-20 flex -translate-x-1/2 items-center sm:bottom-3">
             {banners.map((banner, i) => (
               <button
                 key={banner.id}
                 type="button"
                 aria-label={`Go to banner ${i + 1}`}
                 onClick={() => setIndex(i)}
-                className={`h-1.5 rounded-full transition-all sm:h-2 ${
-                  i === index
-                    ? "w-5 bg-[#EE9933] sm:w-6"
-                    : "w-1.5 bg-white/50 hover:bg-white/85 sm:w-2"
-                }`}
-              />
+                className="group flex min-h-[44px] min-w-[32px] items-center justify-center p-2 focus:outline-none"
+              >
+                <span
+                  className={`block h-1.5 rounded-full transition-all sm:h-2 ${
+                    i === index
+                      ? "w-5 bg-[#EE9933] sm:w-6"
+                      : "w-1.5 bg-white/50 group-hover:bg-white/85 sm:w-2"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>

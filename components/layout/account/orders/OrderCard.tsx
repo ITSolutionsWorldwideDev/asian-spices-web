@@ -167,7 +167,10 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
   };
 
   return (
-    <div className="border rounded-2xl p-5 bg-white transition-all duration-300 ease-in-out">
+    <div
+      className="notranslate border rounded-2xl p-5 bg-white transition-all duration-300 ease-in-out"
+      translate="no"
+    >
       <div className="flex justify-between items-center">
         <div>
           <p className="font-semibold">#{order.order_number}</p>

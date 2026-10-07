@@ -205,7 +205,7 @@ export default function RecipeIngredientsInstructionsSection({
                   type="button"
                   onClick={handleAddSelectedToCart}
                   disabled={!selectedCount || adding}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#e8924a] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#d97d35] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-[#e8924a] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#d97d35] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <span aria-hidden>+</span>
                   {adding ? "Adding..." : "Add to Shopping Cart"}
@@ -368,9 +368,9 @@ export default function RecipeIngredientsInstructionsSection({
                 type="button"
                 onClick={() => setShowSuccess(false)}
                 aria-label="Close"
-                className="absolute top-3 right-3 rounded-full p-2 text-gray-500 transition hover:bg-gray-100"
+                className="absolute top-3 right-3 flex h-11 w-11 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 active:scale-95"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </button>
 
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-50">

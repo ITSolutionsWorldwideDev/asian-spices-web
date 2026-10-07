@@ -49,7 +49,7 @@ export function ChatInput({
   }
 
   return (
-    <div className="bg-transparent px-4 py-4 sm:px-5">
+    <div className="notranslate bg-transparent px-4 py-4 sm:px-5" translate="no">
       <div className="flex items-center gap-3 rounded-[1.75rem] border border-[rgba(255,255,255,0.34)] bg-[rgba(255,255,255,0.72)] px-4 py-3 shadow-[0_10px_24px_rgba(95,61,37,0.08)]">
         <button
           type="button"

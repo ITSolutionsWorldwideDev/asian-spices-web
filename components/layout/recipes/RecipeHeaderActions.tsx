@@ -80,7 +80,10 @@ export default function RecipeHeaderActions({
     averageRating > 0 ? averageRating.toFixed(1) : "0.0";
 
   return (
-    <div className="flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-3 text-white">
+    <div
+      className="notranslate flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-3 text-white"
+      translate="no"
+    >
       <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
         <div className="inline-flex items-center gap-2">
           <div className="flex items-center gap-0.5" aria-hidden>

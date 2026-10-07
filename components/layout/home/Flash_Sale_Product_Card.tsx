@@ -12,6 +12,7 @@ import { getProductPath } from "@/lib/product-path";
 import { stripHtml } from "@/lib/product-metadata";
 import { resolveTaxRate } from "@/lib/tax";
 import { useGlobalStore } from "@/store/useGlobalStore";
+import { Tag } from "lucide-react";
 
 import Flash_Sale_Hover_product_Card from "./Flash_Sale_Hover_product_Card";
 
@@ -67,6 +68,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
           return {
             id: p.id,
             title: p.name,
+            weight: p.weight ? String(p.weight).trim() : null,
             image: p.image || "fallback-placeholder.jpg",
             oldPrice: basePrice,
             sale_price: salePriceFromDb,
@@ -119,28 +121,28 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
 
   return (
     <div className="group relative w-full min-w-0">
-      {/* Slider Controls — inset so they stay on-screen on mobile */}
+      {/* Slider Controls — hidden on mobile so cards are not compressed or covered */}
       <button
         type="button"
         aria-label="Previous deals"
         onClick={() => scroll("left")}
-        className="absolute left-0 top-1/2 z-40 -translate-y-1/2 rounded-full border border-gray-100 bg-black p-1.5 opacity-100 shadow-md transition sm:left-1 sm:p-2 md:left-0 md:opacity-0 md:group-hover:opacity-100"
+        className="absolute left-0 top-1/2 z-40 hidden sm:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center -translate-y-1/2 rounded-full border border-gray-100 bg-black text-white opacity-100 shadow-md transition active:scale-95 sm:left-1 md:left-0 md:opacity-0 md:group-hover:opacity-100"
       >
-        <ChevronLeft size={18} />
+        <ChevronLeft size={20} />
       </button>
       <button
         type="button"
         aria-label="Next deals"
         onClick={() => scroll("right")}
-        className="absolute right-0 top-1/2 z-40 -translate-y-1/2 rounded-full border border-gray-100 bg-black p-1.5 opacity-100 shadow-md transition sm:right-1 sm:p-2 md:right-0 md:opacity-0 md:group-hover:opacity-100"
+        className="absolute right-0 top-1/2 z-40 hidden sm:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center -translate-y-1/2 rounded-full border border-gray-100 bg-black text-white opacity-100 shadow-md transition active:scale-95 sm:right-1 md:right-0 md:opacity-0 md:group-hover:opacity-100"
       >
-        <ChevronRight size={18} />
+        <ChevronRight size={20} />
       </button>
 
       {/* Horizontal Scroll Box */}
       <div
         ref={sliderRef}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-8 py-3 scrollbar-hide sm:gap-4 sm:px-10 sm:py-4 md:gap-6 md:px-12"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-3 py-3 scrollbar-hide sm:gap-4 sm:px-10 sm:py-4 md:gap-6 md:px-12"
         style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
       >
         {products.map((item, index) => {
@@ -200,128 +202,141 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
           return (
             <div
               key={item.id}
-              className="relative w-[min(280px,78vw)] max-w-[350px] flex-shrink-0 snap-start rounded-2xl border border-gray-50 bg-white p-4 text-black shadow-lg sm:w-[300px] sm:p-5"
+              className="relative w-[280px] sm:w-[300px] flex-shrink-0 snap-start rounded-2xl border border-gray-50 bg-white p-4 text-black shadow-lg flex flex-col justify-between sm:p-5"
             >
-              <div className="relative">
-                <span className="absolute left-2 top-2 z-20 rounded-md bg-red-600 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white sm:left-3 sm:top-3 sm:text-[11px]">
-                  {item.off}
-                </span>
+              <div className="flex flex-col flex-1">
+                <div className="relative">
+                  {item.off && (
+                    <span className="absolute left-2.5 top-2.5 z-20 rounded-full bg-red-500 px-2 py-0.5 text-[11px] font-bold text-white shadow-sm flex items-center sm:left-4 sm:top-4 sm:px-2.5 sm:py-1 sm:text-xs">
+                      <Tag className="mr-1 w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                      <span>{item.off}</span>
+                    </span>
+                  )}
 
-                <Link
-                  href={productHref}
-                  className="relative block h-40 w-full cursor-pointer overflow-hidden rounded-xl bg-gray-50 sm:h-48"
-                  onMouseEnter={() => {
-                    if (
-                      typeof window !== "undefined" &&
-                      window.matchMedia("(hover: hover)").matches
-                    ) {
-                      setHoveredId(item.id);
-                    }
-                  }}
-                >
-                  <Image
-                    src={
-                      item.image.startsWith("http")
-                        ? item.image
-                        : `/assets/home/hot_sale/${item.image}`
-                    }
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 640px) 78vw, 300px"
-                    className="object-contain transition-transform duration-300 hover:scale-110"
-                    priority={index < 2}
-                  />
+                  <Link
+                    href={productHref}
+                    className="relative block h-48 w-full cursor-pointer overflow-hidden rounded-xl bg-gray-50 sm:h-52"
+                    onMouseEnter={() => {
+                      if (
+                        typeof window !== "undefined" &&
+                        window.matchMedia("(hover: hover)").matches
+                      ) {
+                        setHoveredId(item.id);
+                      }
+                    }}
+                  >
+                    <Image
+                      src={
+                        item.image.startsWith("http")
+                          ? item.image
+                          : `/assets/home/hot_sale/${item.image}`
+                      }
+                      alt={item.weight ? `${item.title} ${item.weight}` : item.title}
+                      fill
+                      sizes="(max-width: 640px) 280px, 300px"
+                      className="object-contain p-2 transition-transform duration-300 hover:scale-105"
+                      priority={index < 2}
+                    />
+                  </Link>
+                </div>
+
+                <Link href={productHref} className="block mt-3 sm:mt-4">
+                  <h3 className="text-sm font-semibold text-gray-800 hover:text-orange-600 line-clamp-2 min-h-[2.5rem] sm:text-base sm:min-h-[2.75rem]">
+                    {item.title}
+                    {item.weight &&
+                    !item.title
+                      .toLowerCase()
+                      .includes(String(item.weight).toLowerCase().trim())
+                      ? ` ${item.weight}`
+                      : ""}
+                  </h3>
                 </Link>
+
+                <div className="mt-2 flex items-baseline gap-2 min-h-[1.75rem]">
+                  {realPrice == null || baseWithTax == null ? (
+                    <span
+                      className="inline-block h-6 w-28 animate-pulse rounded bg-orange-100"
+                      aria-hidden
+                    />
+                  ) : (
+                    <>
+                      <span className="text-lg font-bold text-orange-500 sm:text-xl">
+                        €{realPrice.toFixed(2)}
+                      </span>
+                      {baseWithTax > realPrice && (
+                        <span className="text-xs sm:text-sm text-gray-400 line-through font-medium">
+                          €{baseWithTax.toFixed(2)}
+                        </span>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                <div className="min-h-[1.375rem] mt-1 flex items-center">
+                  {realPrice != null && greenDbSale > 0 ? (
+                    <p className="text-green-600 text-xs font-semibold flex items-center bg-green-50/70 py-0.5 px-2 rounded-md w-fit">
+                      You save €{greenDbSale.toFixed(2)}
+                    </p>
+                  ) : null}
+                </div>
               </div>
 
-              <Link href={productHref}>
-                <h3 className="mt-3 truncate text-base font-semibold text-gray-800 hover:text-orange-600 sm:mt-4 sm:text-lg">
-                  {item.title}
-                </h3>
-              </Link>
-
-              <div className="mt-2 flex flex-wrap items-center gap-2 min-h-[1.75rem]">
-                {realPrice == null || baseWithTax == null ? (
-                  <span
-                    className="inline-block h-6 w-28 animate-pulse rounded bg-orange-100"
-                    aria-hidden
-                  />
+              <div className="notranslate mt-4 pt-1" translate="no">
+                {cartItem ? (
+                  <div className="flex h-[44px] items-center justify-between overflow-hidden rounded-xl border border-gray-200">
+                    <button
+                      onClick={() => decreaseQty(item.id, isLoggedIn)}
+                      className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
+                    >
+                      −
+                    </button>
+                    <input
+                      type="number"
+                      min={1}
+                      value={cartItem.quantity}
+                      onChange={(e) => {
+                        const value = Number(e.target.value);
+                        if (isNaN(value) || value < 1) return;
+                        setQty(item.id, value, isLoggedIn);
+                      }}
+                      className="w-2/4 bg-transparent text-center text-sm font-semibold outline-none"
+                    />
+                    <button
+                      onClick={() => increaseQty(item.id, isLoggedIn)}
+                      className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
+                    >
+                      +
+                    </button>
+                  </div>
                 ) : (
-                  <>
-                    <span className="text-lg font-bold text-orange-500 sm:text-xl">
-                      €{realPrice.toFixed(2)}
-                    </span>
-                    <span className="text-sm text-gray-400 line-through">
-                      €{baseWithTax.toFixed(2)}
-                    </span>
-                  </>
+                  <button
+                    onClick={() => {
+                      if (realPrice == null || baseWithTax == null) return;
+                      addToCart(
+                        {
+                          id: item.id,
+                          title: item.title,
+                          base_price: realPrice,
+                          oldPrice: baseWithTax,
+                          discount_value: Number(item.discount_value || 0),
+                          discount_type: item.discount_type,
+                          image: item.image,
+                          slug: item.slug,
+                          category_slug: item.category_slug,
+                          subcategory_slug: item.subcategory_slug,
+                          category_id: item.category_id,
+                          promo_code: item.promo_code,
+                        },
+                        isLoggedIn,
+                      );
+                    }}
+                    disabled={realPrice == null}
+                    className="h-[44px] w-full cursor-pointer rounded-xl bg-orange-500 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    Add to Cart
+                  </button>
                 )}
               </div>
-
-              {realPrice != null && greenDbSale > 0 ? (
-                <p className="mt-1.5 text-xs font-semibold text-green-600">
-                  €{greenDbSale.toFixed(2)}
-                </p>
-              ) : null}
-
-              {cartItem ? (
-                <div
-                  className="notranslate mt-4 flex h-[44px] items-center justify-between overflow-hidden rounded-xl border border-gray-200"
-                  translate="no"
-                >
-                  <button
-                    onClick={() => decreaseQty(item.id, isLoggedIn)}
-                    className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <input
-                    type="number"
-                    min={1}
-                    value={cartItem.quantity}
-                    onChange={(e) => {
-                      const value = Number(e.target.value);
-                      if (isNaN(value) || value < 1) return;
-                      setQty(item.id, value, isLoggedIn);
-                    }}
-                    className="w-2/4 bg-transparent text-center text-sm font-semibold outline-none"
-                  />
-                  <button
-                    onClick={() => increaseQty(item.id, isLoggedIn)}
-                    className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => {
-                    if (realPrice == null || baseWithTax == null) return;
-                    addToCart(
-                      {
-                        id: item.id,
-                        title: item.title,
-                        base_price: realPrice,
-                        oldPrice: baseWithTax,
-                        discount_value: Number(item.discount_value || 0),
-                        discount_type: item.discount_type,
-                        image: item.image,
-                        slug: item.slug,
-                        category_slug: item.category_slug,
-                        subcategory_slug: item.subcategory_slug,
-                        category_id: item.category_id,
-                        promo_code: item.promo_code,
-                      },
-                      isLoggedIn,
-                    );
-                  }}
-                  disabled={realPrice == null}
-                  translate="no"
-                  className="notranslate mt-4 h-[44px] w-full cursor-pointer rounded-xl bg-orange-500 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  Grab This Now
-                </button>
-              )}
 
               {hoveredId === item.id && (
                 <div

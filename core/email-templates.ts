@@ -35,10 +35,11 @@ interface ContactFormEmailOptions {
   message: string;
 }
 
-export async function sendOrderConfirmationEmail(orderId: string) {
+export async function sendOrderConfirmationEmail(orderId: string, customClient?: any) {
+  const db = customClient || pool;
   try {
     // 1️⃣ Fetch complete payload variables for the email (with fallback to linked customer/user profiles)
-    const orderQuery = await pool.query(
+    const orderQuery = await db.query(
       `SELECT 
          o.id,
          o.order_number, 
@@ -75,7 +76,7 @@ export async function sendOrderConfirmationEmail(orderId: string) {
     }
 
     // Ensure store_orders.customer_email is backfilled if it was previously empty
-    await pool.query(
+    await db.query(
       `UPDATE store_orders SET customer_email = $1 WHERE id = $2 AND (customer_email IS NULL OR TRIM(customer_email) = '')`,
       [recipientEmail, orderId],
     ).catch(() => { });
@@ -136,17 +137,25 @@ export async function sendOrderConfirmationEmail(orderId: string) {
       </div>
     `;
 
-    // 3️⃣ Dispatch
-    await sendEmail({
-      to: recipientEmail,
-      bcc: ["sales@asianspices.online", "order@asianspices.online", "cheila.lopes@itsolutionshub2010.com", "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com", "ahmad.raza@itsolutionsworldwide.com"],
-      subject: `Order Confirmed! 🎉 (Ref: ${order.order_number})`,
-      html: emailHtml,
-      // Temporarily back on the "order" profile — the "noreply" mailbox is
-      // currently failing SMTP connections server-side (SSL handshake error),
-      // pending IT fixing the mailbox. Switch back to "noreply" once resolved.
-      fromAccount: "order",
-    });
+    // 3️⃣ Dispatch (try "order" profile, fallback to "support" if SMTP rejects)
+    try {
+      await sendEmail({
+        to: recipientEmail,
+        bcc: ["sales@asianspices.online", "order@asianspices.online", "cheila.lopes@itsolutionshub2010.com", "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com", "ahmad.raza@itsolutionsworldwide.com"],
+        subject: `Order Confirmed! 🎉 (Ref: ${order.order_number})`,
+        html: emailHtml,
+        fromAccount: "order",
+      });
+    } catch (orderProfileError) {
+      console.warn("Order confirmation failed via 'order' profile, falling back to 'support' profile:", orderProfileError);
+      await sendEmail({
+        to: recipientEmail,
+        bcc: ["sales@asianspices.online", "order@asianspices.online", "cheila.lopes@itsolutionshub2010.com", "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com", "ahmad.raza@itsolutionsworldwide.com"],
+        subject: `Order Confirmed! 🎉 (Ref: ${order.order_number})`,
+        html: emailHtml,
+        fromAccount: "support",
+      });
+    }
 
     return { success: true };
   } catch (error) {
