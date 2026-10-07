@@ -15,7 +15,7 @@ import {
  * - Set to `false`: Reverts back to the standard "We've Received Your Message" confirmation email.
  * Note: The admin notification to support@asianspices.online is ALWAYS preserved and sent regardless of this flag.
  */
-export const USE_TEMP_PARTNER_CONFIRMATION_EMAIL = true;
+export const USE_TEMP_PARTNER_CONFIRMATION_EMAIL = false;
 
 // Map delivery expectations contextually
 const DELIVERY_DAYS_MAP: Record<string, string> = {
