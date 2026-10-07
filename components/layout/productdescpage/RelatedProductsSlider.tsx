@@ -81,6 +81,7 @@ export default function RelatedProductsSlider({ products }: any) {
               <div className="p-3">
                 <h3 className="text-sm font-semibold line-clamp-1">
                   {product.name}
+                  {product.weight ? ` ${product.weight}` : ""}
                 </h3>
                 {product.seller_name ? (
                   <p className="mt-0.5 text-[11px] font-medium text-orange-700 line-clamp-1">

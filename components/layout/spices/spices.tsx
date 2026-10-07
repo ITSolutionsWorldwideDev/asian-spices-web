@@ -13,7 +13,7 @@ const spices = () => {
       <ProductPageHeader
         heading="Every Grain, A Burst of Taste"
         text="Handpicked, pure, and powerful  our spices bring depth, warmth, and character to every recipe"
-        videoLink={"/spices/Comp 1_10.mp4"}
+        imageSrc={"/assets/categories/cat-banner.webp"}
       />
 
       <HeadingDescription

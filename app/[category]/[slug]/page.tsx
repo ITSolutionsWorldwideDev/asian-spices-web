@@ -5,13 +5,22 @@ import { Suspense, cache } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Footer from "@/components/ui/Footer";
-import HeadingDescription from "@/components/ui/HeadingDescription";
-import ProductPageHeader from "@/components/ui/ProductPageHeader";
+import Nav from "@/components/ui/Nav";
 import FilterSidebar from "@/components/layout/products/FilterSidebar";
 import InfiniteProducts from "@/components/layout/products/InfiniteProducts";
 import SortDropdown from "@/components/layout/product_filter_search/SortDropdown";
 import ProductDescrption from "@/components/layout/productdescpage/DescMain";
 import ProductNotFound from "@/components/layout/productdescpage/ProductNotFound";
+
+function formatHeroHeading(heading: string, fallbackName: string) {
+  const trimmed = heading?.trim();
+  if (!trimmed) return `Explore Our ${fallbackName}`;
+  if (/^explore\s+our\s+/i.test(trimmed)) return trimmed;
+  if (/^explore\s+/i.test(trimmed)) {
+    return trimmed.replace(/^explore\s+/i, "Explore Our ");
+  }
+  return `Explore Our ${trimmed}`;
+}
 import {
   getStoreCategoryBySlug,
   getStoreSubcategoryBySlug,
@@ -28,6 +37,10 @@ import { resolveCountry } from "@/lib/country";
 import { getProductMetadata } from "@/lib/product-metadata";
 import { getProductJsonLd } from "@/lib/schema";
 import JsonLd from "@/components/seo/JsonLd";
+import { subcategoryContentMap } from "@/data/categoryContent";
+import CategoryHeroDescription from "@/components/layout/category/CategoryHeroDescription";
+import { parseCategoryGuide } from "@/lib/category-helpers";
+
 
 type Filters = {
   category: string;
@@ -172,27 +185,47 @@ export default async function CategorySlugPage({
       page: Number(query.page || 1),
     };
 
+    // Subcategory ka optional content fetch karna agar map mein maujood ho
+    const subContent = subcategoryContentMap[slug] || null;
+    const guideData = parseCategoryGuide(subContent, subcategory.name);
+
     return (
-      <div>
-        <ProductPageHeader
-          heading={subcategory.name}
-          text={`Shop ${category.name}`}
-          videoLink="/spices/Comp 1_10.mp4"
-        />
-        <div className="container mx-auto flex flex-wrap items-center gap-x-2 gap-y-1 px-5 pt-6 text-sm sm:text-base">
-          <Link href={`/${category.slug}`} className="hover:underline">
-            <p className="whitespace-nowrap text-[#6A7282]">{category.name}</p>
-          </Link>
-          <span className="text-[#6A7282]">/</span>
-          <p className="whitespace-nowrap font-medium text-gray-900">
-            {subcategory.name}
-          </p>
-        </div>
-        <HeadingDescription
-          heading="Explore Our Collection"
-          text={`Shop By ${subcategory.name}`}
-          description={`Discover products in ${subcategory.name}`}
-        />
+      <div className="bg-white min-h-screen">
+        {/* Top Floating / Fixed Nav */}
+        <Nav />
+
+        {/* 1. Dedicated Hero Section Wrapper */}
+        <section className="relative w-full bg-gradient-to-b from-[#fbf9f5] via-[#faf7f2]/50 to-white pt-2 sm:pt-2 md:pt-3 xl:pt-4 pb-2 sm:pb-4 border-b border-gray-100/60">
+          <div className="container mx-auto px-4 sm:px-6">
+            {/* Breadcrumb: Home Page > {category.name} > {subcategory.name} */}
+            <nav aria-label="Breadcrumb" className="mb-0.5 sm:mb-1 text-[11px] sm:text-xs text-gray-500">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <Link href="/" className="hover:text-gray-900 transition font-normal">
+                  Home Page
+                </Link>
+                <span className="text-gray-400">&gt;</span>
+                <Link href={`/${category.slug}`} className="hover:text-gray-900 transition font-normal">
+                  {category.name}
+                </Link>
+                <span className="text-gray-400">&gt;</span>
+                <span className="text-gray-700 font-medium">{subcategory.name}</span>
+              </div>
+            </nav>
+
+            {/* Hero Content */}
+            <div className="text-center max-w-5xl lg:max-w-6xl mx-auto pt-0 pb-0.5">
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-extrabold tracking-tight text-red-600 leading-tight">
+                {formatHeroHeading(guideData.bannerHeading, subcategory.name)}
+              </h1>
+              <CategoryHeroDescription
+                initialText={guideData.bannerText}
+                extendedText={guideData.extendedText}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Products Section */}
         <Suspense
           fallback={
             <div className="text-center py-20 text-gray-500">Loading products...</div>
@@ -200,6 +233,42 @@ export default async function CategorySlugPage({
         >
           <ProductSection filters={filters} slug={category.slug} />
         </Suspense>
+
+        <div className="container mx-auto px-5">
+          {/* 4. Frequently Asked Questions (Products ke baad) */}
+          {subContent && subContent.faqs && subContent.faqs.length > 0 && (
+            <section className="py-16 max-w-4xl mx-auto">
+              <div className="text-center mb-10">
+                <h2 className="text-3xl font-extrabold text-neutral-900 mb-2">
+                  Frequently Asked Questions
+                </h2>
+                <p className="text-neutral-500 text-sm">
+                  Got questions? We've got answers.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {subContent.faqs.map((faq: { question: string; answer: string }, index: number) => (
+                  <details
+                    key={index}
+                    className="group p-6 rounded-2xl border border-neutral-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-all"
+                  >
+                    <summary className="font-bold text-base md:text-lg text-neutral-900 cursor-pointer list-none flex justify-between items-center outline-none">
+                      <span>{faq.question}</span>
+                      <span className="w-8 h-8 rounded-full bg-[#fff4ee] flex items-center justify-center text-[#ff7733] transition-transform duration-300 group-open:rotate-180 shrink-0 ml-4">
+                        ⌄
+                      </span>
+                    </summary>
+                    <p className="text-neutral-600 text-sm md:text-base mt-4 pt-4 border-t border-neutral-100 leading-relaxed font-normal">
+                      {faq.answer}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+
         <Footer />
       </div>
     );

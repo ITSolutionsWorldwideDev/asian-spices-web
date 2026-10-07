@@ -46,12 +46,12 @@ export default function ProductImageGallery({ images, name, badge }: Props) {
     <div>
       {/* Main image */}
       <div
-        className="relative w-full aspect-square overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm cursor-zoom-in"
+        className="relative w-full aspect-square overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200 bg-white shadow-sm cursor-zoom-in"
         onMouseMove={handleMouseMove}
         onMouseLeave={resetZoom}
       >
         {badge ? (
-          <span className="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-amber-700 shadow-sm">
+          <span className="absolute left-3 top-3 sm:left-4 sm:top-4 z-10 rounded-full bg-white/95 px-2.5 py-1 text-[11px] sm:text-xs font-semibold text-amber-800 shadow-xs border border-amber-100">
             {badge}
           </span>
         ) : null}
@@ -60,30 +60,33 @@ export default function ProductImageGallery({ images, name, badge }: Props) {
           alt={name}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover transition-transform duration-200"
+          className="object-contain p-3 sm:p-6 transition-transform duration-200"
           style={zoomStyle}
           priority
         />
       </div>
 
       {/* Thumbnails */}
-      <div className="mt-4 grid grid-cols-4 gap-3">
-        {safeImages.map((img, idx) => (
-          <button
-            key={idx}
-            onClick={() => setActiveImage(img)}
-            className={`relative h-20 w-full overflow-hidden rounded-xl border-2 transition sm:h-24
-              ${activeImage === img ? "border-orange-500" : "border-gray-200"}`}
-          >
-            <Image
-              src={img}
-              alt={`${name}-${idx}`}
-              fill
-              className="object-cover"
-            />
-          </button>
-        ))}
-      </div>
+      {safeImages.length > 1 && (
+        <div className="mt-3 sm:mt-4 flex gap-2.5 overflow-x-auto scrollbar-hide sm:grid sm:grid-cols-4 sm:gap-3">
+          {safeImages.map((img, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setActiveImage(img)}
+              className={`relative h-16 w-16 sm:h-24 sm:w-full shrink-0 sm:shrink overflow-hidden rounded-xl border-2 transition cursor-pointer p-1 bg-white
+                ${activeImage === img ? "border-amber-600 shadow-sm" : "border-gray-200 hover:border-gray-300"}`}
+            >
+              <Image
+                src={img}
+                alt={`${name}-${idx}`}
+                fill
+                className="object-contain p-1"
+              />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

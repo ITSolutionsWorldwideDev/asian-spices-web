@@ -8,11 +8,6 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/foods-beverages",
-        destination: "/beverages",
-        permanent: true,
-      },
-      {
         source: "/spices/heera-neem-powder-100-g",
         destination: "/spices/heera-neem-powder-100g",
         permanent: true,
@@ -20,6 +15,21 @@ const nextConfig: NextConfig = {
       {
         source: "/recipes/chickenpizzarecipe",
         destination: "/recipes/chicken-jalfrezi",
+        permanent: true,
+      },
+      {
+        source: "/about",
+        destination: "/about-us",
+        permanent: true,
+      },
+      {
+        source: "/terms",
+        destination: "/terms-and-conditions",
+        permanent: true,
+      },
+      {
+        source: "/privacy",
+        destination: "/privacy-policy",
         permanent: true,
       },
     ];

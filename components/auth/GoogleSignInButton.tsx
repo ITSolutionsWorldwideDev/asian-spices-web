@@ -42,7 +42,9 @@ export default function GoogleSignInButton({
       type="button"
       onClick={handleClick}
       disabled={loading}
+      translate="no"
       className={`
+        notranslate
         flex w-full items-center justify-center gap-3 rounded-xl
         border border-slate-200 bg-white px-4 py-3
         text-sm font-semibold text-slate-700

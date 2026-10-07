@@ -110,7 +110,10 @@ export default function OrderActionWorkflow({
   };
 
   return (
-    <div className="bg-white rounded-2xl border p-6 space-y-6 max-w-2xl mx-auto">
+    <div
+      className="notranslate bg-white rounded-2xl border p-6 space-y-6 max-w-2xl mx-auto"
+      translate="no"
+    >
       {/* Visual Step Indicator Tracker */}
       <div className="flex items-center justify-between pb-4 border-b">
         {[
@@ -160,7 +163,7 @@ export default function OrderActionWorkflow({
           <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl border text-sm">
             <div>
               <p className="text-xs text-gray-400">Order Reference</p>
-              <p className="font-semibold">#{order.order_number}</p>
+              <p className="font-semibold">{order.order_number?.replace(/^#+\s*/, "")}</p>
             </div>
             <div>
               <p className="text-xs text-gray-400">Date Placed</p>

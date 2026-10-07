@@ -7,9 +7,12 @@ import Prerequisites from "./Prerequisites";
 import BusinessVerification from "./BusinessVerification";
 import DocumentUpload from "./DocumentUpload";
 import ContactDetails from "./ContactDetails";
-import IdentityVerification from "./IdentityVerification";
+// import IdentityVerification from "./IdentityVerification"; // iDIN step disabled
 import Confirmation from "./Confirmation";
 import SessionTimeoutModal from "./SessionTimeoutModal";
+
+// Last step (Confirmation). Was 6 when iDIN step existed.
+const LAST_STEP = 5;
 
 const generateApplicationId = () => {
   const random = Math.floor(10000 + Math.random() * 90000);
@@ -29,8 +32,8 @@ export default function TabSwitching() {
     { id: 2, label: "Business Verification" },
     { id: 3, label: "Document Upload" },
     { id: 4, label: "Contact Details" },
-    { id: 5, label: "Identity Verification" },
-    { id: 6, label: "Confirmation" },
+    // { id: 5, label: "Identity Verification" }, // iDIN step disabled
+    { id: 5, label: "Confirmation" },
   ];
   const safeActiveStep = Math.min(Math.max(activeStep, 1), steps.length);
   const currentStep = steps[safeActiveStep - 1];
@@ -53,7 +56,9 @@ export default function TabSwitching() {
       try {
         const parsed = JSON.parse(saved);
 
-        if (parsed.activeStep === 6) {
+        // Old saved sessions (from when iDIN step existed) could have
+        // activeStep 5 or 6, so clear anything at/after the last step.
+        if (parsed.activeStep >= LAST_STEP) {
           localStorage.removeItem("partner_registration");
           return;
         }
@@ -68,7 +73,7 @@ export default function TabSwitching() {
   }, []);
 
   useEffect(() => {
-    if (activeStep < 6) {
+    if (activeStep < LAST_STEP) {
       localStorage.setItem(
         "partner_registration",
         JSON.stringify({
@@ -80,14 +85,15 @@ export default function TabSwitching() {
     }
   }, [formData, activeStep, completedSteps]);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-
-    if (params.get("idin") === "success") {
-      setCompletedSteps((prev) => [...new Set([...prev, 5])]);
-      setActiveStep(6);
-    }
-  }, []);
+  // iDIN success redirect handling disabled
+  // useEffect(() => {
+  //   const params = new URLSearchParams(window.location.search);
+  //
+  //   if (params.get("idin") === "success") {
+  //     setCompletedSteps((prev) => [...new Set([...prev, 5])]);
+  //     setActiveStep(6);
+  //   }
+  // }, []);
 
   useEffect(() => {
     setFormData((prev: any) => {
@@ -152,17 +158,17 @@ export default function TabSwitching() {
         setCompletedSteps={setCompletedSteps}
       />
     ),
+    // 5: (
+    //   <IdentityVerification
+    //     setActiveStep={setActiveStep}
+    //     activeStep={activeStep}
+    //     formData={formData}
+    //     setCompletedSteps={setCompletedSteps}
+    //     completedSteps={completedSteps}
+    //     setFormData={setFormData}
+    //   />
+    // ),
     5: (
-      <IdentityVerification
-        setActiveStep={setActiveStep}
-        activeStep={activeStep}
-        formData={formData}
-        setCompletedSteps={setCompletedSteps}
-        completedSteps={completedSteps}
-        setFormData={setFormData}
-      />
-    ),
-    6: (
       <Confirmation
         formData={formData}
         setActiveStep={setActiveStep}
@@ -172,7 +178,7 @@ export default function TabSwitching() {
   });
 
   return (
-    <div className="w-full p-4 sm:p-8">
+    <div className="notranslate w-full p-4 sm:p-8" translate="no">
       <div className="w-full overflow-x-auto max-w-6xl mx-auto pb-2">
         <div className="sm:hidden  sticky top-0 z-10 bg-white pb-3 border-b shadow-sm">
           <div className="flex items-center justify-between mb-2">
@@ -246,7 +252,7 @@ export default function TabSwitching() {
       </form>
 
       <SessionTimeoutModal
-        enabled={activeStep < 6}
+        enabled={activeStep < LAST_STEP}
         onExpire={handleSessionExpire}
       />
     </div>

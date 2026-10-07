@@ -122,6 +122,7 @@ export function getLocalBusinessJsonLd(reviewStats?: SchemaReviewStats) {
 export type ProductForSchema = {
   id: string;
   name: string;
+  weight?: string | number | null;
   slug: string;
   sku?: string | null;
   description?: string | null;
@@ -163,15 +164,19 @@ export function getProductJsonLd(
     .filter(Boolean)
     .map(absoluteUrl);
 
+  const fullName = product.weight
+    ? `${product.name} ${product.weight}`
+    : product.name;
+
   const description =
     stripHtml(product.description || "") ||
-    `${product.name} — buy online at ${SITE_NAME}.`;
+    `${fullName} — buy online at ${SITE_NAME}.`;
 
   const json: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
     "@id": `${url}#product`,
-    name: product.name,
+    name: fullName,
     description: description.slice(0, 5000),
     sku: product.sku || product.id,
     url,

@@ -240,3 +240,12 @@ a font,
   pointer-events: none;
 }
 
+/* Hide scrollbars while allowing touch/mouse wheel scrolling */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

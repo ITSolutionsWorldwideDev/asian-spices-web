@@ -1,5 +1,4 @@
 import Cart from "@/components/ui/Cart";
-import Footer from "@/components/ui/Footer";
 import Nav from "@/components/ui/Nav";
 import React from "react";
 
@@ -10,7 +9,6 @@ const page = async () => {
         <Nav />
       </div>
       <Cart />
-      <Footer />
     </div>
   );
 };

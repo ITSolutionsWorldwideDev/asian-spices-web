@@ -124,6 +124,7 @@ export async function GET(req: NextRequest) {
         r.difficulty,
         r.is_featured,
         r.created_at,
+        r.total_views,
 
         rc.id AS category_id,
         rc.name AS category_name,

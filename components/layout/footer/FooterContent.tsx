@@ -18,7 +18,6 @@ const TICKER_ITEMS = [
   "EST. 2026 - AMSTERDAM",
   "AUTHENTIC ASIAN FLAVORS",
   "FREE RECIPES INCLUDED",
-  "100% ORGANIC",
 ] as const;
 
 const SOCIAL_LINKS = [
@@ -45,7 +44,7 @@ const SOCIAL_LINKS = [
 ] as const;
 
 const QUICK_LINKS = [
-  { label: "About Us", href: "/about-us" }, // Updated from "/about" to "/about-us"
+  { label: "About Us", href: "/about-us" },
   { label: "Our Products", href: "/products" },
   { label: "Recipes", href: "/recipes" },
   { label: "Blog", href: "/recipes" },
@@ -53,11 +52,12 @@ const QUICK_LINKS = [
 ] as const;
 
 const CUSTOMER_SERVICE = [
-  { label: "Terms & Conditions", href: "/terms-and-conditions" }, // Updated
-  { label: "Shipping Info", href: "/terms-and-conditions" },     // Updated (ya apni zaroorat ke mutabiq change kar sakte hain)
-  { label: "Returns", href: "/terms-and-conditions" },          // Updated
+  { label: "Terms & Conditions", href: "/terms-conditions" },
+  { label: "Shipping Info", href: "/shipping-info" },
+  { label: "Returns & Refunds", href: "/return-&-refund-policy" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Cookie Policy", href: "/cookie-policy" },
   { label: "FAQ", href: "/faqs" },
-  { label: "Privacy Policy", href: "/privacy-policy" },         // Updated from "/privacy" to "/privacy-policy"
 ] as const;
 
 function TickerBar() {
@@ -79,7 +79,8 @@ function TickerBar() {
 
 const FooterContent = () => {
   return (
-    <div className="w-full">
+    // NOTE: Yahan se 'overflow-hidden' hata diya hai aur bottom padding add ki hai taake kuch bhi cut na ho
+    <div className="relative z-10 mt-20 w-full bg-[#141414] text-white pb-16 sm:pb-10">
       <TickerBar />
 
       {/* Newsletter */}
@@ -95,11 +96,11 @@ const FooterContent = () => {
         </div>
       </div>
 
-      <div className="container mx-auto border-t border-white/10 px-6">
-        {/* Main columns */}
-        <div className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+      <div className="container mx-auto border-t border-white/10 px-4 sm:px-6 lg:px-8">
+        {/* Main columns with mobile divider lines */}
+        <div className="grid grid-cols-1 gap-8 py-10 sm:grid-cols-2 sm:gap-10 sm:py-12 lg:grid-cols-4 lg:gap-8">
           {/* Brand */}
-          <div>
+          <div className="border-b border-white/10 pb-8 sm:border-b-0 sm:pb-0">
             <Link href="/" className="mb-5 inline-block">
               <Image
                 src="/assets/logo/Group 87.png"
@@ -110,8 +111,8 @@ const FooterContent = () => {
                 className="h-14 w-auto object-contain sm:h-16"
               />
             </Link>
-            <p className="max-w-xs text-sm leading-relaxed text-white/55">
-             Premium quality spices, sourced from trusted farms across Asia to bring authentic flavor to every kitchen.
+            <p className="max-w-xs text-sm leading-relaxed text-white/60">
+              Our Journey with Spices Began in 1970. Today, We Bring Decades of Experience and Authentic Asian Flavours to Your Kitchen.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
@@ -121,7 +122,7 @@ const FooterContent = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-sm text-white transition hover:border-orange-500/50 hover:bg-orange-500 hover:text-white"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-sm text-white transition hover:border-orange-500/50 hover:bg-orange-500 hover:text-white active:scale-95"
                 >
                   <Icon />
                 </a>
@@ -130,16 +131,17 @@ const FooterContent = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h3 className="mb-5 text-base font-semibold text-white">
-              Quick Links
+          <div className="border-b border-white/10 pb-8 sm:border-b-0 sm:pb-0">
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+              <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
+              <span>Quick Links</span>
             </h3>
             <ul className="space-y-3">
               {QUICK_LINKS.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/55 transition hover:text-orange-400"
+                    className="inline-block text-sm text-white/60 transition hover:translate-x-1 hover:text-orange-400"
                   >
                     {link.label}
                   </Link>
@@ -149,16 +151,17 @@ const FooterContent = () => {
           </div>
 
           {/* Customer Service */}
-          <div>
-            <h3 className="mb-5 text-base font-semibold text-white">
-              Customer Service
+          <div className="border-b border-white/10 pb-8 sm:border-b-0 sm:pb-0">
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+              <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
+              <span>Customer Service</span>
             </h3>
             <ul className="space-y-3">
               {CUSTOMER_SERVICE.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/55 transition hover:text-orange-400"
+                    className="inline-block text-sm text-white/60 transition hover:translate-x-1 hover:text-orange-400"
                   >
                     {link.label}
                   </Link>
@@ -169,28 +172,29 @@ const FooterContent = () => {
 
           {/* Get In Touch */}
           <div>
-            <h3 className="mb-5 text-base font-semibold text-white">
-              Get In Touch
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+              <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
+              <span>Get In Touch</span>
             </h3>
-            <ul className="space-y-4 text-sm text-white/55">
-              <li className="flex items-start gap-3">
+            <ul className="space-y-3 text-sm text-white/60">
+              <li className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:border-0 sm:bg-transparent sm:p-0">
                 <Mail
                   className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
                   aria-hidden
                 />
                 <a
                   href="mailto:Support@asianspices.online"
-                  className="transition hover:text-orange-400"
+                  className="break-all transition hover:text-orange-400"
                 >
                   Support@asianspices.online
                 </a>
               </li>
-              <li className="flex items-start gap-3">
+              <li className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:border-0 sm:bg-transparent sm:p-0">
                 <MapPin
                   className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
                   aria-hidden
                 />
-                <span>
+                <span className="leading-relaxed">
                   Slakkenveen 341
                   <br />
                   3205 GK Spijkenisse
@@ -202,23 +206,29 @@ const FooterContent = () => {
           </div>
         </div>
 
-        {/* Partners Hub row — stacks on mobile */}
-        <div className="flex flex-col gap-3 border-t border-white/15 py-5 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <p className="text-xs leading-relaxed text-white/50 sm:text-sm">
-            KVK #: 42041922{" "}
-            <span className="mx-1 text-white/25">|</span> BTW (VAT) Number:
-            NL869440317B01
-          </p>
+        {/* Partners Hub row */}
+        <div className="flex flex-col gap-3.5 border-t border-white/10 py-5 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-white/55 sm:text-sm">
+            <span>
+              KVK #: <strong className="font-medium text-white/75">42041922</strong>
+            </span>
+            <span className="text-white/25 hidden sm:inline">|</span>
+            <span>
+              BTW (VAT) Number:{" "}
+              <strong className="font-medium text-white/75">NL869440317B01</strong>
+            </span>
+          </div>
           <Link
             href="/partnerplatform"
-            className="shrink-0 text-sm font-semibold text-white underline underline-offset-4 transition hover:text-orange-300 sm:ml-auto"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-400 underline underline-offset-4 transition hover:text-orange-300 sm:ml-auto sm:text-sm sm:text-white"
           >
-            Go To The Partners Hub
+            <span>Go To The Partners Hub</span>
+            <span aria-hidden>→</span>
           </Link>
         </div>
 
         {/* Bottom credit — Powered by + logo */}
-        <div className="flex flex-col gap-4 border-t border-white/15 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="flex flex-col gap-4 border-t border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <p className="text-xs text-white/45 sm:text-sm">
             © {new Date().getFullYear()} Asian Spices. All rights reserved.
           </p>
@@ -227,7 +237,7 @@ const FooterContent = () => {
             href="https://www.itsolutionsworldwide.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex w-full flex-col items-start gap-3 opacity-95 transition hover:opacity-100 sm:ml-auto sm:w-auto sm:flex-row sm:items-center sm:gap-4"
+            className="inline-flex items-center gap-3 opacity-90 transition hover:opacity-100 sm:ml-auto"
             aria-label="Powered by IT Solutions Worldwide"
           >
             <span className="text-xs leading-snug text-white/70 sm:text-sm">
@@ -239,9 +249,9 @@ const FooterContent = () => {
             <Image
               src="/assets/footer/it-solutions-worldwide-logo-white.png"
               alt="IT Solutions Worldwide"
-              width={180}
-              height={65}
-              className="h-[32px] w-auto object-contain object-left sm:h-[36px] sm:object-right md:h-[40px]"
+              width={140}
+              height={50}
+              className="h-7 w-auto object-contain sm:h-8"
               unoptimized
             />
           </a>

@@ -12,8 +12,8 @@ const ButtonsNavigation = () => {
   const clearCart = useCartStore((s) => s.clearCart);
 
   const handleLogout = () => {
-    clearCart(false); // clear local only — keep DB cart for next login
-    signOut({ callbackUrl: "/" });
+    clearCart(false); 
+        signOut({ callbackUrl: "/" });
   };
 
   if (status === "loading") {
@@ -21,8 +21,8 @@ const ButtonsNavigation = () => {
   }
 
   return (
-    <div className="shrink-0">
-      {!session ? (
+    <div className="notranslate shrink-0" translate="no">
+            {!session ? (
         <Link
           href="/login"
           className="flex max-w-[6.5rem] items-center gap-1.5 rounded-full border-2 border-orange-500 px-3 py-1.5 text-sm font-semibold text-gray-800 transition hover:bg-orange-50"

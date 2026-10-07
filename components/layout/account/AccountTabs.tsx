@@ -17,7 +17,10 @@ export default function AccountTabs() {
   const pathname = usePathname();
 
   return (
-    <div className="lg:hidden flex justify-around bg-white border rounded-xl p-2 mb-6 shadow-sm">
+    <div
+      className="notranslate lg:hidden flex justify-around bg-white border rounded-xl p-2 mb-6 shadow-sm"
+      translate="no"
+    >
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const active = pathname.startsWith(tab.href);

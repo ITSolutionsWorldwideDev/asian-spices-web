@@ -101,7 +101,7 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
             <span className="bg-green-500 rounded-full h-8 w-8 flex items-center justify-center">
               <Leaf className="w-5 h-5 text-white" />
             </span>
-            100% organic
+            Versatile Range
           </p>
           <p className="flex items-center gap-3 justify-center text-center">
             <span className="bg-yellow-400 rounded-full h-8 w-8 flex items-center justify-center">

@@ -94,7 +94,10 @@ export default function WriteReviewForm({
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow-xl rounded-2xl">
+    <div
+      className="notranslate max-w-xl mx-auto p-6 bg-white shadow-xl rounded-2xl"
+      translate="no"
+    >
       <h2 className="text-2xl font-bold mb-4 text-center">Leave a Review ⭐</h2>
 
       {/* 🔥 MESSAGE */}

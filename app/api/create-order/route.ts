@@ -11,8 +11,13 @@ import {
   logOrderEvent,
   ORDER_EVENTS,
 } from "@/core/order-routing";
+import { generateNextOrderNumber } from "@/core/order-number";
 import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
 import { validatePromo } from "@/app/api/checkout/promo/route";
+import {
+  sendGuestAccountCreatedEmail,
+  sendOrderConfirmationEmail,
+} from "@/core/email-templates";
 
 export async function POST(req: NextRequest) {
   const client = await pool.connect();
@@ -79,7 +84,20 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const email = userId ? userEmail : customer.email;
+    const email = (
+      (userId ? userEmail : customer?.email) ||
+      customer?.email ||
+      body?.email ||
+      userEmail ||
+      ""
+    ).trim().toLowerCase();
+
+    if (!email) {
+      return errorResponse(
+        "Please provide a valid email address.",
+        "MISSING_EMAIL",
+      );
+    }
 
     const { latitude, longitude, country } = shippingAddress;
 
@@ -93,140 +111,101 @@ export async function POST(req: NextRequest) {
     await client.query("BEGIN");
 
     let customer_id: string;
+    let guestTempPassword: string | null = null;
 
     // ====================================================
     // 1️⃣ CUSTOMER
     // ====================================================
 
+    // Determine valid user ID in database (to satisfy foreign key constraint fk_user on store_customers)
+    let linkedUserId: string | null = null;
+
     if (userId) {
-      const existing = await client.query(
-        `
-          SELECT id
-          FROM store_customers
-          WHERE user_id = $1
-          LIMIT 1
-        `,
+      const userCheck = await client.query(
+        `SELECT id FROM users WHERE id = $1 LIMIT 1`,
         [userId],
       );
-
-      if (existing.rowCount) {
-        customer_id = existing.rows[0].id;
-      } else {
-        const result = await client.query(
-          `
-            INSERT INTO store_customers
-            (
-              user_id,
-              first_name,
-              last_name,
-              email,
-              phone,
-              city,
-              postcode
-            )
-            VALUES ($1,$2,$3,$4,$5,$6,$7)
-            RETURNING id
-          `,
-          [
-            userId,
-            customer.firstName,
-            customer.lastName,
-            email,
-            customer.phone,
-            shippingAddress.city,
-            shippingAddress.postal_code,
-          ],
-        );
-
-        customer_id = result.rows[0].id;
+      if (userCheck.rowCount) {
+        linkedUserId = userCheck.rows[0].id;
       }
-    } else {
-      // ====================================================
-      // GUEST CUSTOMER
-      // ====================================================
+    }
 
-      // Check if this email already exists in store_customers
-      const existingCustomer = await client.query(
-        `SELECT id, user_id FROM store_customers WHERE email = $1 LIMIT 1`,
-        [email],
-      );
-
-      // Check if an auth user profile exists for this email
-      const userCheck = await client.query(
+    if (!linkedUserId && email) {
+      const emailUserCheck = await client.query(
         `SELECT id FROM users WHERE email = $1 LIMIT 1`,
         [email],
       );
-      const linkedUserId = userCheck.rowCount ? userCheck.rows[0].id : null;
-
-      if (existingCustomer.rowCount) {
-        customer_id = existingCustomer.rows[0].id;
-
-        // If the profile found was missing its user_id link, bind it now
-        if (!existingCustomer.rows[0].user_id && linkedUserId) {
-          await client.query(
-            `UPDATE store_customers SET user_id = $1 WHERE id = $2`,
-            [linkedUserId, customer_id],
-          );
-        }
-      } else {
-        // Customer row doesn't exist yet. Create it.
-        if (linkedUserId) {
-          // Email belongs to a registered user checking out as guest
-          const result = await client.query(
-            `
-              INSERT INTO store_customers 
-              (user_id, first_name, last_name, email, phone, city, postcode)
-              VALUES ($1, $2, $3, $4, $5, $6, $7)
-              RETURNING id
-            `,
-            [
-              linkedUserId,
-              customer.firstName,
-              customer.lastName,
-              email,
-              customer.phone,
-              shippingAddress.city,
-              shippingAddress.postal_code,
-            ],
-          );
-          customer_id = result.rows[0].id;
-        } else {
-          // Absolute guest user: profile doesn't exist, auth record doesn't exist
-          const result = await client.query(
-            `
-              INSERT INTO store_customers 
-              (first_name, last_name, email, phone, city, postcode)
-              VALUES ($1, $2, $3, $4, $5, $6)
-              RETURNING id
-            `,
-            [
-              customer.firstName,
-              customer.lastName,
-              email,
-              customer.phone,
-              shippingAddress.city,
-              shippingAddress.postal_code,
-            ],
-          );
-          customer_id = result.rows[0].id;
-
-          // Execute your optional auto-account creation flow
-          const bcrypt = require("bcryptjs");
-          const tempPassword = Math.random().toString(36).slice(-8);
-          const hash = await bcrypt.hash(tempPassword, 10);
-
-          const newUser = await client.query(
-            `INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id`,
-            [email, hash],
-          );
-          const newUserId = newUser.rows[0].id;
-
-          await client.query(
-            `UPDATE store_customers SET user_id = $1 WHERE id = $2`,
-            [newUserId, customer_id],
-          );
-        }
+      if (emailUserCheck.rowCount) {
+        linkedUserId = emailUserCheck.rows[0].id;
       }
+    }
+
+    // Check if customer already exists in store_customers by linkedUserId or email
+    const existingCustomer = linkedUserId
+      ? await client.query(
+          `SELECT id, user_id FROM store_customers WHERE user_id = $1 OR email = $2 LIMIT 1`,
+          [linkedUserId, email],
+        )
+      : await client.query(
+          `SELECT id, user_id FROM store_customers WHERE email = $1 LIMIT 1`,
+          [email],
+        );
+
+    // If user profile doesn't exist in users table at all, automatically create account
+    if (!linkedUserId) {
+      const bcrypt = require("bcryptjs");
+      const chars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789";
+      let tempPassword = "AS";
+      for (let i = 0; i < 8; i++) {
+        tempPassword += chars.charAt(
+          Math.floor(Math.random() * chars.length),
+        );
+      }
+      const hash = await bcrypt.hash(tempPassword, 10);
+      const fullName =
+        [customer?.firstName, customer?.lastName]
+          .filter(Boolean)
+          .join(" ")
+          .trim() || null;
+
+      const newUser = await client.query(
+        `INSERT INTO users (email, password_hash, name) VALUES ($1, $2, $3) RETURNING id`,
+        [email, hash, fullName],
+      );
+      linkedUserId = newUser.rows[0].id;
+      guestTempPassword = tempPassword;
+    }
+
+    if (existingCustomer.rowCount) {
+      customer_id = existingCustomer.rows[0].id;
+
+      // If the profile found was missing its user_id link or needs updating, bind it now
+      if (linkedUserId && existingCustomer.rows[0].user_id !== linkedUserId) {
+        await client.query(
+          `UPDATE store_customers SET user_id = $1 WHERE id = $2`,
+          [linkedUserId, customer_id],
+        );
+      }
+    } else {
+      // Customer row doesn't exist yet. Create and link.
+      const result = await client.query(
+        `
+          INSERT INTO store_customers 
+          (user_id, first_name, last_name, email, phone, city, postcode)
+          VALUES ($1, $2, $3, $4, $5, $6, $7)
+          RETURNING id
+        `,
+        [
+          linkedUserId,
+          customer?.firstName || "",
+          customer?.lastName || "",
+          email,
+          customer?.phone || null,
+          shippingAddress?.city || null,
+          shippingAddress?.postal_code || null,
+        ],
+      );
+      customer_id = result.rows[0].id;
     }
 
     // ====================================================
@@ -316,7 +295,7 @@ export async function POST(req: NextRequest) {
     // 4️⃣ CREATE ORDER
     // ====================================================
 
-    const orderNumber = `ORD-${Date.now()}`;
+    const orderNumber = await generateNextOrderNumber(client);
 
     const orderResult = await client.query(
       `
@@ -487,10 +466,55 @@ export async function POST(req: NextRequest) {
       eventType: ORDER_EVENTS.CREATED,
       message:
         "Order authorization records generated. Awaiting confirmation of client transaction settlement.",
-      metadata: { item_count: cartItems.length },
+      metadata: {
+        item_count: cartItems.length,
+        ...(guestTempPassword
+          ? { guest_temp_password: guestTempPassword }
+          : {}),
+      },
     });
 
+    if (guestTempPassword) {
+      await client
+        .query(
+          `UPDATE store_orders SET guest_temp_password = $1 WHERE id = $2`,
+          [guestTempPassword, order_id],
+        )
+        .catch(() => {});
+    }
+
     await client.query("COMMIT");
+
+    if (guestTempPassword) {
+      // Guest order: Send account creation email (with password & login link)
+      const emailResult = await sendGuestAccountCreatedEmail({
+        email,
+        password: guestTempPassword,
+        firstName: customer?.firstName,
+      });
+
+      if (!emailResult.success) {
+        console.error(
+          "[Guest Account Email Failed]",
+          email,
+          emailResult.error,
+        );
+      }
+    } else {
+      // Logged-in customer order: Send order confirmation email directly (reuse active client)
+      try {
+        const orderEmailResult = await sendOrderConfirmationEmail(order_id, client);
+        if (!orderEmailResult.success) {
+          console.error(
+            "[Order Confirmation Email Failed]",
+            email,
+            orderEmailResult.error,
+          );
+        }
+      } catch (emailErr) {
+        console.error("[Order Confirmation Email Exception]:", emailErr);
+      }
+    }
 
     return NextResponse.json({
       success: true,
@@ -830,6 +854,8 @@ export async function POST(req: NextRequest) {
     // =========================================
     // 4️⃣ CREATE ORDER
     // =========================================
+    const orderNumber = await generateNextOrderNumber(client);
+
     const orderResult = await client.query(
       `INSERT INTO store_orders
         (store_id, current_store_id, order_number, customer_id, customer_email, order_status,
@@ -849,7 +875,7 @@ export async function POST(req: NextRequest) {
       [
         bestStore,
         bestStore,
-        `ORD-${Date.now()}`,
+        orderNumber,
         customer_id,
         email,
         "pending",

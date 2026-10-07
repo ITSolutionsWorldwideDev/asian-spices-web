@@ -64,7 +64,8 @@ export default function RetryPaymentButton({
     <button
       onClick={retryPayment}
       disabled={loading}
-      className="bg-black text-white px-4 py-2 rounded mt-4"
+      translate="no"
+      className="notranslate bg-black text-white px-4 py-2 rounded mt-4"
     >
       {loading ? "Redirecting..." : "Retry Payment"}
     </button>

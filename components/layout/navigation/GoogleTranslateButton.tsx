@@ -209,7 +209,7 @@ export default function GoogleTranslateButton() {
         type="button"
         onMouseDown={(e) => e.stopPropagation()}
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 rounded-full bg-[#e8dfd0] px-2.5 py-1 text-xs font-semibold text-gray-800 transition hover:bg-[#ddd2c0]"
+        className="flex h-8 items-center gap-1 rounded-full border border-gray-200/90 bg-[#f7f2ea] px-2 text-[11px] font-semibold text-gray-800 transition hover:bg-[#ede5d8] active:scale-95 sm:h-9 sm:px-2.5 sm:text-xs"
         aria-label="Translate page"
         aria-expanded={open}
       >

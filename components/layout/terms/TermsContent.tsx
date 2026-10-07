@@ -8,6 +8,16 @@ type Block =
   | { type: "subheading"; text: string }
   | { type: "list"; items: string[] }
   | {
+      type: "table";
+      headers: string[];
+      rows: string[][];
+    }
+  | {
+      type: "callout";
+      text: string;
+      variant?: "info" | "warning";
+    }
+  | {
       type: "contactCards";
       cards: { icon: string; label: string; value: string }[];
     };
@@ -97,6 +107,59 @@ function renderBlock(block: Block, index: number) {
             </li>
           ))}
         </ul>
+      );
+    case "table":
+      return (
+        <div
+          key={index}
+          className="mt-5 mb-4 overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm"
+        >
+          <table className="min-w-full divide-y divide-gray-200 text-left text-sm">
+            <thead className="bg-[#fef9f3]">
+              <tr>
+                {block.headers.map((h, hi) => (
+                  <th
+                    key={hi}
+                    scope="col"
+                    className="px-4 py-3 font-semibold text-gray-900 text-xs sm:text-sm tracking-wider uppercase"
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {block.rows.map((row, ri) => (
+                <tr
+                  key={ri}
+                  className={ri % 2 === 0 ? "bg-white" : "bg-gray-50/60"}
+                >
+                  {row.map((cell, ci) => (
+                    <td
+                      key={ci}
+                      className="px-4 py-3 text-xs sm:text-sm text-gray-700 leading-relaxed align-top"
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    case "callout":
+      return (
+        <div
+          key={index}
+          className={`mt-5 rounded-xl border p-4 text-sm leading-relaxed ${
+            block.variant === "warning"
+              ? "border-amber-200 bg-amber-50/70 text-amber-900"
+              : "border-orange-200 bg-orange-50/60 text-gray-800"
+          }`}
+        >
+          {block.text}
+        </div>
       );
     case "contactCards":
       return <ContactCards key={index} cards={block.cards} />;

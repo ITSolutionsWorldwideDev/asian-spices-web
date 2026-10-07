@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import ContactDetails from "@/components/layout/contact_us/ContactDetails";
 import HeroSection from "@/components/layout/contact_us/HeroSection";
 import Footer from "@/components/ui/Footer";
@@ -6,6 +7,15 @@ import Image from "next/image";
 import faqsData from "@/components/layout/contact_us/faqsData.json";
 import { getFaqPageJsonLd, type FaqItem } from "@/lib/schema";
 import JsonLd from "@/components/seo/JsonLd";
+
+export const metadata: Metadata = {
+  title: "Contact Asian Spices | Customer Support Netherlands",
+  description:
+    "Have a question about an order, product, or delivery? Get in touch with the Asian Spices team - we're here to help.",
+  alternates: {
+    canonical: "/contact-us",
+  },
+};
 
 function getAllContactFaqs(): FaqItem[] {
   const { sections } = faqsData;

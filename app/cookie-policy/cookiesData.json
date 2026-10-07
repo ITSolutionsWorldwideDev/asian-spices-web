@@ -1,0 +1,171 @@
+{
+  "meta": {
+    "badge": "Privacy & Cookies",
+    "title": "Cookieverklaring",
+    "subtitle": "Asian Spices Online B.V. gebruikt cookies en vergelijkbare technieken op onze website, webshop en app. In deze verklaring lees je welke soorten cookies wij gebruiken, waarom en welke keuzes je hebt.",
+    "lastUpdated": "22 september 2026",
+    "effectiveFrom": "22 september 2026"
+  },
+  "support": {
+    "heading": "Vragen over cookies?",
+    "text": "Neem contact op met onze klantenservice voor vragen over ons cookiegebruik.",
+    "email": "support@asianspices.online"
+  },
+  "sections": [
+    {
+      "id": "wat-zijn-cookies",
+      "title": "1. Wat zijn cookies?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cookies zijn kleine tekstbestanden die op je apparaat worden opgeslagen wanneer je onze website of app bezoekt. Ze worden gebruikt om de website goed te laten werken, je voorkeuren te onthouden en, met jouw toestemming, het gebruik van onze diensten te analyseren."
+        }
+      ]
+    },
+    {
+      "id": "categorieen-cookies",
+      "title": "2. Welke categorieën cookies gebruiken wij?",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "2.1 Noodzakelijke cookies"
+        },
+        {
+          "type": "paragraph",
+          "text": "Deze cookies zijn nodig om de website en webshop goed te laten functioneren, bijvoorbeeld voor het onthouden van je winkelwagen, inloggegevens en cookievoorkeuren. Deze cookies kun je niet uitzetten, omdat de website anders niet goed werkt. Hiervoor is geen toestemming vereist. Zie hoofdstuk 3 voor het volledige overzicht van deze cookies, inclusief namen en bewaartermijnen."
+        },
+        {
+          "type": "subheading",
+          "text": "2.2 Analytische cookies"
+        },
+        {
+          "type": "paragraph",
+          "text": "Met jouw toestemming gebruiken wij analytische cookies om te begrijpen hoe bezoekers onze website gebruiken, zodat we deze kunnen verbeteren."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Google Tag Manager – beheert het plaatsen van tags/cookies op de website",
+            "Google Analytics 4 (GA4) – verzamelt geanonimiseerde of pseudonieme statistieken over websitegebruik",
+            "Microsoft Clarity – analyseert gebruikersgedrag (bijv. muisbewegingen en scrollgedrag) om de gebruikerservaring te verbeteren"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "GA4 past sinds 2022 standaard IP-anonimisering toe (IP-adressen worden niet volledig opgeslagen). Voor het gebruik van Google Analytics 4 en Microsoft Clarity hanteert Asian Spices een verwerkersovereenkomst (Data Processing Addendum) met Google respectievelijk Microsoft, zoals vereist onder de AVG. Deze overeenkomsten worden geaccepteerd via de accountinstellingen van beide diensten, voordat de betreffende cookies op de website actief worden."
+        },
+        {
+          "type": "subheading",
+          "text": "2.3 Marketingcookies"
+        },
+        {
+          "type": "paragraph",
+          "text": "Asian Spices gebruikt op dit moment geen marketing-/advertentiecookies (bijv. Google Ads-remarketing, Meta/Facebook Pixel). Mocht dit in de toekomst wijzigen, dan wordt deze verklaring bijgewerkt en wordt opnieuw om toestemming gevraagd."
+        },
+        {
+          "type": "subheading",
+          "text": "2.4 Functionele cookies"
+        },
+        {
+          "type": "paragraph",
+          "text": "Naast de noodzakelijke cookies gebruikt Asian Spices op dit moment geen aanvullende functionele cookies (bijv. voor taalvoorkeur). Mocht dit wijzigen, bijvoorbeeld bij toevoeging van een functie “eerder bekeken producten” dan wordt deze verklaring bijgewerkt."
+        }
+      ]
+    },
+    {
+      "id": "overzicht-cookies",
+      "title": "3. Overzicht van cookies",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Op basis van de tools die Asian Spices al gebruikt (Google Tag Manager, Google Analytics 4 en Microsoft Clarity — zie hoofdstuk 2.2), hanteren deze diensten de volgende, door Google en Microsoft gedocumenteerde standaardcookies:"
+        },
+        {
+          "type": "table",
+          "headers": ["Cookienaam", "Aanbieder", "Doel", "Type", "Bewaartermijn"],
+          "rows": [
+            ["(sessie-cookie)", "Asian Spices", "Houdt de sessie van de klant actief (bijv. inlogstatus)", "Noodzakelijk", "Sessie"],
+            ["(winkelwagen-cookie)", "Asian Spices", "Onthoudt de inhoud van de winkelwagen", "Noodzakelijk", "Tot 30 of 90 dagen (zie Privacyverklaring)"],
+            ["(cookie-consent-cookie)", "Asian Spices", "Onthoudt de cookiekeuze van de bezoeker", "Noodzakelijk", "6 maanden"],
+            ["_ga", "Google Analytics 4", "Onderscheidt unieke bezoekers", "Analytisch", "2 jaar"],
+            ["ga<container-ID>", "Google Analytics 4", "Houdt sessiestatus bij", "Analytisch", "2 jaar"],
+            ["_clck", "Microsoft Clarity", "Onthoudt de Clarity-gebruikers-ID tussen bezoeken", "Analytisch", "1 jaar"],
+            ["_clsk", "Microsoft Clarity", "Groepeert meerdere paginaweergaven in één sessie-opname", "Analytisch", "1 dag"],
+            ["CLID", "Microsoft Clarity", "Herkent of dit de eerste keer is dat Clarity deze gebruiker ziet", "Analytisch", "1 jaar"],
+            ["MUID", "Microsoft Clarity", "Identificeert unieke browsers op Microsoft-domeinen", "Analytisch", "1 jaar"],
+            ["ANONCHK / MR / SM", "Microsoft Clarity", "Ondersteunende technische cookies voor werking van Clarity", "Analytisch", "1 jaar"]
+          ]
+        },
+        {
+          "type": "callout",
+          "text": "Let op: De exacte namen van de sessie-, winkelwagen- en consentcookie hangen af van het platform en de consent-tool die Asian Spices gebruikt. Zodra de website live staat, raden we aan deze tabel te bevestigen met een technische cookie-scan (bijv. via Cookiebot of Complianz) om te controleren of er geen extra cookies worden geplaatst.",
+          "variant": "info"
+        }
+      ]
+    },
+    {
+      "id": "toestemming-keuzes",
+      "title": "4. Toestemming en jouw keuzes",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bij je eerste bezoek aan onze website vragen wij toestemming voor niet-noodzakelijke cookies via een cookiebanner. Je kunt:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Alleen noodzakelijke cookies accepteren",
+            "Alle cookies accepteren",
+            "Je keuze per categorie aanpassen"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Je kunt je cookievoorkeuren op elk moment wijzigen via de link “Cookie-instellingen” in de footer van onze website."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wij bewaren je cookiekeuze en toestemmingsbewijs 6 maanden (conform onze Privacyverklaring, hoofdstuk 8). Bij belangrijke wijzigingen in de gebruikte cookies, doeleinden of leveranciers vragen wij opnieuw om jouw keuze."
+        }
+      ]
+    },
+    {
+      "id": "browser-beheren",
+      "title": "5. Cookies via je browser beheren",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Naast onze cookiebanner kun je cookies ook beheren via je browserinstellingen, bijvoorbeeld door cookies te blokkeren of te verwijderen. Houd er rekening mee dat het blokkeren van noodzakelijke cookies de werking van onze website kan beperken."
+        }
+      ]
+    },
+    {
+      "id": "wijzigingen",
+      "title": "6. Wijzigingen in deze verklaring",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wij kunnen deze cookieverklaring aanpassen wanneer wij nieuwe technieken gebruiken of wanneer wet- en regelgeving wijzigt. De meest actuele versie wordt op onze website gepubliceerd."
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "7. Contact",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "E-mail: support@asianspices.online",
+            "Telefoon: 010-7660786",
+            "Adres: Slakkenveen 341, 3205 GK Spijkenisse"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Zie ook onze Privacyverklaring voor meer informatie over hoe wij met persoonsgegevens omgaan."
+        }
+      ]
+    }
+  ]
+}

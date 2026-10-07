@@ -75,7 +75,8 @@ export default function CartToast() {
       ref={popupRef}
       role="status"
       aria-live="polite"
-      className="pointer-events-none fixed z-[9998]"
+      translate="no"
+      className="notranslate pointer-events-none fixed z-[9998]"
       style={style}
     >
       <div className="animate-fade-in pointer-events-auto overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-[0_16px_48px_rgba(0,0,0,0.15)]">

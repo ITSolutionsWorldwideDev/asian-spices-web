@@ -27,11 +27,78 @@ interface RecipesPageProps {
   }>;
 }
 
-export async function generateMetadata() {
-  return {
-    title: "Recipes",
+import type { Metadata } from "next";
+
+const RECIPE_CATEGORY_META: Record<
+  string,
+  { title: string; description: string }
+> = {
+  "chicken-recipes": {
+    title: "Chicken Recipes | Easy & Authentic Asian Chicken Dishes",
     description:
-      "Explore delicious recipes with categories, tags, and cooking inspiration.",
+      "Browse our best chicken recipes - from creamy curries to crispy stir-fries. Easy, authentic Asian-inspired chicken dishes for every meal.",
+  },
+  vegetarian: {
+    title: "Vegetarian Recipes | Authentic Indian & Asian Veg Dishes",
+    description:
+      "Discover flavorful vegetarian recipes inspired by Indian and Asian cuisine - paneer curries, dals, stir-fries and more.",
+  },
+  paneer: {
+    title: "Paneer Recipes | Easy Indian Paneer Curries & Dishes",
+    description:
+      "Explore our collection of paneer recipes - from Paneer Bhurji to Chilli Paneer - quick, authentic, and full of flavour.",
+  },
+  pasta: {
+    title: "Asian-Inspired Pasta Recipes | Fusion Pasta Dishes",
+    description:
+      "Try our fusion pasta recipes blending Asian flavours with classic pasta dishes - creamy, spicy, and easy to make at home.",
+  },
+  "indo-chinese": {
+    title: "Indo-Chinese Recipes | Chilli Paneer, Manchurian & More",
+    description:
+      "Discover popular Indo-Chinese recipes like Chicken Manchurian, Chilli Paneer, and Dragon Chicken - restaurant flavour at home.",
+  },
+  rice: {
+    title: "Rice Recipes | Biryani, Fried Rice & More",
+    description:
+      "From Hyderabadi Biryani to Egg Fried Rice - explore our best rice recipes for every occasion.",
+  },
+  beef: {
+    title: "Beef Recipes | Asian & Indian-Style Beef Dishes",
+    description:
+      "Explore beef recipes from Mongolian Beef to Beef and Broccoli - bold, easy Asian-inspired dishes.",
+  },
+  breads: {
+    title: "Bread Recipes | Homemade Rotis, Parathas & More",
+    description:
+      "Learn to make authentic Indian breads at home, including Aloo Paratha and more traditional recipes.",
+  },
+};
+
+export async function generateMetadata({
+  searchParams,
+}: RecipesPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const categoryKey = params?.category?.toLowerCase().trim();
+
+  if (categoryKey && RECIPE_CATEGORY_META[categoryKey]) {
+    const meta = RECIPE_CATEGORY_META[categoryKey];
+    return {
+      title: meta.title,
+      description: meta.description,
+      alternates: {
+        canonical: `/recipes?category=${categoryKey}`,
+      },
+    };
+  }
+
+  return {
+    title: "Asian Recipes | Indian, Chinese & Fusion Cooking Inspiration",
+    description:
+      "Discover authentic Asian recipes - from Indian curries to Chinese stir-fries - made with real ingredients. Browse by category, tag, or cuisine.",
+    alternates: {
+      canonical: "/recipes",
+    },
   };
 }
 

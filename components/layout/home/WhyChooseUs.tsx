@@ -2,8 +2,8 @@ import Image from "next/image";
 
 const features = [
   {
-    title: "100% Organic",
-    desc: "Certified organic and sustainably sourced from trusted farms across Asia.",
+    title: "Versatile Range",
+    desc: "An extensive collection designed to suit every lifestyle and preference.",
     iconBg: "bg-linear-to-b from-green-400 to-green-600",
     icon: "Vector (1).png",
   },
@@ -41,11 +41,11 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="overflow-visible bg-[#f2f2f2] pt-10 pb-24 sm:pt-12 sm:pb-28 md:pt-14 md:pb-32">
+    <section className="overflow-x-clip overflow-y-visible pt-10 pb-16 sm:pt-12 sm:pb-20 md:pt-14 md:pb-24 lg:pb-32">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
-          {/* Left — 2×3 feature cards */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4">
+        <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
+          {/* Left — 2×3 feature cards (mobile: black card ke baad) */}
+          <div className="order-2 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4 lg:order-1">
             {features.map((item) => (
               <div
                 key={item.title}
@@ -74,20 +74,24 @@ export default function WhyChooseUs() {
             ))}
           </div>
 
-          {/* Right — matches left height; spices overflow below card only */}
-          <div className="relative mx-auto w-full max-w-[400px] lg:mx-0 lg:max-w-none">
+          {/* Right — mobile pe sabse pehle */}
+          <div className="relative order-1 mx-auto mb-16 w-full max-w-[400px] lg:order-2 lg:mx-0 lg:mb-0 lg:max-w-none">
             {/* Amber plate behind */}
             <div
               aria-hidden
               className="absolute inset-0 rounded-2xl bg-[#e8b86d] rotate-[7deg]"
             />
 
-            {/* Black card — stretches with left column */}
-            <div className="relative z-10 flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl bg-neutral-950 shadow-xl lg:min-h-0">
-              <div className="pointer-events-none absolute inset-0 opacity-[0.12]">
+            {/* Black card — overflow-visible taake mobile image neeche hang kar sake */}
+            <div className="relative z-10 flex flex-col rounded-2xl bg-neutral-950 shadow-xl lg:h-full lg:min-h-0">
+              {/* Pattern layer — apni alag clipped layer */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl opacity-[0.12]"
+              >
                 <Image
                   src="/assets/home/collections/collection-bg.webp"
-                  alt="Decorative spice pattern with star anise, cloves, and peppercorns"
+                  alt=""
                   fill
                   sizes="400px"
                   className="object-cover"
@@ -96,17 +100,30 @@ export default function WhyChooseUs() {
               </div>
 
               <div className="relative z-10 px-5 pt-8 text-center sm:pt-10 lg:pt-12">
-                <h2 className="text-[1.75rem] font-bold leading-[1.15] sm:text-3xl lg:text-[2.15rem]">
+                <h2 className="text-3xl font-bold leading-[1.15] lg:text-[2.15rem]">
                   <span className="block text-orange-400">Why Choose</span>
                   <span className="block text-white">Asian Spices</span>
                 </h2>
               </div>
 
-              <div className="flex-1" aria-hidden />
+              {/* MOBILE image — normal flow, card ke neeche thora sa hang */}
+              <div className="pointer-events-none relative z-20 -mb-14 mt-2 flex justify-center lg:hidden">
+                <Image
+                  src="/assets/home/why_choose_us/e901a8e43e221c4b953024f51bc6d8ba79e7809c.png"
+                  alt="Assortment of spices"
+                  width={640}
+                  height={520}
+                  className="h-auto w-[88%] max-w-[360px] object-contain"
+                  loading="lazy"
+                />
+              </div>
+
+              {/* DESKTOP spacer */}
+              <div className="hidden flex-1 lg:block" aria-hidden />
             </div>
 
-            {/* Only the spice image hangs below the black card */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex translate-y-[42%] justify-center">
+            {/* DESKTOP image — pehle jaisa absolute overlap */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 hidden translate-y-[42%] justify-center lg:flex">
               <Image
                 src="/assets/home/why_choose_us/e901a8e43e221c4b953024f51bc6d8ba79e7809c.png"
                 alt="Assortment of spices"

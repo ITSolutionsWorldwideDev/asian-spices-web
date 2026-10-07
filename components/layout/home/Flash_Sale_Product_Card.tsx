@@ -4,9 +4,15 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { useCartStore } from "@/store/useCartStore";
 import { useSession } from "next-auth/react";
+import { getProductPath } from "@/lib/product-path";
+import { stripHtml } from "@/lib/product-metadata";
+import { resolveTaxRate } from "@/lib/tax";
+import { useGlobalStore } from "@/store/useGlobalStore";
+import { Tag } from "lucide-react";
 
 import Flash_Sale_Hover_product_Card from "./Flash_Sale_Hover_product_Card";
 
@@ -23,6 +29,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
   const { cart, addToCart, increaseQty, decreaseQty, setQty } = useCartStore();
+  const { taxRules, taxRulesLoaded } = useGlobalStore();
 
   useEffect(() => {
     async function loadSaleItems() {
@@ -34,41 +41,48 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
 
         // Transform the DB structure to fit your design templates
         const mapped = (json.data || []).map((p: any) => {
-          const basePrice = Number(p.base_price);
-          const salePrice = Number(p.sale_price || basePrice);
-          const rawSave = basePrice - salePrice;
-          const discountPct =
-            basePrice > 0 ? Math.round((rawSave / basePrice) * 100) : 0;
+          const basePrice = Number(p.base_price) || 0;
+          const hasSalePrice =
+            p.sale_price !== undefined &&
+            p.sale_price !== null &&
+            p.sale_price !== "" &&
+            !Number.isNaN(Number(p.sale_price));
+          const salePriceFromDb = hasSalePrice ? Number(p.sale_price) : 0;
+          const discountValue = Number(p.discount_value);
+          const dtype = (p.discount_type || "").toLowerCase();
 
           let offBadge = "HOT DEAL";
-          if (p.discount_type === "percentage" || p.discount_type === "Bulk") {
-            const pct = Number(p.discount_value);
-            if (!isNaN(pct) && pct > 0) {
-              // Match mock: very strong deals can show HOT DEAL
-              offBadge = pct >= 50 ? "HOT DEAL" : `${pct}% OFF`;
-            } else if (discountPct > 0) {
-              offBadge = discountPct >= 50 ? "HOT DEAL" : `${discountPct}% OFF`;
+          if (dtype === "percentage" || dtype === "bulk") {
+            if (!Number.isNaN(discountValue) && discountValue > 0) {
+              offBadge =
+                discountValue >= 50 ? "HOT DEAL" : `${discountValue}% OFF`;
             }
-          } else if (p.discount_type === "fixed") {
-            offBadge = `€${p.discount_value} OFF`;
-          } else if (discountPct > 0) {
-            offBadge = discountPct >= 50 ? "HOT DEAL" : `${discountPct}% OFF`;
+          } else if (
+            dtype === "fixed" &&
+            !Number.isNaN(discountValue) &&
+            discountValue > 0
+          ) {
+            offBadge = `€${discountValue} OFF`;
           }
 
           return {
             id: p.id,
             title: p.name,
+            weight: p.weight ? String(p.weight).trim() : null,
             image: p.image || "fallback-placeholder.jpg",
-            base_price: salePrice, // The actual cost to buy now
-            oldPrice: basePrice, // Crossed out cost
+            oldPrice: basePrice,
+            sale_price: salePriceFromDb,
+            discount_type: p.discount_type,
+            discount_value: p.discount_value,
             off: offBadge,
-            save: `€${rawSave > 0 ? rawSave.toFixed(2) : "0.00"}`,
-            description: p.description || "",
-            qualities: p.health_benefits
-              ? [p.health_benefits]
-              : ["Premium Quality", "Intense Aroma", "Hand-Harvested"],
-            rating: 5,
-            rating_percentage: "100%",
+            description: stripHtml(p.description || ""),
+            qualities: Array.isArray(p.highlights) && p.highlights.length
+              ? p.highlights.map(String).filter(Boolean)
+              : p.health_benefits
+                ? [p.health_benefits]
+                : [],
+            rating: Number(p.avg_rating) || 0,
+            reviews: Number(p.reviews) || 0,
             seller_name: p.seller_name || null,
             slug: p.slug,
             category_slug: p.category_slug,
@@ -92,12 +106,14 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
 
   const scroll = (direction: "left" | "right") => {
     if (sliderRef.current) {
-      const { scrollLeft, clientWidth } = sliderRef.current;
+      const el = sliderRef.current;
+      const { scrollLeft, clientWidth, scrollWidth } = el;
+      const maxScroll = Math.max(0, scrollWidth - clientWidth);
       const scrollTo =
         direction === "left"
-          ? scrollLeft - clientWidth
-          : scrollLeft + clientWidth;
-      sliderRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
+          ? Math.max(0, scrollLeft - clientWidth)
+          : Math.min(maxScroll, scrollLeft + clientWidth);
+      el.scrollTo({ left: scrollTo, behavior: "smooth" });
     }
   };
 
@@ -105,153 +121,230 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
 
   return (
     <div className="group relative w-full min-w-0">
-      {/* Slider Controls — inset so they stay on-screen on mobile */}
+      {/* Slider Controls — hidden on mobile so cards are not compressed or covered */}
       <button
         type="button"
         aria-label="Previous deals"
         onClick={() => scroll("left")}
-        className="absolute left-0 top-1/2 z-40 -translate-y-1/2 rounded-full border border-gray-100 bg-black p-1.5 opacity-100 shadow-md transition sm:left-1 sm:p-2 md:left-0 md:opacity-0 md:group-hover:opacity-100"
+        className="absolute left-0 top-1/2 z-40 hidden sm:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center -translate-y-1/2 rounded-full border border-gray-100 bg-black text-white opacity-100 shadow-md transition active:scale-95 sm:left-1 md:left-0 md:opacity-0 md:group-hover:opacity-100"
       >
-        <ChevronLeft size={18} />
+        <ChevronLeft size={20} />
       </button>
       <button
         type="button"
         aria-label="Next deals"
         onClick={() => scroll("right")}
-        className="absolute right-0 top-1/2 z-40 -translate-y-1/2 rounded-full border border-gray-100 bg-black p-1.5 opacity-100 shadow-md transition sm:right-1 sm:p-2 md:right-0 md:opacity-0 md:group-hover:opacity-100"
+        className="absolute right-0 top-1/2 z-40 hidden sm:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center -translate-y-1/2 rounded-full border border-gray-100 bg-black text-white opacity-100 shadow-md transition active:scale-95 sm:right-1 md:right-0 md:opacity-0 md:group-hover:opacity-100"
       >
-        <ChevronRight size={18} />
+        <ChevronRight size={20} />
       </button>
 
       {/* Horizontal Scroll Box */}
       <div
         ref={sliderRef}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-8 py-3 scrollbar-hide sm:gap-4 sm:px-10 sm:py-4 md:justify-center md:gap-6 md:px-12"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-3 py-3 scrollbar-hide sm:gap-4 sm:px-10 sm:py-4 md:gap-6 md:px-12"
         style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
       >
         {products.map((item, index) => {
           const cartItem = cart?.find((c) => c.id === item.id);
+          const productHref = getProductPath(item);
+
+          // Wait for tax rules so prices don't flash from net → VAT-inclusive
+          const taxRate = taxRulesLoaded
+            ? resolveTaxRate(taxRules, item.category_id)
+            : null;
+          const netBase = Number(item.oldPrice || 0);
+          const baseWithTax =
+            taxRate == null
+              ? null
+              : Number((netBase * (1 + taxRate)).toFixed(2));
+
+          const dtype = (item.discount_type || "").toLowerCase();
+          const discountValue = Number(item.discount_value);
+          const saleFromDb = Number(item.sale_price || 0);
+          const hasDiscountMeta =
+            !Number.isNaN(discountValue) && discountValue > 0;
+
+          let realPrice: number | null = baseWithTax;
+          let greenDbSale = 0;
+
+          if (baseWithTax != null) {
+            if (
+              hasDiscountMeta &&
+              (dtype === "percentage" || dtype === "bulk") &&
+              discountValue < 100
+            ) {
+              realPrice = Number(
+                (baseWithTax * (1 - discountValue / 100)).toFixed(2),
+              );
+            } else if (hasDiscountMeta && dtype === "fixed") {
+              realPrice = Number(
+                Math.max(0, baseWithTax - discountValue).toFixed(2),
+              );
+            } else if (saleFromDb > 0 && netBase > 0 && saleFromDb < netBase) {
+              realPrice = Number(
+                (baseWithTax * (saleFromDb / netBase)).toFixed(2),
+              );
+            }
+            // Green = exact sale amount (base − sale)
+            if (realPrice != null && realPrice < baseWithTax) {
+              greenDbSale = Number((baseWithTax - realPrice).toFixed(2));
+            }
+          }
+
+          const displayItem = {
+            ...item,
+            base_price: realPrice ?? 0,
+            oldPrice: baseWithTax ?? 0,
+            save: greenDbSale > 0 ? `€${greenDbSale.toFixed(2)}` : "",
+          };
 
           return (
             <div
               key={item.id}
-              className="relative w-[min(280px,78vw)] max-w-[350px] flex-shrink-0 snap-center rounded-2xl border border-gray-50 bg-white p-4 text-black shadow-lg sm:w-[300px] sm:snap-start sm:p-5"
+              className="relative w-[280px] sm:w-[300px] flex-shrink-0 snap-start rounded-2xl border border-gray-50 bg-white p-4 text-black shadow-lg flex flex-col justify-between sm:p-5"
             >
-              {/* Image Box */}
-              <div className="relative">
-                <span className="absolute left-2 top-2 z-20 rounded-md bg-red-600 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white sm:left-3 sm:top-3 sm:text-[11px]">
-                  {item.off}
-                </span>
+              <div className="flex flex-col flex-1">
+                <div className="relative">
+                  {item.off && (
+                    <span className="absolute left-2.5 top-2.5 z-20 rounded-full bg-red-500 px-2 py-0.5 text-[11px] font-bold text-white shadow-sm flex items-center sm:left-4 sm:top-4 sm:px-2.5 sm:py-1 sm:text-xs">
+                      <Tag className="mr-1 w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                      <span>{item.off}</span>
+                    </span>
+                  )}
 
-                <div
-                  className="relative h-40 w-full cursor-pointer overflow-hidden rounded-xl bg-gray-50 sm:h-48"
-                  onMouseEnter={() => {
-                    if (
-                      typeof window !== "undefined" &&
-                      window.matchMedia("(hover: hover)").matches
-                    ) {
-                      setHoveredId(item.id);
-                    }
-                  }}
-                >
-                  <Image
-                    src={
-                      item.image.startsWith("http")
-                        ? item.image
-                        : `/assets/home/hot_sale/${item.image}`
-                    }
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 640px) 78vw, 300px"
-                    className="object-contain transition-transform duration-300 hover:scale-110"
-                    priority={index < 2}
-                  />
-                </div>
-              </div>
-
-              <h3 className="mt-3 truncate text-base font-semibold text-gray-800 sm:mt-4 sm:text-lg">
-                {item.title}
-              </h3>
-              {item.seller_name ? (
-                <p className="mt-1 truncate text-xs font-medium text-orange-700">
-                  Sold by {item.seller_name}
-                </p>
-              ) : null}
-
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                <span className="text-lg font-bold text-orange-500 sm:text-xl">
-                  €{item.base_price.toFixed(2)}
-                </span>
-                <span className="text-sm text-gray-400 line-through">
-                  €{item.oldPrice.toFixed(2)}
-                </span>
-              </div>
-
-              <p className="mt-1.5 text-xs font-semibold text-green-600">
-                You save {item.save}
-              </p>
-
-              {cartItem ? (
-                <div className="mt-4 flex h-[44px] items-center justify-between overflow-hidden rounded-xl border border-gray-200">
-                  <button
-                    onClick={() => decreaseQty(item.id, isLoggedIn)}
-                    className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <input
-                    type="number"
-                    min={1}
-                    value={cartItem.quantity}
-                    onChange={(e) => {
-                      const value = Number(e.target.value);
-                      if (isNaN(value) || value < 1) return;
-                      setQty(item.id, value, isLoggedIn);
+                  <Link
+                    href={productHref}
+                    className="relative block h-48 w-full cursor-pointer overflow-hidden rounded-xl bg-gray-50 sm:h-52"
+                    onMouseEnter={() => {
+                      if (
+                        typeof window !== "undefined" &&
+                        window.matchMedia("(hover: hover)").matches
+                      ) {
+                        setHoveredId(item.id);
+                      }
                     }}
-                    className="w-2/4 bg-transparent text-center text-sm font-semibold outline-none"
-                  />
-                  <button
-                    onClick={() => increaseQty(item.id, isLoggedIn)}
-                    className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
                   >
-                    +
-                  </button>
+                    <Image
+                      src={
+                        item.image.startsWith("http")
+                          ? item.image
+                          : `/assets/home/hot_sale/${item.image}`
+                      }
+                      alt={item.weight ? `${item.title} ${item.weight}` : item.title}
+                      fill
+                      sizes="(max-width: 640px) 280px, 300px"
+                      className="object-contain p-2 transition-transform duration-300 hover:scale-105"
+                      priority={index < 2}
+                    />
+                  </Link>
                 </div>
-              ) : (
-                <button
-                  onClick={() => {
-                    addToCart(
-                      {
-                        id: item.id,
-                        title: item.title,
-                        base_price: Number(item.base_price || 0),
-                        oldPrice: Number(item.base_price || 0),
-                        discount_value: Number(item.oldPrice || 0),
-                        discount_type: item.discount_type,
-                        image: item.image,
-                        slug: item.slug,
-                        category_slug: item.category_slug,
-                        subcategory_slug: item.subcategory_slug,
-                        category_id: item.category_id,
-                        promo_code: item.promo_code,
-                      },
-                      isLoggedIn,
-                    );
-                  }}
-                  className="mt-4 h-[44px] w-full cursor-pointer rounded-xl bg-orange-500 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98]"
-                >
-                  Grab This Now
-                </button>
-              )}
 
-              {/* Desktop hover overlay only */}
+                <Link href={productHref} className="block mt-3 sm:mt-4">
+                  <h3 className="text-sm font-semibold text-gray-800 hover:text-orange-600 line-clamp-2 min-h-[2.5rem] sm:text-base sm:min-h-[2.75rem]">
+                    {item.title}
+                    {item.weight &&
+                    !item.title
+                      .toLowerCase()
+                      .includes(String(item.weight).toLowerCase().trim())
+                      ? ` ${item.weight}`
+                      : ""}
+                  </h3>
+                </Link>
+
+                <div className="mt-2 flex items-baseline gap-2 min-h-[1.75rem]">
+                  {realPrice == null || baseWithTax == null ? (
+                    <span
+                      className="inline-block h-6 w-28 animate-pulse rounded bg-orange-100"
+                      aria-hidden
+                    />
+                  ) : (
+                    <>
+                      <span className="text-lg font-bold text-orange-500 sm:text-xl">
+                        €{realPrice.toFixed(2)}
+                      </span>
+                      {baseWithTax > realPrice && (
+                        <span className="text-xs sm:text-sm text-gray-400 line-through font-medium">
+                          €{baseWithTax.toFixed(2)}
+                        </span>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                <div className="min-h-[1.375rem] mt-1 flex items-center">
+                  {realPrice != null && greenDbSale > 0 ? (
+                    <p className="text-green-600 text-xs font-semibold flex items-center bg-green-50/70 py-0.5 px-2 rounded-md w-fit">
+                      You save €{greenDbSale.toFixed(2)}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="notranslate mt-4 pt-1" translate="no">
+                {cartItem ? (
+                  <div className="flex h-[44px] items-center justify-between overflow-hidden rounded-xl border border-gray-200">
+                    <button
+                      onClick={() => decreaseQty(item.id, isLoggedIn)}
+                      className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
+                    >
+                      −
+                    </button>
+                    <input
+                      type="number"
+                      min={1}
+                      value={cartItem.quantity}
+                      onChange={(e) => {
+                        const value = Number(e.target.value);
+                        if (isNaN(value) || value < 1) return;
+                        setQty(item.id, value, isLoggedIn);
+                      }}
+                      className="w-2/4 bg-transparent text-center text-sm font-semibold outline-none"
+                    />
+                    <button
+                      onClick={() => increaseQty(item.id, isLoggedIn)}
+                      className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
+                    >
+                      +
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      if (realPrice == null || baseWithTax == null) return;
+                      addToCart(
+                        {
+                          id: item.id,
+                          title: item.title,
+                          base_price: realPrice,
+                          oldPrice: baseWithTax,
+                          discount_value: Number(item.discount_value || 0),
+                          discount_type: item.discount_type,
+                          image: item.image,
+                          slug: item.slug,
+                          category_slug: item.category_slug,
+                          subcategory_slug: item.subcategory_slug,
+                          category_id: item.category_id,
+                          promo_code: item.promo_code,
+                        },
+                        isLoggedIn,
+                      );
+                    }}
+                    disabled={realPrice == null}
+                    className="h-[44px] w-full cursor-pointer rounded-xl bg-orange-500 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    Add to Cart
+                  </button>
+                )}
+              </div>
+
               {hoveredId === item.id && (
                 <div
                   className="absolute -left-2 -right-2 -top-2 z-50 hidden rounded-2xl border border-gray-100 bg-white p-4 shadow-2xl md:block md:min-w-[320px] lg:min-w-[340px]"
                   onMouseLeave={() => setHoveredId(null)}
                 >
                   <Flash_Sale_Hover_product_Card
-                    item={item}
+                    item={displayItem}
                     setHoveredId={setHoveredId}
                   />
                 </div>

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function ReadyToCook() {
   return (
-    <section className="bg-white py-16 sm:py-20 lg:py-24">
+    <section className="bg-white pb-10 pt-16 sm:pb-12 sm:pt-20 lg:pb-14 lg:pt-24">
       <div className="container mx-auto max-w-3xl px-4 text-center sm:px-6">
         <div className="flex items-center justify-center gap-3">
           <span className="h-px w-6 bg-[#C0712C]" aria-hidden />

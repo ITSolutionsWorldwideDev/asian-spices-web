@@ -169,7 +169,7 @@ export default function CancelItemsWorkflow({
   );
 
   return (
-    <div className="space-y-6">
+    <div className="notranslate space-y-6" translate="no">
       {/* Step Indicator */}
       <div className="flex items-center justify-between pb-4 border-b">
         {[
@@ -219,7 +219,7 @@ export default function CancelItemsWorkflow({
           <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl border text-sm">
             <div>
               <p className="text-xs text-gray-400">Order Reference</p>
-              <p className="font-semibold">#{order.order_number}</p>
+              <p className="font-semibold">{order.order_number?.replace(/^#+\s*/, "")}</p>
             </div>
             <div>
               <p className="text-xs text-gray-400">Date Placed</p>

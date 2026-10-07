@@ -87,7 +87,10 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center p-12">
+      <div
+        className="notranslate flex flex-col items-center justify-center p-12"
+        translate="no"
+      >
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mb-4" />
         <p className="text-gray-600 font-medium">
           Loading your order status details...
@@ -98,7 +101,7 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
 
   if (!order) {
     return (
-      <p className="text-center text-red-500 font-medium">
+      <p className="notranslate text-center text-red-500 font-medium" translate="no">
         Order tracking details not found.
       </p>
     );
@@ -110,7 +113,7 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
 
   if (order.payment_status === "paid") {
     return (
-      <div className="bg-green-50 border p-6 rounded">
+      <div className="notranslate bg-green-50 border p-6 rounded" translate="no">
         <h2 className="text-green-700 text-xl font-bold">
           ✅ Payment Successful
         </h2>
@@ -130,7 +133,7 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
 
   if (order.payment_status === "failed") {
     return (
-      <div className="bg-red-50 border p-6 rounded">
+      <div className="notranslate bg-red-50 border p-6 rounded" translate="no">
         <h2 className="text-red-700 text-xl font-bold mb-2">
           ❌ Payment Failed
         </h2>
@@ -152,7 +155,7 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
 
   // default = pending
   return (
-    <div className="bg-yellow-50 border p-6 rounded">
+    <div className="notranslate bg-yellow-50 border p-6 rounded" translate="no">
       <h2 className="text-yellow-700 text-xl font-bold flex items-center gap-2">
         ⏳ Awaiting Settlement Authorization
       </h2>

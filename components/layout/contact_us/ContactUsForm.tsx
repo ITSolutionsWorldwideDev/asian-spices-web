@@ -60,7 +60,7 @@ const ContactUsForm = () => {
   };
 
   return (
-    <div>
+    <div className="notranslate" translate="no">
       <h2 className="text-2xl md:text-3xl font-bold text-[#1b0d07] font-serif">
         Send Us a Message
       </h2>

@@ -1,9 +1,21 @@
 import React from "react";
+import type { Metadata } from "next";
 import Footer from "@/components/ui/Footer";
 import Nav from "@/components/ui/Nav";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "About Asian Spices | Authentic Asian Groceries, Delivered in NL",
+  description:
+    "Learn how Asian Spices brings authentic Indian & Asian ingredients to homes across the Netherlands - quality spices, groceries, and trusted brands.",
+  alternates: {
+    canonical: "/about-us",
+  },
+};
 import Story from "@/components/layout/about_us/Story";
 import OurMission from "@/components/layout/about_us/OurMission";
+import WhatWeBring from "@/components/layout/about_us/WhatWeBring";
+import SupportFarmers from "@/components/layout/about_us/SupportFarmers";
 import QualityTrust from "@/components/layout/about_us/QualityTrust";
 import WhatWeOffer from "@/components/layout/about_us/WhatWeOffer";
 import ForEveryone from "@/components/layout/about_us/ForEveryone";
@@ -120,6 +132,8 @@ const AboutUs = () => {
 
       <Story />
       <OurMission />
+      <WhatWeBring />
+      <SupportFarmers />
       <QualityTrust />
       <WhatWeOffer />
       <ForEveryone />
@@ -127,7 +141,9 @@ const AboutUs = () => {
       <StoryBanner />
       <ReadyToCook />
 
-      <Footer />
+      <div className="[&>footer]:mt-0">
+        <Footer />
+      </div>
     </div>
   );
 };
