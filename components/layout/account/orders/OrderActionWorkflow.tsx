@@ -110,7 +110,10 @@ export default function OrderActionWorkflow({
   };
 
   return (
-    <div className="bg-white rounded-2xl border p-6 space-y-6 max-w-2xl mx-auto">
+    <div
+      className="notranslate bg-white rounded-2xl border p-6 space-y-6 max-w-2xl mx-auto"
+      translate="no"
+    >
       {/* Visual Step Indicator Tracker */}
       <div className="flex items-center justify-between pb-4 border-b">
         {[

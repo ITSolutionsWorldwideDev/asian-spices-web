@@ -265,7 +265,10 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
               ) : null}
 
               {cartItem ? (
-                <div className="mt-4 flex h-[44px] items-center justify-between overflow-hidden rounded-xl border border-gray-200">
+                <div
+                  className="notranslate mt-4 flex h-[44px] items-center justify-between overflow-hidden rounded-xl border border-gray-200"
+                  translate="no"
+                >
                   <button
                     onClick={() => decreaseQty(item.id, isLoggedIn)}
                     className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
@@ -313,7 +316,8 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                     );
                   }}
                   disabled={realPrice == null}
-                  className="mt-4 h-[44px] w-full cursor-pointer rounded-xl bg-orange-500 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  translate="no"
+                  className="notranslate mt-4 h-[44px] w-full cursor-pointer rounded-xl bg-orange-500 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Grab This Now
                 </button>

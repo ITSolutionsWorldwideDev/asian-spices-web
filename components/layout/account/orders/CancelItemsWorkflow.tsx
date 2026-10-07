@@ -128,7 +128,7 @@ export default function CancelItemsWorkflow({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="notranslate space-y-6" translate="no">
       {/* Step Indicator */}
       <div className="flex items-center justify-between pb-4 border-b">
         {[

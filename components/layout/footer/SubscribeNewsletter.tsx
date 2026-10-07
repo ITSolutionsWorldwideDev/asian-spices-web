@@ -74,7 +74,8 @@ const SubscribeNewsletter = ({
     return (
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mx-auto w-full max-w-2xl space-y-4"
+        translate="no"
+        className="notranslate mx-auto w-full max-w-2xl space-y-4"
       >
         <div className="mx-auto flex w-full max-w-xl flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
           <input
@@ -141,7 +142,11 @@ const SubscribeNewsletter = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-3">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      translate="no"
+      className="notranslate w-full space-y-3"
+    >
       <div className="flex flex-col lg:flex-row bg-white rounded-xl overflow-hidden shadow-md w-full justify-between">
         <div className="flex items-center flex-1 px-3 py-2 text-gray-400 sm:py-0">
           <input

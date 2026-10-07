@@ -48,7 +48,10 @@ export default async function AccountLayout({
             <div className="hidden lg:block">
               <AccountSidebar />
             </div>
-            <main className="bg-white rounded-2xl p-6 shadow-sm border min-h-100">
+            <main
+              className="notranslate bg-white rounded-2xl p-6 shadow-sm border min-h-100"
+              translate="no"
+            >
               {children}
             </main>
           </div>

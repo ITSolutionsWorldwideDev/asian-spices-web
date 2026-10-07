@@ -178,7 +178,7 @@ export default function TabSwitching() {
   });
 
   return (
-    <div className="w-full p-4 sm:p-8">
+    <div className="notranslate w-full p-4 sm:p-8" translate="no">
       <div className="w-full overflow-x-auto max-w-6xl mx-auto pb-2">
         <div className="sm:hidden  sticky top-0 z-10 bg-white pb-3 border-b shadow-sm">
           <div className="flex items-center justify-between mb-2">

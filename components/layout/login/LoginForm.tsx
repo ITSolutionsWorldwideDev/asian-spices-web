@@ -105,7 +105,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="relative flex w-full min-w-0 flex-1">
+    <div className="notranslate relative flex w-full min-w-0 flex-1" translate="no">
       <div className="pointer-events-none absolute top-0 left-0 h-24 w-24 rounded-full bg-orange-300/20 blur-3xl sm:h-32 sm:w-32 md:h-40 md:w-40" />
       <div className="pointer-events-none absolute right-0 bottom-0 h-24 w-24 rounded-full bg-amber-300/20 blur-3xl sm:h-32 sm:w-32 md:h-40 md:w-40" />
       <div

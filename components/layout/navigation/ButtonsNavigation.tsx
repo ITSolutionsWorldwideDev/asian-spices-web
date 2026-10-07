@@ -21,7 +21,7 @@ const ButtonsNavigation = () => {
   }
 
   return (
-    <div className="shrink-0">
+    <div className="notranslate shrink-0" translate="no">
             {!session ? (
         <Link
           href="/login"

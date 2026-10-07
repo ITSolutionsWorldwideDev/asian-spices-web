@@ -84,7 +84,10 @@ const Nav: React.FC = () => {
           </Link>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+        <div
+          className="notranslate flex shrink-0 items-center gap-2 sm:gap-2.5"
+          translate="no"
+        >
           <GoogleTranslateButton />
           <Link
             href="/cart"

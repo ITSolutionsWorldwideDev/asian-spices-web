@@ -57,7 +57,7 @@ export function GenieChatWidget({
   const panelVisible = isWidgetOpen && !isTucked;
 
   return (
-    <>
+    <div className="notranslate" translate="no">
       <motion.div
         initial={false}
         animate={
@@ -175,6 +175,6 @@ export function GenieChatWidget({
           </div>
         </motion.div>
       ) : null}
-    </>
+    </div>
   );
 }

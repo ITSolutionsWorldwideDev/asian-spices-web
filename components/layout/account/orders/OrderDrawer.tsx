@@ -11,7 +11,10 @@ export default function OrderDrawer({ order, onClose }: any) {
   if (!order) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex justify-end z-50">
+    <div
+      className="notranslate fixed inset-0 bg-black/40 flex justify-end z-50"
+      translate="no"
+    >
       <div className="w-full max-w-md bg-white p-6 h-full flex flex-col shadow-xl">
         
         {/* Dynamic scrollable body view region content */}

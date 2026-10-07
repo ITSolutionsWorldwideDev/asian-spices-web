@@ -201,7 +201,8 @@ export default function ProductCard({
                       isLoggedIn,
                     )
                   }
-                  className="absolute top-4 right-4 bg-white rounded-full p-2 shadow transition hover:scale-110 z-10 cursor-pointer"
+                  translate="no"
+                  className="notranslate absolute top-4 right-4 bg-white rounded-full p-2 shadow transition hover:scale-110 z-10 cursor-pointer"
                 >
                   <Heart
                     className={`w-5 h-5 transition ${
@@ -278,7 +279,7 @@ export default function ProductCard({
 
               {/* Dynamic Action Buttons Bottom Control Block */}
 
-              <div className="mt-4">
+              <div className="notranslate mt-4" translate="no">
                 {cartItem ? (
                   <div className="flex items-center justify-between border border-gray-200 rounded-xl overflow-hidden h-[40px]">
                     <button
@@ -358,7 +359,8 @@ export default function ProductCard({
           <button
             type="button"
             onClick={() => setShowAll(!showAll)}
-            className="flex items-center justify-center px-10 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2 font-semibold rounded-lg transition cursor-pointer shadow"
+            translate="no"
+            className="notranslate flex items-center justify-center px-10 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2 font-semibold rounded-lg transition cursor-pointer shadow"
           >
             {showAll ? (
               "See Less"

@@ -71,12 +71,14 @@ export default function Cart() {
 
   if (cart.length === 0) {
     return (
-      <h1 className="text-gray-500 text-center mt-10">🛒 Your cart is empty</h1>
+      <h1 className="notranslate text-gray-500 text-center mt-10" translate="no">
+        🛒 Your cart is empty
+      </h1>
     );
   }
 
   return (
-    <div className="bg-white p-8">
+    <div className="notranslate bg-white p-8" translate="no">
       <div className="p-4 sm:p-6 container mx-auto">
         <div className="flex flex-wrap items-center gap-1 text-sm sm:text-base">
           <Link href={"/"}>

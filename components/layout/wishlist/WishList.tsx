@@ -90,7 +90,7 @@ export default function WishList() {
   );
 
   return (
-    <section className="py-10">
+    <section className="notranslate py-10" translate="no">
       <div className="container mx-auto px-4">
         {/* =========================================================
             BREADCRUMB

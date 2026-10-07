@@ -169,7 +169,8 @@ export default function NavSearch({ variant = "desktop" }: NavSearchProps) {
   return (
     <div
       ref={containerRef}
-      className={`relative flex items-center ${isMobile ? "w-full" : "w-32 min-w-[7rem] shrink xl:w-40"}`}
+      translate="no"
+      className={`notranslate relative flex items-center ${isMobile ? "w-full" : "w-32 min-w-[7rem] shrink xl:w-40"}`}
     >
       <form onSubmit={handleSubmit} className="relative w-full">
         {isMobile && (

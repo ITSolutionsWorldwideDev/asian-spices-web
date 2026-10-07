@@ -24,7 +24,10 @@ export default function CookieConsentBanner() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-[100] rounded-xl border border-gray-200 bg-white p-4 shadow-2xl md:left-auto md:max-w-xl">
+    <div
+      className="notranslate fixed bottom-4 left-4 right-4 z-[100] rounded-xl border border-gray-200 bg-white p-4 shadow-2xl md:left-auto md:max-w-xl"
+      translate="no"
+    >
       <p className="text-sm text-gray-700">
         We use only necessary cookies required for login, cart, and secure site
         functionality.{" "}

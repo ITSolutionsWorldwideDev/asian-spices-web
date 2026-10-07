@@ -14,6 +14,7 @@ import {
 import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
 import { validatePromo } from "@/app/api/checkout/promo/route";
 import { sendGuestAccountCreatedEmail } from "@/core/email-templates";
+import { generateNextOrderNumber } from "@/core/order-number";
 
 export async function POST(req: NextRequest) {
   const client = await pool.connect();
@@ -318,7 +319,7 @@ export async function POST(req: NextRequest) {
     // 4️⃣ CREATE ORDER
     // ====================================================
 
-    const orderNumber = `ORD-${Date.now()}`;
+    const orderNumber = await generateNextOrderNumber(client);
 
     const orderResult = await client.query(
       `
@@ -863,6 +864,8 @@ export async function POST(req: NextRequest) {
     // =========================================
     // 4️⃣ CREATE ORDER
     // =========================================
+    const orderNumber = await generateNextOrderNumber(client);
+
     const orderResult = await client.query(
       `INSERT INTO store_orders
         (store_id, current_store_id, order_number, customer_id, customer_email, order_status,
@@ -882,7 +885,7 @@ export async function POST(req: NextRequest) {
       [
         bestStore,
         bestStore,
-        `ORD-${Date.now()}`,
+        orderNumber,
         customer_id,
         email,
         "pending",

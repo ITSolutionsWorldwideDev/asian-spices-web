@@ -406,7 +406,7 @@ export default function ProductDesc({
 
           {/* Quantity */}
           {isPriceAvailable && (
-            <div className="space-y-3">
+            <div className="notranslate space-y-3" translate="no">
               <p className="text-2xl font-semibold text-gray-900">Quantity</p>
               {cartItem ? (
                 <div className="inline-flex h-12 items-center overflow-hidden rounded-xl border border-gray-200 bg-white">
@@ -478,7 +478,7 @@ export default function ProductDesc({
 
           {/* Primary actions */}
           {isPriceAvailable && (
-            <div className="space-y-3">
+            <div className="notranslate space-y-3" translate="no">
               <div className="flex items-center gap-3">
                 {cartItem ? (
                   <button

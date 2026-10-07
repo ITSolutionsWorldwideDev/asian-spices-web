@@ -62,7 +62,8 @@ export default function RegisterOnAppModal() {
       aria-label="App early access"
       onClick={closeModal}
       style={{ zIndex: MODAL_Z_INDEX }}
-      className="fixed inset-0 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm md:p-6"
+      translate="no"
+      className="notranslate fixed inset-0 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm md:p-6"
     >
       <div
         onClick={(e) => e.stopPropagation()}

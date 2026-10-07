@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { webAuthOptions } from "@/core/auth";
 import { pool } from "@/core/db";
+import { invoiceNumberFromOrderNumber } from "@/core/invoice-number";
 import { jsPDF } from "jspdf";
 import fs from "fs";
 import path from "path";
@@ -24,16 +25,6 @@ function prettyDate(value: any) {
 function normalizeOrderNumber(value: any) {
   const text = String(value ?? "").trim();
   return text.replace(/^#+\s*/, "") || "-";
-}
-
-function buildInvoiceNumber(order: any, orderNumber: string) {
-  const withoutOrdPrefix = orderNumber.replace(/^ORD[-_\s]*/i, "");
-  const uniqueTail = String(order.id ?? "")
-    .replace(/[^a-zA-Z0-9]/g, "")
-    .slice(-2)
-    .toUpperCase()
-    .padStart(2, "0");
-  return `INV-${withoutOrdPrefix}-${uniqueTail}`;
 }
 
 function loadAsianSpicesLogo() {
@@ -152,7 +143,7 @@ export async function GET(
       : "-";
     const paymentStatus = String(order.payment_status || "").toUpperCase();
     const orderNumber = normalizeOrderNumber(order.order_number);
-    const invoiceNumber = buildInvoiceNumber(order, orderNumber);
+    const invoiceNumber = invoiceNumberFromOrderNumber(orderNumber);
 
     // Header left: logo
     const logoData = loadAsianSpicesLogo();
@@ -386,7 +377,7 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="invoice_order_${orderNumber}.pdf"`,
+        "Content-Disposition": `attachment; filename="invoice_${invoiceNumber}.pdf"`,
       },
     });
   } catch (error: any) {

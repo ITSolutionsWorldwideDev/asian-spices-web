@@ -477,7 +477,7 @@ export default function Checkout() {
     : "";
 
   return (
-    <div>
+    <div className="notranslate" translate="no">
       <div className="bg-black">
         <Nav />
       </div>

@@ -49,7 +49,7 @@ export default function PaymentForm({
   const canContinue = !disabled && agreedToTerms;
 
   return (
-    <div className="flex justify-center">
+    <div className="notranslate flex justify-center" translate="no">
       <div className="w-full bg-white rounded-xl border border-[#E5E7EB] p-8">
         <h2 className="text-xl font-semibold mb-2">Payment Method</h2>
         <p className="text-sm text-gray-500 mb-6">
