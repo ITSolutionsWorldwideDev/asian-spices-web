@@ -18,7 +18,7 @@ export default function OrderDrawer({ order, onClose }: any) {
         <div className="flex-1 overflow-y-auto pb-4">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-bold">
-              Order #{order.order_number}
+              Order {order.order_number?.replace(/^#+\s*/, "")}
             </h2>
             <button 
               onClick={onClose}

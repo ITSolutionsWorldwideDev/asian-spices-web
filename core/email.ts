@@ -12,7 +12,9 @@ interface EmailOptions {
   bcc?: string | string[];
   attachments?: Array<{
     filename: string;
-    content: any;
+    content?: any;
+    path?: string;
+    cid?: string;
     contentType?: string;
   }>;
 }
@@ -93,24 +95,33 @@ const SMTP_PROFILES = {
 
 type ProfileKey = keyof typeof SMTP_PROFILES;
 
+const transporterCache = new Map<ProfileKey, nodemailer.Transporter>();
+
 function getTransporter(profileKey: ProfileKey) {
   const profile = SMTP_PROFILES[profileKey] || SMTP_PROFILES.default;
 
-  const transporter = nodemailer.createTransport({
-    host: profile.host,
-    port: profile.port,
-    secure: profile.secure,
-    auth: {
-      user: profile.auth.user,
-      pass: profile.auth.pass,
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-    connectionTimeout: 8000,
-    greetingTimeout: 5000,
-    socketTimeout: 10000,
-  });
+  let transporter = transporterCache.get(profileKey);
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
+      pool: true,
+      maxConnections: 3,
+      maxMessages: 100,
+      host: profile.host,
+      port: profile.port,
+      secure: profile.secure,
+      auth: {
+        user: profile.auth.user,
+        pass: profile.auth.pass,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+      connectionTimeout: 15000,
+      greetingTimeout: 10000,
+      socketTimeout: 20000,
+    });
+    transporterCache.set(profileKey, transporter);
+  }
 
   return {
     transporter,

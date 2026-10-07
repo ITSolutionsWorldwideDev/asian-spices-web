@@ -23,15 +23,15 @@ export interface GuideSection {
 export interface ParsedCategoryGuide {
   bannerHeading: string;
   bannerText: string;
+  extendedText: string;
   guideSections: GuideSection[];
 }
 
 /**
- * Splits category guide content between the top hero banner and Section 2:
+ * Parses category guide content:
  * - Banner heading: e.g. "Explore Beverages" (from section title)
  * - Banner text: 1st paragraph of description (cleaned of dashes)
- * - Section 2 guide card: 2nd paragraph starts with heading (e.g. "Browse Beverages by Type:")
- *   and the remaining body/bullets become the collapsible guide description.
+ * - Extended text: Remaining paragraphs (e.g. "Browse Beverages by Type: ...") for Read More toggle
  */
 export function parseCategoryGuide(
   content: {
@@ -45,6 +45,7 @@ export function parseCategoryGuide(
     return {
       bannerHeading: defaultHeading,
       bannerText: "",
+      extendedText: "",
       guideSections: [],
     };
   }
@@ -59,6 +60,7 @@ export function parseCategoryGuide(
     return {
       bannerHeading,
       bannerText: "",
+      extendedText: "",
       guideSections: [],
     };
   }
@@ -66,31 +68,13 @@ export function parseCategoryGuide(
   // 1st paragraph moves into the top hero banner
   const bannerText = cleanDashes(parts[0]);
 
-  // Remaining paragraphs go into Section 2 (CategoryGuideSection)
-  const remainingText = parts.slice(1).join("\n\n").trim();
-  const guideSections: GuideSection[] = [];
-
-  if (remainingText) {
-    const firstNewline = remainingText.indexOf("\n");
-    if (firstNewline !== -1) {
-      const headingLine = remainingText.slice(0, firstNewline).trim();
-      const bodyLines = remainingText.slice(firstNewline + 1).trim();
-
-      guideSections.push({
-        title: cleanDashes(headingLine),
-        description: cleanDashes(bodyLines),
-      });
-    } else {
-      guideSections.push({
-        title: cleanDashes(remainingText),
-        description: "",
-      });
-    }
-  }
+  // Remaining paragraphs become extended text (joined with hero via Read More)
+  const remainingText = cleanDashes(parts.slice(1).join("\n\n").trim());
 
   return {
     bannerHeading,
     bannerText,
-    guideSections,
+    extendedText: remainingText,
+    guideSections: [],
   };
 }
