@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import ProductCard from "@/components/ui/ProductCard";
+import { mapProductCardData } from "@/lib/product/map-product-card";
 import { useGlobalStore } from "@/store/useGlobalStore";
 
 type ShopCategory = {
@@ -11,41 +12,6 @@ type ShopCategory = {
   name: string;
   slug: string;
 };
-
-function mapProducts(items: any[]) {
-  return (items || []).map((p: any) => {
-    const basePrice = Number(p.min_offered_price || p.base_price || 0);
-    const salePrice = Number(p.sale_price || basePrice);
-    const rawSave = basePrice - salePrice;
-
-    let offBadge = "";
-    if (rawSave > 0) {
-      if (p.discount_type === "percentage" || p.discount_type === "Bulk") {
-        offBadge =
-          p.discount_value && p.discount_value !== "NaN"
-            ? `${p.discount_value}% OFF`
-            : `${Math.round((rawSave / basePrice) * 100)}% OFF`;
-      } else if (p.discount_type === "fixed") {
-        offBadge = `€${p.discount_value} OFF`;
-      } else {
-        offBadge = `${Math.round((rawSave / basePrice) * 100)}% OFF`;
-      }
-    }
-
-    return {
-      ...p,
-      id: p.id,
-      name: p.name,
-      image: p.image,
-      base_price: salePrice,
-      oldPrice: rawSave > 0 ? basePrice : null,
-      off: offBadge,
-      tag: p.tag || "",
-      description: p.description || "",
-      seller_name: p.seller_name || null,
-    };
-  });
-}
 
 export default function ExploreTheCollection() {
   const { selectedCountry } = useGlobalStore();
@@ -114,7 +80,7 @@ export default function ExploreTheCollection() {
       .then((res) => res.json())
       .then((json) => {
         if (cancelled) return;
-        setProducts(mapProducts(json.data || []).slice(0, 10));
+        setProducts(mapProductCardData(json.data || []).slice(0, 10));
       })
       .catch((err) => {
         console.error("Failed to load collection products:", err);
