@@ -1,7 +1,26 @@
 // core/email-templates.ts
 
+import fs from "fs";
+import path from "path";
 import { pool } from "./db";
 import { sendEmail } from "./email";
+import {
+  generatePartnerVerificationEmailHtml,
+  generatePartnerVerificationEmailText,
+} from "./utils/mails/partner-verification";
+import {
+  generateOrderConfirmationEmailHtml,
+  generateOrderConfirmationEmailText,
+  OrderItem,
+} from "./utils/mails/order-confirmation";
+
+/**
+ * Feature flag for the customer confirmation email when the Contact Us form is submitted.
+ * - Set to `true`: Temporarily sends the Dutch "Partner Verification Email" (Welkom als goedgekeurde partner).
+ * - Set to `false`: Reverts back to the standard "We've Received Your Message" confirmation email.
+ * Note: The admin notification to support@asianspices.online is ALWAYS preserved and sent regardless of this flag.
+ */
+export const USE_TEMP_PARTNER_CONFIRMATION_EMAIL = true;
 
 // Map delivery expectations contextually
 const DELIVERY_DAYS_MAP: Record<string, string> = {
@@ -29,12 +48,59 @@ interface ContactFormEmailOptions {
   message: string;
 }
 
+function formatDutchDeliveryDate(
+  createdAt: Date | string | null,
+  provider?: string,
+): string {
+  const baseDate = createdAt ? new Date(createdAt) : new Date();
+  let daysToAdd = 3;
+  const p = (provider || "").toLowerCase();
+  if (p.includes("express") || p.includes("overnight") || p.includes("1 - 2")) {
+    daysToAdd = 1;
+  }
+  const estDate = new Date(baseDate);
+  estDate.setDate(estDate.getDate() + daysToAdd);
+  if (estDate.getDay() === 0) estDate.setDate(estDate.getDate() + 1); // Sunday -> Monday
+  if (estDate.getDay() === 6) estDate.setDate(estDate.getDate() + 2); // Saturday -> Monday
+
+  try {
+    return estDate.toLocaleDateString("nl-NL", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    });
+  } catch {
+    return `${estDate.getDate()} ${estDate.toLocaleString("nl-NL", { month: "long" })}`;
+  }
+}
+
 export async function sendOrderConfirmationEmail(orderId: string) {
   try {
     // 1️⃣ Fetch complete payload variables for the email
     const orderQuery = await pool.query(
-      `SELECT order_number, customer_email, total_amount, shipping_provider, shipping_city 
-       FROM store_orders WHERE id = $1`,
+      `SELECT 
+        o.id,
+        o.order_number,
+        o.customer_id,
+        o.customer_email,
+        o.total_amount,
+        o.subtotal,
+        o.shipping_amount,
+        o.tax_amount,
+        o.discount_amount,
+        o.shipping_address_line1,
+        o.shipping_address_line2,
+        o.shipping_city,
+        o.shipping_state,
+        o.shipping_postal_code,
+        o.shipping_country,
+        o.shipping_provider,
+        o.created_at,
+        c.first_name,
+        c.last_name
+       FROM store_orders o
+       LEFT JOIN store_customers c ON c.id = o.customer_id
+       WHERE o.id = $1`,
       [orderId],
     );
 
@@ -42,39 +108,120 @@ export async function sendOrderConfirmationEmail(orderId: string) {
       return { success: false, error: "Order context missing" };
 
     const order = orderQuery.rows[0];
-    const deliveryWindow =
-      DELIVERY_DAYS_MAP[order.shipping_provider] || "3 - 5 business days";
 
-    // 2️⃣ Build modern HTML Email Structure
-    const emailHtml = `
-      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #f0f0f0; padding: 20px; border-radius: 12px;">
-        <h2 style="color: #ea580c; text-align: center;">Your Flavorful Journey Begins!</h2>
-        <p>Hello,</p>
-        <p>Thank you for shopping with <strong>Asian Spices</strong>. We are thrilled to confirm that your payment has been processed and your order is officially locked in.</p>
-        
-        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <p style="margin: 0 0 8px 0;"><strong>Order Number:</strong> ${order.order_number}</p>
-          <p style="margin: 0 0 8px 0;"><strong>Amount Paid:</strong> €${Number(order.total_amount).toFixed(2)}</p>
-          <p style="margin: 0 0 8px 0;"><strong>Shipping Choice:</strong> ${order.shipping_provider}</p>
-          <p style="margin: 0;"><strong>Estimated Delivery:</strong> ${deliveryWindow}</p>
-        </div>
+    // 2️⃣ Fetch order items with product titles, SKUs, and primary images
+    const itemsQuery = await pool.query(
+      `SELECT 
+        oi.quantity,
+        oi.price,
+        COALESCE(p.name, 'Product') AS name,
+        p.sku,
+        COALESCE(md.file_url, CASE WHEN pi.url ~ '^https?://' THEN pi.url ELSE NULL END) AS image_url
+       FROM store_order_items oi
+       LEFT JOIN store_products p ON p.id = oi.product_id
+       LEFT JOIN (
+         SELECT DISTINCT ON (pi_sub.product_id) 
+           pi_sub.product_id, 
+           pi_sub.url
+         FROM store_product_images pi_sub
+         ORDER BY pi_sub.product_id, pi_sub.is_primary DESC, pi_sub.id ASC
+       ) pi ON pi.product_id = p.id
+       LEFT JOIN media md ON md.media_id = CASE WHEN pi.url ~ '^[0-9]+$' THEN pi.url::int ELSE NULL END
+       WHERE oi.order_id = $1`,
+      [orderId],
+    );
 
-        <p>Our team is currently preparing your parcel for selection and dynamic routing. Once your tracking code registers out of the hub for delivery to <strong>${order.shipping_city}</strong>, we'll send a follow-up link immediately.</p>
-        
-        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
-        <p style="font-size: 12px; color: #6b7280; text-align: center;">
-          © 2026 Asian Spices Online. All rights reserved.<br>
-          Need support? Reply directly to this thread or contact us via support@asianspices.online
-        </p>
-      </div>
-    `;
+    // 3️⃣ Map data to template format
+    let firstName = (order.first_name || "").trim();
+    if (!firstName && order.customer_email) {
+      const localPart = order.customer_email.split("@")[0].split(".")[0];
+      firstName = localPart
+        ? localPart.charAt(0).toUpperCase() + localPart.slice(1)
+        : "Klant";
+    }
+    if (!firstName) {
+      firstName = "Klant";
+    }
 
-    // 3️⃣ Dispatch
+    const addressParts = [
+      order.shipping_address_line1,
+      order.shipping_address_line2,
+    ]
+      .map((s: string | null) => (s || "").trim())
+      .filter(Boolean);
+    const deliveryAddress = addressParts.join(", ") || "Adres op aanvraag";
+    const postalCode = (order.shipping_postal_code || "").trim();
+    const city = (order.shipping_city || "").trim();
+
+    const items: OrderItem[] = (itemsQuery.rows || []).map((it: any) => ({
+      name: it.name || "Product",
+      sku: it.sku || undefined,
+      quantity: Number(it.quantity || 1),
+      price: Number(it.price || 0).toFixed(2),
+      imageUrl: it.image_url || undefined,
+    }));
+
+    const shippingAmountNum = Number(order.shipping_amount || 0);
+    const shippingCost =
+      shippingAmountNum > 0 ? shippingAmountNum.toFixed(2) : "Gratis";
+    const totalAmountNum = Number(order.total_amount || 0);
+    const subtotalNum =
+      order.subtotal !== null && order.subtotal !== undefined
+        ? Number(order.subtotal)
+        : Math.max(0, totalAmountNum - shippingAmountNum);
+    const rewardPoints = Math.floor(totalAmountNum);
+
+    const deliveryDateStr = formatDutchDeliveryDate(
+      order.created_at,
+      order.shipping_provider,
+    );
+
+    const emailData = {
+      orderNumber: order.order_number,
+      firstName,
+      lastName: order.last_name || undefined,
+      email: order.customer_email,
+      orderDate: new Date(order.created_at || Date.now()).toLocaleDateString(
+        "nl-NL",
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        },
+      ),
+      deliveryDate: deliveryDateStr,
+      deliveryAddress,
+      postalCode,
+      city,
+      items: items.length > 0 ? items : undefined,
+      subtotal: subtotalNum.toFixed(2),
+      shippingCost,
+      rewardPoints,
+      totalAmount: totalAmountNum.toFixed(2),
+      orderStatusUrl: "https://www.asianspices.online/account/orders",
+      helpPageUrl: "https://www.asianspices.online/contact-us",
+      supportEmail: "klantenservice@asianspices.nl",
+    };
+
+    // 4️⃣ Generate HTML and Plaintext via the modern Dutch template
+    const emailHtml = generateOrderConfirmationEmailHtml(emailData);
+    const emailText = generateOrderConfirmationEmailText(emailData);
+
+    // 5️⃣ Dispatch
     await sendEmail({
       to: order.customer_email,
-      bcc: ["sales@asianspices.online", "order@asianspices.online", "cheila.lopes@itsolutionshub2010.com", "ahmed.mehmood@itsolutionshub2010.com", "zraja@itsolutionsworldwide.com", "sdevi@itsolutionsworldwide.com", "ahmad.raza@itsolutionsworldwide.com"],
-      subject: `Order Confirmed! 🎉 (Ref: ${order.order_number})`,
+      bcc: [
+        "sales@asianspices.online",
+        "order@asianspices.online",
+        "cheila.lopes@itsolutionshub2010.com",
+        "ahmed.mehmood@itsolutionshub2010.com",
+        "zraja@itsolutionsworldwide.com",
+        "sdevi@itsolutionsworldwide.com",
+        "ahmad.raza@itsolutionsworldwide.com",
+      ],
+      subject: `Bestelbevestiging #${order.order_number} - Asian Spices`,
       html: emailHtml,
+      text: emailText,
       // Temporarily back on the "order" profile — the "noreply" mailbox is
       // currently failing SMTP connections server-side (SSL handshake error),
       // pending IT fixing the mailbox. Switch back to "noreply" once resolved.
@@ -562,38 +709,119 @@ export async function sendContactFormEmail({
       fromAccount: "support",
     });
 
-    const confirmationHtml = `
-      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
-        <h2 style="color: #111827; text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
-          We've Received Your Message
-        </h2>
+    // Small pause between emails to allow SMTP socket reuse
+    await new Promise((r) => setTimeout(r, 300));
 
-        <p>Hello ${fullName},</p>
-        <p>Thanks for reaching out to <strong>Asian Spices</strong>. Our support team has received your message and will respond within 48 hours.</p>
+    const sendCustomerConfirmation = async () => {
+      if (USE_TEMP_PARTNER_CONFIRMATION_EMAIL) {
+        // Temporary Partner Verification confirmation email
+        const nameParts = (fullName || "").trim().split(/\s+/);
+        const lastName =
+          nameParts.length > 1 ? nameParts.slice(1).join(" ") : fullName || "Partner";
 
-        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; color: #4b5563;">
-          <p style="margin: 0 0 8px 0;"><strong>Subject:</strong> ${subject}</p>
-          <p style="margin: 0; white-space: pre-wrap;"><strong>Your message:</strong><br>${message}</p>
+        const publicImagesDir = path.join(process.cwd(), "public", "images");
+
+        const imageConfigs = [
+          { name: "asian-spices-logo.png", cid: "asianSpicesLogo" },
+          { name: "check-circle.png", cid: "checkCircleIcon" },
+          { name: "clock-circle.png", cid: "clockCircleIcon" },
+          { name: "as-circle.png", cid: "asCircleIcon" },
+          { name: "tiktok.png", cid: "tiktokIcon" },
+          { name: "instagram.png", cid: "instagramIcon" },
+          { name: "facebook.png", cid: "facebookIcon" },
+          { name: "youtube.png", cid: "youtubeIcon" },
+        ];
+
+        const attachments: Array<{
+          filename: string;
+          path: string;
+          cid: string;
+          contentType: string;
+        }> = [];
+
+        for (const img of imageConfigs) {
+          const filePath = path.join(publicImagesDir, img.name);
+          if (fs.existsSync(filePath)) {
+            attachments.push({
+              filename: img.name,
+              path: filePath,
+              cid: img.cid,
+              contentType: "image/png",
+            });
+          }
+        }
+
+        const partnerHtml = generatePartnerVerificationEmailHtml({
+          fullName,
+          lastName,
+          email,
+          logoUrl: "cid:asianSpicesLogo",
+          checkCircleUrl: "cid:checkCircleIcon",
+          clockCircleUrl: "cid:clockCircleIcon",
+          asCircleUrl: "cid:asCircleIcon",
+          tiktokIconUrl: "cid:tiktokIcon",
+          instagramIconUrl: "cid:instagramIcon",
+          facebookIconUrl: "cid:facebookIcon",
+          youtubeIconUrl: "cid:youtubeIcon",
+        });
+
+        const partnerText = generatePartnerVerificationEmailText({
+          fullName,
+          lastName,
+          email,
+        });
+
+        await sendEmail({
+          to: email,
+          subject: "Welkom als goedgekeurde partner - Asian Spices",
+          html: partnerHtml,
+          text: partnerText,
+          attachments,
+          fromAccount: "support",
+        });
+      } else {
+        const confirmationHtml = `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
+          <h2 style="color: #111827; text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
+            We've Received Your Message
+          </h2>
+
+          <p>Hello ${fullName},</p>
+          <p>Thanks for reaching out to <strong>Asian Spices</strong>. Our support team has received your message and will respond within 48 hours.</p>
+
+          <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; color: #4b5563;">
+            <p style="margin: 0 0 8px 0;"><strong>Subject:</strong> ${subject}</p>
+            <p style="margin: 0; white-space: pre-wrap;"><strong>Your message:</strong><br>${message}</p>
+          </div>
+
+          <p style="font-size: 14px; color: #6b7280;">This is an automated confirmation — please don't reply to this email. Our team will contact you directly at this address.</p>
+
+          <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
+          <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
+            © 2026 Asian Spices Online. All rights reserved.<br>
+            Need urgent help? Contact us at support@asianspices.online
+          </p>
         </div>
+      `;
 
-        <p style="font-size: 14px; color: #6b7280;">This is an automated confirmation — please don't reply to this email. Our team will contact you directly at this address.</p>
+        await sendEmail({
+          to: email,
+          subject: "We've received your message — Asian Spices",
+          html: confirmationHtml,
+          // Temporarily on "support" — the "noreply" mailbox is currently
+          // failing SMTP connections server-side, pending IT fixing it.
+          fromAccount: "support",
+        });
+      }
+    };
 
-        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
-        <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
-          © 2026 Asian Spices Online. All rights reserved.<br>
-          Need urgent help? Contact us at support@asianspices.online
-        </p>
-      </div>
-    `;
-
-    await sendEmail({
-      to: email,
-      subject: "We've received your message — Asian Spices",
-      html: confirmationHtml,
-      // Temporarily on "support" — the "noreply" mailbox is currently
-      // failing SMTP connections server-side, pending IT fixing it.
-      fromAccount: "support",
-    });
+    try {
+      await sendCustomerConfirmation();
+    } catch (confErr) {
+      console.warn("[Customer Confirmation Attempt 1 Failed, Retrying after 1s...]", confErr);
+      await new Promise((r) => setTimeout(r, 1000));
+      await sendCustomerConfirmation();
+    }
 
     return { success: true };
   } catch (error) {

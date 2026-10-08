@@ -1,4 +1,4 @@
-import { ASIAN_SPICES_LOGO_BASE64 } from './partner-logo-data';
+import { ASIAN_SPICES_LOGO_BASE64 } from '@/core/partner-logo-data';
 import {
   CHECK_CIRCLE_ICON_BASE64,
   CLOCK_CIRCLE_ICON_BASE64,
@@ -7,7 +7,7 @@ import {
   INSTAGRAM_ICON_BASE64,
   FACEBOOK_ICON_BASE64,
   YOUTUBE_ICON_BASE64,
-} from './partner-icons-data';
+} from '@/core/partner-icons-data';
 
 export interface EmailTemplateData {
   fullName?: string;
@@ -142,8 +142,7 @@ export function generatePartnerVerificationEmailHtml(data: EmailTemplateData): s
                     <!-- User's Official Asian Spices Logo -->
                     <img src="${logoSrc}" alt="Asian Spices" width="96" height="38" style="display: block; border: 0; width: 96px; height: 38px; max-width: 96px; outline: none;" />
                   </td>
-              </td>
-              <td align="right" valign="middle" style="border: 0; border: none; mso-border-alt: none;">
+                  <td align="right" valign="middle" style="border: 0; border: none; mso-border-alt: none;">
                 <span style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.6px; color: #71717a; text-transform: uppercase;">
                   PARTNERVERIFICATIE
                 </span>
@@ -360,18 +359,20 @@ export function generatePartnerVerificationEmailHtml(data: EmailTemplateData): s
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                            <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: block; border: 0; outline: none;">
-                              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                                <tr>
-                                  <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
+                              <tr>
+                                <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
+                                  <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
                                     <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                  </td>
-                                  <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
+                                  </a>
+                                </td>
+                                <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
+                                  <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
                                     TikTok
-                                  </td>
-                                </tr>
-                              </table>
-                            </a>
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       </table>
@@ -382,18 +383,20 @@ export function generatePartnerVerificationEmailHtml(data: EmailTemplateData): s
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                            <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; display: block; border: 0; outline: none;">
-                              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                                <tr>
-                                  <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
+                              <tr>
+                                <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
+                                  <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
                                     <img src="${instagramIconSrc}" alt="Instagram" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                  </td>
-                                  <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
+                                  </a>
+                                </td>
+                                <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
+                                  <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
                                     Instagram
-                                  </td>
-                                </tr>
-                              </table>
-                            </a>
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       </table>
@@ -404,18 +407,20 @@ export function generatePartnerVerificationEmailHtml(data: EmailTemplateData): s
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                            <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; display: block; border: 0; outline: none;">
-                              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                                <tr>
-                                  <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
+                              <tr>
+                                <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
+                                  <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
                                     <img src="${facebookIconSrc}" alt="Facebook" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                  </td>
-                                  <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
+                                  </a>
+                                </td>
+                                <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
+                                  <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
                                     Facebook
-                                  </td>
-                                </tr>
-                              </table>
-                            </a>
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       </table>
@@ -426,18 +431,20 @@ export function generatePartnerVerificationEmailHtml(data: EmailTemplateData): s
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                            <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; display: block; border: 0; outline: none;">
-                              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                                <tr>
-                                  <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
+                              <tr>
+                                <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
+                                  <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
                                     <img src="${youtubeIconSrc}" alt="YouTube" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                  </td>
-                                  <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
+                                  </a>
+                                </td>
+                                <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
+                                  <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
                                     YouTube
-                                  </td>
-                                </tr>
-                              </table>
-                            </a>
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       </table>

@@ -12,7 +12,9 @@ interface EmailOptions {
   bcc?: string | string[];
   attachments?: Array<{
     filename: string;
-    content: any;
+    content?: any;
+    path?: string;
+    cid?: string;
     contentType?: string;
   }>;
 }
@@ -98,9 +100,10 @@ function getTransporter(profileKey: ProfileKey) {
         user: profile.auth.user,
         pass: profile.auth.pass,
       },
-      pool: true,
-      maxConnections: 5,
-      maxMessages: 100,
+      tls: {
+        rejectUnauthorized: false,
+      },
+      pool: false,
     });
     transporterCache.set(profileKey, transporter);
   }
