@@ -13,7 +13,10 @@ export async function POST(req: Request) {
 
     try {
       const { rows } = await client.query(
-        `SELECT id FROM users WHERE email = $1`,
+        `SELECT u.id, COALESCE(NULLIF(TRIM(c.first_name), ''), NULLIF(TRIM(SPLIT_PART(u.name, ' ', 1)), '')) AS first_name 
+         FROM users u 
+         LEFT JOIN store_customers c ON (c.user_id = u.id OR LOWER(c.email) = LOWER(u.email))
+         WHERE LOWER(u.email) = LOWER($1) LIMIT 1`,
         [email],
       );
 
@@ -21,21 +24,26 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: true });
       }
 
+      const user = rows[0];
       const otp = String(randomInt(100000, 1000000));
       const otpHash = await bcrypt.hash(otp, 10);
 
       await client.query(
         `DELETE FROM password_reset_tokens WHERE user_id = $1`,
-        [rows[0].id],
+        [user.id],
       );
 
       await client.query(
         `INSERT INTO password_reset_tokens (user_id, token, expires_at)
          VALUES ($1, $2, now() + interval '15 minutes')`,
-        [rows[0].id, otpHash],
+        [user.id, otpHash],
       );
 
-      const result = await sendPasswordResetEmail({ email, otp });
+      const result = await sendPasswordResetEmail({ 
+        email, 
+        otp, 
+        firstName: user.first_name || undefined 
+      });
       if (!result.success) {
         const message =
           result.error instanceof Error

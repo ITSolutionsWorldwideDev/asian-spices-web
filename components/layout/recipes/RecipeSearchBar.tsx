@@ -3,8 +3,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
-import { useState } from "react";
+import { Search, X } from "lucide-react";
+import { useState, useRef } from "react";
 
 interface RecipeSearchBarProps {
   defaultSearch?: string;
@@ -30,9 +30,12 @@ export default function RecipeSearchBar({
 }: RecipeSearchBarProps) {
   const router = useRouter();
   const [search, setSearch] = useState(defaultSearch);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    inputRef.current?.blur();
+    (document.activeElement as HTMLElement)?.blur();
 
     const params = new URLSearchParams();
     if (search.trim()) {
@@ -57,23 +60,41 @@ export default function RecipeSearchBar({
     window.setTimeout(tick, 50);
   };
 
+  const handleClear = () => {
+    setSearch("");
+    inputRef.current?.focus();
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full min-w-0 bg-white rounded-2xl border shadow-sm p-2 sm:p-3 flex items-center gap-2 sm:gap-3 overflow-hidden"
+      translate="no"
+      className="notranslate w-full min-w-0 bg-white rounded-2xl border shadow-sm p-2 sm:p-3 flex items-center gap-2 sm:gap-3 overflow-hidden"
     >
-      <Search size={20} className="text-gray-400 shrink-0" />
+      <Search size={20} className="text-gray-400 shrink-0 ml-1" />
 
       <input
+        ref={inputRef}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search recipes..."
-        className="min-w-0 flex-1 outline-none bg-transparent text-sm sm:text-base px-1"
+        className="min-w-0 flex-1 outline-none bg-transparent text-[16px] sm:text-base px-1 text-gray-800"
       />
+
+      {search.trim().length > 0 && (
+        <button
+          type="button"
+          aria-label="Clear recipe search"
+          onClick={handleClear}
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-gray-400 transition hover:bg-gray-100 hover:text-gray-600 active:scale-90"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      )}
 
       <button
         type="submit"
-        className="shrink-0 px-3 sm:px-5 py-2 rounded-xl bg-orange-600 text-white text-sm sm:text-base hover:bg-orange-700 transition whitespace-nowrap"
+        className="shrink-0 min-h-[44px] px-4 sm:px-5 py-2.5 rounded-xl bg-orange-600 text-white text-sm sm:text-base font-medium hover:bg-orange-700 transition active:scale-95 whitespace-nowrap flex items-center justify-center"
       >
         Search
       </button>

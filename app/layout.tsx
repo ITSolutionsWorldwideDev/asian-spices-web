@@ -30,9 +30,9 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: normalizeCanonicalPath(pathname),
     },
-    title: "Asian Spices",
+    title: "Asian Spices Online | Authentic Indian & Asian Groceries NL",
     description:
-      "Asian Spices is your trusted online destination for premium Asian spices, authentic ingredients, recipes, and kitchen essentials.",
+      "Shop premium Asian spices, rice, lentils & pantry staples online in the Netherlands. Authentic ingredients, fast NL delivery, and recipes to match.",
     keywords:
       "inventory management, admin dashboard, bootstrap template, invoicing, estimates, business management, responsive admin, POS system",
     icons: {

@@ -79,116 +79,107 @@ export default function ProductCard({
           );
 
           // 1️⃣ Safe Numeric Extractions & Conversions
-          // const currentPrice = Number(product.base_price || 0);
-
-          // Wait for tax rules, then: category → global → 21%
+          // Match flash sale / ProductDesc: VAT the base first, then apply % / fixed
+          const basePrice = Number(product.base_price || 0);
           const netPrice = Number(
             product.min_offered_price || product.base_price || 0,
           );
           const taxRate = taxRulesLoaded
             ? resolveTaxRate(taxRules, product.category_id)
             : null;
-          const currentPrice =
-            taxRate == null ? null : netPrice * (1 + taxRate);
+          const discountValue = Number(product.discount_value);
+          const discountType = (product.discount_type || "").toLowerCase();
+          const hasDiscountMeta =
+            !!product.discount_value &&
+            !isNaN(discountValue) &&
+            discountValue > 0;
 
+          let currentPrice: number | null = null;
           let originalPrice: number | null = null;
 
-          const discountValue = Number(product.discount_value);
-
-          if (
-            taxRate != null &&
-            netPrice > 0 &&
-            product.discount_value &&
-            !isNaN(discountValue) &&
-            discountValue > 0
-          ) {
-            let netOriginal: number | null = null;
-            switch ((product.discount_type || "").toLowerCase()) {
-              case "percentage":
-              case "bulk":
-                netOriginal = netPrice / (1 - discountValue / 100);
-                break;
-
-              case "fixed":
-                netOriginal = netPrice + discountValue;
-                break;
-
-              default:
-                netOriginal = null;
-            }
-
-            if (netOriginal !== null) {
-              originalPrice = Number((netOriginal * (1 + taxRate)).toFixed(2));
+          if (taxRate != null && netPrice > 0) {
+            if (
+              hasDiscountMeta &&
+              basePrice > 0 &&
+              (discountType === "fixed" ||
+                ((discountType === "percentage" || discountType === "bulk") &&
+                  discountValue < 100))
+            ) {
+              const baseWithTax = Number(
+                (basePrice * (1 + taxRate)).toFixed(2),
+              );
+              originalPrice = baseWithTax;
+              currentPrice =
+                discountType === "fixed"
+                  ? Number(
+                      Math.max(0, baseWithTax - discountValue).toFixed(2),
+                    )
+                  : Number(
+                      (baseWithTax * (1 - discountValue / 100)).toFixed(2),
+                    );
+            } else {
+              currentPrice = Number((netPrice * (1 + taxRate)).toFixed(2));
             }
           }
-          // const originalPrice = product.oldPrice
-          //   ? Number(product.oldPrice)
-          //   : null;
 
-          // if(product.id === 'eafdb67e-3323-49cb-887b-201695df0c3c'){
-
-          //   console.log('currentPrice === ',currentPrice);
-          //   console.log('originalPrice === ',originalPrice);
-          //   console.log('product.discount_value === ',product.discount_value);
-          //   console.log('product.discount_type === ',product.discount_type);
-          // }
+          // Fallback if originalPrice is not set from discount metadata but oldPrice exists
+          if (
+            originalPrice == null &&
+            product.oldPrice &&
+            Number(product.oldPrice) > (currentPrice ?? 0)
+          ) {
+            const oldPriceNum = Number(product.oldPrice);
+            originalPrice =
+              taxRate != null
+                ? Number((oldPriceNum * (1 + taxRate)).toFixed(2))
+                : oldPriceNum;
+          }
 
           // 2️⃣ Dynamic Discount/Savings Math Engine with NaN Guards
-          // let discountBadgeText = null;
           let discountBadgeText: string | null = null;
           let calculatedSavings = 0;
 
           if (originalPrice && currentPrice != null && originalPrice > currentPrice) {
             calculatedSavings = originalPrice - currentPrice;
 
-            if (product.discount_type?.toLowerCase() === "fixed") {
-              discountBadgeText = `${symbol}${(discountValue * rate).toFixed(2)} OFF`;
-            } else {
+            if (discountType === "fixed" && discountValue > 0) {
+              discountBadgeText = `${symbol}${discountValue.toFixed(2)} OFF`;
+            } else if (discountValue > 0) {
               discountBadgeText = `${discountValue}% OFF`;
-            }
-          }
-
-          /* if (originalPrice && originalPrice > currentPrice) {
-            calculatedSavings = originalPrice - currentPrice;
-
-            if (product.off && !product.off.includes("NaN")) {
+            } else if (product.off && !product.off.includes("NaN")) {
               discountBadgeText = product.off;
-            } else if (
-              product.discount_value &&
-              !isNaN(Number(product.discount_value))
-            ) {
-              discountBadgeText = `${Number(product.discount_value)}% OFF`;
             } else {
-              // Mathematical fallback check if strings fail
               const rawPct = Math.round(
                 ((originalPrice - currentPrice) / originalPrice) * 100,
               );
-              discountBadgeText = rawPct > 0 ? `${rawPct}% OFF` : "SALE";
+              if (rawPct > 0) discountBadgeText = `${rawPct}% OFF`;
             }
-          } */
+          } else if (product.off && !product.off.includes("NaN")) {
+            discountBadgeText = product.off;
+          }
 
           return (
             <div
               key={`${product.id}-${index}`}
-              className="bg-white rounded-2xl shadow hover:shadow-2xl transition p-4 relative flex flex-col justify-between"
+              className="h-full bg-white rounded-2xl shadow hover:shadow-2xl transition p-4 relative flex flex-col justify-between"
               data-cart-anchor
             >
               {/* Upper Section */}
-              <div className="relative">
-                {/* Product Status Tag */}
-                {product.tag && (
-                  <span className="absolute top-4 left-4 bg-yellow-500 text-white text-xs px-2.5 py-1 font-semibold rounded-full flex items-center z-10 shadow-sm">
-                    {product.tag}
-                  </span>
-                )}
-
-                {/* Fixed Dynamic Discount Badge */}
-                {discountBadgeText && (
-                  <span className="absolute top-4 left-4 bg-red-500 font-bold text-white text-xs px-2.5 py-1 rounded-full flex items-center z-10 shadow-sm animate-fade-in">
-                    <Tag className="mr-1.5 w-3.5 h-3.5" />
-                    {discountBadgeText}
-                  </span>
-                )}
+              <div className="relative flex flex-col flex-1">
+                {/* Badges Container */}
+                <div className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 z-20 flex flex-col gap-1 items-start pointer-events-none">
+                  {discountBadgeText && (
+                    <span className="bg-red-500 font-bold text-white text-[11px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full flex items-center shadow-sm animate-fade-in">
+                      <Tag className="mr-1 w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                      <span>{discountBadgeText}</span>
+                    </span>
+                  )}
+                  {product.tag && (
+                    <span className="bg-yellow-500 text-white text-[11px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 font-semibold rounded-full flex items-center shadow-sm">
+                      {product.tag}
+                    </span>
+                  )}
+                </div>
 
                 {/* Wishlist Heart Toggle */}
                 <button
@@ -212,10 +203,11 @@ export default function ProductCard({
                       isLoggedIn,
                     )
                   }
-                  className="absolute top-4 right-4 bg-white rounded-full p-2 shadow transition hover:scale-110 z-10 cursor-pointer"
+                  translate="no"
+                  className="notranslate absolute top-2.5 right-2.5 sm:top-4 sm:right-4 bg-white rounded-full p-2 min-h-[38px] min-w-[38px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center shadow transition hover:scale-110 active:scale-95 z-20 cursor-pointer"
                 >
                   <Heart
-                    className={`w-5 h-5 transition ${
+                    className={`w-4.5 h-4.5 sm:w-5 sm:h-5 transition ${
                       mounted && isInWishlist(product.id)
                         ? "fill-red-500 text-red-500"
                         : "text-gray-500"
@@ -224,7 +216,7 @@ export default function ProductCard({
                 </button>
 
                 {/* Product Image Cover Container */}
-                <div className="h-70 w-full overflow-hidden rounded-xl relative bg-gray-50">
+                <div className="h-60 sm:h-70 w-full overflow-hidden rounded-xl relative bg-gray-50">
                   <Image
                     src={
                       product.image ||
@@ -233,7 +225,7 @@ export default function ProductCard({
                     alt={product.name}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    className="object-contain"
+                    className="object-contain p-2"
                     priority={index < 4}
                   />
                 </div>
@@ -241,13 +233,16 @@ export default function ProductCard({
                 {/* Routing Anchors */}
                 <Link
                   href={getProductPath(product, "spices")}
-                  className="block mt-4"
+                  className="block mt-3 sm:mt-4"
                 >
-                  <h3 className="font-semibold text-gray-800 text-base line-clamp-1">
+                  <h3 className="font-semibold text-gray-800 text-sm sm:text-base line-clamp-2 min-h-[2.5rem] sm:min-h-[2.75rem]">
                     {product.name}
+                    {product.weight ? ` ${product.weight}` : ""}
                   </h3>
                   <p className="text-xs text-gray-600 mt-0.5 line-clamp-2 min-h-[32px]">
-                    {product.description || "No description available."}
+                    {product.description
+                      ? product.description.replace(/<[^>]*>/g, "").trim() || "No description available."
+                      : "No description available."}
                   </p>
                 </Link>
 
@@ -260,13 +255,13 @@ export default function ProductCard({
                     />
                   ) : (
                     <>
-                      <span className="text-orange-500 font-bold text-xl">
+                      <span className="text-orange-500 font-bold text-lg sm:text-xl">
                         {symbol}
                         {(currentPrice * rate).toFixed(2)}
                       </span>
 
                       {originalPrice && originalPrice > currentPrice && (
-                        <span className="text-gray-400 line-through text-sm font-medium">
+                        <span className="text-gray-400 line-through text-xs sm:text-sm font-medium">
                           {symbol}
                           {(originalPrice * rate).toFixed(2)}
                         </span>
@@ -276,39 +271,43 @@ export default function ProductCard({
                 </div>
 
                 {/* 3️⃣ "You Save" Calculated Tracker Info Label */}
-                {calculatedSavings > 0 && (
-                  <p className="text-green-600 text-xs font-semibold mt-1 flex items-center bg-green-50/70 py-0.5 px-2 rounded-md w-fit">
-                    You save {symbol}
-                    {(calculatedSavings * rate).toFixed(2)}
-                  </p>
-                )}
+                <div className="min-h-[1.375rem] mt-1 flex items-center">
+                  {calculatedSavings > 0 ? (
+                    <p className="text-green-600 text-xs font-semibold flex items-center bg-green-50/70 py-0.5 px-2 rounded-md w-fit">
+                      You save {symbol}
+                      {(calculatedSavings * rate).toFixed(2)}
+                    </p>
+                  ) : null}
+                </div>
               </div>
 
               {/* Dynamic Action Buttons Bottom Control Block */}
-
-              <div className="mt-4">
+              <div className="notranslate mt-4 pt-1" translate="no">
                 {cartItem ? (
-                  <div className="flex items-center justify-between border border-gray-200 rounded-xl overflow-hidden h-[40px]">
+                  <div className="flex items-center justify-between border-2 border-orange-500/30 rounded-xl overflow-hidden h-[44px] sm:h-[46px] bg-orange-50/50 shadow-sm">
                     <button
                       type="button"
                       aria-label={`Decrease quantity of ${product.name}`}
                       onClick={() => decreaseQty(product.id, isLoggedIn)}
-                      className="px-4 h-full text-lg hover:bg-gray-50 active:bg-gray-100 transition select-none cursor-pointer"
+                      className="w-12 min-w-[44px] h-full flex items-center justify-center text-lg font-bold text-orange-600 hover:bg-orange-100/70 active:bg-orange-200/70 transition select-none cursor-pointer"
                     >
                       −
                     </button>
-                    <input
-                      type="number"
-                      min={1}
-                      aria-label={`Quantity of ${product.name}`}
-                      value={cartItem.quantity}
-                      onChange={(e) => {
-                        const value = Number(e.target.value);
-                        if (isNaN(value) || value < 1) return;
-                        setQty(product.id, value, isLoggedIn);
-                      }}
-                      className="w-12 text-center text-sm font-semibold outline-none bg-transparent"
-                    />
+                    <div className="flex items-center gap-1">
+                      <span className="text-[11px] font-semibold text-stone-500">Qty:</span>
+                      <input
+                        type="number"
+                        min={1}
+                        aria-label={`Quantity of ${product.name}`}
+                        value={cartItem.quantity}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          if (isNaN(value) || value < 1) return;
+                          setQty(product.id, value, isLoggedIn);
+                        }}
+                        className="w-8 text-center text-sm font-bold text-stone-900 outline-none bg-transparent"
+                      />
+                    </div>
                     <button
                       type="button"
                       aria-label={`Increase quantity of ${product.name}`}
@@ -317,7 +316,7 @@ export default function ProductCard({
                           anchor: anchorFromClick(e),
                         })
                       }
-                      className="px-4 h-full text-lg hover:bg-gray-50 active:bg-gray-100 transition select-none cursor-pointer"
+                      className="w-12 min-w-[44px] h-full flex items-center justify-center text-lg font-bold text-orange-600 hover:bg-orange-100/70 active:bg-orange-200/70 transition select-none cursor-pointer"
                     >
                       +
                     </button>
@@ -326,7 +325,7 @@ export default function ProductCard({
                   <button
                     type="button"
                     aria-label={`Add ${product.name} to cart`}
-                    className="cursor-pointer w-full h-[40px] bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white rounded-xl text-sm font-bold flex items-center justify-center transition shadow-sm active:scale-[0.99]"
+                    className="cursor-pointer w-full h-[44px] sm:h-[46px] bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl text-sm font-bold tracking-wide flex items-center justify-center transition shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/35 active:scale-[0.98]"
                     onClick={(e) => {
                       if (currentPrice == null) return;
                       addToCart(
@@ -340,7 +339,7 @@ export default function ProductCard({
                           image: product.image || "/images/placeholder.png",
                           slug: product.slug,
                           category_slug: product.category_slug,
-                        subcategory_slug: product.subcategory_slug,
+                          subcategory_slug: product.subcategory_slug,
                           category_id: product.category_id,
                           promo_code: product.promo_code,
                         },
@@ -350,8 +349,8 @@ export default function ProductCard({
                     }}
                     disabled={currentPrice == null}
                   >
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    Add To Cart
+                    <ShoppingCart className="w-4.5 h-4.5 mr-2 shrink-0" />
+                    <span>Add To Cart</span>
                   </button>
                 )}
               </div>
@@ -366,7 +365,8 @@ export default function ProductCard({
           <button
             type="button"
             onClick={() => setShowAll(!showAll)}
-            className="flex items-center justify-center px-10 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2 font-semibold rounded-lg transition cursor-pointer shadow"
+            translate="no"
+            className="notranslate flex items-center justify-center px-10 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2 font-semibold rounded-lg transition cursor-pointer shadow"
           >
             {showAll ? (
               "See Less"
@@ -494,7 +494,7 @@ export default function ProductCard({
                     isLoggedIn,
                   )
                 }
-                className="absolute top-4 right-4 bg-white rounded-full p-2 shadow transition hover:scale-110 z-10"
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-white rounded-full p-2.5 sm:p-2 min-h-[44px] min-w-[44px] flex items-center justify-center shadow transition hover:scale-110 active:scale-95 z-10"
               >
                 <Heart
                   className={`w-5 h-5 transition ${
@@ -527,8 +527,9 @@ export default function ProductCard({
                   {product.name}
                 </h3>
                 <span className="text-xs text-gray-400 mt-0.5 block line-clamp-2 min-h-[32px]">
-             
-                  {product.description?.split(" ").slice(0, 3).join(" ") || "No description available."}...
+                  {product.description
+                    ? product.description.replace(/<[^>]*>/g, "").trim().split(" ").slice(0, 3).join(" ") + "..."
+                    : "No description available."}
                 </span>
               </Link>
 
@@ -548,10 +549,10 @@ export default function ProductCard({
               </div>
 
               {cartItem ? (
-                <div className="mt-4 flex items-center justify-between border border-gray-200 rounded-xl overflow-hidden h-[40px]">
+                <div className="mt-4 flex items-center justify-between border border-gray-200 rounded-xl overflow-hidden h-[44px]">
                   <button
                     onClick={() => decreaseQty(product.id, isLoggedIn)}
-                    className="px-4 h-full text-lg hover:bg-gray-50 active:bg-gray-100 transition select-none cursor-pointer"
+                    className="w-11 min-w-[44px] h-full flex items-center justify-center text-lg hover:bg-gray-50 active:bg-gray-100 transition select-none cursor-pointer"
                   >
                     −
                   </button>
@@ -572,14 +573,14 @@ export default function ProductCard({
                         anchor: anchorFromClick(e),
                       })
                     }
-                    className="px-4 h-full text-lg hover:bg-gray-50 active:bg-gray-100 transition select-none cursor-pointer"
+                    className="w-11 min-w-[44px] h-full flex items-center justify-center text-lg hover:bg-gray-50 active:bg-gray-100 transition select-none cursor-pointer"
                   >
                     +
                   </button>
                 </div>
               ) : (
                 <button
-                  className="cursor-pointer mt-4 w-full h-[40px] bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white rounded-xl text-sm font-bold flex items-center justify-center transition shadow-sm active:scale-[0.99]"
+                  className="cursor-pointer mt-4 w-full h-[44px] bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white rounded-xl text-sm font-bold flex items-center justify-center transition shadow-sm active:scale-[0.99]"
                   onClick={(e) => {
                     addToCart(
                       {

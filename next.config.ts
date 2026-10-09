@@ -1,17 +1,17 @@
 // next.config.ts
 import type { NextConfig } from "next";
 
+import path from "path";
+
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   typescript: {
     ignoreBuildErrors: false,
   },
   async redirects() {
     return [
-      {
-        source: "/foods-beverages",
-        destination: "/beverages",
-        permanent: true,
-      },
       {
         source: "/spices/heera-neem-powder-100-g",
         destination: "/spices/heera-neem-powder-100g",
@@ -20,6 +20,21 @@ const nextConfig: NextConfig = {
       {
         source: "/recipes/chickenpizzarecipe",
         destination: "/recipes/chicken-jalfrezi",
+        permanent: true,
+      },
+      {
+        source: "/about",
+        destination: "/about-us",
+        permanent: true,
+      },
+      {
+        source: "/terms",
+        destination: "/terms-and-conditions",
+        permanent: true,
+      },
+      {
+        source: "/privacy",
+        destination: "/privacy-policy",
         permanent: true,
       },
     ];

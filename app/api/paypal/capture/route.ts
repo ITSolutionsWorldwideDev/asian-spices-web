@@ -63,6 +63,9 @@ export async function POST(req: NextRequest) {
     }
 
     if (existing.rows[0].payment_status === "paid") {
+      sendOrderConfirmationEmail(orderId).catch((err) =>
+        console.error("[Email Trigger Error on Already Paid]:", err),
+      );
       return NextResponse.json({ success: true, alreadyPaid: true });
     }
 
@@ -160,8 +163,9 @@ async function markPayPalOrderPaid(
        SET payment_status = 'paid',
            order_status = 'pending',
            transaction_id = $1,
+           payment_method = 'paypal',
            updated_at = NOW()
-       WHERE id = $2 AND payment_method = 'paypal' AND payment_status != 'paid'
+       WHERE id = $2 AND payment_status != 'paid'
        RETURNING id`,
       [paypalOrderId, orderId],
     );
@@ -189,9 +193,11 @@ async function markPayPalOrderPaid(
   }
 
   if (shouldSendEmail) {
-    sendOrderConfirmationEmail(orderId).catch((err) =>
-      console.error("[Email Trigger Error Background Execution]:", err),
-    );
+    try {
+      await sendOrderConfirmationEmail(orderId);
+    } catch (emailErr) {
+      console.error("[Email Trigger Error Background Execution]:", emailErr);
+    }
   }
 }
 

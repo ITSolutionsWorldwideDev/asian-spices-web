@@ -49,7 +49,7 @@ export default function PaymentForm({
   const canContinue = !disabled && agreedToTerms;
 
   return (
-    <div className="flex justify-center">
+    <div className="notranslate flex justify-center" translate="no">
       <div className="w-full bg-white rounded-xl border border-[#E5E7EB] p-8">
         <h2 className="text-xl font-semibold mb-2">Payment Method</h2>
         <p className="text-sm text-gray-500 mb-6">
@@ -71,19 +71,17 @@ export default function PaymentForm({
                 key={option.id}
                 type="button"
                 onClick={() => setMethod(option.id)}
-                className={`w-full flex items-center justify-between gap-4 border rounded-xl px-4 py-4 text-left transition ${
-                  selected
+                className={`w-full flex items-center justify-between gap-4 border rounded-xl px-4 py-4 text-left transition ${selected
                     ? "border-orange-500 bg-orange-50 ring-1 ring-orange-500"
                     : "border-gray-200 hover:border-gray-300 bg-white"
-                }`}
+                  }`}
               >
                 <span className="flex items-center gap-3 min-w-0">
                   <span
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
-                      selected
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${selected
                         ? "border-orange-500"
                         : "border-gray-300"
-                    }`}
+                      }`}
                     aria-hidden
                   >
                     {selected ? (
@@ -130,7 +128,7 @@ export default function PaymentForm({
           <span>
             I agree to the{" "}
             <Link
-              href="/terms"
+              href="/terms-conditions"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-orange-600 underline hover:text-orange-700"
@@ -162,11 +160,10 @@ export default function PaymentForm({
           type="button"
           disabled={!canContinue}
           className={`w-full mt-6 px-6 py-3 rounded-lg text-white flex items-center justify-center gap-2 transition
-          ${
-            !canContinue
+          ${!canContinue
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-orange-500 hover:bg-orange-600"
-          }`}
+            }`}
           onClick={() => placeOrder(method)}
         >
           <Lock size={16} />

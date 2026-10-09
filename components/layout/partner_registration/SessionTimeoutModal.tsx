@@ -133,7 +133,8 @@ export default function SessionTimeoutModal({
       aria-labelledby="session-timeout-title"
       aria-describedby="session-timeout-description"
       style={{ zIndex: MODAL_Z_INDEX }}
-      className="fixed inset-0 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+      translate="no"
+      className="notranslate fixed inset-0 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
     >
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl sm:p-8">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-orange-50">

@@ -4,6 +4,13 @@ import {
   INSTAGRAM_ICON_BASE64,
   FACEBOOK_ICON_BASE64,
   YOUTUBE_ICON_BASE64,
+  DEFAULT_LOGO_SRC,
+  DEFAULT_TIKTOK_SRC,
+  DEFAULT_INSTAGRAM_SRC,
+  DEFAULT_FACEBOOK_SRC,
+  DEFAULT_YOUTUBE_SRC,
+  renderEmailSocialFooter,
+  escapeHtml,
 } from '../shared';
 
 export interface CancelledItem {
@@ -51,22 +58,24 @@ export interface OrderCancelEmailData {
  */
 export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): string {
   const orderNumber = (data.orderNumber && data.orderNumber.trim()) || '{{Bestelnummer}}';
-  const firstName = (data.firstName && data.firstName.trim()) || '{{Voornaam}}';
-  const paymentMethod = (data.paymentMethod && data.paymentMethod.trim()) || '{{Betaalmethode}}';
-  const totalAmount = data.totalAmount !== undefined ? `${data.totalAmount}` : '{{Totaalbedrag}}';
+  const rawFirstName = (data.firstName && data.firstName.trim()) || '';
+  const firstName = rawFirstName && rawFirstName.toLowerCase() !== 'klant' && !rawFirstName.includes('{{') ? rawFirstName : '';
+  const greetingTitle = firstName ? `Uw annulering is verwerkt,<br />${escapeHtml(firstName)}.` : `Uw annulering is verwerkt.`;
+  const paymentMethod = (data.paymentMethod && data.paymentMethod.trim()) || 'Online betaling';
+  const totalAmount = data.totalAmount !== undefined ? `${data.totalAmount}` : '0.00';
 
   const orderOverviewUrl = data.orderOverviewUrl || 'https://www.asianspices.online/account/orders';
   const shopUrl = data.shopUrl || 'https://www.asianspices.online/shop';
   const helpPageUrl = data.helpPageUrl || 'https://www.asianspices.online/contact-us';
   const supportEmail = data.supportEmail || 'klantenservice@asianspices.nl';
-  const phoneNumber = data.phoneNumber || '+31 (0)XX XXX XXXX';
+  const phoneNumber = data.phoneNumber || '06 44844844';
   const openingHours = data.openingHours || 'Ma t/m vr &middot; 07:00&ndash;15:00';
 
-  const logoSrc = data.logoUrl || ASIAN_SPICES_LOGO_BASE64;
-  const tiktokIconSrc = data.tiktokIconUrl || TIKTOK_ICON_BASE64;
-  const instagramIconSrc = data.instagramIconUrl || INSTAGRAM_ICON_BASE64;
-  const facebookIconSrc = data.facebookIconUrl || FACEBOOK_ICON_BASE64;
-  const youtubeIconSrc = data.youtubeIconUrl || YOUTUBE_ICON_BASE64;
+  const logoSrc = data.logoUrl || DEFAULT_LOGO_SRC || ASIAN_SPICES_LOGO_BASE64;
+  const tiktokIconSrc = data.tiktokIconUrl || DEFAULT_TIKTOK_SRC || TIKTOK_ICON_BASE64;
+  const instagramIconSrc = data.instagramIconUrl || DEFAULT_INSTAGRAM_SRC || INSTAGRAM_ICON_BASE64;
+  const facebookIconSrc = data.facebookIconUrl || DEFAULT_FACEBOOK_SRC || FACEBOOK_ICON_BASE64;
+  const youtubeIconSrc = data.youtubeIconUrl || DEFAULT_YOUTUBE_SRC || YOUTUBE_ICON_BASE64;
 
   const items: CancelledItem[] = (data.items && data.items.length > 0) ? data.items : [
     {
@@ -220,7 +229,7 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td align="left" valign="middle">
-                    <img src="${logoSrc}" alt="Asian Spices" width="96" height="38" style="display: block; border: 0; width: 96px; height: 38px; max-width: 96px; outline: none;" />
+                    <img src="${logoSrc}" alt="Asian Spices" width="70" height="70" style="display: block; border: 0; width: 70px; height: 70px; max-width: 70px; outline: none;" />
                   </td>
                   <td align="right" valign="middle">
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" bgcolor="#fff7ed" style="background-color: #fff7ed; border-radius: 14px; border: 1px solid #ffedd5;">
@@ -256,7 +265,7 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
 
               <!-- Main Title -->
               <h1 style="margin: 0 0 10px 0; font-family: 'Playfair Display', Georgia, serif; font-size: 28px; line-height: 36px; font-weight: 700; color: #18181b;">
-                Uw annulering is verwerkt,<br />${firstName}.
+                ${greetingTitle}
               </h1>
 
               <!-- Subtitle -->
@@ -588,139 +597,15 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
           </tr>
 
           <!-- 7. Shared Bulletproof Social Footer -->
-          <tr>
-            <td style="padding: 0 26px 30px 26px; border: 0; border: none; mso-border-alt: none;">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none; text-align: center;">
-                <tr>
-                  <td style="background-color: #f8f9fa; border-radius: 16px; border: 1px solid #edf0f3; mso-border-alt: solid #edf0f3 1pt; padding: 28px 24px 26px 24px; text-align: center;">
-                    <!-- Brand Logo -->
-                    <div style="text-align: center; margin-bottom: 10px; border: 0;">
-                      <img src="${logoSrc}" alt="Asian Spices" width="96" height="38" style="display: block; border: 0; margin: 0 auto; width: 96px; height: 38px; max-width: 96px; outline: none;" />
-                    </div>
-
-                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11.5px; color: #71717a; margin-top: 10px; margin-bottom: 16px; border: 0;">
-                      Volg ons voor dagelijkse inspiratie
-                    </div>
-
-                    <!-- Social Channels (Outlook & Gmail bulletproof links) -->
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 22px auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                      <tr>
-                        <!-- TikTok -->
-                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
-                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block;">
-                                        <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
-                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
-                                        TikTok
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-
-                        <!-- Instagram -->
-                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
-                                      <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; display: inline-block;">
-                                        <img src="${instagramIconSrc}" alt="Instagram" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
-                                      <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
-                                        Instagram
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-
-                        <!-- Facebook -->
-                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
-                                      <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; display: inline-block;">
-                                        <img src="${facebookIconSrc}" alt="Facebook" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
-                                      <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
-                                        Facebook
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-
-                        <!-- YouTube -->
-                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
-                                      <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; display: inline-block;">
-                                        <img src="${youtubeIconSrc}" alt="YouTube" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
-                                      <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
-                                        YouTube
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
-
-                    <!-- Divider -->
-                    <div style="border-top: 1px solid #e5e7eb; width: 85%; margin: 0 auto 18px auto;"></div>
-
-                    <!-- Sign-off -->
-                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; line-height: 20px; color: #52525b;">
-                      Met vriendelijke groet,<br />
-                      <strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>
-                    </div>
-
-                    <!-- Welcome Note -->
-                    <p style="margin: 14px auto 0 auto; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10.5px; line-height: 17px; color: #a1a1aa; max-width: 480px;">
-                      We kijken uit naar een inspirerende, smaakvolle en langdurige samenwerking. Welkom bij de Asian Spices-familie!
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+          ${renderEmailSocialFooter({
+            logoUrl: logoSrc,
+            tiktokIconUrl: tiktokIconSrc,
+            instagramIconUrl: instagramIconSrc,
+            facebookIconUrl: facebookIconSrc,
+            youtubeIconUrl: youtubeIconSrc,
+            signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>',
+            subtext: 'U ontvangt deze e-mail ter bevestiging van de annulering van uw bestelling. &copy; 2026 Asian Spices. Alle rechten voorbehouden.',
+          })}
 
         </table>
 
@@ -741,24 +626,26 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
  */
 export function generateOrderCancelEmailText(data: OrderCancelEmailData = {}): string {
   const orderNumber = (data.orderNumber && data.orderNumber.trim()) || '{{Bestelnummer}}';
-  const firstName = (data.firstName && data.firstName.trim()) || '{{Voornaam}}';
-  const paymentMethod = (data.paymentMethod && data.paymentMethod.trim()) || '{{Betaalmethode}}';
-  const totalAmount = data.totalAmount !== undefined ? `${data.totalAmount}` : '{{Totaalbedrag}}';
+  const rawFirstName = (data.firstName && data.firstName.trim()) || '';
+  const firstName = rawFirstName && rawFirstName.toLowerCase() !== 'klant' && !rawFirstName.includes('{{') ? rawFirstName : '';
+  const greetingLine = firstName ? `Uw annulering is verwerkt, ${firstName}.` : `Uw annulering is verwerkt.`;
+  const paymentMethod = (data.paymentMethod && data.paymentMethod.trim()) || 'Online betaling';
+  const totalAmount = data.totalAmount !== undefined ? `${data.totalAmount}` : '0.00';
   const orderOverviewUrl = data.orderOverviewUrl || 'https://www.asianspices.online/account/orders';
   const shopUrl = data.shopUrl || 'https://www.asianspices.online/shop';
   const supportEmail = data.supportEmail || 'klantenservice@asianspices.nl';
-  const phoneNumber = data.phoneNumber || '+31 (0)XX XXX XXXX';
+  const phoneNumber = data.phoneNumber || '06 44844844';
 
-  const items = data.items && data.items.length > 0 ? data.items : [
-    { name: '{{Productnaam}}', sku: '{{SKU}}', quantity: '{{Aantal}}', price: '{{Prijs}}' }
-  ];
+  const items = data.items && data.items.length > 0 ? data.items : [];
 
-  const itemsText = items.map(item => `- ${item.name} (${item.quantity}x) - € ${item.price}`).join('\n');
+  const itemsText = items.length > 0
+    ? items.map(item => `- ${item.name} (${item.quantity}x) - € ${item.price}`).join('\n')
+    : '- Geannuleerde artikelen';
 
   return `ASIAN SPICES - BESTELLING GEANNULEERD (#${orderNumber})
 ==================================================
 
-Uw annulering is verwerkt, ${firstName}.
+${greetingLine}
 Bestelling #${orderNumber} wordt niet meer verzonden.
 
 Bestelstatus: Geannuleerd

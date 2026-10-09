@@ -1,10 +1,17 @@
 import {
+  DEFAULT_LOGO_SRC,
+  DEFAULT_CHECK_SRC,
+  DEFAULT_TIKTOK_SRC,
+  DEFAULT_INSTAGRAM_SRC,
+  DEFAULT_FACEBOOK_SRC,
+  DEFAULT_YOUTUBE_SRC,
   ASIAN_SPICES_LOGO_BASE64,
   CHECK_CIRCLE_ICON_BASE64,
   TIKTOK_ICON_BASE64,
   INSTAGRAM_ICON_BASE64,
   FACEBOOK_ICON_BASE64,
   YOUTUBE_ICON_BASE64,
+  escapeHtml,
 } from '../shared';
 
 export interface OrderItem {
@@ -35,6 +42,8 @@ export interface OrderConfirmationEmailData {
   supportEmail?: string;
   phoneNumber?: string;
   openingHours?: string;
+  guestPassword?: string;
+  loginUrl?: string;
   logoUrl?: string;
   checkCircleUrl?: string;
   tiktokIconUrl?: string;
@@ -51,7 +60,9 @@ export interface OrderConfirmationEmailData {
  */
 export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailData = {}): string {
   const orderNumber = (data.orderNumber && data.orderNumber.trim()) || '{{BESTELNUMMER}}';
-  const firstName = (data.firstName && data.firstName.trim()) || '{{Voornaam}}';
+  const rawFirstName = (data.firstName && data.firstName.trim()) || '';
+  const firstName = rawFirstName && rawFirstName !== 'Klant' && rawFirstName !== '{{Voornaam}}' ? rawFirstName : '';
+  const greetingHeading = firstName ? `Bedankt voor uw bestelling,<br />${escapeHtml(firstName)}!` : `Bedankt voor uw bestelling!`;
   const deliveryDate = (data.deliveryDate && data.deliveryDate.trim()) || '{{Bezorgdatum}}';
   const deliveryAddress = (data.deliveryAddress && data.deliveryAddress.trim()) || '{{Bezorgadres}}';
   const postalCode = (data.postalCode && data.postalCode.trim()) || '{{Postcode}}';
@@ -65,15 +76,17 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
   const orderStatusUrl = data.orderStatusUrl || 'https://www.asianspices.online/account/orders';
   const helpPageUrl = data.helpPageUrl || 'https://www.asianspices.online/contact-us';
   const supportEmail = data.supportEmail || 'klantenservice@asianspices.nl';
-  const phoneNumber = data.phoneNumber || '+31 (0)XX XXX XXXX';
+  const phoneNumber = data.phoneNumber || '06 44844844';
   const openingHours = data.openingHours || 'Ma t/m vr &middot; 07:00&ndash;15:00';
+  const guestPassword = data.guestPassword ? data.guestPassword.trim() : null;
+  const loginUrl = data.loginUrl || 'https://www.asianspices.online/login';
 
-  const logoSrc = data.logoUrl || ASIAN_SPICES_LOGO_BASE64;
-  const checkCircleSrc = data.checkCircleUrl || CHECK_CIRCLE_ICON_BASE64;
-  const tiktokIconSrc = data.tiktokIconUrl || TIKTOK_ICON_BASE64;
-  const instagramIconSrc = data.instagramIconUrl || INSTAGRAM_ICON_BASE64;
-  const facebookIconSrc = data.facebookIconUrl || FACEBOOK_ICON_BASE64;
-  const youtubeIconSrc = data.youtubeIconUrl || YOUTUBE_ICON_BASE64;
+  const logoSrc = data.logoUrl || DEFAULT_LOGO_SRC;
+  const checkCircleSrc = data.checkCircleUrl || DEFAULT_CHECK_SRC;
+  const tiktokIconSrc = data.tiktokIconUrl || DEFAULT_TIKTOK_SRC;
+  const instagramIconSrc = data.instagramIconUrl || DEFAULT_INSTAGRAM_SRC;
+  const facebookIconSrc = data.facebookIconUrl || DEFAULT_FACEBOOK_SRC;
+  const youtubeIconSrc = data.youtubeIconUrl || DEFAULT_YOUTUBE_SRC;
 
   // Default demo items if none passed
   const items: OrderItem[] = (data.items && data.items.length > 0) ? data.items : [
@@ -132,13 +145,15 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
     `;
   }).join('');
 
+  const pageTitle = firstName ? `Bedankt voor uw bestelling, ${escapeHtml(firstName)}! - Asian Spices` : `Bedankt voor uw bestelling! - Asian Spices`;
+
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="nl">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="x-apple-disable-message-reformatting" />
-  <title>Bedankt voor uw bestelling, ${firstName}! - Asian Spices</title>
+  <title>${pageTitle}</title>
   <!--[if gte mso 9]>
   <xml>
     <o:OfficeDocumentSettings>
@@ -236,7 +251,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none;">
                 <tr>
                   <td align="left" valign="middle" style="border: 0; border: none; mso-border-alt: none;">
-                    <img src="${logoSrc}" alt="Asian Spices" width="96" height="38" style="display: block; border: 0; width: 96px; height: 38px; max-width: 96px; outline: none;" />
+                    <img src="${logoSrc}" alt="Asian Spices" width="70" height="70" style="display: block; border: 0; width: 70px; height: 70px; max-width: 70px; outline: none;" />
                   </td>
                   <td align="right" valign="middle" style="border: 0; border: none; mso-border-alt: none;">
                     <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: #71717a; text-transform: uppercase;">
@@ -271,7 +286,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
 
               <!-- Main Greeting Title -->
               <h1 style="margin: 0 0 10px 0; font-family: 'Playfair Display', Georgia, serif; font-size: 28px; line-height: 36px; font-weight: 700; color: #18181b;">
-                Bedankt voor uw bestelling,<br />${firstName}!
+                ${greetingHeading}
               </h1>
 
               <!-- Subtitle -->
@@ -280,53 +295,108 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
               </p>
 
               <!-- Progress Tracker (Besteld - Verzonden - Opgeleverd) -->
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width: 380px; margin: 0 auto; border-collapse: collapse;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width: 360px; margin: 0 auto; border-collapse: collapse;">
                 <tr>
                   <!-- Step 1: Besteld (Active Green) -->
-                  <td width="20" align="center" valign="middle">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="18" height="18" bgcolor="#1b4332" style="background-color: #1b4332; border-radius: 50%;">
-                      <tr><td></td></tr>
+                  <td width="33%" align="center" valign="top">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td width="50%"></td>
+                        <td width="16" align="center" valign="middle">
+                          <div style="width: 16px; height: 16px; background-color: #1b4332; border-radius: 50%;"></div>
+                        </td>
+                        <td width="50%" valign="middle" style="padding-left: 2px;">
+                          <div style="height: 3px; background-color: #1b4332; width: 100%;"></div>
+                        </td>
+                      </tr>
                     </table>
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11.5px; font-weight: 800; color: #18181b; padding-top: 6px; white-space: nowrap;">
+                      Besteld
+                    </div>
                   </td>
-                  <!-- Line 1 to 2 (Green) -->
-                  <td valign="middle" style="padding: 0 4px;">
-                    <div style="height: 3px; background-color: #1b4332; width: 100%;"></div>
-                  </td>
+
                   <!-- Step 2: Verzonden (Active Green) -->
-                  <td width="20" align="center" valign="middle">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="18" height="18" bgcolor="#1b4332" style="background-color: #1b4332; border-radius: 50%;">
-                      <tr><td></td></tr>
+                  <td width="34%" align="center" valign="top">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td width="50%" valign="middle" style="padding-right: 2px;">
+                          <div style="height: 3px; background-color: #1b4332; width: 100%;"></div>
+                        </td>
+                        <td width="16" align="center" valign="middle">
+                          <div style="width: 16px; height: 16px; background-color: #1b4332; border-radius: 50%;"></div>
+                        </td>
+                        <td width="50%" valign="middle" style="padding-left: 2px;">
+                          <div style="height: 3px; background-color: #e4e4e7; width: 100%;"></div>
+                        </td>
+                      </tr>
                     </table>
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11.5px; font-weight: 700; color: #1b4332; padding-top: 6px; white-space: nowrap;">
+                      Verzonden
+                    </div>
                   </td>
-                  <!-- Line 2 to 3 (Grey) -->
-                  <td valign="middle" style="padding: 0 4px;">
-                    <div style="height: 3px; background-color: #e4e4e7; width: 100%;"></div>
-                  </td>
-                  <!-- Step 3: Opgeleverd (Hollow/Grey) -->
-                  <td width="20" align="center" valign="middle">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="18" height="18" bgcolor="#ffffff" style="background-color: #ffffff; border: 2px solid #d4d4d8; border-radius: 50%;">
-                      <tr><td></td></tr>
+
+                  <!-- Step 3: Opgeleverd (Pending Grey) -->
+                  <td width="33%" align="center" valign="top">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td width="50%" valign="middle" style="padding-right: 2px;">
+                          <div style="height: 3px; background-color: #e4e4e7; width: 100%;"></div>
+                        </td>
+                        <td width="16" align="center" valign="middle">
+                          <div style="width: 16px; height: 16px; background-color: #ffffff; border: 2px solid #d4d4d8; border-radius: 50%; box-sizing: border-box;"></div>
+                        </td>
+                        <td width="50%"></td>
+                      </tr>
                     </table>
-                  </td>
-                </tr>
-                <tr>
-                  <!-- Labels -->
-                  <td align="center" style="padding-top: 8px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 800; color: #18181b;">
-                    Besteld
-                  </td>
-                  <td></td>
-                  <td align="center" style="padding-top: 8px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 700; color: #1b4332;">
-                    Verzonden
-                  </td>
-                  <td></td>
-                  <td align="center" style="padding-top: 8px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 500; color: #a1a1aa;">
-                    opgeleverd
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11.5px; font-weight: 500; color: #a1a1aa; padding-top: 6px; white-space: nowrap;">
+                      Opgeleverd
+                    </div>
                   </td>
                 </tr>
               </table>
 
             </td>
           </tr>
+
+          ${guestPassword ? `
+          <!-- Guest Account Credentials Card -->
+          <tr>
+            <td style="padding: 22px 30px 4px 30px;" class="mobile-padding">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#fff7ed" style="background-color: #fff7ed; border: 1px solid #fed7aa; border-radius: 14px; padding: 18px 20px;">
+                <tr>
+                  <td>
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 14px; font-weight: 800; color: #ea580c; margin-bottom: 6px;">
+                      🎉 Uw Asian Spices-account is automatisch aangemaakt!
+                    </div>
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; color: #4b5563; line-height: 1.5; margin-bottom: 12px;">
+                      Er is automatisch een account voor u aangemaakt zodat u uw bestelling 24/7 kunt volgen en in de toekomst sneller kunt bestellen.
+                    </div>
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #fed7aa; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+                      <tr>
+                        <td style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; color: #18181b; padding: 2px 0;">
+                          <strong>E-mail:</strong> ${data.email || ''}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; color: #18181b; padding: 4px 0;">
+                          <strong>Tijdelijk wachtwoord:</strong> <span style="font-family: monospace; font-size: 14px; font-weight: 700; color: #ea580c; background-color: #fff1e6; padding: 2px 8px; border-radius: 4px;">${guestPassword}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    <div style="text-align: center;">
+                      <a href="${loginUrl}" style="display: inline-block; background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 10px 24px; border-radius: 9999px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; font-weight: 700;">
+                        Inloggen op uw account &rarr;
+                      </a>
+                    </div>
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; color: #6b7280; text-align: center; margin-top: 10px;">
+                      Voor uw veiligheid raden wij aan uw wachtwoord na het inloggen te wijzigen.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          ` : ''}
 
           <!-- 3. Order Overview (Uw Aankoop) -->
           <tr>
@@ -710,7 +780,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                   <td style="background-color: #f8f9fa; border-radius: 16px; border: 1px solid #edf0f3; mso-border-alt: solid #edf0f3 1pt; padding: 28px 24px 26px 24px; text-align: center;">
                     <!-- Brand Logo -->
                     <div style="text-align: center; margin-bottom: 10px; border: 0;">
-                      <img src="${logoSrc}" alt="Asian Spices" width="96" height="38" style="display: block; border: 0; margin: 0 auto; width: 96px; height: 38px; max-width: 96px; outline: none;" />
+                      <img src="${logoSrc}" alt="Asian Spices" width="68" height="68" style="display: block; border: 0; margin: 0 auto; width: 68px; height: 68px; max-width: 68px; outline: none;" />
                     </div>
 
                     <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11.5px; color: #71717a; margin-top: 10px; margin-bottom: 16px; border: 0;">
@@ -856,7 +926,9 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
  */
 export function generateOrderConfirmationEmailText(data: OrderConfirmationEmailData = {}): string {
   const orderNumber = (data.orderNumber && data.orderNumber.trim()) || '{{BESTELNUMMER}}';
-  const firstName = (data.firstName && data.firstName.trim()) || '{{Voornaam}}';
+  const rawFirstName = (data.firstName && data.firstName.trim()) || '';
+  const firstName = rawFirstName && rawFirstName.toLowerCase() !== 'klant' && !rawFirstName.includes('{{') ? rawFirstName : '';
+  const greetingLine = firstName ? `Bedankt voor uw bestelling, ${firstName}!` : `Bedankt voor uw bestelling!`;
   const deliveryDate = (data.deliveryDate && data.deliveryDate.trim()) || '{{Bezorgdatum}}';
   const deliveryAddress = (data.deliveryAddress && data.deliveryAddress.trim()) || '{{Bezorgadres}}';
   const postalCode = (data.postalCode && data.postalCode.trim()) || '{{Postcode}}';
@@ -866,7 +938,10 @@ export function generateOrderConfirmationEmailText(data: OrderConfirmationEmailD
   const rewardPoints = data.rewardPoints !== undefined ? `${data.rewardPoints}` : '{{Aantal_Punten}}';
   const totalAmount = data.totalAmount !== undefined ? `${data.totalAmount}` : '{{Totaalbedrag}}';
   const supportEmail = data.supportEmail || 'klantenservice@asianspices.nl';
-  const phoneNumber = data.phoneNumber || '+31 (0)XX XXX XXXX';
+  const phoneNumber = data.phoneNumber || '06 44844844';
+
+  const guestPassword = data.guestPassword ? data.guestPassword.trim() : null;
+  const loginUrl = data.loginUrl || 'https://www.asianspices.online/login';
 
   const items = data.items && data.items.length > 0 ? data.items : [
     { name: '{{Productnaam}}', sku: '{{SKU}}', quantity: '{{Aantal}}', price: '{{Prijs}}' }
@@ -877,8 +952,16 @@ export function generateOrderConfirmationEmailText(data: OrderConfirmationEmailD
   return `ASIAN SPICES - BESTELLING #${orderNumber}
 ==================================================
 
-Bedankt voor uw bestelling, ${firstName}!
+${greetingLine}
 Fijn dat u kiest voor Asian Spices. We gaan direct aan de slag om uw bestelling met zorg in te pakken.
+${guestPassword ? `
+--------------------------------------------------
+UW ACCOUNT IS AANGEMAAKT
+Er is automatisch een account voor u aangemaakt:
+E-mail: ${data.email || ''}
+Tijdelijk wachtwoord: ${guestPassword}
+Inloggen: ${loginUrl}
+` : ''}
 
 Status: Besteld -> Verzonden -> Opgeleverd
 

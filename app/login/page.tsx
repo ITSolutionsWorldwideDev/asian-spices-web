@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 
 import FormSideImage from "@/components/ui/FormSideImage";
 import LoginForm from "@/components/layout/login/LoginForm";
@@ -10,7 +10,9 @@ export default function LogInPage() {
         <div className="grid w-full grid-cols-1 items-stretch gap-4 sm:gap-6 md:grid-cols-2 md:gap-8 lg:gap-10 xl:gap-12">
           {/* Form — below image on mobile, left on desktop */}
           <div className="order-2 flex min-w-0 md:order-1">
-            <LoginForm />
+            <Suspense fallback={null}>
+              <LoginForm />
+            </Suspense>
           </div>
 
           {/* Image — compact banner on mobile, full column on tablet+ */}

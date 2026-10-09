@@ -135,11 +135,12 @@ export async function POST(req: NextRequest) {
         UPDATE store_orders
         SET transaction_id = $1,
             payment_method = $2,
+            customer_email = COALESCE(NULLIF(TRIM(customer_email), ''), $4),
             payment_status = 'pending',
             updated_at = NOW()
         WHERE id = $3
         `,
-        [paynlOrderId, "paynl", order.id],
+        [paynlOrderId, "paynl", order.id, customerEmail?.trim()?.toLowerCase() || null],
       );
 
       return NextResponse.json({
@@ -172,10 +173,14 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "PayPal routing initialization failed" }, { status: 502 });
       }
 
-      // Save PayPal order ID as transaction_id
+      // Save PayPal order ID as transaction_id and ensure customer_email is saved
       await pool.query(
-        `UPDATE store_orders SET transaction_id = $1, payment_method = $2 WHERE id = $3`,
-        [orderData.id, "paypal", order.id],
+        `UPDATE store_orders 
+         SET transaction_id = $1, 
+             payment_method = $2, 
+             customer_email = COALESCE(NULLIF(TRIM(customer_email), ''), $4) 
+         WHERE id = $3`,
+        [orderData.id, "paypal", order.id, customerEmail?.trim()?.toLowerCase() || null],
       );
 
       return NextResponse.json({

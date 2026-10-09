@@ -39,107 +39,100 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
               <td style="background-color: #f8f9fa; border-radius: 16px; border: 1px solid #edf0f3; mso-border-alt: solid #edf0f3 1pt; padding: 28px 24px 26px 24px; text-align: center;">
                 <!-- Centered Brand Logo -->
                 <div style="text-align: center; margin-bottom: 10px; border: 0;">
-                  <img src="${logoSrc}" alt="Asian Spices" width="96" height="38" style="display: block; border: 0; margin: 0 auto; width: 96px; height: 38px; max-width: 96px; outline: none;" />
+                  <img src="${logoSrc}" alt="Asian Spices" width="68" height="68" style="display: block; border: 0; margin: 0 auto; width: 68px; height: 68px; max-width: 68px; outline: none;" />
                 </div>
 
                 <div style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 11.5px; color: #71717a; margin-top: 10px; margin-bottom: 16px; border: 0;">
                   Volg ons voor dagelijkse inspiratie
                 </div>
 
-                <!-- Social Media Channels (Outlook-bulletproof inline links inside cells) -->
-                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 22px auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none;">
+                <!-- Social Media Channels (2x2 balanced grid, bulletproof across Outlook & Gmail) -->
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 20px auto; border-collapse: separate;">
                   <tr>
                     <!-- TikTok -->
-                    <td align="center" valign="middle" style="padding: 4px 5px; border: 0; border: none; mso-border-alt: none;" class="mobile-social-col">
-                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                    <td align="center" valign="middle" style="padding: 4px 6px;" width="135">
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
-                          <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                              <tr>
-                                <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
-                                  <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
-                                    <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                  </a>
-                                </td>
-                                <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
-                                  <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
+                          <td align="center" valign="middle" style="padding: 7px 12px;">
+                            <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                  <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                                    <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; width: 16px; height: 16px; border: 0;" />
+                                  </td>
+                                  <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
                                     TikTok
-                                  </a>
-                                </td>
-                              </tr>
-                            </table>
+                                  </td>
+                                </tr>
+                              </table>
+                            </a>
                           </td>
                         </tr>
                       </table>
                     </td>
 
                     <!-- Instagram -->
-                    <td align="center" valign="middle" style="padding: 4px 5px; border: 0; border: none; mso-border-alt: none;" class="mobile-social-col">
-                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                    <td align="center" valign="middle" style="padding: 4px 6px;" width="135">
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
-                          <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                              <tr>
-                                <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
-                                  <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
-                                    <img src="${instagramIconSrc}" alt="Instagram" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                  </a>
-                                </td>
-                                <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
-                                  <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
+                          <td align="center" valign="middle" style="padding: 7px 12px;">
+                            <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                  <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                                    <img src="${instagramIconSrc}" alt="Instagram" width="16" height="16" style="display: block; width: 16px; height: 16px; border: 0;" />
+                                  </td>
+                                  <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
                                     Instagram
-                                  </a>
-                                </td>
-                              </tr>
-                            </table>
+                                  </td>
+                                </tr>
+                              </table>
+                            </a>
                           </td>
                         </tr>
                       </table>
                     </td>
-
+                  </tr>
+                  <tr>
                     <!-- Facebook -->
-                    <td align="center" valign="middle" style="padding: 4px 5px; border: 0; border: none; mso-border-alt: none;" class="mobile-social-col">
-                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                    <td align="center" valign="middle" style="padding: 4px 6px;" width="135">
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
-                          <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                              <tr>
-                                <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
-                                  <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
-                                    <img src="${facebookIconSrc}" alt="Facebook" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                  </a>
-                                </td>
-                                <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
-                                  <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
+                          <td align="center" valign="middle" style="padding: 7px 12px;">
+                            <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                  <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                                    <img src="${facebookIconSrc}" alt="Facebook" width="16" height="16" style="display: block; width: 16px; height: 16px; border: 0;" />
+                                  </td>
+                                  <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
                                     Facebook
-                                  </a>
-                                </td>
-                              </tr>
-                            </table>
+                                  </td>
+                                </tr>
+                              </table>
+                            </a>
                           </td>
                         </tr>
                       </table>
                     </td>
 
                     <!-- YouTube -->
-                    <td align="center" valign="middle" style="padding: 4px 5px; border: 0; border: none; mso-border-alt: none;" class="mobile-social-col">
-                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                    <td align="center" valign="middle" style="padding: 4px 6px;" width="135">
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
-                          <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                              <tr>
-                                <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
-                                  <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
-                                    <img src="${youtubeIconSrc}" alt="YouTube" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                  </a>
-                                </td>
-                                <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
-                                  <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
+                          <td align="center" valign="middle" style="padding: 7px 12px;">
+                            <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                  <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                                    <img src="${youtubeIconSrc}" alt="YouTube" width="16" height="16" style="display: block; width: 16px; height: 16px; border: 0;" />
+                                  </td>
+                                  <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
                                     YouTube
-                                  </a>
-                                </td>
-                              </tr>
-                            </table>
+                                  </td>
+                                </tr>
+                              </table>
+                            </a>
                           </td>
                         </tr>
                       </table>

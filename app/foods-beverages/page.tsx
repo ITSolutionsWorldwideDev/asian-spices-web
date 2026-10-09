@@ -1,10 +1,20 @@
 // app/foods-beverages/page.tsx
 
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Footer from "@/components/ui/Footer";
 import HeadingDescription from "@/components/ui/HeadingDescription";
 import ProductPageHeader from "@/components/ui/ProductPageHeader";
 import Reviews from "@/components/ui/Reviews";
+
+export const metadata: Metadata = {
+  title: "Asian Groceries & Foods Online | Rice, Lentils, Snacks - NL",
+  description:
+    "Shop authentic Asian food & beverages online: rice, lentils, flours, snacks and more. Trusted Indian & Asian grocery brands delivered in the Netherlands.",
+  alternates: {
+    canonical: "/foods-beverages",
+  },
+};
 
 import {
   getBrands,

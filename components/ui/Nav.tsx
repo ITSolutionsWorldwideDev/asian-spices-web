@@ -4,13 +4,14 @@ import React, { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
-import { Heart, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import ResponsiveNavigation from "../layout/navigation/ResponsiveNavigation";
 import CartandWhishBtn from "../layout/navigation/CartandWhishBtn";
 import ButtonsNavigation from "../layout/navigation/ButtonsNavigation";
 import UpperSelection from "../layout/navigation/UpperSelection";
 import GoogleTranslateButton from "../layout/navigation/GoogleTranslateButton";
 import NavSearch from "../layout/navigation/NavSearch";
+import MobileBottomNav from "../layout/navigation/MobileBottomNav";
 import { useCartStore } from "@/store/useCartStore";
 
 const subscribeToClient = () => () => {};
@@ -66,40 +67,36 @@ const Nav: React.FC = () => {
   );
 
   const mobileHeader = (
-    <div className="pointer-events-auto w-full xl:hidden">
-      <div className="flex min-h-[3.5rem] items-center justify-between gap-3 bg-white px-4 py-3 shadow-sm sm:min-h-[3.75rem] sm:px-5 md:min-h-16 md:px-6 lg:min-h-[4.25rem] lg:px-8 lg:py-3.5">
-        <div className="flex min-w-0 items-center gap-2.5 sm:gap-3 md:gap-4">
+    <div className="pointer-events-auto w-full bg-white shadow-sm border-b border-gray-100 xl:hidden">
+      <div className="flex min-h-[3.25rem] items-center justify-between gap-1.5 px-2.5 pt-2 pb-1.5 sm:gap-2 sm:px-5 sm:pt-2.5">
+        <div className="flex min-w-0 items-center gap-1.5 sm:gap-3">
           <ResponsiveNavigation mobileOnly />
           <Link href="/" className="flex shrink-0 items-center">
             <Image
               src="/assets/logo/Group 87.png"
               alt="Asian Spices Logo"
-              width={180}
-              height={60}
+              width={160}
+              height={48}
               priority
               fetchPriority="high"
-              className="h-11 w-auto object-contain sm:h-12 md:h-14 lg:h-16"
+              className="h-7.5 w-auto object-contain sm:h-9 md:h-10"
             />
           </Link>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2.5 sm:gap-3 md:gap-3.5">
+        <div
+          className="notranslate flex shrink-0 items-center gap-1.5 sm:gap-2.5"
+          translate="no"
+        >
           <GoogleTranslateButton />
-          <Link
-            href="/wishlist"
-            aria-label="Wishlist"
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 transition active:scale-95 sm:h-[3.25rem] sm:w-[3.25rem] md:h-14 md:w-14 lg:h-16 lg:w-16"
-          >
-            <Heart className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" strokeWidth={1.75} />
-          </Link>
           <Link
             href="/cart"
             aria-label="Cart"
-            className="relative flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 transition active:scale-95 sm:h-[3.25rem] sm:w-[3.25rem] md:h-14 md:w-14 lg:h-16 lg:w-16"
+            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm transition hover:bg-gray-50 active:scale-95"
           >
-            <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" strokeWidth={1.75} />
+            <ShoppingCart className="h-5 w-5 text-gray-700 sm:h-5.5 sm:w-5.5" strokeWidth={1.8} />
             {itemInCart > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white sm:h-6 sm:min-w-6 sm:text-[11px] md:text-xs">
+              <span className="absolute -right-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
                 {itemInCart > 99 ? "99+" : itemInCart}
               </span>
             )}
@@ -107,7 +104,7 @@ const Nav: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-4 py-3 sm:px-5 md:px-6 lg:px-8 lg:py-3.5">
+      <div className="px-2.5 pb-1.5 pt-0.5 sm:px-5 sm:pb-3">
         <NavSearch variant="mobile" />
       </div>
     </div>
@@ -166,8 +163,24 @@ const Nav: React.FC = () => {
   return (
     <>
       {/* Reserves header height so content does not jump under the fixed bar */}
-      <div className="h-[8rem] shrink-0 sm:h-[8.5rem] md:h-[9rem] lg:h-[10rem] xl:h-28" aria-hidden />
-      {mounted ? createPortal(bar, document.body) : null}
+      <div className="h-[7rem] shrink-0 sm:h-[7.5rem] md:h-[8rem] xl:h-28" aria-hidden />
+      {mounted ? (
+        <>
+          {createPortal(bar, document.body)}
+          {createPortal(
+            <>
+              {/* Pushes page content above the floating mobile bottom nav */}
+              <div
+                className="h-[4.75rem] shrink-0 xl:hidden"
+                style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+                aria-hidden
+              />
+              <MobileBottomNav />
+            </>,
+            document.body,
+          )}
+        </>
+      ) : null}
     </>
   );
 };

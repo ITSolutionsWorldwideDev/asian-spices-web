@@ -21,7 +21,7 @@ export function BibiChatWidget({
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
 
   return (
-    <>
+    <div className="notranslate" translate="no">
       <motion.div
         initial={false}
         animate={
@@ -80,6 +80,6 @@ export function BibiChatWidget({
           </button>
         </div>
       </motion.div>
-    </>
+    </div>
   );
 }

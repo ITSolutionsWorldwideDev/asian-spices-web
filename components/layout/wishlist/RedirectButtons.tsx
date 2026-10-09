@@ -27,7 +27,7 @@ const RedirectButtons = () => {
         </p>
 
         {/* Buttons */}
-        <div className="flex justify-center gap-4">
+        <div className="notranslate flex justify-center gap-4" translate="no">
           <Link href={"/"}>
             <button className="px-5 py-2 border border-[#E5E7EB] bg-white rounded-md hover:bg-gray-300 transition">
               Add More Items

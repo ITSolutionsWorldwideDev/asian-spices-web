@@ -4,9 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { webAuthOptions } from "@/core/auth";
 import { pool } from "@/core/db";
+import { invoiceNumberFromOrderNumber } from "@/core/invoice-number";
 import { jsPDF } from "jspdf";
 import fs from "fs";
 import path from "path";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 function euro(value: number | string | null | undefined) {
   return `€ ${Number(value || 0).toFixed(2)}`;
@@ -26,25 +30,24 @@ function normalizeOrderNumber(value: any) {
   return text.replace(/^#+\s*/, "") || "-";
 }
 
-function buildInvoiceNumber(order: any, orderNumber: string) {
-  const withoutOrdPrefix = orderNumber.replace(/^ORD[-_\s]*/i, "");
-  const uniqueTail = String(order.id ?? "")
-    .replace(/[^a-zA-Z0-9]/g, "")
-    .slice(-2)
-    .toUpperCase()
-    .padStart(2, "0");
-  return `INV-${withoutOrdPrefix}-${uniqueTail}`;
-}
-
 function loadAsianSpicesLogo() {
   try {
-    const logoPath = path.join(
+    let logoPath = path.join(
       process.cwd(),
       "public",
       "assets",
       "logo",
-      "Group 87.png",
+      "inlogo.png",
     );
+    if (!fs.existsSync(logoPath)) {
+      logoPath = path.join(
+        process.cwd(),
+        "public",
+        "assets",
+        "logo",
+        "Group 87.png",
+      );
+    }
     const base64 = fs.readFileSync(logoPath).toString("base64");
     return `data:image/png;base64,${base64}`;
   } catch {
@@ -152,7 +155,7 @@ export async function GET(
       : "-";
     const paymentStatus = String(order.payment_status || "").toUpperCase();
     const orderNumber = normalizeOrderNumber(order.order_number);
-    const invoiceNumber = buildInvoiceNumber(order, orderNumber);
+    const invoiceNumber = invoiceNumberFromOrderNumber(orderNumber);
 
     // Header left: logo
     const logoData = loadAsianSpicesLogo();
@@ -188,9 +191,9 @@ export async function GET(
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9.5);
-    doc.text("Mandenmakerstraat 100C", RIGHT, topY + 28, { align: "right" });
-    doc.text("3194 DG Hoogvliet Rotterdam", RIGHT, topY + 41, { align: "right" });
-    doc.text("The Netherlands", RIGHT, topY + 54, { align: "right" });
+    doc.text("Slakkenveen 341", RIGHT, topY + 28, { align: "right" });
+    doc.text("3205 GK Spijkenisse", RIGHT, topY + 41, { align: "right" });
+    doc.text("Netherlands", RIGHT, topY + 54, { align: "right" });
     doc.text("VAT: NL869440317B01", RIGHT, topY + 82, { align: "right" });
     doc.text("CoC: 42041922", RIGHT, topY + 95, { align: "right" });
 
@@ -286,8 +289,7 @@ export async function GET(
       : [];
 
     const pageH = doc.internal.pageSize.getHeight();
-    const FOOTER_LINE_Y = pageH - 36;
-    const FOOTER_TEXT_Y = pageH - 18;
+    const FOOTER_LINE_Y = pageH - 48;
 
     // Loop through invoice item records
     validItems.forEach((item: any, index: number) => {
@@ -366,17 +368,28 @@ export async function GET(
     doc.text("Grand Total", labelX, rowY);
     doc.text(euro(totalAmount), amountX, rowY, { align: "right" });
 
-    // Footer at the very bottom of the last page, after totals.
-    doc.setDrawColor("#111827");
-    doc.setLineWidth(1.2);
-    doc.line(LEFT, FOOTER_LINE_Y, RIGHT, FOOTER_LINE_Y);
+    // Footer: apply to all pages
+    const footerMessage =
+      "Thank you for shopping with Asian Spices. We are thrilled to confirm that your payment has been processed and your order is officially locked in.";
+    const totalPages = doc.getNumberOfPages();
+    for (let p = 1; p <= totalPages; p++) {
+      doc.setPage(p);
+      doc.setDrawColor("#111827");
+      doc.setLineWidth(1.2);
+      doc.line(LEFT, FOOTER_LINE_Y, RIGHT, FOOTER_LINE_Y);
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.setTextColor("#111827");
-    doc.text("asianspices.online", (LEFT + RIGHT) / 2, FOOTER_TEXT_Y, {
-      align: "center",
-    });
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor("#111827");
+      const footerLines = doc.splitTextToSize(footerMessage, RIGHT - LEFT);
+      let footerTextY = FOOTER_LINE_Y + 13;
+      footerLines.forEach((line: string) => {
+        doc.text(line, (LEFT + RIGHT) / 2, footerTextY, {
+          align: "center",
+        });
+        footerTextY += 11;
+      });
+    }
 
     // Output straight as a raw array buffer stream type
     const pdfOutputArrayBuffer = doc.output("arraybuffer");
@@ -386,7 +399,10 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="invoice_order_${orderNumber}.pdf"`,
+        "Content-Disposition": `attachment; filename="invoice_${invoiceNumber}.pdf"`,
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
       },
     });
   } catch (error: any) {

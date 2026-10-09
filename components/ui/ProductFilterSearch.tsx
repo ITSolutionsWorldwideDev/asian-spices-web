@@ -32,14 +32,14 @@ export default function ProductFilterSearch() {
   }, [search]);
 
   return (
-    <div className="mb-6 p-4 border rounded-xl bg-white shadow-sm">
+    <div className="notranslate mb-6 p-4 border rounded-xl bg-white shadow-sm" translate="no">
       {/* 🔍 Search */}
       <input
         type="text"
         placeholder="Search spices..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full border p-2 rounded mb-4"
+        className="w-full border border-gray-200 p-2.5 rounded-xl mb-4 text-[16px] sm:text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
       />
 
       {/* 💰 Price */}

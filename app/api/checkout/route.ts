@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 import { getServerSession } from "next-auth";
 import { webAuthOptions } from "@/core/auth";
 import { assignNextStore } from "@/core/order-routing";
+import { generateNextOrderNumber } from "@/core/order-number";
 import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
 
 export async function POST(req: NextRequest) {
@@ -192,6 +193,8 @@ export async function POST(req: NextRequest) {
     );
 
     // 3️⃣ Create Order
+    const orderNumber = await generateNextOrderNumber(client);
+
     const orderResult = await client.query(
       `
       INSERT INTO store_orders
@@ -211,7 +214,7 @@ export async function POST(req: NextRequest) {
       `,
       [
         store_id,
-        `ORD-${Date.now()}`,
+        orderNumber,
         customer_id,
         email,
         pricing.subtotal,

@@ -4,6 +4,12 @@ import {
   INSTAGRAM_ICON_BASE64,
   FACEBOOK_ICON_BASE64,
   YOUTUBE_ICON_BASE64,
+  DEFAULT_LOGO_SRC,
+  DEFAULT_TIKTOK_SRC,
+  DEFAULT_INSTAGRAM_SRC,
+  DEFAULT_FACEBOOK_SRC,
+  DEFAULT_YOUTUBE_SRC,
+  renderEmailSocialFooter,
 } from '../shared';
 
 export interface PartnerCredentialsEmailData {
@@ -34,17 +40,17 @@ export interface PartnerCredentialsEmailData {
  * - Master Outlook & Gmail bulletproof social footer
  */
 export function generatePartnerCredentialsEmailHtml(data: PartnerCredentialsEmailData = {}): string {
-  const firstName = (data.firstName && data.firstName.trim()) || '{{Voornaam}}';
-  const username = (data.username && data.username.trim()) || '{{Gebruikersnaam}}';
-  const tempPassword = (data.tempPassword && data.tempPassword.trim()) || '{{Tijdelijk Wachtwoord}}';
+  const firstName = (data.firstName && data.firstName.trim()) || 'partner';
+  const username = (data.username && data.username.trim()) || 'partner';
+  const tempPassword = (data.tempPassword && data.tempPassword.trim()) || 'Zie instructies per e-mail';
   const loginUrl = data.loginUrl || 'https://www.asianspices.online/partner/login';
   const contactUrl = data.contactUrl || 'https://www.asianspices.online/contact-us';
 
-  const logoSrc = data.logoUrl || ASIAN_SPICES_LOGO_BASE64;
-  const tiktokIconSrc = data.tiktokIconUrl || TIKTOK_ICON_BASE64;
-  const instagramIconSrc = data.instagramIconUrl || INSTAGRAM_ICON_BASE64;
-  const facebookIconSrc = data.facebookIconUrl || FACEBOOK_ICON_BASE64;
-  const youtubeIconSrc = data.youtubeIconUrl || YOUTUBE_ICON_BASE64;
+  const logoSrc = data.logoUrl || DEFAULT_LOGO_SRC;
+  const tiktokIconSrc = data.tiktokIconUrl || DEFAULT_TIKTOK_SRC;
+  const instagramIconSrc = data.instagramIconUrl || DEFAULT_INSTAGRAM_SRC;
+  const facebookIconSrc = data.facebookIconUrl || DEFAULT_FACEBOOK_SRC;
+  const youtubeIconSrc = data.youtubeIconUrl || DEFAULT_YOUTUBE_SRC;
 
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="nl">
@@ -150,7 +156,7 @@ export function generatePartnerCredentialsEmailHtml(data: PartnerCredentialsEmai
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td align="left" valign="middle">
-                    <img src="${logoSrc}" alt="Asian Spices" width="96" height="38" style="display: block; border: 0; width: 96px; height: 38px; max-width: 96px; outline: none;" />
+                    <img src="${logoSrc}" alt="Asian Spices" width="70" height="70" style="display: block; border: 0; width: 70px; height: 70px; max-width: 70px; outline: none;" />
                   </td>
                   <td align="right" valign="middle">
                     <span style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.6px; color: #71717a; text-transform: uppercase;">
@@ -384,139 +390,15 @@ export function generatePartnerCredentialsEmailHtml(data: PartnerCredentialsEmai
           </tr>
 
           <!-- 8. Shared Bulletproof Social Footer -->
-          <tr>
-            <td style="padding: 0 26px 30px 26px; border: 0; border: none; mso-border-alt: none;">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none; text-align: center;">
-                <tr>
-                  <td style="background-color: #f8f9fa; border-radius: 16px; border: 1px solid #edf0f3; mso-border-alt: solid #edf0f3 1pt; padding: 28px 24px 26px 24px; text-align: center;">
-                    <!-- Brand Logo -->
-                    <div style="text-align: center; margin-bottom: 10px; border: 0;">
-                      <img src="${logoSrc}" alt="Asian Spices" width="96" height="38" style="display: block; border: 0; margin: 0 auto; width: 96px; height: 38px; max-width: 96px; outline: none;" />
-                    </div>
-
-                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11.5px; color: #71717a; margin-top: 10px; margin-bottom: 16px; border: 0;">
-                      Volg ons voor dagelijkse inspiratie
-                    </div>
-
-                    <!-- Social Channels (Outlook & Gmail bulletproof links) -->
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 22px auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                      <tr>
-                        <!-- TikTok -->
-                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
-                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block;">
-                                        <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
-                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
-                                        TikTok
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-
-                        <!-- Instagram -->
-                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
-                                      <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; display: inline-block;">
-                                        <img src="${instagramIconSrc}" alt="Instagram" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
-                                      <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
-                                        Instagram
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-
-                        <!-- Facebook -->
-                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
-                                      <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; display: inline-block;">
-                                        <img src="${facebookIconSrc}" alt="Facebook" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
-                                      <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
-                                        Facebook
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-
-                        <!-- YouTube -->
-                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
-                                      <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; display: inline-block;">
-                                        <img src="${youtubeIconSrc}" alt="YouTube" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
-                                      <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
-                                        YouTube
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
-
-                    <!-- Divider -->
-                    <div style="border-top: 1px solid #e5e7eb; width: 85%; margin: 0 auto 18px auto;"></div>
-
-                    <!-- Sign-off -->
-                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; line-height: 20px; color: #52525b;">
-                      Met vriendelijke groet,<br />
-                      <strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>
-                    </div>
-
-                    <!-- Welcome Note -->
-                    <p style="margin: 14px auto 0 auto; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10.5px; line-height: 17px; color: #a1a1aa; max-width: 480px;">
-                      We kijken uit naar een inspirerende, smaakvolle en langdurige samenwerking. Welkom bij de Asian Spices-familie!
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+          ${renderEmailSocialFooter({
+            logoUrl: logoSrc,
+            tiktokIconUrl: tiktokIconSrc,
+            instagramIconUrl: instagramIconSrc,
+            facebookIconUrl: facebookIconSrc,
+            youtubeIconUrl: youtubeIconSrc,
+            signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>',
+            subtext: 'We kijken uit naar een inspirerende, smaakvolle en langdurige samenwerking. Welkom bij de Asian Spices-familie!',
+          })}
 
         </table>
 
@@ -536,9 +418,9 @@ export function generatePartnerCredentialsEmailHtml(data: PartnerCredentialsEmai
  * Plain-text fallback for partner credentials approved email.
  */
 export function generatePartnerCredentialsEmailText(data: PartnerCredentialsEmailData = {}): string {
-  const firstName = (data.firstName && data.firstName.trim()) || '{{Voornaam}}';
-  const username = (data.username && data.username.trim()) || '{{Gebruikersnaam}}';
-  const tempPassword = (data.tempPassword && data.tempPassword.trim()) || '{{Tijdelijk Wachtwoord}}';
+  const firstName = (data.firstName && data.firstName.trim()) || 'partner';
+  const username = (data.username && data.username.trim()) || 'partner';
+  const tempPassword = (data.tempPassword && data.tempPassword.trim()) || 'Zie instructies per e-mail';
   const loginUrl = data.loginUrl || 'https://www.asianspices.online/partner/login';
   const contactUrl = data.contactUrl || 'https://www.asianspices.online/contact-us';
 

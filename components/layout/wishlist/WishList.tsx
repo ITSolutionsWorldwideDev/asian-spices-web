@@ -90,7 +90,7 @@ export default function WishList() {
   );
 
   return (
-    <section className="py-10">
+    <section className="notranslate py-10" translate="no">
       <div className="container mx-auto px-4">
         {/* =========================================================
             BREADCRUMB
@@ -273,7 +273,7 @@ export default function WishList() {
                             isLoggedIn,
                           );
                         }}
-                        className="bg-orange-500 hover:bg-orange-600 transition text-white rounded-xl py-3 px-5 font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                        className="bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 transition text-white rounded-xl py-3 px-5 font-bold shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/35 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
                       >
                         <ShoppingCart size={18} />
                         Add To Cart

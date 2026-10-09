@@ -31,7 +31,7 @@ export default function UserMenu({ email }: { email?: string }) {
         Manage your account settings, orders and addresses
       </p>
 
-      <div className="relative right-0 ">
+      <div className="notranslate relative right-0" translate="no">
         <div className="absolute right-0 -top-8">
           {/* Avatar */}
           <button

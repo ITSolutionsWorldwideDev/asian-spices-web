@@ -4,6 +4,13 @@ import {
   INSTAGRAM_ICON_BASE64,
   FACEBOOK_ICON_BASE64,
   YOUTUBE_ICON_BASE64,
+  DEFAULT_LOGO_SRC,
+  DEFAULT_TIKTOK_SRC,
+  DEFAULT_INSTAGRAM_SRC,
+  DEFAULT_FACEBOOK_SRC,
+  DEFAULT_YOUTUBE_SRC,
+  renderEmailSocialFooter,
+  escapeHtml,
 } from '../shared';
 
 export interface AccountRegistrationEmailData {
@@ -27,19 +34,39 @@ export interface AccountRegistrationEmailData {
  * Compatible with Microsoft Outlook (Word engine), Gmail, Apple Mail, and mobile clients.
  */
 export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEmailData = {}): string {
-  const lastName = (data.lastName && data.lastName.trim()) || '{{Achternaam}}';
-  const email = (data.email && data.email.trim()) || '{{E-mail}}';
-  const accountType = (data.accountType && data.accountType.trim()) || 'Gastaccount';
+  let firstName = data.firstName?.trim();
+  let lastName = data.lastName?.trim();
+  if (!firstName && !lastName && data.fullName?.trim()) {
+    const parts = data.fullName.trim().split(/\s+/);
+    if (parts.length > 1) {
+      firstName = parts[0];
+      lastName = parts.slice(1).join(' ');
+    } else {
+      firstName = parts[0];
+    }
+  }
+
+  let salutation = 'Beste klant,';
+  if (firstName && lastName) {
+    salutation = `Beste <span style="color: #ea580c;">${escapeHtml(firstName)} ${escapeHtml(lastName)}</span>,`;
+  } else if (firstName) {
+    salutation = `Beste <span style="color: #ea580c;">${escapeHtml(firstName)}</span>,`;
+  } else if (lastName) {
+    salutation = `Geachte heer/mevrouw <span style="color: #ea580c;">${escapeHtml(lastName)}</span>,`;
+  }
+
+  const email = (data.email && data.email.trim()) || '';
+  const accountType = (data.accountType && data.accountType.trim()) || 'Klantaccount';
   const loginUrl = data.loginUrl || 'https://www.asianspices.online/login';
   const supportEmail = data.supportEmail || 'support@asianspices.online';
-  const phoneNumber = data.phoneNumber || '+31 6 12345678';
+  const phoneNumber = data.phoneNumber || '06 44844844';
   const phoneClean = phoneNumber.replace(/[^0-9+]/g, '');
 
-  const logoSrc = data.logoUrl || ASIAN_SPICES_LOGO_BASE64;
-  const tiktokIconSrc = data.tiktokIconUrl || TIKTOK_ICON_BASE64;
-  const instagramIconSrc = data.instagramIconUrl || INSTAGRAM_ICON_BASE64;
-  const facebookIconSrc = data.facebookIconUrl || FACEBOOK_ICON_BASE64;
-  const youtubeIconSrc = data.youtubeIconUrl || YOUTUBE_ICON_BASE64;
+  const logoSrc = data.logoUrl || DEFAULT_LOGO_SRC || ASIAN_SPICES_LOGO_BASE64;
+  const tiktokIconSrc = data.tiktokIconUrl || DEFAULT_TIKTOK_SRC || TIKTOK_ICON_BASE64;
+  const instagramIconSrc = data.instagramIconUrl || DEFAULT_INSTAGRAM_SRC || INSTAGRAM_ICON_BASE64;
+  const facebookIconSrc = data.facebookIconUrl || DEFAULT_FACEBOOK_SRC || FACEBOOK_ICON_BASE64;
+  const youtubeIconSrc = data.youtubeIconUrl || DEFAULT_YOUTUBE_SRC || YOUTUBE_ICON_BASE64;
 
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="nl">
@@ -139,16 +166,20 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
           
           <!-- 1. Header: Brand Logo & Right Label -->
           <tr>
-            <td style="padding: 22px 34px 18px 34px; border: 0; border: none; mso-border-alt: none;" class="mobile-padding">
+            <td style="padding: 18px 34px 16px 34px; border: 0; border: none; mso-border-alt: none;" class="mobile-padding">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none;">
                 <tr>
                   <td align="left" valign="middle" style="border: 0; border: none; mso-border-alt: none;">
-                    <img src="${logoSrc}" alt="Asian Spices" width="96" height="38" style="display: block; border: 0; width: 96px; height: 38px; max-width: 96px; outline: none;" />
+                    <img src="${logoSrc}" alt="Asian Spices" width="70" height="70" style="display: block; border: 0; width: 70px; height: 70px; max-width: 70px; outline: none;" />
                   </td>
                   <td align="right" valign="middle" style="border: 0; border: none; mso-border-alt: none;">
-                    <span style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: #ea580c; text-transform: uppercase;">
-                      &bull; ASIAN SPICES
-                    </span>
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" bgcolor="#fff7ed" style="background-color: #fff7ed; border-radius: 14px; border: 1px solid #ffedd5;">
+                      <tr>
+                        <td style="padding: 6px 14px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; color: #ea580c; text-transform: uppercase;">
+                          ACCOUNTREGISTRATIE
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </table>
@@ -193,7 +224,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                   <td style="padding: 6px 4px;">
                     <!-- Salutation -->
                     <div style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 15px; font-weight: 800; color: #18181b; margin-bottom: 10px;">
-                      Geachte heer/mevrouw <span style="color: #ea580c;">${lastName}</span>,
+                      ${salutation}
                     </div>
 
                     <!-- Intro copy -->
@@ -252,7 +283,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                           E-MAILADRES
                         </td>
                         <td align="right" style="padding: 12px 16px; border-bottom: 1px solid #edf0f3; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 13px; font-weight: 700; color: #ea580c;">
-                          ${email}
+                          ${escapeHtml(email)}
                         </td>
                       </tr>
                       <tr>
@@ -260,7 +291,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                           ACCOUNTTYPE
                         </td>
                         <td align="right" style="padding: 12px 16px; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 13px; font-weight: 700; color: #18181b;">
-                          ${accountType}
+                          ${escapeHtml(accountType)}
                         </td>
                       </tr>
                     </table>
@@ -445,139 +476,15 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
           </tr>
 
           <!-- 6. Shared Social Footer: Outlook & Gmail Bulletproof -->
-          <tr>
-            <td style="padding: 0 26px 30px 26px; border: 0; border: none; mso-border-alt: none;">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none; text-align: center;">
-                <tr>
-                  <td style="background-color: #f8f9fa; border-radius: 16px; border: 1px solid #edf0f3; mso-border-alt: solid #edf0f3 1pt; padding: 28px 24px 26px 24px; text-align: center;">
-                    <!-- Centered Brand Logo -->
-                    <div style="text-align: center; margin-bottom: 10px; border: 0;">
-                      <img src="${logoSrc}" alt="Asian Spices" width="96" height="38" style="display: block; border: 0; margin: 0 auto; width: 96px; height: 38px; max-width: 96px; outline: none;" />
-                    </div>
-
-                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 11.5px; color: #71717a; margin-top: 10px; margin-bottom: 16px; border: 0;">
-                      Volg ons voor dagelijkse inspiratie
-                    </div>
-
-                    <!-- Social Media Channels (Bulletproof inline links inside cells) -->
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 22px auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none;">
-                      <tr>
-                        <!-- TikTok -->
-                        <td align="center" valign="middle" style="padding: 4px 5px; border: 0; border: none; mso-border-alt: none;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
-                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
-                                        <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
-                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
-                                        TikTok
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-
-                        <!-- Instagram -->
-                        <td align="center" valign="middle" style="padding: 4px 5px; border: 0; border: none; mso-border-alt: none;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
-                                      <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
-                                        <img src="${instagramIconSrc}" alt="Instagram" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
-                                      <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
-                                        Instagram
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-
-                        <!-- Facebook -->
-                        <td align="center" valign="middle" style="padding: 4px 5px; border: 0; border: none; mso-border-alt: none;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
-                                      <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
-                                        <img src="${facebookIconSrc}" alt="Facebook" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
-                                      <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
-                                        Facebook
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-
-                        <!-- YouTube -->
-                        <td align="center" valign="middle" style="padding: 4px 5px; border: 0; border: none; mso-border-alt: none;" class="mobile-social-col">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                            <tr>
-                              <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
-                                  <tr>
-                                    <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">
-                                      <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; display: inline-block; border: 0; outline: none;">
-                                        <img src="${youtubeIconSrc}" alt="YouTube" width="16" height="16" style="display: block; border: 0; outline: none; width: 16px; height: 16px;" />
-                                      </a>
-                                    </td>
-                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap; border: 0;">
-                                      <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block; border: 0; outline: none;">
-                                        YouTube
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
-
-                    <!-- Divider -->
-                    <div style="border-top: 1px solid #e5e7eb; width: 85%; margin: 0 auto 18px auto;"></div>
-
-                    <!-- Sign-off with Clean Spacing -->
-                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 13px; line-height: 20px; color: #52525b; border: 0;">
-                      Met vriendelijke groet,<br />
-                      <strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>
-                    </div>
-
-                    <!-- Disclaimer & Copyright -->
-                    <p style="margin: 14px auto 0 auto; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 10.5px; line-height: 17px; mso-line-height-rule: exactly; color: #a1a1aa; max-width: 480px; border: 0;">
-                      U ontvangt deze e-mail omdat u recent een account heeft aangemaakt bij Asian Spices. &copy; 2026 Asian Spices. Alle rechten voorbehouden.
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+          ${renderEmailSocialFooter({
+            logoUrl: logoSrc,
+            tiktokIconUrl: tiktokIconSrc,
+            instagramIconUrl: instagramIconSrc,
+            facebookIconUrl: facebookIconSrc,
+            youtubeIconUrl: youtubeIconSrc,
+            signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>',
+            subtext: 'U ontvangt deze e-mail omdat u recent een account heeft aangemaakt bij Asian Spices. &copy; 2026 Asian Spices. Alle rechten voorbehouden.',
+          })}
 
         </table>
 
@@ -597,17 +504,37 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
  * Plain-text fallback for email clients that do not render HTML.
  */
 export function generateAccountRegistrationEmailText(data: AccountRegistrationEmailData = {}): string {
-  const lastName = (data.lastName && data.lastName.trim()) || '{{Achternaam}}';
-  const email = (data.email && data.email.trim()) || '{{E-mail}}';
-  const accountType = (data.accountType && data.accountType.trim()) || 'Gastaccount';
+  let firstName = data.firstName?.trim();
+  let lastName = data.lastName?.trim();
+  if (!firstName && !lastName && data.fullName?.trim()) {
+    const parts = data.fullName.trim().split(/\s+/);
+    if (parts.length > 1) {
+      firstName = parts[0];
+      lastName = parts.slice(1).join(' ');
+    } else {
+      firstName = parts[0];
+    }
+  }
+
+  let salutation = 'Beste klant,';
+  if (firstName && lastName) {
+    salutation = `Beste ${firstName} ${lastName},`;
+  } else if (firstName) {
+    salutation = `Beste ${firstName},`;
+  } else if (lastName) {
+    salutation = `Geachte heer/mevrouw ${lastName},`;
+  }
+
+  const email = (data.email && data.email.trim()) || '';
+  const accountType = (data.accountType && data.accountType.trim()) || 'Klantaccount';
   const loginUrl = data.loginUrl || 'https://www.asianspices.online/login';
   const supportEmail = data.supportEmail || 'support@asianspices.online';
-  const phoneNumber = data.phoneNumber || '+31 6 12345678';
+  const phoneNumber = data.phoneNumber || '06 44844844';
 
   return `ASIAN SPICES - BEVESTIGING ACCOUNTREGISTRATIE
 ==================================================
 
-Geachte heer/mevrouw ${lastName},
+${salutation}
 
 Hartelijk dank voor uw registratie bij Asian Spices. Hierbij bevestigen wij dat uw account succesvol is aangemaakt.
 

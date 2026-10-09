@@ -9,6 +9,7 @@ import GlobalDataProvider from "./GlobalDataProvider";
 import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
 import { DeferredBibiChatWidget } from "@/components/chatbot/DeferredBibiChatWidget";
 import { DeferredGuruChatWidget } from "@/components/chatbot/DeferredGuruChatWidget";
+import { DeferredGenieChatWidget } from "@/components/chatbot/DeferredGenieChatWidget";
 import SessionWatcher from "@/components/auth/SessionWatcher";
 
 function isRecipePath(pathname: string | null) {
@@ -22,6 +23,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isHealthPage = pathname?.startsWith("/healthyliving") ?? false;
   const isRecipePage = isRecipePath(pathname);
+  const isPartnerRegistrationPage =
+    pathname?.startsWith("/partner-registration") ?? false;
 
   return (
     <SessionProvider refetchOnWindowFocus={false} refetchInterval={60}>
@@ -31,6 +34,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           {children}
           {isHealthPage ? <DeferredGuruChatWidget /> : null}
           {isRecipePage ? <DeferredBibiChatWidget /> : null}
+          {isPartnerRegistrationPage ? <DeferredGenieChatWidget /> : null}
           <CookieConsentBanner />
         </CartSyncProvider>
       </GlobalDataProvider>

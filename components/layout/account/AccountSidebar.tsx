@@ -34,7 +34,10 @@ export default function AccountSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="bg-white rounded-2xl p-4 shadow-sm border h-fit sticky top-24">
+    <aside
+      className="notranslate bg-white rounded-2xl p-4 shadow-sm border h-fit sticky top-24"
+      translate="no"
+    >
       <nav className="flex flex-col gap-2">
         {navItems.map((item) => {
           const Icon = item.icon;

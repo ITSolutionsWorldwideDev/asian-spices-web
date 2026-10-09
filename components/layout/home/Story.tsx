@@ -3,16 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-const Story = () => {
+const Story = ({ className = "" }: { className?: string }) => {
   return (
-    <div className="container mx-auto overflow-x-hidden px-4 py-12 sm:px-6 lg:px-8">
+    <div
+      className={`container mx-auto overflow-x-hidden px-4 pt-2 pb-10 sm:px-6 sm:pt-4 sm:pb-12 lg:px-8 ${className}`}
+    >
       <section className="grid items-start gap-10 xl:grid-cols-2 xl:gap-12">
-        <div className="space-y-6">
+        {/* Images: mobile pe second (order-2), desktop pe left (xl:order-1) */}
+        <div className="order-2 space-y-6 xl:order-1">
           {/* Full 100% Organic banner — whole image, no empty bg */}
           <div className="relative w-full overflow-hidden rounded-2xl">
             <Image
-              src="/assets/home/our_story/organic-100-banner.png"
-              alt="100% Organic"
+              src="/assets/home/our_story/organic-banner.png"
+              alt="Organic"
               width={510}
               height={306}
               sizes="(max-width: 1280px) 100vw, 50vw"
@@ -45,10 +48,11 @@ const Story = () => {
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-col gap-6 sm:gap-8">
+        {/* Content: mobile pe pehle (order-1), desktop pe right (xl:order-2) */}
+        <div className="order-1 flex min-w-0 flex-col gap-6 sm:gap-8 xl:order-2">
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-              Bringing Authentic Asian Flavors to Every Home
+              Bringing Authentic Asian spices to Every Home
             </h2>
             <p className="text-gray-600">
               Founded in 2026, Asian Spices is a modern online marketplace
@@ -75,68 +79,68 @@ const Story = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 pt-2 sm:grid-cols-2 sm:gap-6">
-            <div className="flex items-center space-x-4">
-              <div className="shrink-0 rounded-lg bg-orange-50 p-3 shadow-sm">
+          <div className="grid grid-cols-2 gap-3 pt-2 sm:gap-6">
+            <div className="flex items-center gap-2.5 sm:gap-4">
+              <div className="shrink-0 rounded-lg bg-orange-50 p-2 sm:p-3 shadow-sm">
                 <Image
                   src={`/assets/home/our_story/fluent_leaf-two-32-filled.png`}
                   alt="Partner farms"
                   height={40}
                   width={40}
-                  className="h-10 w-10 object-contain"
+                  className="h-7 w-7 object-contain sm:h-10 sm:w-10"
                 />
               </div>
               <div className="min-w-0">
-                <p className="text-2xl font-bold text-gray-900">500+</p>
-                <p className="text-sm text-orange-500">Partner Farms</p>
+                <p className="text-lg font-bold text-gray-900 sm:text-2xl">500+</p>
+                <p className="text-xs text-orange-500 sm:text-sm">Partner Farms</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <div className="shrink-0 rounded-lg bg-orange-50 p-3 shadow-sm">
+            <div className="flex items-center gap-2.5 sm:gap-4">
+              <div className="shrink-0 rounded-lg bg-orange-50 p-2 sm:p-3 shadow-sm">
                 <Image
                   src={`/assets/home/our_story/ix_customer-filled.png`}
                   alt="Happy customers"
                   height={40}
                   width={40}
-                  className="h-10 w-10 object-contain"
+                  className="h-7 w-7 object-contain sm:h-10 sm:w-10"
                 />
               </div>
               <div className="min-w-0">
-                <p className="text-2xl font-bold text-gray-900">50+</p>
-                <p className="text-sm text-orange-500">High Quality Brands</p>
+                <p className="text-lg font-bold text-gray-900 sm:text-2xl">50+</p>
+                <p className="text-xs text-orange-500 sm:text-sm">High Quality Brands</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <div className="shrink-0 rounded-lg bg-orange-50 p-3 shadow-sm">
+            <div className="flex items-center gap-2.5 sm:gap-4">
+              <div className="shrink-0 rounded-lg bg-orange-50 p-2 sm:p-3 shadow-sm">
                 <Image
                   src={`/assets/home/our_story/Group.png`}
                   alt="Years experience"
                   height={40}
                   width={40}
-                  className="h-10 w-10 object-contain"
+                  className="h-7 w-7 object-contain sm:h-10 sm:w-10"
                 />
               </div>
               <div className="min-w-0">
-                <p className="text-2xl font-bold text-gray-900">15+</p>
-                <p className="text-sm text-orange-500">Years Experience</p>
+                <p className="text-lg font-bold text-gray-900 sm:text-2xl">150+</p>
+                <p className="text-xs text-orange-500 sm:text-sm">Orders Dilevered</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <div className="shrink-0 rounded-lg bg-orange-50 p-3 shadow-sm">
+            <div className="flex items-center gap-2.5 sm:gap-4">
+              <div className="shrink-0 rounded-lg bg-orange-50 p-2 sm:p-3 shadow-sm">
                 <Image
                   src={`/assets/home/our_story/Vector.png`}
                   alt="Spice varieties"
                   height={40}
                   width={40}
-                  className="h-10 w-10 object-contain"
+                  className="h-7 w-7 object-contain sm:h-10 sm:w-10"
                 />
               </div>
               <div className="min-w-0">
-                <p className="text-2xl font-bold text-gray-900">200+</p>
-                <p className="text-sm text-orange-500">Spice Verities</p>
+                <p className="text-lg font-bold text-gray-900 sm:text-2xl">200+</p>
+                <p className="text-xs text-orange-500 sm:text-sm">Spice Verities</p>
               </div>
             </div>
           </div>
