@@ -82,7 +82,8 @@ export async function GET(
             'title', p.name,
             'category_id', p.category_id,
             'price', oi.price,
-            'quantity', oi.quantity
+            'quantity', oi.quantity,
+            'tax_rate', oi.tax_rate
           )
         ) AS cart_items,
         json_agg(
@@ -305,12 +306,17 @@ export async function GET(
       const qty = Number(item.quantity || 0);
       const unit = Number(item.price || 0);
       const lineTotal = qty * unit;
+      // tax_rate is stored as a fraction (e.g. 0.21); fall back to order-level % for old rows
+      const itemRate = Number(item.tax_rate);
+      const itemVatPct = Number.isFinite(itemRate)
+        ? Math.round(itemRate * 100)
+        : vatPct;
 
       doc.text(String(index + 1), colNo, currentY);
       doc.text(item.title.substring(0, 42), colArticle, currentY);
       doc.text(qty.toString(), colQty, currentY, { align: "right" });
       doc.text(euro(unit), colUnit, currentY, { align: "right" });
-      doc.text(`${vatPct}%`, colVat, currentY, { align: "right" });
+      doc.text(`${itemVatPct}%`, colVat, currentY, { align: "right" });
       doc.text(euro(lineTotal), colIncl, currentY, { align: "right" });
 
       // Horizontal separation borders
@@ -341,7 +347,7 @@ export async function GET(
     doc.text(euro(exclVatAmount), amountX, rowY, { align: "right" });
     rowY += rowGap;
 
-    doc.text(`VAT ${vatPct}%`, labelX, rowY);
+    doc.text("VAT", labelX, rowY);
     doc.text(euro(taxAmount), amountX, rowY, { align: "right" });
     rowY += rowGap;
 

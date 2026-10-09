@@ -35,7 +35,7 @@ interface CartState {
   addToCart: (
     item: Omit<CartItem, "quantity">,
     isLoggedIn: boolean,
-    options?: CartActionOptions,
+    options?: CartActionOptions & { quantity?: number },
   ) => void;
   removeFromCart: (id: string, isLoggedIn: boolean) => void;
 
@@ -62,6 +62,7 @@ export const useCartStore = create<CartState>()(
         const normalizeId = (id: string | number) =>
           id.toString().toLowerCase().trim();
 
+        const addQty = Math.max(1, Number(options?.quantity) || 1);
         const targetId = normalizeId(item.id);
         const existing = get().cart.find((i) => normalizeId(i.id) === targetId);
 
@@ -70,16 +71,19 @@ export const useCartStore = create<CartState>()(
         if (existing) {
           updatedCart = get().cart.map((i) =>
             normalizeId(i.id) === targetId
-              ? { ...i, quantity: i.quantity + 1 }
+              ? { ...i, quantity: i.quantity + addQty }
               : i,
           );
         } else {
-          updatedCart = [...get().cart, { ...item, id: targetId, quantity: 1 }];
+          updatedCart = [
+            ...get().cart,
+            { ...item, id: targetId, quantity: addQty },
+          ];
         }
 
         set({ cart: updatedCart });
 
-        const newQty = existing ? existing.quantity + 1 : 1;
+        const newQty = existing ? existing.quantity + addQty : addQty;
         if (options?.showToast !== false) {
           if (existing) {
             useToastStore.getState().show({
@@ -92,7 +96,10 @@ export const useCartStore = create<CartState>()(
             useToastStore.getState().show({
               variant: "added",
               title: "Added to cart!",
-              subtitle: "Item added successfully",
+              subtitle:
+                addQty > 1
+                  ? `${addQty} items added successfully`
+                  : "Item added successfully",
               anchor: options?.anchor,
             });
           }
@@ -105,7 +112,7 @@ export const useCartStore = create<CartState>()(
 
         // Calculate financials for this line item using your updated core utility
         const { lineItems } = calculateTotals(
-          [{ ...item, quantity: 1 }],
+          [{ ...item, quantity: addQty }],
           0,
           currentGlobalState.taxRules,
         );
@@ -119,7 +126,7 @@ export const useCartStore = create<CartState>()(
             body: JSON.stringify({
               product_id: item.id,
               price: item.base_price,
-              quantity: 1,
+              quantity: addQty,
               exchange_rate: currentCurrencyState.rate || 1.0,
               tax_rate: stampedItem?.tax_rate || 0.0,
               tax_amount: stampedItem?.tax_amount || 0.0,

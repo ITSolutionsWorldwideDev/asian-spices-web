@@ -4,7 +4,8 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { ArrowRight, Heart, ShoppingCart, Tag } from "lucide-react";
+import { ArrowRight, Heart, Tag } from "lucide-react";
+import CartPlusIcon from "@/components/ui/CartPlusIcon";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import Link from "next/link";
@@ -56,14 +57,24 @@ export default function ProductCard({
   const isLoggedIn = !!session?.user;
 
   const { toggleWishlist, isInWishlist } = useWishlistStore();
-  const { cart, addToCart, increaseQty, decreaseQty, setQty } = useCartStore();
+  const { addToCart } = useCartStore();
 
   const [mounted, setMounted] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [qtyByProduct, setQtyByProduct] = useState<Record<string, number>>({});
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const getPickQty = (productId: string) => qtyByProduct[productId] ?? 1;
+
+  const setPickQty = (productId: string, qty: number) => {
+    setQtyByProduct((prev) => ({
+      ...prev,
+      [productId]: Math.max(1, qty),
+    }));
+  };
 
   const visibleProducts =
     disableSlicing || showAll ? products : products.slice(0, 20);
@@ -72,11 +83,7 @@ export default function ProductCard({
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10">
         {visibleProducts.map((product, index) => {
-          const cartItem = cart.find(
-            (item) =>
-              item.id.toString().toLowerCase().trim() ===
-              product.id.toString().toLowerCase().trim(),
-          );
+          const pickQty = getPickQty(product.id);
 
           // 1️⃣ Safe Numeric Extractions & Conversions
           // Match flash sale / ProductDesc: VAT the base first, then apply % / fixed
@@ -281,78 +288,75 @@ export default function ProductCard({
                 </div>
               </div>
 
-              {/* Dynamic Action Buttons Bottom Control Block */}
-              <div className="notranslate mt-4 pt-1" translate="no">
-                {cartItem ? (
-                  <div className="flex items-center justify-between border-2 border-orange-500/30 rounded-xl overflow-hidden h-[44px] sm:h-[46px] bg-orange-50/50 shadow-sm">
-                    <button
-                      type="button"
-                      aria-label={`Decrease quantity of ${product.name}`}
-                      onClick={() => decreaseQty(product.id, isLoggedIn)}
-                      className="w-12 min-w-[44px] h-full flex items-center justify-center text-lg font-bold text-orange-600 hover:bg-orange-100/70 active:bg-orange-200/70 transition select-none cursor-pointer"
-                    >
-                      −
-                    </button>
-                    <div className="flex items-center gap-1">
-                      <span className="text-[11px] font-semibold text-stone-500">Qty:</span>
-                      <input
-                        type="number"
-                        min={1}
-                        aria-label={`Quantity of ${product.name}`}
-                        value={cartItem.quantity}
-                        onChange={(e) => {
-                          const value = Number(e.target.value);
-                          if (isNaN(value) || value < 1) return;
-                          setQty(product.id, value, isLoggedIn);
-                        }}
-                        className="w-8 text-center text-sm font-bold text-stone-900 outline-none bg-transparent"
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      aria-label={`Increase quantity of ${product.name}`}
-                      onClick={(e) =>
-                        increaseQty(product.id, isLoggedIn, {
-                          anchor: anchorFromClick(e),
-                        })
-                      }
-                      className="w-12 min-w-[44px] h-full flex items-center justify-center text-lg font-bold text-orange-600 hover:bg-orange-100/70 active:bg-orange-200/70 transition select-none cursor-pointer"
-                    >
-                      +
-                    </button>
-                  </div>
-                ) : (
+              {/* Qty picker + cart icon — counter resets to 1 after add */}
+              <div
+                className="notranslate mt-4 pt-1 flex items-stretch gap-2"
+                translate="no"
+              >
+                <div className="flex flex-1 items-center overflow-hidden rounded-xl border border-gray-200 bg-white h-[44px] sm:h-[46px]">
                   <button
                     type="button"
-                    aria-label={`Add ${product.name} to cart`}
-                    className="cursor-pointer w-full h-[44px] sm:h-[46px] bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl text-sm font-bold tracking-wide flex items-center justify-center transition shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/35 active:scale-[0.98]"
-                    onClick={(e) => {
-                      if (currentPrice == null) return;
-                      addToCart(
-                        {
-                          id: product.id,
-                          title: product.name,
-                          base_price: Number(currentPrice || 0),
-                          oldPrice: Number(originalPrice || 0),
-                          discount_value: Number(product.discount_value || 0),
-                          discount_type: product.discount_type,
-                          image: product.image || "/images/placeholder.png",
-                          slug: product.slug,
-                          category_slug: product.category_slug,
-                          subcategory_slug: product.subcategory_slug,
-                          category_id: product.category_id,
-                          promo_code: product.promo_code,
-                        },
-                        isLoggedIn,
-                        { anchor: anchorFromClick(e) },
-                      );
-                    }}
-                    disabled={currentPrice == null}
+                    aria-label={`Decrease quantity of ${product.name}`}
+                    onClick={() => setPickQty(product.id, pickQty - 1)}
+                    disabled={pickQty <= 1}
+                    className="h-full w-11 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
                   >
-                    <ShoppingCart className="w-4.5 h-4.5 mr-2 shrink-0" />
-                    <span>Add To Cart</span>
+                    −
                   </button>
-                )}
+                  <input
+                    type="number"
+                    min={1}
+                    aria-label={`Quantity of ${product.name}`}
+                    value={pickQty}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (isNaN(value) || value < 1) return;
+                      setPickQty(product.id, value);
+                    }}
+                    className="h-full min-w-0 flex-1 border-x border-gray-200 bg-white text-center text-sm font-semibold text-stone-900 outline-none"
+                  />
+                  <button
+                    type="button"
+                    aria-label={`Increase quantity of ${product.name}`}
+                    onClick={() => setPickQty(product.id, pickQty + 1)}
+                    className="h-full w-11 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  aria-label={`Add ${pickQty} ${product.name} to cart`}
+                  className="cursor-pointer shrink-0 h-[44px] sm:h-[46px] min-w-[76px] sm:min-w-[82px] px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  onClick={(e) => {
+                    if (currentPrice == null) return;
+                    addToCart(
+                      {
+                        id: product.id,
+                        title: product.name,
+                        base_price: Number(currentPrice || 0),
+                        oldPrice: Number(originalPrice || 0),
+                        discount_value: Number(product.discount_value || 0),
+                        discount_type: product.discount_type,
+                        image: product.image || "/images/placeholder.png",
+                        slug: product.slug,
+                        category_slug: product.category_slug,
+                        subcategory_slug: product.subcategory_slug,
+                        category_id: product.category_id,
+                        promo_code: product.promo_code,
+                      },
+                      isLoggedIn,
+                      {
+                        quantity: pickQty,
+                        anchor: anchorFromClick(e),
+                      },
+                    );
+                    setPickQty(product.id, 1);
+                  }}
+                  disabled={currentPrice == null}
+                >
+                  <CartPlusIcon className="h-7 w-auto sm:h-8" />
+                </button>
               </div>
             </div>
           );

@@ -12,7 +12,9 @@ import { getProductPath } from "@/lib/product-path";
 import { stripHtml } from "@/lib/product-metadata";
 import { resolveTaxRate } from "@/lib/tax";
 import { useGlobalStore } from "@/store/useGlobalStore";
+import { anchorFromClick } from "@/lib/cart-toast-anchor";
 import { Tag } from "lucide-react";
+import CartPlusIcon from "@/components/ui/CartPlusIcon";
 
 import Flash_Sale_Hover_product_Card from "./Flash_Sale_Hover_product_Card";
 
@@ -24,12 +26,22 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [qtyByProduct, setQtyByProduct] = useState<Record<string, number>>({});
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
-  const { cart, addToCart, increaseQty, decreaseQty, setQty } = useCartStore();
+  const { addToCart } = useCartStore();
   const { taxRules, taxRulesLoaded } = useGlobalStore();
+
+  const getPickQty = (productId: string) => qtyByProduct[productId] ?? 1;
+
+  const setPickQty = (productId: string, qty: number) => {
+    setQtyByProduct((prev) => ({
+      ...prev,
+      [productId]: Math.max(1, qty),
+    }));
+  };
 
   useEffect(() => {
     async function loadSaleItems() {
@@ -146,7 +158,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
         style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
       >
         {products.map((item, index) => {
-          const cartItem = cart?.find((c) => c.id === item.id);
+          const pickQty = getPickQty(String(item.id));
           const productHref = getProductPath(item);
 
           // Wait for tax rules so prices don't flash from net → VAT-inclusive
@@ -281,61 +293,74 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                 </div>
               </div>
 
-              <div className="notranslate mt-4 pt-1" translate="no">
-                {cartItem ? (
-                  <div className="flex h-[44px] items-center justify-between overflow-hidden rounded-xl border border-gray-200">
-                    <button
-                      onClick={() => decreaseQty(item.id, isLoggedIn)}
-                      className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
-                    >
-                      −
-                    </button>
-                    <input
-                      type="number"
-                      min={1}
-                      value={cartItem.quantity}
-                      onChange={(e) => {
-                        const value = Number(e.target.value);
-                        if (isNaN(value) || value < 1) return;
-                        setQty(item.id, value, isLoggedIn);
-                      }}
-                      className="w-2/4 bg-transparent text-center text-sm font-semibold outline-none"
-                    />
-                    <button
-                      onClick={() => increaseQty(item.id, isLoggedIn)}
-                      className="h-full w-1/4 cursor-pointer select-none px-4 text-xl font-medium transition hover:bg-gray-50 active:bg-gray-100"
-                    >
-                      +
-                    </button>
-                  </div>
-                ) : (
+              <div
+                className="notranslate mt-4 pt-1 flex items-stretch gap-2"
+                translate="no"
+              >
+                <div className="flex flex-1 items-center overflow-hidden rounded-xl border border-gray-200 bg-white h-[44px]">
                   <button
-                    onClick={() => {
-                      if (realPrice == null || baseWithTax == null) return;
-                      addToCart(
-                        {
-                          id: item.id,
-                          title: item.title,
-                          base_price: realPrice,
-                          oldPrice: baseWithTax,
-                          discount_value: Number(item.discount_value || 0),
-                          discount_type: item.discount_type,
-                          image: item.image,
-                          slug: item.slug,
-                          category_slug: item.category_slug,
-                          subcategory_slug: item.subcategory_slug,
-                          category_id: item.category_id,
-                          promo_code: item.promo_code,
-                        },
-                        isLoggedIn,
-                      );
-                    }}
-                    disabled={realPrice == null}
-                    className="h-[44px] w-full cursor-pointer rounded-xl bg-orange-500 text-sm font-semibold tracking-wide text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                    type="button"
+                    aria-label={`Decrease quantity of ${item.title}`}
+                    onClick={() => setPickQty(String(item.id), pickQty - 1)}
+                    disabled={pickQty <= 1}
+                    className="h-full w-11 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
                   >
-                    Add to Cart
+                    −
                   </button>
-                )}
+                  <input
+                    type="number"
+                    min={1}
+                    aria-label={`Quantity of ${item.title}`}
+                    value={pickQty}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (isNaN(value) || value < 1) return;
+                      setPickQty(String(item.id), value);
+                    }}
+                    className="h-full min-w-0 flex-1 border-x border-gray-200 bg-white text-center text-sm font-semibold text-stone-900 outline-none"
+                  />
+                  <button
+                    type="button"
+                    aria-label={`Increase quantity of ${item.title}`}
+                    onClick={() => setPickQty(String(item.id), pickQty + 1)}
+                    className="h-full w-11 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  aria-label={`Add ${pickQty} ${item.title} to cart`}
+                  className="cursor-pointer shrink-0 h-[44px] min-w-[76px] px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  onClick={(e) => {
+                    if (realPrice == null || baseWithTax == null) return;
+                    addToCart(
+                      {
+                        id: item.id,
+                        title: item.title,
+                        base_price: realPrice,
+                        oldPrice: baseWithTax,
+                        discount_value: Number(item.discount_value || 0),
+                        discount_type: item.discount_type,
+                        image: item.image,
+                        slug: item.slug,
+                        category_slug: item.category_slug,
+                        subcategory_slug: item.subcategory_slug,
+                        category_id: item.category_id,
+                        promo_code: item.promo_code,
+                      },
+                      isLoggedIn,
+                      {
+                        quantity: pickQty,
+                        anchor: anchorFromClick(e),
+                      },
+                    );
+                    setPickQty(String(item.id), 1);
+                  }}
+                  disabled={realPrice == null}
+                >
+                  <CartPlusIcon className="h-7 w-auto" />
+                </button>
               </div>
 
               {hoveredId === item.id && (

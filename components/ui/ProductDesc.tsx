@@ -12,6 +12,7 @@ import {
   ShoppingCart,
   Zap,
 } from "lucide-react";
+import CartPlusIcon from "@/components/ui/CartPlusIcon";
 import { useRouter } from "next/navigation";
 
 import ProductTabs from "../layout/productdescpage/ProductTabs";
@@ -40,17 +41,11 @@ export default function ProductDesc({
   const { symbol, rate } = useCurrencyStore();
   const { taxRules, taxRulesLoaded } = useGlobalStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();
-  const { cart, addToCart, increaseQty, decreaseQty, setQty } = useCartStore();
+  const { addToCart } = useCartStore();
 
   const taxRate = taxRulesLoaded
     ? resolveTaxRate(taxRules, product.category_id)
     : null;
-
-  const cartItem = cart.find(
-    (item) =>
-      item.id.toString().toLowerCase().trim() ===
-      product.id.toString().toLowerCase().trim(),
-  );
 
   const isPriceAvailable =
     product.min_offered_price !== undefined &&
@@ -214,28 +209,29 @@ export default function ProductDesc({
 
   const addConfiguredQuantity = (e: React.MouseEvent<HTMLElement>) => {
     if (!priceReady) return;
-    const anchor = anchorFromClick(e);
     const quantityToAdd = Math.max(1, pendingQty);
-    for (let i = 0; i < quantityToAdd; i += 1) {
-      addToCart(
-        {
-          id: product.id,
-          title: product.name,
-          base_price: Number(currentPrice || 0),
-          oldPrice: Number(originalPrice || 0),
-          discount_value: Number(product.discount_value || 0),
-          discount_type: product.discount_type,
-          image: images[0] || "/images/placeholder.png",
-          slug: product.slug,
-          category_slug: product.category_slug,
-          subcategory_slug: product.subcategory_slug,
-          category_id: product.category_id,
-          promo_code: product.promo_code,
-        },
-        isLoggedIn,
-        { anchor, showToast: i === quantityToAdd - 1 },
-      );
-    }
+    addToCart(
+      {
+        id: product.id,
+        title: product.name,
+        base_price: Number(currentPrice || 0),
+        oldPrice: Number(originalPrice || 0),
+        discount_value: Number(product.discount_value || 0),
+        discount_type: product.discount_type,
+        image: images[0] || "/images/placeholder.png",
+        slug: product.slug,
+        category_slug: product.category_slug,
+        subcategory_slug: product.subcategory_slug,
+        category_id: product.category_id,
+        promo_code: product.promo_code,
+      },
+      isLoggedIn,
+      {
+        quantity: quantityToAdd,
+        anchor: anchorFromClick(e),
+      },
+    );
+    setPendingQty(1);
   };
 
   return (
@@ -409,104 +405,64 @@ export default function ProductDesc({
             </span>
           </div>
 
-          {/* Quantity */}
+          {/* Qty picker + cart icon (+ wishlist) */}
           {isPriceAvailable && (
             <div className="notranslate space-y-2.5 sm:space-y-3" translate="no">
-              <p className="text-base sm:text-lg font-semibold text-gray-900">Quantity</p>
-              {cartItem ? (
-                <div className="inline-flex h-11 sm:h-12 items-center overflow-hidden rounded-xl border border-gray-200 bg-white">
+              <div className="flex flex-col items-start gap-2 sm:gap-2.5">
+                {product.weight ? (
+                  <span className="inline-flex rounded-lg bg-gray-100 px-3.5 py-2 text-xs sm:text-sm font-medium text-gray-700">
+                    {product.weight} per unit
+                  </span>
+                ) : null}
+                <p className="text-base sm:text-lg font-semibold text-gray-900">
+                  Quantity
+                </p>
+              </div>
+              <div className="flex items-stretch gap-2.5 sm:gap-3">
+                <div className="flex flex-1 items-center overflow-hidden rounded-xl border border-gray-200 bg-white h-12 sm:h-14">
                   <button
-                    onClick={() => decreaseQty(product.id, isLoggedIn)}
-                    className="h-full px-4 text-lg font-semibold transition hover:bg-gray-100 cursor-pointer"
-                  >
-                    –
-                  </button>
-                  <input
-                    type="number"
-                    min={1}
-                    value={cartItem.quantity}
-                    onChange={(e) => {
-                      const value = Number(e.target.value);
-                      if (isNaN(value) || value < 1) return;
-                      setQty(product.id, value, isLoggedIn);
-                    }}
-                    className="w-12 text-center text-sm sm:text-base font-semibold outline-none"
-                  />
-                  <button
-                    onClick={(e) =>
-                      increaseQty(product.id, isLoggedIn, {
-                        anchor: anchorFromClick(e),
-                      })
+                    type="button"
+                    aria-label={`Decrease quantity of ${product.name}`}
+                    onClick={() =>
+                      setPendingQty((prev) => Math.max(1, prev - 1))
                     }
-                    className="h-full px-4 text-lg font-semibold transition hover:bg-gray-100 cursor-pointer"
+                    disabled={pendingQty <= 1}
+                    className="h-full w-12 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
                   >
-                    +
-                  </button>
-                </div>
-              ) : (
-                <div className="inline-flex h-11 sm:h-12 items-center overflow-hidden rounded-xl border border-gray-200 bg-white">
-                  <button
-                    onClick={() => setPendingQty((prev) => Math.max(1, prev - 1))}
-                    className="h-full px-4 text-lg font-semibold transition hover:bg-gray-100 cursor-pointer"
-                  >
-                    –
+                    −
                   </button>
                   <input
                     type="number"
                     min={1}
+                    aria-label={`Quantity of ${product.name}`}
                     value={pendingQty}
                     onChange={(e) => {
                       const value = Number(e.target.value);
                       if (isNaN(value) || value < 1) return;
                       setPendingQty(value);
                     }}
-                    className="w-12 text-center text-sm sm:text-base font-semibold outline-none"
+                    className="h-full min-w-0 flex-1 border-x border-gray-200 bg-white text-center text-sm sm:text-base font-semibold text-stone-900 outline-none"
                   />
                   <button
+                    type="button"
+                    aria-label={`Increase quantity of ${product.name}`}
                     onClick={() => setPendingQty((prev) => prev + 1)}
-                    className="h-full px-4 text-lg font-semibold transition hover:bg-gray-100 cursor-pointer"
+                    className="h-full w-12 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
                   >
                     +
                   </button>
                 </div>
-              )}
-
-              {product.weight ? (
-                <div className="flex flex-wrap gap-2.5">
-                  <span className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-700">
-                    {product.weight} per unit
-                  </span>
-                </div>
-              ) : null}
-            </div>
-          )}
-
-          {/* Primary actions */}
-          {isPriceAvailable && (
-            <div className="notranslate space-y-2.5 sm:space-y-3 pt-2" translate="no">
-              <div className="flex items-center gap-2.5 sm:gap-3">
-                {cartItem ? (
-                  <button
-                    onClick={(e) =>
-                      increaseQty(product.id, isLoggedIn, {
-                        anchor: anchorFromClick(e),
-                      })
-                    }
-                    className="h-12 sm:h-14 flex-1 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-sm sm:text-base lg:text-lg shadow-lg shadow-orange-500/25 hover:shadow-orange-500/35 active:scale-[0.99] flex items-center justify-center gap-2 transition cursor-pointer"
-                  >
-                    <ShoppingCart className="h-5 w-5 shrink-0" />
-                    <span>In Cart ({cartItem.quantity}) — Add More</span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={addConfiguredQuantity}
-                    className="h-12 sm:h-14 flex-1 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-sm sm:text-base lg:text-lg shadow-lg shadow-orange-500/25 hover:shadow-orange-500/35 active:scale-[0.99] flex items-center justify-center gap-2 transition cursor-pointer"
-                  >
-                    <ShoppingCart className="h-5 w-5 shrink-0" />
-                    <span>Add to Cart</span>
-                  </button>
-                )}
                 <button
+                  type="button"
+                  aria-label={`Add ${pendingQty} ${product.name} to cart`}
+                  onClick={addConfiguredQuantity}
+                  disabled={!priceReady}
+                  className="cursor-pointer shrink-0 h-12 sm:h-14 min-w-[88px] sm:min-w-[100px] px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <CartPlusIcon className="h-8 w-auto sm:h-9" />
+                </button>
+                <button
+                  type="button"
                   onClick={() =>
                     toggleWishlist(
                       {
@@ -521,7 +477,7 @@ export default function ProductDesc({
                       isLoggedIn,
                     )
                   }
-                  className={`inline-flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl border transition cursor-pointer shadow-sm ${
+                  className={`inline-flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-xl border transition cursor-pointer shadow-sm ${
                     isInWishlist(product.id)
                       ? "border-red-500 bg-red-500 text-white"
                       : "border-gray-200 bg-white text-gray-700 hover:border-red-400 hover:text-red-500"
@@ -533,13 +489,17 @@ export default function ProductDesc({
                   />
                 </button>
               </div>
+            </div>
+          )}
+
+          {/* Buy now */}
+          {isPriceAvailable && (
+            <div className="notranslate space-y-2.5 sm:space-y-3 pt-1" translate="no">
               <button
                 type="button"
                 onClick={(e) => {
                   if (!priceReady) return;
-                  if (!cartItem) {
-                    addConfiguredQuantity(e);
-                  }
+                  addConfiguredQuantity(e);
                   router.push("/checkout");
                 }}
                 className="inline-flex h-12 sm:h-14 w-full items-center justify-center gap-2 rounded-2xl bg-stone-900 text-sm sm:text-base lg:text-lg font-bold text-white transition hover:bg-black shadow-md shadow-black/15 active:scale-[0.99] cursor-pointer ring-1 ring-stone-800/10"

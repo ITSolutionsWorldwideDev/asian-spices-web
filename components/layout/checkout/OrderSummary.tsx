@@ -232,10 +232,6 @@ export default function OrderSummary({
               ? originalPrice - itemPrice
               : 0;
 
-          if (rawSave > 0) {
-            totalOrderSavings += rawSave * itemQuantity;
-          }
-
           let activeBadge = "";
           if (originalPrice && originalPrice > itemPrice) {
             if (
