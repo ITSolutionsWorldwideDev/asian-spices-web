@@ -9,6 +9,10 @@ import {
   generatePartnerVerificationEmailText,
 } from "./utils/mails/partner-verification";
 import {
+  generatePartnerApplicationEmailHtml,
+  generatePartnerApplicationEmailText,
+} from "./utils/mails/partner-application";
+import {
   generateOrderConfirmationEmailHtml,
   generateOrderConfirmationEmailText,
   OrderItem,
@@ -299,19 +303,21 @@ export async function sendOrderConfirmationEmail(orderId: string, customClient?:
 
     const brandingAttachments = getEmailBrandingAttachments();
 
-    // 5️⃣ Dispatch (try "order" profile, fallback to "support" if SMTP rejects)
+    // 5️⃣ Dispatch (try "order" profile, fallback to "support", then fallback to "partners")
+    const orderBcc = [
+      "sales@asianspices.online",
+      "order@asianspices.online",
+      // "cheila.lopes@itsolutionshub2010.com",
+      // "ahmed.mehmood@itsolutionshub2010.com",
+      // "zraja@itsolutionsworldwide.com",
+      // "sdevi@itsolutionsworldwide.com",
+      "ahmad.raza@itsolutionsworldwide.com",
+    ];
+
     try {
       await sendEmail({
         to: recipientEmail,
-        bcc: [
-          "sales@asianspices.online",
-          "order@asianspices.online",
-          // "cheila.lopes@itsolutionshub2010.com",
-          // "ahmed.mehmood@itsolutionshub2010.com",
-          // "zraja@itsolutionsworldwide.com",
-          // "sdevi@itsolutionsworldwide.com",
-          "ahmad.raza@itsolutionsworldwide.com",
-        ],
+        bcc: orderBcc,
         subject: `Bestelbevestiging #${order.order_number} - Asian Spices`,
         html: emailHtml,
         text: emailText,
@@ -320,23 +326,28 @@ export async function sendOrderConfirmationEmail(orderId: string, customClient?:
       });
     } catch (orderProfileError) {
       console.warn("Order confirmation failed via 'order' profile, falling back to 'support' profile:", orderProfileError);
-      await sendEmail({
-        to: recipientEmail,
-        bcc: [
-          "sales@asianspices.online",
-          "order@asianspices.online",
-          // "cheila.lopes@itsolutionshub2010.com",
-          // "ahmed.mehmood@itsolutionshub2010.com",
-          // "zraja@itsolutionsworldwide.com",
-          // "sdevi@itsolutionsworldwide.com",
-          "ahmad.raza@itsolutionsworldwide.com",
-        ],
-        subject: `Bestelbevestiging #${order.order_number} - Asian Spices`,
-        html: emailHtml,
-        text: emailText,
-        attachments: brandingAttachments,
-        fromAccount: "support",
-      });
+      try {
+        await sendEmail({
+          to: recipientEmail,
+          bcc: orderBcc,
+          subject: `Bestelbevestiging #${order.order_number} - Asian Spices`,
+          html: emailHtml,
+          text: emailText,
+          attachments: brandingAttachments,
+          fromAccount: "support",
+        });
+      } catch (supportProfileError) {
+        console.warn("Order confirmation failed via 'support' profile, falling back to 'partners' profile:", supportProfileError);
+        await sendEmail({
+          to: recipientEmail,
+          bcc: orderBcc,
+          subject: `Bestelbevestiging #${order.order_number} - Asian Spices`,
+          html: emailHtml,
+          text: emailText,
+          attachments: brandingAttachments,
+          fromAccount: "partners",
+        });
+      }
     }
 
     // Record confirmation email dispatched event for idempotency
@@ -554,19 +565,21 @@ export async function sendPartnerRegistrationEmail({
   applicationId,
 }: PartnerOnboardingEmailOptions) {
   try {
-    const safeFirstName = (firstName || "").trim() || "partner";
+    const safeFirstName = (firstName || "").trim() || "Partner";
     const brandingAttachments = getEmailBrandingAttachments();
 
-    const emailHtml = generatePartnerVerificationEmailHtml({
-      fullName: companyName || safeFirstName,
-      lastName: safeFirstName,
+    const emailHtml = generatePartnerApplicationEmailHtml({
+      companyName,
+      firstName: safeFirstName,
       email,
+      applicationId,
     });
 
-    const emailText = generatePartnerVerificationEmailText({
-      fullName: companyName || safeFirstName,
-      lastName: safeFirstName,
+    const emailText = generatePartnerApplicationEmailText({
+      companyName,
+      firstName: safeFirstName,
       email,
+      applicationId,
     });
 
     await sendEmail({
@@ -576,7 +589,7 @@ export async function sendPartnerRegistrationEmail({
         // "zraja@itsolutionsworldwide.com",
         // "sdevi@itsolutionsworldwide.com",
       ],
-      subject: `Welkom als goedgekeurde partner - Asian Spices`,
+      subject: `Uw partneraanvraag is ontvangen (${applicationId}) - Asian Spices`,
       html: emailHtml,
       text: emailText,
       attachments: brandingAttachments,
@@ -1247,7 +1260,7 @@ export async function sendAccountWelcomeEmail({
     return { success: true };
   } catch (error) {
     console.warn(
-      "[Account Welcome Email failed via 'support' profile, trying 'default']:",
+      "[Account Welcome Email failed via 'support' profile, trying 'partners']:",
       error,
     );
     try {
@@ -1257,15 +1270,31 @@ export async function sendAccountWelcomeEmail({
         html: emailHtml,
         text: emailText,
         attachments: brandingAttachments,
-        fromAccount: "default",
+        fromAccount: "partners",
       });
       return { success: true };
-    } catch (fallbackError) {
-      console.error(
-        `[Account Welcome Email Fail] Target recipient: ${email}`,
-        fallbackError,
+    } catch (partnersError) {
+      console.warn(
+        "[Account Welcome Email failed via 'partners' profile, trying 'default']:",
+        partnersError,
       );
-      return { success: false, error: fallbackError };
+      try {
+        await sendEmail({
+          to: email,
+          subject: "Bevestiging registratie account – Asian Spices",
+          html: emailHtml,
+          text: emailText,
+          attachments: brandingAttachments,
+          fromAccount: "default",
+        });
+        return { success: true };
+      } catch (fallbackError) {
+        console.error(
+          `[Account Welcome Email Fail] Target recipient: ${email}`,
+          fallbackError,
+        );
+        return { success: false, error: fallbackError };
+      }
     }
   }
 }

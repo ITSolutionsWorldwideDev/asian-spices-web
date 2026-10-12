@@ -6,3 +6,4 @@ export * from './order-cancel';
 export * from './return-processed';
 export * from './partner-verification';
 export * from './partner-credentials';
+export * from './partner-application';

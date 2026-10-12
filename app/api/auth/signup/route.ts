@@ -52,15 +52,31 @@ export async function POST(req: NextRequest) {
     const lastName = nameParts.slice(1).join(" ") || "";
 
     // Ensure store_customers record is linked/created with the customer's name
-    await runQuery(
-      `INSERT INTO store_customers (user_id, first_name, last_name, email)
-       VALUES ($1, $2, $3, $4)
-       ON CONFLICT (email) DO UPDATE SET 
-         user_id = EXCLUDED.user_id, 
-         first_name = COALESCE(NULLIF(EXCLUDED.first_name, ''), store_customers.first_name), 
-         last_name = COALESCE(NULLIF(EXCLUDED.last_name, ''), store_customers.last_name)`,
-      [userId, firstName, lastName, email],
-    ).catch(() => {});
+    try {
+      const existingCustomer = await runQuery(
+        `SELECT id FROM store_customers WHERE LOWER(email) = LOWER($1) LIMIT 1`,
+        [email],
+      );
+
+      if ((existingCustomer?.rowCount ?? 0) > 0) {
+        await runQuery(
+          `UPDATE store_customers 
+           SET user_id = $1,
+               first_name = COALESCE(NULLIF($2, ''), first_name),
+               last_name = COALESCE(NULLIF($3, ''), last_name)
+           WHERE LOWER(email) = LOWER($4)`,
+          [userId, firstName, lastName, email],
+        );
+      } else {
+        await runQuery(
+          `INSERT INTO store_customers (user_id, first_name, last_name, email)
+           VALUES ($1, $2, $3, $4)`,
+          [userId, firstName, lastName, email],
+        );
+      }
+    } catch (custErr) {
+      console.warn("[store_customers link warning]:", custErr);
+    }
 
     // Send welcome email (awaited for Vercel/serverless runtime stability)
     try {
