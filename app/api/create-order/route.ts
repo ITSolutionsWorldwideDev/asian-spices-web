@@ -526,6 +526,20 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Send order confirmation email directly upon order placement
+    try {
+      const orderEmailResult = await sendOrderConfirmationEmail(order_id);
+      if (!orderEmailResult?.success && !orderEmailResult?.alreadySent) {
+        console.error(
+          "[Order Confirmation Email Failed]",
+          email,
+          orderEmailResult?.error,
+        );
+      }
+    } catch (orderEmailErr) {
+      console.error("[Order Confirmation Email Exception]:", orderEmailErr);
+    }
+
     return NextResponse.json({
       success: true,
       orderId: order_id,

@@ -86,6 +86,16 @@ export async function findOrCreateGoogleUser(params: {
   const user = created.rows[0];
   if (!user) return null;
 
+  try {
+    const { sendAccountWelcomeEmail } = await import("@/core/email-templates");
+    await sendAccountWelcomeEmail({
+      email: user.email,
+      name: params.name || undefined,
+    });
+  } catch (emailErr) {
+    console.error("[Google Signup Welcome Email Error]:", emailErr);
+  }
+
   return {
     id: user.id,
     email: user.email,

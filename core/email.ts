@@ -104,9 +104,6 @@ function getTransporter(profileKey: ProfileKey) {
   let transporter = transporterCache.get(profileKey);
   if (!transporter) {
     transporter = nodemailer.createTransport({
-      pool: true,
-      maxConnections: 3,
-      maxMessages: 100,
       host: profile.host,
       port: profile.port,
       secure: profile.secure,
@@ -141,14 +138,21 @@ export async function sendEmail({
   bcc,
   attachments,
 }: EmailOptions) {
-  const profileKey: ProfileKey = SMTP_PROFILES[fromAccount]
+  let profileKey: ProfileKey = SMTP_PROFILES[fromAccount]
     ? fromAccount
     : "default";
 
-  const { transporter, fromAddress } = getTransporter(profileKey);
+  // If the requested profile lacks a password on this environment (e.g. Vercel dev preview),
+  // fall back immediately to 'partners' which is configured and verified working.
+  const profile = SMTP_PROFILES[profileKey];
+  if ((!profile?.auth?.pass || profile.auth.pass.trim() === "") && SMTP_PROFILES.partners?.auth?.pass) {
+    console.warn(
+      `[Email Warning] Profile [${profileKey}] has no password configured. Falling back to [partners].`,
+    );
+    profileKey = "partners";
+  }
 
-  // const defaultCC = ["admin@asianspices.online", "backup@asianspices.online"];
-  // const finalCC = cc ? (Array.isArray(cc) ? [...cc, ...defaultCC] : [cc, ...defaultCC]) : defaultCC;
+  const { transporter, fromAddress } = getTransporter(profileKey);
 
   const isTest = cleanVal(process.env.IS_TEST_EMAIL) === "true";
   const finalSubject = isTest && !subject.trim().toUpperCase().startsWith("[TEST]")
@@ -164,10 +168,6 @@ export async function sendEmail({
     html,
     text,
     replyTo: replyTo || fromAddress,
-    // Keep headers plain for 1:1 transactional mail. Bulk/list headers such as
-    // "Precedence: bulk", "Auto-Submitted" and "List-Unsubscribe" are mass-mail
-    // markers that the mail server's spam filter scores against transactional
-    // sends, which led to "550 classified as SPAM" on order confirmations.
     headers: {
       "X-Mailer": "Asian Spices Transactional Mailer",
     },
@@ -179,13 +179,34 @@ export async function sendEmail({
 
   try {
     const info = await transporter.sendMail(mailOptions);
-
-    if (process.env.NODE_ENV !== "production") {
-      console.log(`[Email Sent] ID: ${info.messageId} via [${profileKey}] | Subject: ${finalSubject}`);
-    }
+    console.log(
+      `[Email Sent] ID: ${info.messageId} via [${profileKey}] | To: ${to} | Subject: ${finalSubject}`,
+    );
     return { success: true, messageId: info.messageId };
   } catch (error: any) {
     console.error(`[Email Failure] Profile [${profileKey}]:`, error);
+
+    // Automatic fallback to 'partners' if another profile fails
+    if (profileKey !== "partners" && SMTP_PROFILES.partners?.auth?.pass) {
+      console.warn(`[Email Fallback] Retrying send via [partners] profile...`);
+      try {
+        const { transporter: fallbackTransporter, fromAddress: fallbackFrom } =
+          getTransporter("partners");
+        const fallbackOptions = {
+          ...mailOptions,
+          from: fallbackFrom,
+          replyTo: mailOptions.replyTo || fromAddress,
+        };
+        const fallbackInfo = await fallbackTransporter.sendMail(fallbackOptions);
+        console.log(
+          `[Email Sent via Fallback partners] ID: ${fallbackInfo.messageId} | To: ${to}`,
+        );
+        return { success: true, messageId: fallbackInfo.messageId };
+      } catch (fallbackError) {
+        console.error(`[Email Fallback Failure via partners]:`, fallbackError);
+      }
+    }
+
     throw error;
   }
 }
