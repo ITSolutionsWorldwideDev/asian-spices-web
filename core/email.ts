@@ -164,13 +164,12 @@ export async function sendEmail({
     html,
     text,
     replyTo: replyTo || fromAddress,
+    // Keep headers plain for 1:1 transactional mail. Bulk/list headers such as
+    // "Precedence: bulk", "Auto-Submitted" and "List-Unsubscribe" are mass-mail
+    // markers that the mail server's spam filter scores against transactional
+    // sends, which led to "550 classified as SPAM" on order confirmations.
     headers: {
       "X-Mailer": "Asian Spices Transactional Mailer",
-      "Precedence": "bulk",
-      "X-Auto-Response-Suppress": "OOF, AutoReply",
-      "Auto-Submitted": "auto-generated",
-      "List-Unsubscribe": "<mailto:support@asianspices.online?subject=Unsubscribe>",
-      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
     },
   };
 
