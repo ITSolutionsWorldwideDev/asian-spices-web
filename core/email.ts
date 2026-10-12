@@ -155,7 +155,7 @@ export async function sendEmail({
     ? `[TEST] ${subject}`
     : subject;
 
-  const mailOptions = {
+  const mailOptions: any = {
     from: fromAddress,
     to,
     cc,
@@ -163,9 +163,16 @@ export async function sendEmail({
     subject: finalSubject,
     html,
     text,
-    replyTo,
-    attachments,
+    replyTo: replyTo || fromAddress,
+    headers: {
+      "X-Mailer": "Asian Spices MailEngine",
+      "X-Priority": "3", // Normal priority
+    },
   };
+
+  if (attachments && attachments.length > 0) {
+    mailOptions.attachments = attachments;
+  }
 
   try {
     const info = await transporter.sendMail(mailOptions);
@@ -174,8 +181,8 @@ export async function sendEmail({
       console.log(`[Email Sent] ID: ${info.messageId} via [${profileKey}] | Subject: ${finalSubject}`);
     }
     return { success: true, messageId: info.messageId };
-  } catch (error) {
+  } catch (error: any) {
     console.error(`[Email Failure] Profile [${profileKey}]:`, error);
-    throw new Error(`Email dispatch failed via SMTP profile: ${profileKey}`);
+    throw error;
   }
 }
