@@ -216,27 +216,31 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
               key={item.id}
               className="relative w-[280px] sm:w-[300px] flex-shrink-0 snap-start rounded-2xl border border-gray-50 bg-white p-4 text-black shadow-lg flex flex-col justify-between sm:p-5"
             >
-              <div className="flex flex-col flex-1">
-                <div className="relative">
+              <div className="relative flex flex-col flex-1">
+                {/* Badges Container */}
+                <div className="absolute left-2.5 top-2.5 z-20 pointer-events-none sm:left-4 sm:top-4">
                   {item.off && (
-                    <span className="absolute left-2.5 top-2.5 z-20 rounded-full bg-red-500 px-2 py-0.5 text-[11px] font-bold text-white shadow-sm flex items-center sm:left-4 sm:top-4 sm:px-2.5 sm:py-1 sm:text-xs">
+                    <span className="rounded-full bg-red-500 px-2 py-0.5 text-[11px] font-bold text-white shadow-sm flex items-center sm:px-2.5 sm:py-1 sm:text-xs">
                       <Tag className="mr-1 w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
                       <span>{item.off}</span>
                     </span>
                   )}
+                </div>
 
-                  <Link
-                    href={productHref}
-                    className="relative block h-48 w-full cursor-pointer overflow-hidden rounded-xl bg-gray-50 sm:h-52"
-                    onMouseEnter={() => {
-                      if (
-                        typeof window !== "undefined" &&
-                        window.matchMedia("(hover: hover)").matches
-                      ) {
-                        setHoveredId(item.id);
-                      }
-                    }}
-                  >
+                {/* Clickable Upper Area Link */}
+                <Link
+                  href={productHref}
+                  className="flex flex-col flex-1 block group cursor-pointer"
+                  onMouseEnter={() => {
+                    if (
+                      typeof window !== "undefined" &&
+                      window.matchMedia("(hover: hover)").matches
+                    ) {
+                      setHoveredId(item.id);
+                    }
+                  }}
+                >
+                  <div className="relative block h-48 w-full overflow-hidden rounded-xl bg-gray-50 sm:h-52">
                     <Image
                       src={
                         item.image.startsWith("http")
@@ -246,51 +250,51 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                       alt={item.weight ? `${item.title} ${item.weight}` : item.title}
                       fill
                       sizes="(max-width: 640px) 280px, 300px"
-                      className="object-contain p-2 transition-transform duration-300 hover:scale-105"
+                      className="object-contain p-2 transition-transform duration-300 group-hover:scale-105"
                       priority={index < 2}
                     />
-                  </Link>
-                </div>
+                  </div>
 
-                <Link href={productHref} className="block mt-3 sm:mt-4">
-                  <h3 className="text-sm font-semibold text-gray-800 hover:text-orange-600 line-clamp-2 min-h-[2.5rem] sm:text-base sm:min-h-[2.75rem]">
-                    {item.title}
-                    {item.weight &&
-                    !item.title
-                      .toLowerCase()
-                      .includes(String(item.weight).toLowerCase().trim())
-                      ? ` ${item.weight}`
-                      : ""}
-                  </h3>
-                </Link>
+                  <div className="mt-3 sm:mt-4">
+                    <h3 className="text-sm font-semibold text-gray-800 group-hover:text-orange-600 line-clamp-2 min-h-[2.5rem] sm:text-base sm:min-h-[2.75rem] transition-colors">
+                      {item.title}
+                      {item.weight &&
+                      !item.title
+                        .toLowerCase()
+                        .includes(String(item.weight).toLowerCase().trim())
+                        ? ` ${item.weight}`
+                        : ""}
+                    </h3>
+                  </div>
 
-                <div className="mt-2 flex items-baseline gap-2 min-h-[1.75rem]">
-                  {realPrice == null || baseWithTax == null ? (
-                    <span
-                      className="inline-block h-6 w-28 animate-pulse rounded bg-orange-100"
-                      aria-hidden
-                    />
-                  ) : (
-                    <>
-                      <span className="text-lg font-bold text-orange-500 sm:text-xl">
-                        €{realPrice.toFixed(2)}
-                      </span>
-                      {baseWithTax > realPrice && (
-                        <span className="text-xs sm:text-sm text-gray-400 line-through font-medium">
-                          €{baseWithTax.toFixed(2)}
+                  <div className="mt-2 flex items-baseline gap-2 min-h-[1.75rem]">
+                    {realPrice == null || baseWithTax == null ? (
+                      <span
+                        className="inline-block h-6 w-28 animate-pulse rounded bg-orange-100"
+                        aria-hidden
+                      />
+                    ) : (
+                      <>
+                        <span className="text-lg font-bold text-orange-500 sm:text-xl">
+                          €{realPrice.toFixed(2)}
                         </span>
-                      )}
-                    </>
-                  )}
-                </div>
+                        {baseWithTax > realPrice && (
+                          <span className="text-xs sm:text-sm text-gray-400 line-through font-medium">
+                            €{baseWithTax.toFixed(2)}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </div>
 
-                <div className="min-h-[1.375rem] mt-1 flex items-center">
-                  {realPrice != null && greenDbSale > 0 ? (
-                    <p className="text-green-600 text-xs font-semibold flex items-center bg-green-50/70 py-0.5 px-2 rounded-md w-fit">
-                      You save €{greenDbSale.toFixed(2)}
-                    </p>
-                  ) : null}
-                </div>
+                  <div className="min-h-[1.375rem] mt-1 flex items-center">
+                    {realPrice != null && greenDbSale > 0 ? (
+                      <p className="text-green-600 text-xs font-semibold flex items-center bg-green-50/70 py-0.5 px-2 rounded-md w-fit">
+                        You save €{greenDbSale.toFixed(2)}
+                      </p>
+                    ) : null}
+                  </div>
+                </Link>
               </div>
 
               <div

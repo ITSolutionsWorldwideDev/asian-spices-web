@@ -196,7 +196,9 @@ export default function ProductCard({
                       ? `Remove ${product.name} from wishlist`
                       : `Add ${product.name} to wishlist`
                   }
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     toggleWishlist(
                       {
                         id: product.id,
@@ -208,8 +210,8 @@ export default function ProductCard({
                         subcategory_slug: product.subcategory_slug,
                       },
                       isLoggedIn,
-                    )
-                  }
+                    );
+                  }}
                   translate="no"
                   className="notranslate absolute top-2.5 right-2.5 sm:top-4 sm:right-4 bg-white rounded-full p-2 min-h-[38px] min-w-[38px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center shadow transition hover:scale-110 active:scale-95 z-20 cursor-pointer"
                 >
@@ -222,70 +224,73 @@ export default function ProductCard({
                   />
                 </button>
 
-                {/* Product Image Cover Container */}
-                <div className="h-60 sm:h-70 w-full overflow-hidden rounded-xl relative bg-gray-50">
-                  <Image
-                    src={
-                      product.image ||
-                      "/assets/home/premium_collection/8a94a27bd306859ae9b600c037a4132590040eeb.jpg"
-                    }
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    className="object-contain p-2"
-                    priority={index < 4}
-                  />
-                </div>
-
-                {/* Routing Anchors */}
+                {/* Clickable Card Link for Entire Upper Area */}
                 <Link
                   href={getProductPath(product, "spices")}
-                  className="block mt-3 sm:mt-4"
+                  className="flex flex-col flex-1 block group cursor-pointer"
                 >
-                  <h3 className="font-semibold text-gray-800 text-sm sm:text-base line-clamp-2 min-h-[2.5rem] sm:min-h-[2.75rem]">
-                    {product.name}
-                    {product.weight ? ` ${product.weight}` : ""}
-                  </h3>
-                  <p className="text-xs text-gray-600 mt-0.5 line-clamp-2 min-h-[32px]">
-                    {product.description
-                      ? product.description.replace(/<[^>]*>/g, "").trim() || "No description available."
-                      : "No description available."}
-                  </p>
-                </Link>
-
-                {/* Price Presentation Segment */}
-                <div className="flex items-baseline gap-2 mt-2 min-h-[1.75rem]">
-                  {currentPrice == null ? (
-                    <span
-                      className="inline-block h-6 w-16 animate-pulse rounded bg-orange-100"
-                      aria-hidden
+                  {/* Product Image Cover Container */}
+                  <div className="h-60 sm:h-70 w-full overflow-hidden rounded-xl relative bg-gray-50">
+                    <Image
+                      src={
+                        product.image ||
+                        "/assets/home/premium_collection/8a94a27bd306859ae9b600c037a4132590040eeb.jpg"
+                      }
+                      alt={product.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      className="object-contain p-2 transition-transform duration-300 group-hover:scale-105"
+                      priority={index < 4}
                     />
-                  ) : (
-                    <>
-                      <span className="text-orange-500 font-bold text-lg sm:text-xl">
-                        {symbol}
-                        {(currentPrice * rate).toFixed(2)}
-                      </span>
+                  </div>
 
-                      {originalPrice && originalPrice > currentPrice && (
-                        <span className="text-gray-400 line-through text-xs sm:text-sm font-medium">
-                          {symbol}
-                          {(originalPrice * rate).toFixed(2)}
-                        </span>
-                      )}
-                    </>
-                  )}
-                </div>
-
-                {/* 3️⃣ "You Save" Calculated Tracker Info Label */}
-                <div className="min-h-[1.375rem] mt-1 flex items-center">
-                  {calculatedSavings > 0 ? (
-                    <p className="text-green-600 text-xs font-semibold flex items-center bg-green-50/70 py-0.5 px-2 rounded-md w-fit">
-                      You save {symbol}
-                      {(calculatedSavings * rate).toFixed(2)}
+                  {/* Title & Description */}
+                  <div className="mt-3 sm:mt-4">
+                    <h3 className="font-semibold text-gray-800 text-sm sm:text-base group-hover:text-orange-600 line-clamp-2 min-h-[2.5rem] sm:min-h-[2.75rem] transition-colors">
+                      {product.name}
+                      {product.weight ? ` ${product.weight}` : ""}
+                    </h3>
+                    <p className="text-xs text-gray-600 mt-0.5 line-clamp-2 min-h-[32px]">
+                      {product.description
+                        ? product.description.replace(/<[^>]*>/g, "").trim() || "No description available."
+                        : "No description available."}
                     </p>
-                  ) : null}
-                </div>
+                  </div>
+
+                  {/* Price Presentation Segment */}
+                  <div className="flex items-baseline gap-2 mt-2 min-h-[1.75rem]">
+                    {currentPrice == null ? (
+                      <span
+                        className="inline-block h-6 w-16 animate-pulse rounded bg-orange-100"
+                        aria-hidden
+                      />
+                    ) : (
+                      <>
+                        <span className="text-orange-500 font-bold text-lg sm:text-xl">
+                          {symbol}
+                          {(currentPrice * rate).toFixed(2)}
+                        </span>
+
+                        {originalPrice && originalPrice > currentPrice && (
+                          <span className="text-gray-400 line-through text-xs sm:text-sm font-medium">
+                            {symbol}
+                            {(originalPrice * rate).toFixed(2)}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </div>
+
+                  {/* 3️⃣ "You Save" Calculated Tracker Info Label */}
+                  <div className="min-h-[1.375rem] mt-1 flex items-center">
+                    {calculatedSavings > 0 ? (
+                      <p className="text-green-600 text-xs font-semibold flex items-center bg-green-50/70 py-0.5 px-2 rounded-md w-fit">
+                        You save {symbol}
+                        {(calculatedSavings * rate).toFixed(2)}
+                      </p>
+                    ) : null}
+                  </div>
+                </Link>
               </div>
 
               {/* Qty picker + cart icon — counter resets to 1 after add */}
