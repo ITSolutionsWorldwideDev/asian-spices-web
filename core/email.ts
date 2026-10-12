@@ -165,8 +165,12 @@ export async function sendEmail({
     text,
     replyTo: replyTo || fromAddress,
     headers: {
-      "X-Mailer": "Asian Spices MailEngine",
-      "X-Priority": "3", // Normal priority
+      "X-Mailer": "Asian Spices Transactional Mailer",
+      "Precedence": "bulk",
+      "X-Auto-Response-Suppress": "OOF, AutoReply",
+      "Auto-Submitted": "auto-generated",
+      "List-Unsubscribe": "<mailto:support@asianspices.online?subject=Unsubscribe>",
+      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
     },
   };
 

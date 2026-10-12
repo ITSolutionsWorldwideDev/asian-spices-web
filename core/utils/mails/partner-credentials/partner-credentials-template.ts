@@ -79,11 +79,7 @@ export function generatePartnerCredentialsEmailHtml(data: PartnerCredentialsEmai
     }
   </style>
   <![endif]-->
-  <!--[if !mso]><!-->
-  <style type="text/css">
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
-  </style>
-  <!--<![endif]-->
+  <!-- Web fonts intentionally omitted: @import in email triggers spam filters -->
   <style type="text/css">
     body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
     table { border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; }

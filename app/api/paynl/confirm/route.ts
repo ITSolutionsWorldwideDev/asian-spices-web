@@ -68,13 +68,22 @@ export async function POST(req: NextRequest) {
             `Executing decentralized routing for Order ID: ${orderId}`,
           );
           await assignNextStore(client, orderId);
+        } else {
+          // Check if confirmation email was already sent
+          const emailEventCheck = await client.query(
+            `SELECT id FROM order_events WHERE order_id = $1 AND event_type = 'confirmation_email_sent' LIMIT 1`,
+            [orderId],
+          );
+          if (emailEventCheck.rowCount === 0) {
+            shouldSendEmail = true;
+          }
         }
 
         await client.query("COMMIT");
 
         if (shouldSendEmail) {
           try {
-            await sendOrderConfirmationEmail(orderId, client);
+            await sendOrderConfirmationEmail(orderId);
           } catch (emailErr) {
             console.error("[Email Trigger Error PayNL Workflow]:", emailErr);
           }

@@ -83,22 +83,19 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
       sku: '{{SKU}}',
       quantity: '{{Aantal}}',
       price: '{{Prijs}}',
-      imageUrl: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=100&h=100&fit=crop&q=80',
     },
   ];
 
   const itemsHtml = items.map((item, index) => {
     const isLast = index === items.length - 1;
     const borderStyle = isLast ? '' : 'border-bottom: 1px solid #f4f4f5;';
-    const itemImg = item.imageUrl || 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=100&h=100&fit=crop&q=80';
+    const itemImg = item.imageUrl || null;
     return `
       <tr>
         <td style="padding: 14px 16px; ${borderStyle} vertical-align: middle;">
           <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
-              <td width="48" valign="middle" style="padding-right: 12px;">
-                <img src="${itemImg}" alt="${item.name}" width="46" height="46" style="display: block; width: 46px; height: 46px; border-radius: 8px; object-fit: cover; border: 1px solid #e4e4e7;" />
-              </td>
+              ${itemImg ? `<td width="48" valign="middle" style="padding-right: 12px;"><img src="${itemImg}" alt="${item.name}" width="46" height="46" style="display: block; width: 46px; height: 46px; border-radius: 8px; object-fit: cover; border: 1px solid #e4e4e7;" /></td>` : ''}
               <td valign="middle">
                 <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13.5px; font-weight: 700; color: #18181b; line-height: 18px;">
                   ${item.name}
@@ -149,11 +146,7 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
     }
   </style>
   <![endif]-->
-  <!--[if !mso]><!-->
-  <style type="text/css">
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
-  </style>
-  <!--<![endif]-->
+  <!-- Web fonts intentionally omitted: @import in email triggers spam filters -->
   <style type="text/css">
     body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
     table { border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; }

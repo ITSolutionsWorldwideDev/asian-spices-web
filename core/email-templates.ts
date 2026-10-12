@@ -304,15 +304,16 @@ export async function sendOrderConfirmationEmail(orderId: string, customClient?:
     const brandingAttachments = getEmailBrandingAttachments();
 
     // 5️⃣ Dispatch (try "order" profile, fallback to "support", then fallback to "partners")
-    const orderBcc = [
-      "sales@asianspices.online",
-      "order@asianspices.online",
-      // "cheila.lopes@itsolutionshub2010.com",
-      // "ahmed.mehmood@itsolutionshub2010.com",
-      // "zraja@itsolutionsworldwide.com",
-      // "sdevi@itsolutionsworldwide.com",
-      "ahmad.raza@itsolutionsworldwide.com",
-    ];
+    // const orderBcc = [
+    //   "sales@asianspices.online",
+    //   "order@asianspices.online",
+    //   // "cheila.lopes@itsolutionshub2010.com",
+    //   // "ahmed.mehmood@itsolutionshub2010.com",
+    //   // "zraja@itsolutionsworldwide.com",
+    //   // "sdevi@itsolutionsworldwide.com",
+    //   "ahmad.raza@itsolutionsworldwide.com",
+    // ];
+    const orderBcc: string[] = []; // BCC empty: prevents 550 SPAM rejections from mass-BCC internal aliases
 
     try {
       await sendEmail({
