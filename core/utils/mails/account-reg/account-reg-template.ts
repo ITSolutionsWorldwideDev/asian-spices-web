@@ -31,7 +31,7 @@ export interface AccountRegistrationEmailData {
 
 /**
  * Generate Account Registration Confirmation HTML Email.
- * Compatible with Microsoft Outlook (Word engine), Gmail, Apple Mail, and mobile clients.
+ * NOTE: hidden preheader div intentionally removed (spam filters flag it).
  */
 export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEmailData = {}): string {
   let firstName = data.firstName?.trim();
@@ -95,13 +95,12 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
     }
   </style>
   <![endif]-->
-  <!-- Web fonts intentionally omitted: @import in email triggers spam filters -->
   <style type="text/css">
     body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
     table { border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; }
     td, tr { border: 0; }
     img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
-    
+
     body {
       margin: 0;
       padding: 0;
@@ -142,10 +141,6 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
   </style>
 </head>
 <body bgcolor="#f1f2f5" style="margin: 0; padding: 0; background-color: #f1f2f5; -webkit-font-smoothing: antialiased; word-break: break-word;">
-  <!-- Preheader text (hidden preview) -->
-  <div style="display: none; font-size: 1px; color: #f1f2f5; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
-    Hartelijk dank voor uw registratie bij Asian Spices. Uw account is succesvol aangemaakt.
-  </div>
 
   <!-- Full-width Canvas -->
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#f1f2f5" style="background-color: #f1f2f5; width: 100%; margin: 0; padding: 24px 0 32px 0;">
@@ -156,10 +151,10 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
           <tr>
             <td width="620" align="center" valign="top">
         <![endif]-->
-        
+
         <!-- Main Card Container -->
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center" style="max-width: 620px; width: 100%; background-color: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;" class="email-container">
-          
+
           <!-- 1. Header: Brand Logo & Right Label -->
           <tr>
             <td style="padding: 18px 34px 16px 34px; border: 0; border: none; mso-border-alt: none;" class="mobile-padding">
@@ -199,7 +194,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                     <h1 style="margin: 0 0 8px 0; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 26px; line-height: 32px; font-weight: 800; color: #ffffff; letter-spacing: -0.3px;">
                       Bevestiging Accountregistratie
                     </h1>
-                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; line-height: 18px; color: rgba(255, 255, 255, 0.9); font-weight: 500;">
+                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; line-height: 18px; color: #ffe8d6; font-weight: 500;">
                       Onderwerp: Bevestiging registratie account &ndash; Asian Spices
                     </div>
                   </td>
@@ -297,7 +292,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                       U kunt te allen tijde inloggen via onze website om uw instellingen en bestelstatus te beheren.
                     </p>
 
-                    <!-- Big Orange CTA Button (Bulletproof table button for Outlook & Web) -->
+                    <!-- CTA Button -->
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                       <tr>
                         <td align="center" valign="middle" bgcolor="#ea580c" style="background-color: #ea580c; border-radius: 26px; padding: 13px 34px; mso-padding-alt: 13px 34px; box-shadow: 0 3px 10px rgba(234, 88, 12, 0.3);">
@@ -344,7 +339,6 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 14px; border-collapse: collapse;">
                       <tr>
                         <td valign="top" width="28" style="padding-top: 1px;">
-                          <!-- Number Badge 1 -->
                           <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="22" height="22" bgcolor="#ea580c" style="background-color: #ea580c; border-radius: 50%; border-collapse: separate;">
                             <tr>
                               <td align="center" valign="middle" style="color: #ffffff; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 800; line-height: 22px; text-align: center;">
@@ -358,7 +352,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                             Upload uw recept direct via onze website:
                           </div>
                           <div style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; line-height: 18px; color: #52525b;">
-                            Log in op uw account en ga naar de pagina [Kookkunsten Delen / Recept Uploaden]. Voeg uw foto&apos;s, kookvideo of favoriete recept toe.
+                            Log in op uw account en ga naar de pagina Kookkunsten Delen. Voeg uw foto&apos;s, kookvideo of favoriete recept toe.
                           </div>
                         </td>
                       </tr>
@@ -368,7 +362,6 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 14px; border-collapse: collapse;">
                       <tr>
                         <td valign="top" width="28" style="padding-top: 1px;">
-                          <!-- Number Badge 2 -->
                           <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="22" height="22" bgcolor="#ea580c" style="background-color: #ea580c; border-radius: 50%; border-collapse: separate;">
                             <tr>
                               <td align="center" valign="middle" style="color: #ffffff; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 800; line-height: 22px; text-align: center;">
@@ -392,7 +385,6 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
                       <tr>
                         <td valign="top" width="28" style="padding-top: 1px;">
-                          <!-- Number Badge 3 -->
                           <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="22" height="22" bgcolor="#ea580c" style="background-color: #ea580c; border-radius: 50%; border-collapse: separate;">
                             <tr>
                               <td align="center" valign="middle" style="color: #ffffff; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 800; line-height: 22px; text-align: center;">
@@ -434,7 +426,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                       Heeft u vragen over ons assortiment of wenst u ondersteuning bij uw bestelling? Neem gerust contact op met onze klantenservice via <a href="mailto:${supportEmail}" style="color: #ea580c; text-decoration: underline;">${supportEmail}</a> of telefonisch via <a href="tel:${phoneClean}" style="color: #ea580c; text-decoration: underline;">${phoneNumber}</a>.
                     </p>
 
-                    <!-- Contact Pill Badges (side-by-side or stacked on mobile) -->
+                    <!-- Contact Pill Badges -->
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                       <tr>
                         <!-- Email Pill -->
@@ -471,16 +463,16 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
             </td>
           </tr>
 
-          <!-- 6. Shared Social Footer: Outlook & Gmail Bulletproof -->
+          <!-- 6. Shared Social Footer -->
           ${renderEmailSocialFooter({
-            logoUrl: logoSrc,
-            tiktokIconUrl: tiktokIconSrc,
-            instagramIconUrl: instagramIconSrc,
-            facebookIconUrl: facebookIconSrc,
-            youtubeIconUrl: youtubeIconSrc,
-            signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>',
-            subtext: 'U ontvangt deze e-mail omdat u recent een account heeft aangemaakt bij Asian Spices. &copy; 2026 Asian Spices. Alle rechten voorbehouden.',
-          })}
+    logoUrl: logoSrc,
+    tiktokIconUrl: tiktokIconSrc,
+    instagramIconUrl: instagramIconSrc,
+    facebookIconUrl: facebookIconSrc,
+    youtubeIconUrl: youtubeIconSrc,
+    signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>',
+    subtext: 'U ontvangt deze e-mail omdat u recent een account heeft aangemaakt bij Asian Spices. &copy; 2026 Asian Spices. Alle rechten voorbehouden.',
+  })}
 
         </table>
 
@@ -553,7 +545,7 @@ Bent u trots op uw culinaire creaties? Sluit aan bij onze kookcommunity en inspi
 
 Zo werkt het:
 1. Upload uw recept direct via onze website:
-   Log in op uw account en ga naar [Kookkunsten Delen / Recept Uploaden].
+   Log in op uw account en ga naar de pagina Kookkunsten Delen.
 2. Deel via sociale media:
    Post uw creatie met hashtag #AsianSpicesKitchen en tag ons account.
 3. Spaar punten en win cadeaus:

@@ -1,16 +1,9 @@
 import {
   DEFAULT_LOGO_SRC,
-  DEFAULT_CHECK_SRC,
   DEFAULT_TIKTOK_SRC,
   DEFAULT_INSTAGRAM_SRC,
   DEFAULT_FACEBOOK_SRC,
   DEFAULT_YOUTUBE_SRC,
-  ASIAN_SPICES_LOGO_BASE64,
-  CHECK_CIRCLE_ICON_BASE64,
-  TIKTOK_ICON_BASE64,
-  INSTAGRAM_ICON_BASE64,
-  FACEBOOK_ICON_BASE64,
-  YOUTUBE_ICON_BASE64,
   escapeHtml,
 } from '../shared';
 
@@ -54,9 +47,7 @@ export interface OrderConfirmationEmailData {
 
 /**
  * Generate Order Confirmation HTML Email.
- * Matches exact design: Header with order #, hero with progress timeline, order overview table,
- * delivery/address cards, "Hoe nu verder" steps, Community box, FAQ accordion preview,
- * customer support banner, and bulletproof Outlook/Gmail footer.
+ * NOTE: hidden preheader div intentionally removed (spam filters flag it).
  */
 export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailData = {}): string {
   const orderNumber = (data.orderNumber && data.orderNumber.trim()) || '{{BESTELNUMMER}}';
@@ -67,7 +58,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
   const deliveryAddress = (data.deliveryAddress && data.deliveryAddress.trim()) || '{{Bezorgadres}}';
   const postalCode = (data.postalCode && data.postalCode.trim()) || '{{Postcode}}';
   const city = (data.city && data.city.trim()) || '{{Plaats}}';
-  
+
   const subtotal = data.subtotal !== undefined ? `${data.subtotal}` : '{{Subtotaal}}';
   const shippingCost = data.shippingCost !== undefined ? (data.shippingCost === 0 || data.shippingCost === '0' || data.shippingCost === 'Gratis' ? 'Gratis' : `€ ${data.shippingCost}`) : 'Gratis';
   const rewardPoints = data.rewardPoints !== undefined ? `${data.rewardPoints}` : '{{Aantal_Punten}}';
@@ -82,7 +73,6 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
   const loginUrl = data.loginUrl || 'https://www.asianspices.online/login';
 
   const logoSrc = data.logoUrl || DEFAULT_LOGO_SRC;
-  const checkCircleSrc = data.checkCircleUrl || DEFAULT_CHECK_SRC;
   const tiktokIconSrc = data.tiktokIconUrl || DEFAULT_TIKTOK_SRC;
   const instagramIconSrc = data.instagramIconUrl || DEFAULT_INSTAGRAM_SRC;
   const facebookIconSrc = data.facebookIconUrl || DEFAULT_FACEBOOK_SRC;
@@ -164,13 +154,12 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
     }
   </style>
   <![endif]-->
-  <!-- Web fonts intentionally omitted: @import in email triggers spam filters -->
   <style type="text/css">
     body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
     table { border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; }
     td, tr { border: 0; }
     img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
-    
+
     body {
       margin: 0;
       padding: 0;
@@ -213,10 +202,6 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
   </style>
 </head>
 <body bgcolor="#f1f2f5" style="margin: 0; padding: 0; background-color: #f1f2f5; -webkit-font-smoothing: antialiased; word-break: break-word;">
-  <!-- Preheader text -->
-  <div style="display: none; font-size: 1px; color: #f1f2f5; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
-    Bedankt voor uw bestelling #${orderNumber}. We gaan direct aan de slag om uw specerijen met zorg in te pakken.
-  </div>
 
   <!-- Full-width Canvas -->
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#f1f2f5" style="background-color: #f1f2f5; width: 100%; margin: 0; padding: 24px 0 32px 0;">
@@ -227,10 +212,10 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
           <tr>
             <td width="620" align="center" valign="top">
         <![endif]-->
-        
+
         <!-- Main Card Container -->
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center" style="max-width: 620px; width: 100%; background-color: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;" class="email-container">
-          
+
           <!-- 1. Top Bar: Brand Logo & Order Number -->
           <tr>
             <td style="padding: 22px 34px 18px 34px; border: 0; border: none; mso-border-alt: none;" class="mobile-padding">
@@ -252,10 +237,10 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
             </td>
           </tr>
 
-          <!-- 2. Hero Section: Warm Cream Background with Check Badge, Title & Progress Tracker -->
+          <!-- 2. Hero Section -->
           <tr>
             <td bgcolor="#fffdfa" style="background-color: #fffdfa; padding: 34px 30px 36px 30px; text-align: center; border-top: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7;" class="mobile-padding">
-              
+
               <!-- Check Badge (Dark Green Circle) -->
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 14px auto; border-collapse: separate;">
                 <tr>
@@ -283,7 +268,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
               <!-- Progress Tracker (Besteld - Verzonden - Opgeleverd) -->
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width: 360px; margin: 0 auto; border-collapse: collapse;">
                 <tr>
-                  <!-- Step 1: Besteld (Active Green) -->
+                  <!-- Step 1: Besteld -->
                   <td width="33%" align="center" valign="top">
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                       <tr>
@@ -301,7 +286,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                     </div>
                   </td>
 
-                  <!-- Step 2: Verzonden (Active Green) -->
+                  <!-- Step 2: Verzonden -->
                   <td width="34%" align="center" valign="top">
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                       <tr>
@@ -321,7 +306,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                     </div>
                   </td>
 
-                  <!-- Step 3: Opgeleverd (Pending Grey) -->
+                  <!-- Step 3: Opgeleverd -->
                   <td width="33%" align="center" valign="top">
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                       <tr>
@@ -352,7 +337,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                 <tr>
                   <td>
                     <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 14px; font-weight: 800; color: #ea580c; margin-bottom: 6px;">
-                      🎉 Uw Asian Spices-account is automatisch aangemaakt!
+                      Uw Asian Spices-account is automatisch aangemaakt!
                     </div>
                     <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; color: #4b5563; line-height: 1.5; margin-bottom: 12px;">
                       Er is automatisch een account voor u aangemaakt zodat u uw bestelling 24/7 kunt volgen en in de toekomst sneller kunt bestellen.
@@ -387,7 +372,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
           <!-- 3. Order Overview (Uw Aankoop) -->
           <tr>
             <td style="padding: 28px 30px 18px 30px;" class="mobile-padding">
-              
+
               <!-- Section Header -->
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 14px;">
                 <tr>
@@ -536,7 +521,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
             </td>
           </tr>
 
-          <!-- 5. "Hoe nu verder?" Steps & Big Orange Button -->
+          <!-- 5. "Hoe nu verder?" Steps & Button -->
           <tr>
             <td style="padding: 0 30px 24px 30px;" class="mobile-padding">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border-radius: 16px; border: 1px solid #edf0f3; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
@@ -560,7 +545,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                           </table>
                         </td>
                         <td valign="top" style="padding-left: 10px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12.5px; line-height: 19px; color: #52525b;">
-                          <strong style="color: #18181b;">Verzending:</strong> Zodra uw bestelling ons magazijn verlaat, ontvangt u een e-mail met een Track & Trace-code om uw pakket te volgen.
+                          <strong style="color: #18181b;">Verzending:</strong> Zodra uw bestelling ons magazijn verlaat, ontvangt u een e-mail met een Track &amp; Trace-code om uw pakket te volgen.
                         </td>
                       </tr>
                     </table>
@@ -618,7 +603,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
             </td>
           </tr>
 
-          <!-- 6. Community: Asian Spices Kitchen (Deel uw kookcreaties) -->
+          <!-- 6. Community: Asian Spices Kitchen -->
           <tr>
             <td style="padding: 0 30px 24px 30px;" class="mobile-padding">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#f1f5f3" style="background-color: #f1f5f3; border-radius: 16px; border: 1px solid #e0eae4; padding: 24px;">
@@ -680,7 +665,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
             </td>
           </tr>
 
-          <!-- 7. FAQ Preview: Goed om te weten -->
+          <!-- 7. FAQ Preview -->
           <tr>
             <td style="padding: 0 30px 24px 30px;" class="mobile-padding">
               <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.6px; color: #ea580c; text-transform: uppercase; margin-bottom: 4px;">
@@ -705,7 +690,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
             </td>
           </tr>
 
-          <!-- 8. Support Banner: "Onze klantenservice helpt u graag" -->
+          <!-- 8. Support Banner -->
           <tr>
             <td style="padding: 0 30px 30px 30px;" class="mobile-padding">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#fff9f0" style="background-color: #fff9f0; border-left: 4px solid #ea580c; border-radius: 0 12px 12px 0; border-top: 1px solid #fef3c7; border-right: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7; padding: 22px;">
@@ -758,7 +743,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
             </td>
           </tr>
 
-          <!-- 9. Shared Bulletproof Social Footer -->
+          <!-- 9. Social Footer -->
           <tr>
             <td style="padding: 0 26px 30px 26px; border: 0; border: none; mso-border-alt: none;">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none; text-align: center;">
@@ -773,7 +758,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                       Volg ons voor dagelijkse inspiratie
                     </div>
 
-                    <!-- Social Icons (Outlook & Gmail bulletproof links) -->
+                    <!-- Social Icons -->
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 22px auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                       <tr>
                         <!-- TikTok -->
