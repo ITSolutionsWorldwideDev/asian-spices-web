@@ -79,20 +79,23 @@ export async function POST(req: NextRequest) {
     }
 
     // Send welcome email (awaited for Vercel/serverless runtime stability)
+    let emailResult: any = null;
     try {
-      await sendAccountWelcomeEmail({
+      emailResult = await sendAccountWelcomeEmail({
         email,
         name: name || undefined,
         firstName: firstName || undefined,
         lastName: lastName || undefined,
       });
-    } catch (emailErr) {
+    } catch (emailErr: any) {
       console.error("[Signup Welcome Email Error]:", emailErr);
+      emailResult = { success: false, error: emailErr?.message };
     }
 
     return NextResponse.json({
       success: true,
       user: result.rows[0],
+      emailResult,
     });
   } catch (err) {
     console.error("SIGNUP ERROR:", err);

@@ -1249,7 +1249,7 @@ export async function sendAccountWelcomeEmail({
   const brandingAttachments = getEmailBrandingAttachments();
 
   try {
-    await sendEmail({
+    const res = await sendEmail({
       to: email,
       subject: "Bevestiging registratie account - Asian Spices",
       html: emailHtml,
@@ -1258,14 +1258,15 @@ export async function sendAccountWelcomeEmail({
       fromAccount: "order",
     });
 
-    return { success: true };
-  } catch (error) {
+    console.log(`[Account Welcome Email Sent] Profile [order] to ${email}:`, res);
+    return { success: true, profile: "order", messageId: (res as any)?.messageId };
+  } catch (error: any) {
     console.warn(
       "[Account Welcome Email failed via 'order' profile, trying 'partners']:",
-      error,
+      error?.message,
     );
     try {
-      await sendEmail({
+      const res = await sendEmail({
         to: email,
         subject: "Bevestiging registratie account - Asian Spices",
         html: emailHtml,
@@ -1273,14 +1274,15 @@ export async function sendAccountWelcomeEmail({
         attachments: brandingAttachments,
         fromAccount: "partners",
       });
-      return { success: true };
-    } catch (partnersError) {
+      console.log(`[Account Welcome Email Sent] Profile [partners] to ${email}:`, res);
+      return { success: true, profile: "partners", messageId: (res as any)?.messageId };
+    } catch (partnersError: any) {
       console.warn(
         "[Account Welcome Email failed via 'partners' profile, trying 'support']:",
-        partnersError,
+        partnersError?.message,
       );
       try {
-        await sendEmail({
+        const res = await sendEmail({
           to: email,
           subject: "Bevestiging registratie account - Asian Spices",
           html: emailHtml,
@@ -1288,13 +1290,14 @@ export async function sendAccountWelcomeEmail({
           attachments: brandingAttachments,
           fromAccount: "support",
         });
-        return { success: true };
-      } catch (fallbackError) {
+        console.log(`[Account Welcome Email Sent] Profile [support] to ${email}:`, res);
+        return { success: true, profile: "support", messageId: (res as any)?.messageId };
+      } catch (fallbackError: any) {
         console.error(
-          `[Account Welcome Email Fail] Target recipient: ${email}`,
-          fallbackError,
+          `[Account Welcome Email Fail] Target recipient: ${email}:`,
+          fallbackError?.message || fallbackError,
         );
-        return { success: false, error: fallbackError };
+        return { success: false, error: fallbackError?.message || String(fallbackError) };
       }
     }
   }
