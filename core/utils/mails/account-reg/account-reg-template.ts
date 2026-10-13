@@ -9,7 +9,6 @@ import {
   DEFAULT_INSTAGRAM_SRC,
   DEFAULT_FACEBOOK_SRC,
   DEFAULT_YOUTUBE_SRC,
-  renderEmailSocialFooter,
   escapeHtml,
 } from '../shared';
 
@@ -459,16 +458,39 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
             </td>
           </tr>
 
-          <!-- 6. Shared Social Footer -->
-          ${renderEmailSocialFooter({
-    logoUrl: logoSrc,
-    tiktokIconUrl: tiktokIconSrc,
-    instagramIconUrl: instagramIconSrc,
-    facebookIconUrl: facebookIconSrc,
-    youtubeIconUrl: youtubeIconSrc,
-    signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>',
-    subtext: 'U ontvangt deze e-mail omdat u recent een account heeft aangemaakt bij Asian Spices. &copy; 2026 Asian Spices. Alle rechten voorbehouden.',
-  })}
+          <!-- 6. Footer (Matches Order Confirmation) -->
+          <tr>
+            <td style="padding: 0 26px 30px 26px; border: 0; border: none; mso-border-alt: none;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none; text-align: center;">
+                <tr>
+                  <td style="background-color: #f8f9fa; border-radius: 16px; border: 1px solid #edf0f3; mso-border-alt: solid #edf0f3 1pt; padding: 28px 24px 26px 24px; text-align: center;">
+                    <!-- Brand Logo -->
+                    <div style="text-align: center; margin-bottom: 10px; border: 0;">
+                      <img src="${logoSrc}" alt="Asian Spices" width="68" height="68" style="display: block; border: 0; margin: 0 auto; width: 68px; height: 68px; max-width: 68px; outline: none;" />
+                    </div>
+
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11.5px; color: #71717a; margin-top: 10px; margin-bottom: 16px; border: 0;">
+                      Volg ons voor dagelijkse inspiratie
+                    </div>
+
+                    <!-- Divider -->
+                    <div style="border-top: 1px solid #e5e7eb; width: 85%; margin: 0 auto 18px auto;"></div>
+
+                    <!-- Sign-off -->
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; line-height: 20px; color: #52525b;">
+                      Met vriendelijke groet,<br />
+                      <strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>
+                    </div>
+
+                    <!-- Disclaimer -->
+                    <p style="margin: 14px auto 0 auto; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10.5px; line-height: 17px; color: #a1a1aa; max-width: 480px;">
+                      U ontvangt deze e-mail omdat u recent een account heeft aangemaakt bij Asian Spices. &copy; 2026 Asian Spices. Alle rechten voorbehouden.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
         </table>
 

@@ -1251,23 +1251,23 @@ export async function sendAccountWelcomeEmail({
   try {
     await sendEmail({
       to: email,
-      subject: "Bevestiging registratie account – Asian Spices",
+      subject: "Bevestiging registratie account - Asian Spices",
       html: emailHtml,
       text: emailText,
       attachments: brandingAttachments,
-      fromAccount: "support",
+      fromAccount: "order",
     });
 
     return { success: true };
   } catch (error) {
     console.warn(
-      "[Account Welcome Email failed via 'support' profile, trying 'partners']:",
+      "[Account Welcome Email failed via 'order' profile, trying 'partners']:",
       error,
     );
     try {
       await sendEmail({
         to: email,
-        subject: "Bevestiging registratie account – Asian Spices",
+        subject: "Bevestiging registratie account - Asian Spices",
         html: emailHtml,
         text: emailText,
         attachments: brandingAttachments,
@@ -1276,17 +1276,17 @@ export async function sendAccountWelcomeEmail({
       return { success: true };
     } catch (partnersError) {
       console.warn(
-        "[Account Welcome Email failed via 'partners' profile, trying 'default']:",
+        "[Account Welcome Email failed via 'partners' profile, trying 'support']:",
         partnersError,
       );
       try {
         await sendEmail({
           to: email,
-          subject: "Bevestiging registratie account – Asian Spices",
+          subject: "Bevestiging registratie account - Asian Spices",
           html: emailHtml,
           text: emailText,
           attachments: brandingAttachments,
-          fromAccount: "default",
+          fromAccount: "support",
         });
         return { success: true };
       } catch (fallbackError) {
