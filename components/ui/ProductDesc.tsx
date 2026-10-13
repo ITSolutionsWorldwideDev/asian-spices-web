@@ -418,8 +418,8 @@ export default function ProductDesc({
                   Quantity
                 </p>
               </div>
-              <div className="flex items-stretch gap-2.5 sm:gap-3">
-                <div className="flex flex-1 items-center overflow-hidden rounded-xl border border-gray-200 bg-white h-12 sm:h-14">
+              <div className="flex min-w-0 flex-wrap items-stretch gap-2.5 sm:gap-3">
+                <div className="inline-flex h-12 sm:h-14 shrink-0 items-stretch overflow-hidden rounded-xl border border-gray-200 bg-white">
                   <button
                     type="button"
                     aria-label={`Decrease quantity of ${product.name}`}
@@ -427,7 +427,7 @@ export default function ProductDesc({
                       setPendingQty((prev) => Math.max(1, prev - 1))
                     }
                     disabled={pendingQty <= 1}
-                    className="h-full w-12 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
+                    className="h-full w-11 sm:w-12 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
                   >
                     −
                   </button>
@@ -441,13 +441,13 @@ export default function ProductDesc({
                       if (isNaN(value) || value < 1) return;
                       setPendingQty(value);
                     }}
-                    className="h-full min-w-0 flex-1 border-x border-gray-200 bg-white text-center text-sm sm:text-base font-semibold text-stone-900 outline-none"
+                    className="h-full w-12 sm:w-14 shrink-0 border-x border-gray-200 bg-white text-center text-sm sm:text-base font-semibold text-stone-900 outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                   <button
                     type="button"
                     aria-label={`Increase quantity of ${product.name}`}
                     onClick={() => setPendingQty((prev) => prev + 1)}
-                    className="h-full w-12 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
+                    className="h-full w-11 sm:w-12 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
                   >
                     +
                   </button>
@@ -457,9 +457,9 @@ export default function ProductDesc({
                   aria-label={`Add ${pendingQty} ${product.name} to cart`}
                   onClick={addConfiguredQuantity}
                   disabled={!priceReady}
-                  className="cursor-pointer shrink-0 h-12 sm:h-14 min-w-[88px] sm:min-w-[100px] px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="cursor-pointer shrink-0 h-12 w-12 sm:h-14 sm:w-auto sm:min-w-[100px] sm:px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <CartPlusIcon className="h-8 w-auto sm:h-9" />
+                  <CartPlusIcon className="h-7 w-auto sm:h-9 shrink-0" />
                 </button>
                 <button
                   type="button"
