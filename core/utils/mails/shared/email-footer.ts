@@ -54,7 +54,7 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 12px;">
-                            <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                            <!-- <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;"> -->
                               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                   <td valign="middle" style="padding-right: 7px; line-height: 1;">
@@ -65,7 +65,7 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                                   </td>
                                 </tr>
                               </table>
-                            </a>
+                            <!-- </a> -->
                           </td>
                         </tr>
                       </table>
@@ -76,7 +76,7 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 12px;">
-                            <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                            <!-- <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;"> -->
                               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                   <td valign="middle" style="padding-right: 7px; line-height: 1;">
@@ -87,7 +87,7 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                                   </td>
                                 </tr>
                               </table>
-                            </a>
+                            <!-- </a> -->
                           </td>
                         </tr>
                       </table>
@@ -99,7 +99,7 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 12px;">
-                            <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                            <!-- <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;"> -->
                               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                   <td valign="middle" style="padding-right: 7px; line-height: 1;">
@@ -110,7 +110,7 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                                   </td>
                                 </tr>
                               </table>
-                            </a>
+                            <!-- </a> -->
                           </td>
                         </tr>
                       </table>
@@ -121,7 +121,7 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 12px;">
-                            <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                            <!-- <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;"> -->
                               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                   <td valign="middle" style="padding-right: 7px; line-height: 1;">
@@ -132,7 +132,7 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                                   </td>
                                 </tr>
                               </table>
-                            </a>
+                            <!-- </a> -->
                           </td>
                         </tr>
                       </table>

@@ -292,7 +292,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                       U kunt te allen tijde inloggen via onze website om uw instellingen en bestelstatus te beheren.
                     </p>
 
-                    <!-- CTA Button -->
+                    <!-- CTA Button commented out
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                       <tr>
                         <td align="center" valign="middle" bgcolor="#ea580c" style="background-color: #ea580c; border-radius: 26px; padding: 13px 34px; mso-padding-alt: 13px 34px; box-shadow: 0 3px 10px rgba(234, 88, 12, 0.3);">
@@ -302,6 +302,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                         </td>
                       </tr>
                     </table>
+                    -->
 
                   </td>
                 </tr>
@@ -423,39 +424,34 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
 
                     <!-- Description -->
                     <p style="margin: 0 0 16px 0; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12.5px; line-height: 20px; color: #52525b;">
-                      Heeft u vragen over ons assortiment of wenst u ondersteuning bij uw bestelling? Neem gerust contact op met onze klantenservice via <!-- <a href="mailto:${supportEmail}" style="color: #ea580c; text-decoration: underline;">${supportEmail}</a> --> ${supportEmail} of telefonisch via <!-- <a href="tel:${phoneClean}" style="color: #ea580c; text-decoration: underline;">${phoneNumber}</a> --> ${phoneNumber}.
+                      Heeft u vragen over ons assortiment of wenst u ondersteuning bij uw bestelling? Neem gerust contact op met onze klantenservice.<!-- via ${supportEmail} of telefonisch via ${phoneNumber} -->
                     </p>
 
-                    <!-- Contact Pill Badges -->
+                    <!-- Contact Pill Badges commented out
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                       <tr>
-                        <!-- Email Pill -->
                         <td valign="middle" style="padding-right: 6px; padding-bottom: 6px;" class="mobile-contact-col">
                           <table role="presentation" border="0" cellpadding="0" cellspacing="0" bgcolor="#f4f4f5" style="background-color: #f4f4f5; border-radius: 20px; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt;">
                             <tr>
                               <td style="padding: 8px 16px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #27272a;">
-                                <!-- <a href="mailto:${supportEmail}" style="color: #27272a; text-decoration: none;"> -->
-                                  &#9993; ${supportEmail}
-                                <!-- </a> -->
+                                &#9993; ${supportEmail}
                               </td>
                             </tr>
                           </table>
                         </td>
 
-                        <!-- Phone Pill -->
                         <td valign="middle" style="padding-left: 6px; padding-bottom: 6px;" class="mobile-contact-col">
                           <table role="presentation" border="0" cellpadding="0" cellspacing="0" bgcolor="#f4f4f5" style="background-color: #f4f4f5; border-radius: 20px; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt;">
                             <tr>
                               <td style="padding: 8px 16px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #27272a;">
-                                <!-- <a href="tel:${phoneClean}" style="color: #27272a; text-decoration: none;"> -->
-                                  &#9742; ${phoneNumber}
-                                <!-- </a> -->
+                                &#9742; ${phoneNumber}
                               </td>
                             </tr>
                           </table>
                         </td>
                       </tr>
                     </table>
+                    -->
 
                   </td>
                 </tr>

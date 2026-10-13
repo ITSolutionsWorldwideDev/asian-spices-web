@@ -354,11 +354,13 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                         </td>
                       </tr>
                     </table>
+                    <!--
                     <div style="text-align: center;">
                       <a href="${loginUrl}" style="display: inline-block; background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 10px 24px; border-radius: 9999px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; font-weight: 700;">
                         Inloggen op uw account &rarr;
                       </a>
                     </div>
+                    -->
                     <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; color: #6b7280; text-align: center; margin-top: 10px;">
                       Voor uw veiligheid raden wij aan uw wachtwoord na het inloggen te wijzigen.
                     </div>
@@ -586,7 +588,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                       </tr>
                     </table>
 
-                    <!-- Button -->
+                    <!-- Button commented out
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                       <tr>
                         <td align="center" valign="middle" bgcolor="#ea580c" style="background-color: #ea580c; border-radius: 26px; padding: 13px 36px; mso-padding-alt: 13px 36px; box-shadow: 0 3px 10px rgba(234, 88, 12, 0.3);">
@@ -596,6 +598,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                         </td>
                       </tr>
                     </table>
+                    -->
 
                   </td>
                 </tr>
@@ -651,13 +654,14 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                       </tr>
                     </table>
 
-                    <!-- Social text links -->
+                    <!-- Social text links commented out
                     <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700;">
                       <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="color: #0284c7; text-decoration: underline; margin-right: 14px;">Instagram</a>
                       <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="color: #0284c7; text-decoration: underline; margin-right: 14px;">TikTok</a>
                       <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="color: #0284c7; text-decoration: underline; margin-right: 14px;">Facebook</a>
                       <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="color: #0284c7; text-decoration: underline;">YouTube</a>
                     </div>
+                    -->
 
                   </td>
                 </tr>
@@ -727,14 +731,14 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
 
                         <!-- Right Contact Info -->
                         <td valign="top" align="right" class="mobile-stack-col" style="text-align: right;">
+                          <!-- Contact info commented out
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12.5px; font-weight: 800; color: #166534; margin-bottom: 4px;">
-                            <!-- <a href="mailto:${supportEmail}" style="color: #166534; text-decoration: none;">${supportEmail}</a> -->
                             ${supportEmail}
                           </div>
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12.5px; font-weight: 800; color: #166534; margin-bottom: 6px;">
-                            <!-- <a href="tel:${phoneNumber.replace(/[^0-9+]/g, '')}" style="color: #166534; text-decoration: none;">${phoneNumber}</a> -->
                             ${phoneNumber}
                           </div>
+                          -->
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; color: #71717a;">
                             ${openingHours}
                           </div>
@@ -762,7 +766,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                       Volg ons voor dagelijkse inspiratie
                     </div>
 
-                    <!-- Social Icons -->
+                    <!-- Social Icons commented out
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 22px auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                       <tr>
                         <!-- TikTok -->
@@ -862,6 +866,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                         </td>
                       </tr>
                     </table>
+                    -->
 
                     <!-- Divider -->
                     <div style="border-top: 1px solid #e5e7eb; width: 85%; margin: 0 auto 18px auto;"></div>
@@ -935,7 +940,7 @@ UW ACCOUNT IS AANGEMAAKT
 Er is automatisch een account voor u aangemaakt:
 E-mail: ${data.email || ''}
 Tijdelijk wachtwoord: ${guestPassword}
-Inloggen: ${loginUrl}
+<!-- Inloggen: ${loginUrl} -->
 ` : ''}
 
 Status: Besteld -> Verzonden -> Opgeleverd
