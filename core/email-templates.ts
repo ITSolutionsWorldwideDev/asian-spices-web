@@ -297,11 +297,57 @@ export async function sendOrderConfirmationEmail(orderId: string, customClient?:
       supportEmail: "klantenservice@asianspices.nl",
     };
 
-    // 4️⃣ Generate HTML and Plaintext via the modern Dutch template
-    const emailHtml = generateOrderConfirmationEmailHtml(emailData);
-    const emailText = generateOrderConfirmationEmailText(emailData);
+    // 4️⃣ Generate HTML and Plaintext
+    // =========================================================================
+    // ORIGINAL FULL HTML TEMPLATE (PRESERVED - DO NOT DELETE)
+    // =========================================================================
+    // const emailHtml = generateOrderConfirmationEmailHtml(emailData);
+    // const emailText = generateOrderConfirmationEmailText(emailData);
+    // const brandingAttachments = getEmailBrandingAttachments();
 
-    const brandingAttachments = getEmailBrandingAttachments();
+    // =========================================================================
+    // TEMPORARY SIMPLE TEST BODY (No images, pure text/HTML for delivery testing)
+    // =========================================================================
+    const emailHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Order Confirmation #${escapeEmailText(order.order_number)}</title>
+      </head>
+      <body style="font-family: Arial, sans-serif; font-size: 15px; line-height: 1.6; color: #333333; margin: 0; padding: 24px;">
+        <h2 style="color: #111827; margin-top: 0;">Bedankt voor uw bestelling! / Your Order is Confirmed</h2>
+        <p>Beste ${escapeEmailText(firstName || "klant")},</p>
+        <p>Uw bestelling <strong>#${escapeEmailText(order.order_number)}</strong> is succesvol ontvangen.</p>
+        
+        <table style="border-collapse: collapse; margin: 16px 0; width: 100%; max-width: 500px;">
+          <tr>
+            <td style="padding: 6px 0; color: #666;"><strong>Bestelnummer:</strong></td>
+            <td style="padding: 6px 0;">#${escapeEmailText(order.order_number)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 0; color: #666;"><strong>Totaalbedrag:</strong></td>
+            <td style="padding: 6px 0;">&euro;${totalAmountNum.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 0; color: #666;"><strong>Bezorgadres:</strong></td>
+            <td style="padding: 6px 0;">${escapeEmailText(deliveryAddress)}, ${escapeEmailText(postalCode)} ${escapeEmailText(city)}</td>
+          </tr>
+        </table>
+
+        <p style="margin-top: 20px;">Dit is een test e-mail ter verificatie van de orderbevestiging.</p>
+        <p style="margin-top: 24px; color: #666; font-size: 13px;">
+          Met vriendelijke groet,<br>
+          <strong>Asian Spices</strong><br>
+          <a href="https://asianspices.online" style="color: #0d9488;">asianspices.online</a>
+        </p>
+      </body>
+      </html>
+    `;
+
+    const emailText = `Bedankt voor uw bestelling! / Your Order is Confirmed\n\nBeste ${firstName || "klant"},\n\nUw bestelling #${order.order_number} is succesvol ontvangen.\n\nBestelnummer: #${order.order_number}\nTotaalbedrag: €${totalAmountNum.toFixed(2)}\nBezorgadres: ${deliveryAddress}, ${postalCode} ${city}\n\nDit is een test e-mail ter verificatie van de orderbevestiging.\n\nMet vriendelijke groet,\nAsian Spices`;
+
+    const brandingAttachments: any[] = [];
 
     // 5️⃣ Dispatch (try "order" profile, fallback to "support", then fallback to "partners")
     // const orderBcc = [
