@@ -498,16 +498,16 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    await client.query("COMMIT");
+
     if (guestTempPassword) {
-      await client
+      await pool
         .query(
           `UPDATE store_orders SET guest_temp_password = $1 WHERE id = $2`,
           [guestTempPassword, order_id],
         )
         .catch(() => {});
     }
-
-    await client.query("COMMIT");
 
     if (guestTempPassword) {
       // Guest order: Send account creation email (with password & login link)

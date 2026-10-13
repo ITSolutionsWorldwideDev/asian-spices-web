@@ -67,6 +67,11 @@ export async function GET(req: Request) {
     html = generateAccountRegistrationEmailHtml(data);
     text = generateAccountRegistrationEmailText(data);
     subject = 'Bevestiging registratie account – Asian Spices';
+  } else if (t === 'guest') {
+    const data = { firstName: 'Test', email: to, temporaryPassword: 'ASTESTPASSWORD123', accountType: 'Klantaccount' };
+    html = generateAccountRegistrationEmailHtml(data);
+    text = generateAccountRegistrationEmailText(data);
+    subject = 'Uw Asian Spices account is aangemaakt';
   } else {
     const data = { companyName: 'Test BV', firstName: 'Test', email: to, applicationId: 'APP-TEST-1' };
     html = generatePartnerApplicationEmailHtml(data);

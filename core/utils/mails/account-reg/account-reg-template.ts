@@ -1,6 +1,14 @@
 import {
   ASIAN_SPICES_LOGO_BASE64,
   DEFAULT_LOGO_SRC,
+  DEFAULT_TIKTOK_SRC,
+  DEFAULT_INSTAGRAM_SRC,
+  DEFAULT_FACEBOOK_SRC,
+  DEFAULT_YOUTUBE_SRC,
+  TIKTOK_ICON_BASE64,
+  INSTAGRAM_ICON_BASE64,
+  FACEBOOK_ICON_BASE64,
+  YOUTUBE_ICON_BASE64,
   escapeHtml,
 } from '../shared';
 
@@ -9,6 +17,7 @@ export interface AccountRegistrationEmailData {
   firstName?: string;
   lastName?: string;
   email?: string;
+  temporaryPassword?: string;
   accountType?: string;
   loginUrl?: string;
   supportEmail?: string;
@@ -38,12 +47,27 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
   }
 
   const email = (data.email && data.email.trim()) || '';
+  const temporaryPassword = data.temporaryPassword?.trim() || '';
   const accountType = (data.accountType && data.accountType.trim()) || 'Klantaccount';
   const logoSrc = data.logoUrl || DEFAULT_LOGO_SRC || ASIAN_SPICES_LOGO_BASE64;
+  const tiktokIconSrc = data.tiktokIconUrl || DEFAULT_TIKTOK_SRC || TIKTOK_ICON_BASE64;
+  const instagramIconSrc = data.instagramIconUrl || DEFAULT_INSTAGRAM_SRC || INSTAGRAM_ICON_BASE64;
+  const facebookIconSrc = data.facebookIconUrl || DEFAULT_FACEBOOK_SRC || FACEBOOK_ICON_BASE64;
+  const youtubeIconSrc = data.youtubeIconUrl || DEFAULT_YOUTUBE_SRC || YOUTUBE_ICON_BASE64;
 
   const greetingTitle = firstName
     ? `Welkom, ${escapeHtml(firstName)}!`
     : 'Welkom bij Asian Spices!';
+
+  const headerBadge = temporaryPassword ? 'ACCOUNT AANGEMAAKT' : 'ACCOUNTREGISTRATIE';
+  const eyebrowText = temporaryPassword ? 'ACCOUNT AANGEMAAKT' : 'REGISTRATIE SUCCESVOL';
+  const pageTitle = temporaryPassword
+    ? 'Uw Asian Spices Account is Aangemaakt'
+    : 'Bevestiging Accountregistratie - Asian Spices';
+  const subtitleText = temporaryPassword
+    ? 'Hartelijk dank voor uw bestelling bij Asian Spices. Er is automatisch een account voor u aangemaakt zodat u uw bestelling 24/7 kunt volgen en in de toekomst sneller kunt bestellen.'
+    : 'Hartelijk dank voor uw registratie bij Asian Spices. Uw account is succesvol aangemaakt en direct klaar voor gebruik.';
+  const detailsHeading = temporaryPassword ? 'Inloggegevens van uw account' : 'Overzicht van uw account';
 
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="nl">
@@ -51,7 +75,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="x-apple-disable-message-reformatting" />
-  <title>Bevestiging Accountregistratie - Asian Spices</title>
+  <title>${pageTitle}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -131,7 +155,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                   </td>
                   <td align="right" valign="middle" style="border: 0; border: none; mso-border-alt: none;">
                     <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: #ea580c; text-transform: uppercase;">
-                      ACCOUNTREGISTRATIE
+                      ${headerBadge}
                     </div>
                   </td>
                 </tr>
@@ -154,7 +178,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
 
               <!-- Eyebrow -->
               <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #ea580c; text-transform: uppercase; margin-bottom: 8px;">
-                REGISTRATIE SUCCESVOL
+                ${eyebrowText}
               </div>
 
               <!-- Main Greeting Title -->
@@ -164,7 +188,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
 
               <!-- Subtitle -->
               <p style="margin: 0 auto 10px auto; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; line-height: 20px; color: #52525b; max-width: 440px;">
-                Hartelijk dank voor uw registratie bij Asian Spices. Uw account is succesvol aangemaakt en direct klaar voor gebruik.
+                ${subtitleText}
               </p>
             </td>
           </tr>
@@ -174,14 +198,14 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
             <td style="padding: 28px 30px 20px 30px;" class="mobile-padding">
 
               <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.6px; color: #ea580c; text-transform: uppercase; margin-bottom: 6px;">
-                UW GEGEVENS
+                ${temporaryPassword ? 'UW INLOGGEGEVENS' : 'UW GEGEVENS'}
               </div>
               <h2 style="margin: 0 0 16px 0; font-family: 'Playfair Display', Georgia, serif; font-size: 22px; line-height: 28px; font-weight: 700; color: #18181b;">
-                Overzicht van uw account
+                ${detailsHeading}
               </h2>
 
               <!-- Account Info Table -->
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#f8f9fa" style="background-color: #f8f9fa; border-radius: 12px; border: 1px solid #edf0f3; margin-bottom: 22px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#f8f9fa" style="background-color: #f8f9fa; border-radius: 12px; border: 1px solid #edf0f3; margin-bottom: ${temporaryPassword ? '14px' : '22px'};">
                 <tr>
                   <td style="padding: 14px 18px; border-bottom: 1px solid #edf0f3; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.8px; color: #71717a; text-transform: uppercase;">
                     E-mailadres
@@ -190,6 +214,18 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                     ${escapeHtml(email)}
                   </td>
                 </tr>
+                ${temporaryPassword ? `
+                <tr>
+                  <td style="padding: 14px 18px; border-bottom: 1px solid #edf0f3; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.8px; color: #71717a; text-transform: uppercase;">
+                    Tijdelijk wachtwoord
+                  </td>
+                  <td align="right" style="padding: 14px 18px; border-bottom: 1px solid #edf0f3;">
+                    <span style="font-family: monospace; font-size: 14px; font-weight: 700; color: #ea580c; background-color: #fff1e6; padding: 3px 8px; border-radius: 4px; display: inline-block;">
+                      ${escapeHtml(temporaryPassword)}
+                    </span>
+                  </td>
+                </tr>
+                ` : ''}
                 <tr>
                   <td style="padding: 14px 18px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.8px; color: #71717a; text-transform: uppercase;">
                     Accounttype
@@ -199,6 +235,17 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                   </td>
                 </tr>
               </table>
+
+              ${temporaryPassword ? `
+              <!-- Security Tip Box -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#fff7ed" style="background-color: #fff7ed; border-radius: 10px; border: 1px solid #fed7aa; margin-bottom: 22px;">
+                <tr>
+                  <td style="padding: 12px 16px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; line-height: 18px; color: #9a3412;">
+                    <strong>Veiligheidstip:</strong> Wij raden u aan om na het inloggen dit tijdelijke wachtwoord te wijzigen via uw profielpagina.
+                  </td>
+                </tr>
+              </table>
+              ` : ''}
 
               <!-- Benefits Card (Matches How Nu Verder style) -->
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border-radius: 12px; border: 1px solid #edf0f3; padding: 20px; margin-bottom: 8px;">
@@ -355,6 +402,107 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                       Volg ons voor dagelijkse inspiratie
                     </div>
 
+                    <!-- Social Icons -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 22px auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                      <tr>
+                        <!-- TikTok -->
+                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                            <tr>
+                              <td align="center" valign="middle" style="padding: 7px 14px;">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
+                                  <tr>
+                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
+                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block;">
+                                        <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
+                                      </a>
+                                    </td>
+                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
+                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                        TikTok
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+
+                        <!-- Instagram -->
+                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                            <tr>
+                              <td align="center" valign="middle" style="padding: 7px 14px;">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
+                                  <tr>
+                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
+                                      <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; display: inline-block;">
+                                        <img src="${instagramIconSrc}" alt="Instagram" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
+                                      </a>
+                                    </td>
+                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
+                                      <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                        Instagram
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+
+                        <!-- Facebook -->
+                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                            <tr>
+                              <td align="center" valign="middle" style="padding: 7px 14px;">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
+                                  <tr>
+                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
+                                      <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; display: inline-block;">
+                                        <img src="${facebookIconSrc}" alt="Facebook" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
+                                      </a>
+                                    </td>
+                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
+                                      <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                        Facebook
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+
+                        <!-- YouTube -->
+                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                            <tr>
+                              <td align="center" valign="middle" style="padding: 7px 14px;">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
+                                  <tr>
+                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
+                                      <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; display: inline-block;">
+                                        <img src="${youtubeIconSrc}" alt="YouTube" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
+                                      </a>
+                                    </td>
+                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
+                                      <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                        YouTube
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
                     <!-- Divider -->
                     <div style="border-top: 1px solid #e5e7eb; width: 85%; margin: 0 auto 18px auto;"></div>
 
@@ -366,7 +514,10 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
 
                     <!-- Disclaimer -->
                     <p style="margin: 14px auto 0 auto; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10.5px; line-height: 17px; color: #a1a1aa; max-width: 480px;">
-                      U ontvangt deze e-mail omdat u recent een account heeft aangemaakt bij Asian Spices. &copy; 2026 Asian Spices. Alle rechten voorbehouden.
+                      ${temporaryPassword
+      ? 'U ontvangt deze e-mail omdat u recent een bestelling heeft geplaatst bij Asian Spices. &copy; 2026 Asian Spices. Alle rechten voorbehouden.'
+      : 'U ontvangt deze e-mail omdat u recent een account heeft aangemaakt bij Asian Spices. &copy; 2026 Asian Spices. Alle rechten voorbehouden.'
+    }
                     </p>
                   </td>
                 </tr>
@@ -405,24 +556,33 @@ export function generateAccountRegistrationEmailText(data: AccountRegistrationEm
   }
 
   const email = (data.email && data.email.trim()) || '';
+  const temporaryPassword = data.temporaryPassword?.trim() || '';
   const accountType = (data.accountType && data.accountType.trim()) || 'Klantaccount';
 
   const greetingLine = firstName
     ? `Welkom bij Asian Spices, ${firstName}!`
     : 'Welkom bij Asian Spices!';
 
-  return `ASIAN SPICES - BEVESTIGING ACCOUNTREGISTRATIE
+  const headerTitle = temporaryPassword
+    ? 'ASIAN SPICES - ACCOUNT AANGEMAAKT'
+    : 'ASIAN SPICES - BEVESTIGING ACCOUNTREGISTRATIE';
+
+  const introText = temporaryPassword
+    ? 'Hartelijk dank voor uw bestelling bij Asian Spices. Er is automatisch een account voor u aangemaakt zodat u uw bestelling 24/7 kunt volgen en beheren.'
+    : 'Hartelijk dank voor uw registratie bij Asian Spices. Hierbij bevestigen wij dat uw account succesvol is aangemaakt.';
+
+  return `${headerTitle}
 ==================================================
 
 ${greetingLine}
 
-Hartelijk dank voor uw registratie bij Asian Spices. Hierbij bevestigen wij dat uw account succesvol is aangemaakt.
+${introText}
 
 UW ACCOUNTGEGEVENS:
 --------------------------------------------------
 E-mailadres: ${email}
-Accounttype: ${accountType}
-
+${temporaryPassword ? `Tijdelijk wachtwoord: ${temporaryPassword}\n` : ''}Accounttype: ${accountType}
+${temporaryPassword ? '\nVeiligheidstip: Wij raden u aan om na het inloggen dit tijdelijke wachtwoord te wijzigen via uw profielinstellingen.\n' : ''}
 Met uw account heeft u direct toegang tot:
 - Overzicht van uw actuele en eerdere bestellingen
 - Inzicht en beheer van uw contact- en factuurgegevens

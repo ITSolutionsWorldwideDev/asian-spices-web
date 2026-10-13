@@ -54,18 +54,20 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 12px;">
-                            <!-- <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;"> -->
-                              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                <tr>
-                                  <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                              <tr>
+                                <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                                  <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block;">
                                     <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; width: 16px; height: 16px; border: 0;" />
-                                  </td>
-                                  <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
+                                  </a>
+                                </td>
+                                <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
+                                  <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
                                     TikTok
-                                  </td>
-                                </tr>
-                              </table>
-                            <!-- </a> -->
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       </table>
@@ -76,18 +78,20 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 12px;">
-                            <!-- <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;"> -->
-                              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                <tr>
-                                  <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                              <tr>
+                                <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                                  <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; display: inline-block;">
                                     <img src="${instagramIconSrc}" alt="Instagram" width="16" height="16" style="display: block; width: 16px; height: 16px; border: 0;" />
-                                  </td>
-                                  <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
+                                  </a>
+                                </td>
+                                <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
+                                  <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
                                     Instagram
-                                  </td>
-                                </tr>
-                              </table>
-                            <!-- </a> -->
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       </table>
@@ -99,18 +103,20 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 12px;">
-                            <!-- <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;"> -->
-                              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                <tr>
-                                  <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                              <tr>
+                                <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                                  <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; display: inline-block;">
                                     <img src="${facebookIconSrc}" alt="Facebook" width="16" height="16" style="display: block; width: 16px; height: 16px; border: 0;" />
-                                  </td>
-                                  <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
+                                  </a>
+                                </td>
+                                <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
+                                  <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
                                     Facebook
-                                  </td>
-                                </tr>
-                              </table>
-                            <!-- </a> -->
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       </table>
@@ -121,18 +127,20 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="135" bgcolor="#ffffff" style="background-color: #ffffff; width: 135px; border: 1px solid #e4e4e7; border-radius: 20px;">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 12px;">
-                            <!-- <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;"> -->
-                              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                <tr>
-                                  <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                              <tr>
+                                <td valign="middle" style="padding-right: 7px; line-height: 1;">
+                                  <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; display: inline-block;">
                                     <img src="${youtubeIconSrc}" alt="YouTube" width="16" height="16" style="display: block; width: 16px; height: 16px; border: 0;" />
-                                  </td>
-                                  <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
+                                  </a>
+                                </td>
+                                <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
+                                  <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
                                     YouTube
-                                  </td>
-                                </tr>
-                              </table>
-                            <!-- </a> -->
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       </table>

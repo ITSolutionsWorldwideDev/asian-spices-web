@@ -1108,78 +1108,79 @@ export async function sendGuestAccountCreatedEmail({
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://asianspices.online";
   const loginUrl = `${siteUrl.replace(/\/$/, "")}/login`;
-  const greeting = firstName?.trim() ? `Hello ${firstName.trim()},` : "Hello,";
 
-  const emailHtml = `
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; color: #1f2937; line-height: 1.6;">
-      <div style="text-align: center; margin-bottom: 20px;">
-        <span style="background-color: #ea580c15; color: #ea580c; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 14px; display: inline-block; border-radius: 9999px; border: 1px solid #ea580c30;">
-          Account Created
-        </span>
-      </div>
+  const emailHtml = generateAccountRegistrationEmailHtml({
+    firstName,
+    email,
+    temporaryPassword: password,
+    accountType: "Klantaccount",
+    loginUrl,
+    supportEmail: "support@asianspices.online",
+  });
 
-      <h2 style="color: #111827; text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
-        Your Asian Spices Account
-      </h2>
+  const emailText = generateAccountRegistrationEmailText({
+    firstName,
+    email,
+    temporaryPassword: password,
+    accountType: "Klantaccount",
+    loginUrl,
+    supportEmail: "support@asianspices.online",
+  });
 
-      <p>${greeting}</p>
-      <p>Thanks for your order! We created an <strong>Asian Spices</strong> account for you so you can track orders and reorder easily.</p>
-
-      <div style="background-color: #f9fafb; padding: 16px; border-radius: 8px; margin: 20px 0; font-size: 14px; color: #4b5563;">
-        <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${email}</p>
-        <p style="margin: 0;"><strong>Temporary password:</strong> <code style="font-size: 16px; color: #ea580c; font-weight: 700;">${password}</code></p>
-      </div>
-
-      <p style="text-align: center; margin: 28px 0;">
-        <a href="${loginUrl}" style="display: inline-block; background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 9999px; font-weight: 700;">
-          Log in to your account
-        </a>
-      </p>
-
-      <p style="font-size: 14px; color: #6b7280;">
-        For security, please change this password after you log in.
-      </p>
-
-      <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
-      <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
-        © 2026 Asian Spices Online. All rights reserved.<br>
-        Need help? Contact us at support@asianspices.online
-      </p>
-    </div>
-  `;
-
-  const emailText = `Your Asian Spices account
-
-${greeting}
-
-Thanks for your order! We created an Asian Spices account for you so you can track orders and reorder easily.
-
-Email: ${email}
-Temporary password: ${password}
-
-Log in: ${loginUrl}
-
-For security, please change this password after you log in.
-
-Need help? Contact us at support@asianspices.online
-© 2026 Asian Spices Online. All rights reserved.`;
+  const brandingAttachments = getEmailBrandingAttachments();
 
   try {
-    await sendEmail({
+    const res = await sendEmail({
       to: email,
-      subject: "Your Asian Spices account has been created",
+      subject: "Uw Asian Spices account is aangemaakt",
       html: emailHtml,
       text: emailText,
-      fromAccount: "support",
+      attachments: brandingAttachments,
+      fromAccount: "order",
     });
 
-    return { success: true };
-  } catch (error) {
-    console.error(
-      `[Guest Account Email Fail] Target recipient: ${email}`,
-      error,
+    console.log(`[Guest Account Email Sent] Profile [order] to ${email}:`, res);
+    return { success: true, profile: "order", messageId: (res as any)?.messageId };
+  } catch (error: any) {
+    console.warn(
+      "[Guest Account Email failed via 'order' profile, trying 'partners']:",
+      error?.message,
     );
-    return { success: false, error };
+    try {
+      const res = await sendEmail({
+        to: email,
+        subject: "Uw Asian Spices account is aangemaakt",
+        html: emailHtml,
+        text: emailText,
+        attachments: brandingAttachments,
+        fromAccount: "partners",
+      });
+      console.log(`[Guest Account Email Sent] Profile [partners] to ${email}:`, res);
+      return { success: true, profile: "partners", messageId: (res as any)?.messageId };
+    } catch (partnersError: any) {
+      console.warn(
+        "[Guest Account Email failed via 'partners' profile, trying 'support']:",
+        partnersError?.message,
+      );
+      try {
+        const res = await sendEmail({
+          to: email,
+          subject: "Uw Asian Spices account is aangemaakt",
+          html: emailHtml,
+          text: emailText,
+          attachments: brandingAttachments,
+          fromAccount: "support",
+        });
+        console.log(`[Guest Account Email Sent] Profile [support] to ${email}:`, res);
+        return { success: true, profile: "support", messageId: (res as any)?.messageId };
+      } catch (supportError: any) {
+        console.error(
+          `[Guest Account Email Fail] Target recipient: ${email}`,
+          supportError,
+        );
+        return { success: false, error: supportError };
+      }
+    }
   }
 }
 

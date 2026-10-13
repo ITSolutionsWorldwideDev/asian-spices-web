@@ -120,20 +120,15 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
   }).join('');
 
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="nl">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="nl">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="x-apple-disable-message-reformatting" />
   <title>Uw annulering is verwerkt, ${firstName} - Asian Spices</title>
-  <!--[if gte mso 9]>
-  <xml>
-    <o:OfficeDocumentSettings>
-      <o:AllowPNG/>
-      <o:PixelsPerInch>96</o:PixelsPerInch>
-    </o:OfficeDocumentSettings>
-  </xml>
-  <![endif]-->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <!--[if mso]>
   <style type="text/css">
     body, table, td, tr, p, div, span, a, strong, b, em {
@@ -146,7 +141,6 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
     }
   </style>
   <![endif]-->
-  <!-- Web fonts intentionally omitted: @import in email triggers spam filters -->
   <style type="text/css">
     body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
     table { border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; }
@@ -198,10 +192,6 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
   </style>
 </head>
 <body bgcolor="#f1f2f5" style="margin: 0; padding: 0; background-color: #f1f2f5; -webkit-font-smoothing: antialiased; word-break: break-word;">
-  <!-- Preheader text -->
-  <div style="display: none; font-size: 1px; color: #f1f2f5; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
-    Uw bestelling #${orderNumber} is geannuleerd en wordt niet meer verzonden. Hier vindt u alle informatie over uw terugbetaling.
-  </div>
 
   <!-- Full-width Canvas -->
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#f1f2f5" style="background-color: #f1f2f5; width: 100%; margin: 0; padding: 24px 0 32px 0;">
@@ -218,41 +208,37 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
           
           <!-- 1. Header: Brand Logo & Right "ANNULERING BEVESTIGD" badge -->
           <tr>
-            <td style="padding: 22px 34px 18px 34px; border: 0;" class="mobile-padding">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+            <td style="padding: 22px 34px 18px 34px; border: 0; border: none; mso-border-alt: none;" class="mobile-padding">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none;">
                 <tr>
-                  <td align="left" valign="middle">
+                  <td align="left" valign="middle" style="border: 0; border: none; mso-border-alt: none;">
                     <img src="${logoSrc}" alt="Asian Spices" width="70" height="70" style="display: block; border: 0; width: 70px; height: 70px; max-width: 70px; outline: none;" />
                   </td>
-                  <td align="right" valign="middle">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" bgcolor="#fff7ed" style="background-color: #fff7ed; border-radius: 14px; border: 1px solid #ffedd5;">
-                      <tr>
-                        <td style="padding: 6px 14px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; color: #c2410c; text-transform: uppercase;">
-                          ANNULERING BEVESTIGD
-                        </td>
-                      </tr>
-                    </table>
+                  <td align="right" valign="middle" style="border: 0; border: none; mso-border-alt: none;">
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: #ea580c; text-transform: uppercase;">
+                      ANNULERING BEVESTIGD
+                    </div>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
 
-          <!-- 2. Hero Section: Warm background with Brownish-Orange Check Circle, Title & CTA -->
+          <!-- 2. Hero Section: Matches Order Confirmation -->
           <tr>
-            <td bgcolor="#fffdfa" style="background-color: #fffdfa; padding: 36px 30px 32px 30px; text-align: center; border-top: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7;" class="mobile-padding">
+            <td bgcolor="#fffdfa" style="background-color: #fffdfa; padding: 34px 30px 32px 30px; text-align: center; border-top: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7;" class="mobile-padding">
               
-              <!-- Check Badge (Brownish-Orange Circle) -->
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 14px auto;">
+              <!-- Check Badge (Dark Green Circle) -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 14px auto; border-collapse: separate;">
                 <tr>
-                  <td align="center" valign="middle" width="46" height="46" bgcolor="#c2410c" style="background-color: #c2410c; width: 46px; height: 46px; border-radius: 50%; text-align: center;">
+                  <td align="center" valign="middle" width="46" height="46" bgcolor="#1b4332" style="background-color: #1b4332; width: 46px; height: 46px; border-radius: 50%; text-align: center;">
                     <span style="color: #ffffff; font-size: 20px; font-weight: 800; line-height: 46px;">&#10003;</span>
                   </td>
                 </tr>
               </table>
 
               <!-- Eyebrow -->
-              <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #c2410c; text-transform: uppercase; margin-bottom: 8px;">
+              <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #ea580c; text-transform: uppercase; margin-bottom: 8px;">
                 BESTELLING STOPGEZET
               </div>
 
@@ -262,20 +248,21 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
               </h1>
 
               <!-- Subtitle -->
-              <p style="margin: 0 auto 24px auto; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; line-height: 20px; color: #52525b; max-width: 440px;">
+              <p style="margin: 0 auto 20px auto; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; line-height: 20px; color: #52525b; max-width: 440px;">
                 Bestelling <strong style="color: #18181b;">#${orderNumber}</strong> wordt niet meer verzonden. Hieronder vindt u het overzicht en alle informatie over uw betaling.
               </p>
 
-              <!-- CTA Button -->
+              <!-- CTA Button commented out
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 26px auto;">
                 <tr>
-                  <td align="center" valign="middle" bgcolor="#c2410c" style="background-color: #c2410c; border-radius: 8px; padding: 13px 28px; box-shadow: 0 3px 10px rgba(194, 65, 12, 0.25);">
+                  <td align="center" valign="middle" bgcolor="#ea580c" style="background-color: #ea580c; border-radius: 8px; padding: 13px 28px;">
                     <a href="${orderOverviewUrl}" target="_blank" style="display: block; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13.5px; font-weight: 700; color: #ffffff; text-decoration: none; line-height: 100%; white-space: nowrap;">
                       Bekijk uw besteloverzicht &rarr;
                     </a>
                   </td>
                 </tr>
               </table>
+              -->
 
               <!-- 3-Column Summary Status Card -->
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="max-width: 520px; margin: 0 auto; background-color: #ffffff; border: 1px solid #edf0f3; border-radius: 12px; padding: 16px 14px; text-align: left;">
@@ -519,7 +506,7 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
                       Per ongeluk geannuleerd of wilt u iets aanpassen? U kunt op ieder moment een nieuwe bestelling plaatsen. Onze kruiden, sauzen en verse ingredi&euml;nten staan direct weer voor u klaar.
                     </p>
 
-                    <!-- Green Webshop CTA Button -->
+                    <!-- Green Webshop CTA Button commented out
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" valign="middle" bgcolor="#1b4332" style="background-color: #1b4332; border-radius: 8px; padding: 12px 24px;">
@@ -529,6 +516,7 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
                         </td>
                       </tr>
                     </table>
+                    -->
 
                   </td>
                 </tr>
@@ -536,7 +524,7 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
             </td>
           </tr>
 
-          <!-- 6. Customer Support Banner: "Onze klantenservice helpt u graag." -->
+          <!-- 6. Customer Support Banner: Matches Order Confirmation -->
           <tr>
             <td style="padding: 0 30px 30px 30px;" class="mobile-padding">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#fff9f0" style="background-color: #fff9f0; border-left: 4px solid #ea580c; border-radius: 0 12px 12px 0; border-top: 1px solid #fef3c7; border-right: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7; padding: 22px;">
@@ -555,11 +543,6 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; color: #52525b; margin-bottom: 14px;">
                             Is de annulering niet volgens verwachting verlopen? Vermeld bij contact altijd bestelnummer <strong style="color: #18181b;">#${orderNumber}</strong>.
                           </div>
-                          <div style="margin-bottom: 16px;">
-                            <a href="${helpPageUrl}" target="_blank" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12.5px; font-weight: 800; color: #c2410c; text-decoration: none;">
-                              Naar onze klantenservicepagina &rarr;
-                            </a>
-                          </div>
 
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; color: #c2410c; text-transform: uppercase;">
                             ONZE E-MAILSERVICE IS 24/7 BESCHIKBAAR.
@@ -571,12 +554,6 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
 
                         <!-- Right Contact Info -->
                         <td valign="top" align="right" class="mobile-status-col" style="text-align: right;">
-                          <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12.5px; font-weight: 800; color: #166534; margin-bottom: 4px;">
-                            <a href="mailto:${supportEmail}" style="color: #166534; text-decoration: none;">${supportEmail}</a>
-                          </div>
-                          <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12.5px; font-weight: 800; color: #166534; margin-bottom: 6px;">
-                            <a href="tel:${phoneNumber.replace(/[^0-9+]/g, '')}" style="color: #166534; text-decoration: none;">${phoneNumber}</a>
-                          </div>
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; color: #71717a;">
                             ${openingHours}
                           </div>
@@ -589,16 +566,140 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
             </td>
           </tr>
 
-          <!-- 7. Shared Bulletproof Social Footer -->
-          ${renderEmailSocialFooter({
-            logoUrl: logoSrc,
-            tiktokIconUrl: tiktokIconSrc,
-            instagramIconUrl: instagramIconSrc,
-            facebookIconUrl: facebookIconSrc,
-            youtubeIconUrl: youtubeIconSrc,
-            signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>',
-            subtext: 'U ontvangt deze e-mail ter bevestiging van de annulering van uw bestelling. &copy; 2026 Asian Spices. Alle rechten voorbehouden.',
-          })}
+          <!-- 7. Footer: Matches Order Confirmation & Account Registration -->
+          <tr>
+            <td style="padding: 0 26px 30px 26px; border: 0; border: none; mso-border-alt: none;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0; border: none; mso-border-alt: none; text-align: center;">
+                <tr>
+                  <td style="background-color: #f8f9fa; border-radius: 16px; border: 1px solid #edf0f3; mso-border-alt: solid #edf0f3 1pt; padding: 28px 24px 26px 24px; text-align: center;">
+                    <!-- Brand Logo -->
+                    <div style="text-align: center; margin-bottom: 10px; border: 0;">
+                      <img src="${logoSrc}" alt="Asian Spices" width="68" height="68" style="display: block; border: 0; margin: 0 auto; width: 68px; height: 68px; max-width: 68px; outline: none;" />
+                    </div>
+
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11.5px; color: #71717a; margin-top: 10px; margin-bottom: 16px; border: 0;">
+                      Volg ons voor dagelijkse inspiratie
+                    </div>
+
+                    <!-- Social Icons -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 22px auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                      <tr>
+                        <!-- TikTok -->
+                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                            <tr>
+                              <td align="center" valign="middle" style="padding: 7px 14px;">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
+                                  <tr>
+                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
+                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block;">
+                                        <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
+                                      </a>
+                                    </td>
+                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
+                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                        TikTok
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+
+                        <!-- Instagram -->
+                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                            <tr>
+                              <td align="center" valign="middle" style="padding: 7px 14px;">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
+                                  <tr>
+                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
+                                      <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; display: inline-block;">
+                                        <img src="${instagramIconSrc}" alt="Instagram" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
+                                      </a>
+                                    </td>
+                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
+                                      <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                        Instagram
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+
+                        <!-- Facebook -->
+                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                            <tr>
+                              <td align="center" valign="middle" style="padding: 7px 14px;">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
+                                  <tr>
+                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
+                                      <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; display: inline-block;">
+                                        <img src="${facebookIconSrc}" alt="Facebook" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
+                                      </a>
+                                    </td>
+                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
+                                      <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                        Facebook
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+
+                        <!-- YouTube -->
+                        <td align="center" valign="middle" style="padding: 4px 5px;" class="mobile-social-col">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 20px; border-collapse: separate; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                            <tr>
+                              <td align="center" valign="middle" style="padding: 7px 14px;">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
+                                  <tr>
+                                    <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
+                                      <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; display: inline-block;">
+                                        <img src="${youtubeIconSrc}" alt="YouTube" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
+                                      </a>
+                                    </td>
+                                    <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
+                                      <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                        YouTube
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Divider -->
+                    <div style="border-top: 1px solid #e5e7eb; width: 85%; margin: 0 auto 18px auto;"></div>
+
+                    <!-- Sign-off -->
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; line-height: 20px; color: #52525b;">
+                      Met vriendelijke groet,<br />
+                      <strong style="color: #18181b; font-weight: 800;">Het team van Asian Spices</strong>
+                    </div>
+
+                    <!-- Disclaimer -->
+                    <p style="margin: 14px auto 0 auto; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10.5px; line-height: 17px; color: #a1a1aa; max-width: 480px;">
+                      U ontvangt deze e-mail ter bevestiging van de annulering van uw bestelling. &copy; 2026 Asian Spices. Alle rechten voorbehouden.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
         </table>
 

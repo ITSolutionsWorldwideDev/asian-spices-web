@@ -766,7 +766,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                       Volg ons voor dagelijkse inspiratie
                     </div>
 
-                    <!-- Social Icons commented out
+                    <!-- Social Icons -->
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 22px auto; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                       <tr>
                         <!-- TikTok -->
@@ -866,7 +866,6 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                         </td>
                       </tr>
                     </table>
-                    -->
 
                     <!-- Divider -->
                     <div style="border-top: 1px solid #e5e7eb; width: 85%; margin: 0 auto 18px auto;"></div>
