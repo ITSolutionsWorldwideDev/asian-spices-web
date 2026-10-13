@@ -709,11 +709,13 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; color: #52525b; margin-bottom: 14px;">
                             Vermeld bij contact altijd uw bestelnummer <strong style="color: #18181b;">#${orderNumber}</strong>.
                           </div>
+                          <!-- Help page link commented out to prevent spam triggers
                           <div style="margin-bottom: 16px;">
                             <a href="${helpPageUrl}" target="_blank" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12.5px; font-weight: 800; color: #c2410c; text-decoration: none;">
                               Naar onze hulppagina &rarr;
                             </a>
                           </div>
+                          -->
 
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; color: #c2410c; text-transform: uppercase;">
                             ONZE E-MAILSERVICE IS 24/7 BESCHIKBAAR.
@@ -726,10 +728,12 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                         <!-- Right Contact Info -->
                         <td valign="top" align="right" class="mobile-stack-col" style="text-align: right;">
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12.5px; font-weight: 800; color: #166534; margin-bottom: 4px;">
-                            <a href="mailto:${supportEmail}" style="color: #166534; text-decoration: none;">${supportEmail}</a>
+                            <!-- <a href="mailto:${supportEmail}" style="color: #166534; text-decoration: none;">${supportEmail}</a> -->
+                            ${supportEmail}
                           </div>
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12.5px; font-weight: 800; color: #166534; margin-bottom: 6px;">
-                            <a href="tel:${phoneNumber.replace(/[^0-9+]/g, '')}" style="color: #166534; text-decoration: none;">${phoneNumber}</a>
+                            <!-- <a href="tel:${phoneNumber.replace(/[^0-9+]/g, '')}" style="color: #166534; text-decoration: none;">${phoneNumber}</a> -->
+                            ${phoneNumber}
                           </div>
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; color: #71717a;">
                             ${openingHours}
@@ -966,8 +970,8 @@ Deel uw kookcreaties met hashtag #AsianSpicesKitchen op Instagram of TikTok en s
 
 --------------------------------------------------
 HULP NODIG?
-Klantenservice: ${supportEmail}
-Telefoon: ${phoneNumber} (Ma t/m vr · 07:00–15:00)
+<!-- Klantenservice: ${supportEmail} -->
+<!-- Telefoon: ${phoneNumber} (Ma t/m vr · 07:00–15:00) -->
 Vermeld altijd bestelnummer #${orderNumber}.
 
 Met vriendelijke groet,
