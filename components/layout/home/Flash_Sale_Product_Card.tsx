@@ -294,16 +294,16 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
               </div>
 
               <div
-                className="notranslate mt-4 pt-1 flex items-stretch gap-2"
+                className="notranslate mt-4 pt-1 flex min-w-0 items-stretch gap-2"
                 translate="no"
               >
-                <div className="flex flex-1 items-center overflow-hidden rounded-xl border border-gray-200 bg-white h-[44px]">
+                <div className="inline-flex h-11 shrink-0 items-stretch overflow-hidden rounded-xl border border-gray-200 bg-white">
                   <button
                     type="button"
                     aria-label={`Decrease quantity of ${item.title}`}
                     onClick={() => setPickQty(String(item.id), pickQty - 1)}
                     disabled={pickQty <= 1}
-                    className="h-full w-11 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
+                    className="h-full w-9 shrink-0 flex items-center justify-center bg-gray-100 text-base font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
                   >
                     −
                   </button>
@@ -317,13 +317,13 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                       if (isNaN(value) || value < 1) return;
                       setPickQty(String(item.id), value);
                     }}
-                    className="h-full min-w-0 flex-1 border-x border-gray-200 bg-white text-center text-sm font-semibold text-stone-900 outline-none"
+                    className="h-full w-9 shrink-0 border-x border-gray-200 bg-white text-center text-sm font-semibold text-stone-900 outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                   <button
                     type="button"
                     aria-label={`Increase quantity of ${item.title}`}
                     onClick={() => setPickQty(String(item.id), pickQty + 1)}
-                    className="h-full w-11 shrink-0 flex items-center justify-center bg-gray-100 text-lg font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
+                    className="h-full w-9 shrink-0 flex items-center justify-center bg-gray-100 text-base font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
                   >
                     +
                   </button>
@@ -331,7 +331,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                 <button
                   type="button"
                   aria-label={`Add ${pickQty} ${item.title} to cart`}
-                  className="cursor-pointer shrink-0 h-[44px] min-w-[76px] px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="cursor-pointer shrink-0 h-11 w-11 sm:h-12 sm:w-auto sm:min-w-[76px] sm:px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                   onClick={(e) => {
                     if (realPrice == null || baseWithTax == null) return;
                     addToCart(
