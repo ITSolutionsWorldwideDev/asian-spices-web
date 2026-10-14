@@ -37,7 +37,7 @@ import { resolveCountry } from "@/lib/country";
 import { getProductMetadata } from "@/lib/product-metadata";
 import { getProductJsonLd } from "@/lib/schema";
 import JsonLd from "@/components/seo/JsonLd";
-import { subcategoryContentMap } from "@/data/categoryContent";
+import { subcategoryContentMap, categoryContent } from "@/data/categoryContent";
 import CategoryHeroDescription from "@/components/layout/category/CategoryHeroDescription";
 import { parseCategoryGuide } from "@/lib/category-helpers";
 
@@ -85,6 +85,47 @@ export async function generateMetadata({
   const { category, slug } = await params;
   const subcategory = await getStoreSubcategoryBySlug(category, slug);
   if (subcategory) {
+    if (slug === "plates") {
+      return {
+        title: "Plates Online | Steel, Melamine & Thali Dinnerware",
+        description:
+          "Shop plates online — stainless steel, melamine and thali-style dinnerware for everyday meals and serving, delivered across the Netherlands.",
+        alternates: { canonical: `/${category}/${slug}` },
+      };
+    }
+
+    if (slug === "oil" || slug === "oils" || slug === "oil-ghee") {
+      return {
+        title: "Oil & Ghee Online | Cooking Oils & Desi Ghee",
+        description:
+          "Shop cooking oils and ghee online — mustard oil, sunflower oil, sesame oil and traditional cow/buffalo ghee, delivered across the Netherlands.",
+        alternates: { canonical: `/${category}/${slug}` },
+      };
+    }
+
+    if (
+      slug === "all-religious" ||
+      slug === "all-regious" ||
+      slug === "all-religious-items" ||
+      category === "religious"
+    ) {
+      return {
+        title: "Religious & Devotional Items Online | AsianSpices.online",
+        description:
+          "Shop religious and devotional essentials online, delivered across the Netherlands. Range expanding — check back for new additions.",
+        alternates: { canonical: `/${category}/${slug}` },
+      };
+    }
+
+    if (slug === "others" || slug === "other") {
+      return {
+        title: "Other Products | AsianSpices.online",
+        description:
+          "Shop additional products online at AsianSpices.online, delivered across the Netherlands. Range expanding — check back for new additions.",
+        alternates: { canonical: `/${category}/${slug}` },
+      };
+    }
+
     return {
       title: subcategory.name,
       description: `Shop ${subcategory.name}`,
@@ -186,7 +227,12 @@ export default async function CategorySlugPage({
     };
 
     // Subcategory ka optional content fetch karna agar map mein maujood ho
-    const subContent = subcategoryContentMap[slug] || null;
+    const subContent =
+      subcategoryContentMap[slug] ||
+      (slug === "others" ? subcategoryContentMap["other"] : null) ||
+      (slug === "other" ? subcategoryContentMap["others"] : null) ||
+      (category.slug === "religious" ? (categoryContent["religious"] as any) : null) ||
+      null;
     const guideData = parseCategoryGuide(subContent, subcategory.name);
 
     return (

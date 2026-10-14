@@ -1,10 +1,10 @@
 import React from "react";
-import ProductHeader from "./ProductHeader";
-import HeadingDescription from "@/components/ui/HeadingDescription";
+import Link from "next/link";
+import Nav from "@/components/ui/Nav";
+import CategoryHeroDescription from "@/components/layout/category/CategoryHeroDescription";
 import Footer from "@/components/ui/Footer";
 import ComingSoonCategory from "@/components/ui/ComingSoonCategory";
 import GrandmasRemedyGrid from "@/components/ui/GrandmasRemedyGrid";
-import CategoryGuideSection from "@/components/layout/category/CategoryGuideSection";
 import {
   getProducts,
   getSubcategories,
@@ -87,7 +87,7 @@ export default async function HealthyLivingProductpage({
     : false;
   const isGrandmasPage = slug === "grandmas-kitchen-remedies";
   const faqJsonLd =
-    isHerbBenefitPage && currentContent.faqs?.length
+    currentContent.faqs?.length
       ? getFaqPageJsonLd(currentContent.faqs)
       : null;
 
@@ -131,37 +131,63 @@ export default async function HealthyLivingProductpage({
     catalogMatch?.categoryName ||
     slug.replace(/-/g, " ");
 
-  return (
-    <div>
-      <JsonLd data={faqJsonLd} />
-      {/* 1. Banner Header */}
-      <ProductHeader
-        heading={currentContent.heading}
-        text={currentContent.text}
-        imageLink={currentContent.image}
-      />
+  const extendedText =
+    !isGrandmasPage && currentContent.sections && currentContent.sections.length > 0
+      ? currentContent.sections
+          .map((s) => `${s.title}\n${s.description}`)
+          .join("\n\n")
+      : "";
 
-      {/* 2. Herb Benefit Content */}
-      {isHerbBenefitPage && (currentContent.intro || currentContent.sections) && (
-        <section className="container mx-auto px-5 py-10">
-          {isGrandmasPage ? (
-            <GrandmasRemedyGrid sections={currentContent.sections ?? []} />
-          ) : (
-            <CategoryGuideSection
-              sections={currentContent.sections ?? []}
-              categoryName={slug}
-              hideReadMore={true}
+  return (
+    <div className="bg-white min-h-screen">
+      <JsonLd data={faqJsonLd} />
+
+      {/* Top Floating / Fixed Nav */}
+      <Nav />
+
+      {/* 1. Dedicated Hero Section Wrapper (Category Design) */}
+      <section className="relative w-full bg-gradient-to-b from-[#fbf9f5] via-[#faf7f2]/50 to-white pt-2 sm:pt-2 md:pt-3 xl:pt-4 pb-2 sm:pb-4 border-b border-gray-100/60">
+        <div className="container mx-auto px-4 sm:px-6">
+          {/* Breadcrumb: Home Page > Healthy Living > Title */}
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-0.5 sm:mb-1 text-[11px] sm:text-xs text-gray-500"
+          >
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <Link
+                href="/"
+                className="hover:text-gray-900 transition font-normal"
+              >
+                Home Page
+              </Link>
+              <span className="text-gray-400">&gt;</span>
+              <span className="text-gray-500">Healthy Living</span>
+              <span className="text-gray-400">&gt;</span>
+              <span className="text-gray-700 font-medium">
+                {collectionTitle}
+              </span>
+            </div>
+          </nav>
+
+          {/* Hero Content */}
+          <div className="text-center max-w-5xl lg:max-w-6xl mx-auto pt-0 pb-0.5">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-extrabold tracking-tight text-red-600 leading-tight">
+              {currentContent.heading || collectionTitle}
+            </h1>
+            <CategoryHeroDescription
+              initialText={currentContent.text}
+              extendedText={extendedText}
             />
-          )}
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Grandma's Kitchen Remedies Grid (Special Interactive Card Layout) */}
+      {isGrandmasPage && currentContent.sections && currentContent.sections.length > 0 && (
+        <section className="container mx-auto px-5 py-8">
+          <GrandmasRemedyGrid sections={currentContent.sections} />
         </section>
       )}
-
-      {/* 3. Explore Our Collection Section */}
-      <HeadingDescription
-        heading="Explore Our Collection"
-        text={`Shop All ${slug.replace(/-/g, " ").toUpperCase()}`}
-        description="Discover authentic health and wellness products curated for you"
-      />
 
       {/* 4. Products Grid with Sidebar Filters — or Coming Soon when no products */}
       {showProductsComingSoon ? (
@@ -182,14 +208,14 @@ export default async function HealthyLivingProductpage({
       )}
 
       {/* 5. Frequently Asked Questions */}
-      {isHerbBenefitPage && currentContent.faqs && currentContent.faqs.length > 0 && (
+      {currentContent.faqs && currentContent.faqs.length > 0 && (
         <section className="container mx-auto px-5 py-16 max-w-4xl">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-extrabold text-neutral-900 mb-2">
               Frequently Asked Questions
             </h2>
             <p className="text-neutral-500 text-sm">
-              Got questions? Weve got answers.
+              Got questions? We've got answers.
             </p>
           </div>
 

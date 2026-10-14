@@ -1,10 +1,24 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/validation/contact";
 import { sendContactFormEmail } from "@/core/email-templates";
+import { verifyRecaptcha } from "@/lib/recaptcha";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+
+    // Verify reCAPTCHA token
+    const captchaResult = await verifyRecaptcha(body.captchaToken);
+    if (!captchaResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: captchaResult.message || "CAPTCHA verification failed. Please try again.",
+        },
+        { status: 400 },
+      );
+    }
+
     const parsed = contactSchema.safeParse(body);
 
     if (!parsed.success) {

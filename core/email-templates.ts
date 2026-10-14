@@ -355,7 +355,7 @@ export async function sendOrderConfirmationEmail(orderId: string, customClient?:
     await db.query(
       `INSERT INTO order_events (order_id, event_type, metadata) VALUES ($1, 'confirmation_email_sent', $2)`,
       [orderId, JSON.stringify({ sent_at: new Date().toISOString(), to: recipientEmail })],
-    ).catch(() => {});
+    ).catch(() => { });
 
     return { success: true };
   } catch (error) {
@@ -950,9 +950,9 @@ export async function sendReturnStatusUpdateEmail(returnId: string) {
             </td>
           </tr>
           ${renderEmailSocialFooter({
-            signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het Asian Spices Team</strong>',
-            subtext: 'Asian Spices &middot; Uw specialist in authentieke specerijen & ingrediënten.',
-          })}
+        signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het Asian Spices Team</strong>',
+        subtext: 'Asian Spices &middot; Uw specialist in authentieke specerijen & ingrediënten.',
+      })}
         </table>
       </td>
     </tr>
@@ -1484,9 +1484,9 @@ support@asianspices.online`;
             </td>
           </tr>
           ${renderEmailSocialFooter({
-            signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het Asian Spices Support Team</strong>',
-            subtext: 'Asian Spices &middot; Uw specialist in authentieke specerijen & ingrediënten.',
-          })}
+          signoffText: 'Met vriendelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het Asian Spices Support Team</strong>',
+          subtext: 'Asian Spices &middot; Uw specialist in authentieke specerijen & ingrediënten.',
+        })}
         </table>
       </td>
     </tr>

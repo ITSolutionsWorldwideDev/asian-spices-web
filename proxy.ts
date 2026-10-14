@@ -18,6 +18,11 @@ function nextWithPathname(req: NextRequest) {
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Never proxy or rewrite API routes
+  if (pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
   // Nested relative favicon requests (e.g. /spice-powder/favicon.ico) → root icon.
   // Happens when metadata used a relative "favicon.ico" href on category/product pages.
   if (pathname !== "/favicon.ico" && pathname.endsWith("/favicon.ico")) {
@@ -117,5 +122,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image).*)"],
+  matcher: ["/((?!api|_next/static|_next/image).*)"],
 };

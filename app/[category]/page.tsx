@@ -64,6 +64,50 @@ export async function generateMetadata({
     };
   }
 
+  if (slug === "religious") {
+    return {
+      title: "Religious & Devotional Items Online | AsianSpices.online",
+      description:
+        "Shop religious and devotional essentials online, delivered across the Netherlands. Range expanding — check back for new additions.",
+      alternates: {
+        canonical: "/religious",
+      },
+    };
+  }
+
+  if (slug === "others" || slug === "other") {
+    return {
+      title: "Other Products | AsianSpices.online",
+      description:
+        "Shop additional products online at AsianSpices.online, delivered across the Netherlands. Range expanding — check back for new additions.",
+      alternates: {
+        canonical: `/${slug}`,
+      },
+    };
+  }
+
+  if (slug === "kitchen-appliance" || slug === "kitchen-appliances") {
+    return {
+      title: "Kitchen Appliance & Kitchenware Online | AsianSpices.online",
+      description:
+        "Shop kitchenware and kitchen essentials online — plates, dinnerware and everyday cooking tools, delivered across the Netherlands.",
+      alternates: {
+        canonical: `/${slug}`,
+      },
+    };
+  }
+
+  if (slug === "weight-loss") {
+    return {
+      title: "Weight Management Support | Herbal Metabolism Support",
+      description:
+        "Shop herbs traditionally used to support metabolism and satiety as part of a balanced diet and active lifestyle — Green Tea, Guggul, Glucomannan & more.",
+      alternates: {
+        canonical: "/weight-loss",
+      },
+    };
+  }
+
   const category = await getStoreCategoryBySlug(slug);
   if (!category) return {};
 
@@ -110,11 +154,30 @@ export default async function CategoryPage({
   }>;
 }) {
   const { category: slug } = await params;
-  const category = await getStoreCategoryBySlug(slug);
+  const dbCategory = await getStoreCategoryBySlug(slug);
+  const category =
+    dbCategory ||
+    (categoryContent[slug]
+      ? {
+        id: slug,
+        name:
+          slug === "weight-loss"
+            ? "Weight Loss"
+            : slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+        slug,
+      }
+      : null);
   if (!category) notFound();
 
-  // Category ke mutabiq content fetch karna (jaise "beverages")
-  const currentContent = categoryContent[slug] || null;
+  // Category ke mutabiq content fetch karna (jaise "beverages", "kitchen-appliances", "others")
+  const currentContent =
+    categoryContent[slug] ||
+    categoryContent[category.slug] ||
+    (slug === "kitchen-appliances" ? categoryContent["kitchen-appliance"] : null) ||
+    (slug === "kitchen-appliance" ? categoryContent["kitchen-appliances"] : null) ||
+    (slug === "others" ? categoryContent["other"] : null) ||
+    (slug === "other" ? categoryContent["others"] : null) ||
+    null;
   const guideData = parseCategoryGuide(currentContent, category.name);
 
   const query = await searchParams;

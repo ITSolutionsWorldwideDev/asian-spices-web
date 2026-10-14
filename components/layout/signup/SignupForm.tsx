@@ -2,7 +2,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { z } from "zod";
@@ -10,6 +10,7 @@ import { signIn } from "next-auth/react";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useLoaderStore } from "@/store/useLoaderStore";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+import ReCaptcha, { ReCaptchaRef } from "@/components/ui/ReCaptcha";
 
 /* ---------------- ZOD SCHEMA ---------------- */
 const signupSchema = z
@@ -46,6 +47,8 @@ export default function SignupForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCaptchaRef>(null);
 
   const { show, hide } = useLoaderStore();
 
@@ -79,9 +82,18 @@ export default function SignupForm() {
       return;
     }
 
+    /* ---------------- CAPTCHA VALIDATION ---------------- */
+    if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !captchaToken) {
+      setErrors((prev) => ({
+        ...prev,
+        captcha: "Please complete the CAPTCHA verification.",
+      }));
+      return;
+    }
+
     try {
       setLoading(true);
-      show("signing Up...");
+      show("Signing Up...");
 
       /* ---------------- API CALL ---------------- */
       const res = await fetch("/api/auth/signup", {
@@ -90,6 +102,7 @@ export default function SignupForm() {
           email: form.email.trim().toLowerCase(),
           password: form.password,
           acceptedTerms: form.acceptedTerms,
+          captchaToken,
         }),
         headers: { "Content-Type": "application/json" },
       });
@@ -97,7 +110,12 @@ export default function SignupForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        setErrors({ email: data.error || "Signup failed" });
+        setErrors((prev) => ({
+          ...prev,
+          email: data.error || "Signup failed",
+        }));
+        recaptchaRef.current?.reset();
+        setCaptchaToken(null);
         return;
       }
 
@@ -105,10 +123,13 @@ export default function SignupForm() {
       await signIn("credentials", {
         email: form.email,
         password: form.password,
+        signupBypass: data.signupBypass || "",
         callbackUrl: "/",
       });
     } catch (err) {
-      setErrors({ email: "Something went wrong" });
+      setErrors((prev) => ({ ...prev, email: "Something went wrong" }));
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
     } finally {
       setLoading(false);
       hide();
@@ -396,6 +417,20 @@ export default function SignupForm() {
               {errors.acceptedTerms && (
                 <p className="mt-1 text-xs font-medium text-red-500">
                   {errors.acceptedTerms}
+                </p>
+              )}
+
+              <ReCaptcha
+                ref={recaptchaRef}
+                onChange={(token) => {
+                  setCaptchaToken(token);
+                  setErrors((prev) => ({ ...prev, captcha: "" }));
+                }}
+                onExpired={() => setCaptchaToken(null)}
+              />
+              {errors.captcha && (
+                <p className="mt-1 text-xs font-medium text-red-500">
+                  {errors.captcha}
                 </p>
               )}
 

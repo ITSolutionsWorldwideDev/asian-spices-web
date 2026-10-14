@@ -1,7 +1,7 @@
 // apps/web/components/layout/login/LoginForm.tsx
 
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -11,6 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
 import { useLoaderStore } from "@/store/useLoaderStore";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+import ReCaptcha, { ReCaptchaRef } from "@/components/ui/ReCaptcha";
 
 /* ---------------- SCHEMA ---------------- */
 const loginSchema = z.object({
@@ -34,6 +35,9 @@ export default function LoginForm() {
     email: "",
     password: "",
   });
+
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCaptchaRef>(null);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -71,6 +75,11 @@ export default function LoginForm() {
       return;
     }
 
+    if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !captchaToken) {
+      setErrors({ captcha: "Please complete the CAPTCHA verification." });
+      return;
+    }
+
     try {
       setLoading(true);
       show("Login Process...");
@@ -78,11 +87,18 @@ export default function LoginForm() {
       const res = await signIn("credentials", {
         email: form.email,
         password: form.password,
+        captchaToken: captchaToken || "",
         redirect: false,
       });
 
       if (res?.error) {
-        setErrors({ email: "Invalid email or password" });
+        setErrors({
+          email: res.error.toLowerCase().includes("captcha")
+            ? res.error
+            : "Invalid email or password",
+        });
+        recaptchaRef.current?.reset();
+        setCaptchaToken(null);
         return;
       }
 
@@ -98,6 +114,8 @@ export default function LoginForm() {
     } catch (err) {
       console.error(err);
       setErrors({ email: "Login failed. Try again." });
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
     } finally {
       setLoading(false);
       hide();
@@ -293,6 +311,18 @@ export default function LoginForm() {
               <span className="menu-arrow inside-submenu" />
             </Link>
           </div> */}
+
+          <ReCaptcha
+            ref={recaptchaRef}
+            onChange={(token) => {
+              setCaptchaToken(token);
+              setErrors((prev) => ({ ...prev, captcha: "" }));
+            }}
+            onExpired={() => setCaptchaToken(null)}
+          />
+          {errors.captcha && (
+            <p className="text-xs text-red-500 -mt-1 mb-3">{errors.captcha}</p>
+          )}
 
           {/* Sign up button */}
           <button

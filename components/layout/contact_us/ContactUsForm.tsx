@@ -1,16 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { useZodForm } from "@/hooks/useZodForm";
 import { contactSchema, type ContactFormData } from "@/lib/validation/contact";
 import { getErrorMessage } from "@/lib/form/getErrorMessage";
+import ReCaptcha, { ReCaptchaRef } from "@/components/ui/ReCaptcha";
 
 const ContactUsForm = () => {
   const [status, setStatus] = useState<{
     type: "success" | "error";
     message: string;
   } | null>(null);
+
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCaptchaRef>(null);
 
   const {
     register,
@@ -27,13 +31,22 @@ const ContactUsForm = () => {
   const onSubmit = async (data: ContactFormData) => {
     setStatus(null);
 
+    // If site key is configured, require captcha verification
+    if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !captchaToken) {
+      setStatus({
+        type: "error",
+        message: "Please complete the CAPTCHA verification.",
+      });
+      return;
+    }
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, captchaToken }),
       });
 
       const result = await res.json();
@@ -44,6 +57,8 @@ const ContactUsForm = () => {
           message: "Message sent! We'll respond within 48 hours.",
         });
         reset();
+        recaptchaRef.current?.reset();
+        setCaptchaToken(null);
         return;
       }
 
@@ -51,11 +66,15 @@ const ContactUsForm = () => {
         type: "error",
         message: result.message || "Unable to send your message. Please try again.",
       });
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
     } catch {
       setStatus({
         type: "error",
         message: "Something went wrong. Please try again later.",
       });
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
     }
   };
 
@@ -158,6 +177,12 @@ const ContactUsForm = () => {
               </p>
             )}
           </div>
+
+          <ReCaptcha
+            ref={recaptchaRef}
+            onChange={setCaptchaToken}
+            onExpired={() => setCaptchaToken(null)}
+          />
 
           <button
             type="submit"

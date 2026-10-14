@@ -54,8 +54,7 @@ const AboutUs = () => {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage:
-              "url('/assets/home/homeheaderimages/14b140c043c554c46173a4756175feabd5060b1f.webp')",
+            backgroundImage: "url('/about/banner_about.webp')",
           }}
         />
         <div className="absolute inset-0 bg-black/55" aria-hidden />

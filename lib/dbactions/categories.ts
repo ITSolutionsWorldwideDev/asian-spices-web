@@ -50,10 +50,17 @@ export const getShopCategories = async () => {
 };
 
 export const getStoreCategoryBySlug = async (slug: string) => {
+  const normalized = (slug || "").toLowerCase().trim();
+  const variations = [normalized];
+  if (normalized === "kitchen-appliance") variations.push("kitchen-appliances");
+  if (normalized === "kitchen-appliances") variations.push("kitchen-appliance");
+  if (normalized === "others") variations.push("other");
+  if (normalized === "other") variations.push("others");
+
   const { rows } = await pool.query<{ id: string; name: string; slug: string }>(
     `SELECT id, name, slug FROM store_categories
-     WHERE LOWER(slug) = LOWER($1) AND status = 1`,
-    [slug],
+     WHERE LOWER(slug) = ANY($1::text[]) AND status = 1`,
+    [variations],
   );
   return rows[0] ?? null;
 };
@@ -123,6 +130,18 @@ export const getStoreSubcategoryBySlug = async (
   categorySlug: string,
   subcategorySlug: string,
 ) => {
+  const catNormalized = (categorySlug || "").toLowerCase().trim();
+  const catVariations = [catNormalized];
+  if (catNormalized === "kitchen-appliance") catVariations.push("kitchen-appliances");
+  if (catNormalized === "kitchen-appliances") catVariations.push("kitchen-appliance");
+  if (catNormalized === "others") catVariations.push("other");
+  if (catNormalized === "other") catVariations.push("others");
+
+  const subNormalized = (subcategorySlug || "").toLowerCase().trim();
+  const subVariations = [subNormalized];
+  if (subNormalized === "others") subVariations.push("other");
+  if (subNormalized === "other") subVariations.push("others");
+
   const { rows } = await pool.query<{
     id: string;
     name: string;
@@ -135,10 +154,10 @@ export const getStoreSubcategoryBySlug = async (
             c.name AS category_name, c.slug AS category_slug
      FROM store_subcategories sc
      JOIN store_categories c ON c.id = sc.category_id
-     WHERE LOWER(c.slug) = LOWER($1)
-       AND LOWER(sc.slug) = LOWER($2)
+     WHERE LOWER(c.slug) = ANY($1::text[])
+       AND LOWER(sc.slug) = ANY($2::text[])
        AND c.status = 1`,
-    [categorySlug, subcategorySlug],
+    [catVariations, subVariations],
   );
   return rows[0] ?? null;
 };

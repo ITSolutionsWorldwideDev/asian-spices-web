@@ -4,12 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { runQuery } from "@/core/db";
 import { sendAccountWelcomeEmail } from "@/core/email-templates";
+import { verifyRecaptcha, generateSignupAuthToken } from "@/lib/recaptcha";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { email, password, name, acceptedTerms } = body;
+    const { email, password, name, acceptedTerms, captchaToken } = body;
 
     if (acceptedTerms !== true) {
       return NextResponse.json(
@@ -23,6 +24,17 @@ export async function POST(req: NextRequest) {
         { error: "Email and password required" },
         { status: 400 },
       );
+    }
+
+    // Verify reCAPTCHA token if configured
+    if (process.env.RECAPTCHA_SECRET_KEY) {
+      const captchaResult = await verifyRecaptcha(captchaToken);
+      if (!captchaResult.success) {
+        return NextResponse.json(
+          { error: captchaResult.message || "CAPTCHA verification failed. Please try again." },
+          { status: 400 },
+        );
+      }
     }
 
     // check existing user
@@ -92,10 +104,13 @@ export async function POST(req: NextRequest) {
       emailResult = { success: false, error: emailErr?.message };
     }
 
+    const signupBypass = generateSignupAuthToken(email);
+
     return NextResponse.json({
       success: true,
       user: result.rows[0],
       emailResult,
+      signupBypass,
     });
   } catch (err) {
     console.error("SIGNUP ERROR:", err);

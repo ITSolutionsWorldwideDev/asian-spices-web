@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { authorizeUser } from "./authorize";
 import { AUTH_ROLES } from "./constants";
+import { verifyRecaptcha, verifySignupAuthToken } from "@/lib/recaptcha";
 
 type AppType = "admin" | "web";
 
@@ -18,11 +19,28 @@ export function credentialsProvider(app: AppType) {
     credentials: {
       email: { label: "Email", type: "email" },
       password: { label: "Password", type: "password" },
+      captchaToken: { label: "Captcha", type: "text" },
+      signupBypass: { label: "Signup Bypass", type: "text" },
     },
 
     async authorize(credentials) {
       if (!credentials?.email || !credentials.password) {
         return null;
+      }
+
+      // Verify reCAPTCHA on web customer sign in if key is configured
+      if (app === "web" && process.env.RECAPTCHA_SECRET_KEY) {
+        const signupBypass = (credentials as { signupBypass?: string })?.signupBypass;
+        const isBypassed = verifySignupAuthToken(credentials.email, signupBypass);
+
+        if (!isBypassed) {
+          const captchaResult = await verifyRecaptcha(
+            (credentials as { captchaToken?: string })?.captchaToken,
+          );
+          if (!captchaResult.success) {
+            throw new Error(captchaResult.message || "CAPTCHA verification failed");
+          }
+        }
       }
 
       const user = await authorizeUser(credentials.email, credentials.password);

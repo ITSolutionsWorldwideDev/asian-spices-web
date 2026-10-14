@@ -11,6 +11,189 @@ export interface CategoryContentItem {
 }
 
 export const categoryContent: Record<string, CategoryContentItem> = {
+  others: {
+    sections: [
+      {
+        title: "Explore Other Products",
+        description:
+          "This category holds products that don't yet fit neatly into one of our other sections. As the catalog grows, items here may move into a more specific category — the same way new dedicated categories like Kitchen Appliance have been split out over time.\n\n" +
+          "What Belongs Here:\n" +
+          "• Newly added products that haven't yet been assigned a specific category\n" +
+          "• Items that don't fit the scope of any existing category\n" +
+          "• A temporary home for products while a more specific category is being planned",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "Do you deliver products in this category across the Netherlands?",
+        answer: "Yes — AsianSpices.online currently ships across the Netherlands, with further European markets planned as those regions come online.",
+      },
+      {
+        question: "What kinds of products are in the Others category?",
+        answer: "This category holds items that don't yet fit into one of our other specific categories — check back as the catalog is organized further.",
+      },
+      {
+        question: "Will items in this category eventually be moved elsewhere?",
+        answer: "Yes — as the product range grows, items here may be reorganized into more specific categories.",
+      },
+      {
+        question: "Is this category permanent?",
+        answer: "This category is primarily intended as a flexible holding space; its long-term role will depend on how the overall catalog develops.",
+      },
+      {
+        question: "How do I find a specific product if I'm not sure which category it's in?",
+        answer: "Use the site's search function, which should return relevant products regardless of which category they're currently listed under.",
+      },
+      {
+        question: "Can I suggest a new category for a product I'd like to see here?",
+        answer: "Product and category suggestions can typically be sent via customer service — check the site's contact page for how to get in touch.",
+      },
+      {
+        question: "Will this category always contain a mix of unrelated items?",
+        answer: "The goal is for this to be a smaller, temporary section rather than a large permanent mix — specific items are expected to move into dedicated categories over time.",
+      },
+      {
+        question: "Are products in this category still covered by your standard policies (shipping, returns, etc.)?",
+        answer: "Yes — all products on the site, regardless of category, are covered by the same shipping and returns policies. Check the relevant policy page for details.",
+      },
+    ],
+  },
+  "kitchen-appliance": {
+    sections: [
+      {
+        title: "Explore Kitchen Appliance",
+        description:
+          "Good cooking depends on the right tools as much as the right ingredients. This category covers kitchenware and equipment for everyday South Asian cooking and dining — starting with dinnerware, and growing over time to include more of the cookware, tools and small appliances a well-stocked kitchen needs.\n\n" +
+          "Browse Kitchen Appliance by Type:\n" +
+          "• Plates: Everyday dinnerware — steel, melamine and thali-style plates for daily meals and serving.",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "Do you deliver kitchenware across the Netherlands?",
+        answer: "Yes — AsianSpices.online currently ships across the Netherlands, with further European markets planned as those regions come online.",
+      },
+      {
+        question: "What kinds of kitchen products will be available in this category?",
+        answer: "This category currently covers dinnerware (plates), with plans to expand into more kitchen tools, cookware and small appliances over time.",
+      },
+      {
+        question: "Are your kitchenware products suitable for everyday use?",
+        answer: "Most items in this category are designed for everyday household use — check individual product pages for specific care and durability details.",
+      },
+      {
+        question: "Do your kitchen products come with a warranty?",
+        answer: "Warranty terms vary by product and brand — check the individual product page for specific coverage details.",
+      },
+      {
+        question: "Are your kitchenware products dishwasher safe?",
+        answer: "This varies by material and product — check the individual product page, as some traditional metal dinnerware may require hand washing.",
+      },
+      {
+        question: "Can I buy kitchenware in sets or individually?",
+        answer: "Availability varies by product — check the individual product page for set versus individual piece options.",
+      },
+      {
+        question: "Do you sell kitchenware made from stainless steel?",
+        answer: "Material availability varies by product — check the individual product page, as stainless steel is a common choice for traditional South Asian dinnerware.",
+      },
+      {
+        question: "Are these products food-safe?",
+        answer: "Products intended for food use are manufactured to relevant food-safety standards — check the individual product page for specific certification details.",
+      },
+      {
+        question: "Can I return kitchenware if it arrives damaged?",
+        answer: "Please refer to our returns and refunds policy for guidance on damaged or faulty items.",
+      },
+      {
+        question: "Will more kitchen appliance subcategories be added over time?",
+        answer: "Yes — this category is expected to grow beyond dinnerware to include more kitchen tools and equipment; check back as the range expands.",
+      },
+      {
+        question: "Do you sell kitchenware suitable for gifting?",
+        answer: "Gift-appropriate sets or packaging availability varies — check the site for current options, particularly around festivals.",
+      },
+      {
+        question: "Are your kitchen products imported or locally sourced?",
+        answer: "Sourcing varies by product — check the individual product page for origin details.",
+      },
+      {
+        question: "Can I buy kitchenware in bulk, for example for a restaurant or event?",
+        answer: "Bulk ordering availability varies — contact customer service for larger quantity needs.",
+      },
+      {
+        question: "Are your kitchenware products microwave safe?",
+        answer: "This varies significantly by material — traditional metal dinnerware is generally not microwave safe, while some melamine or ceramic options may be. Check the individual product page.",
+      },
+      {
+        question: "How should I care for traditional steel or brass kitchenware?",
+        answer: "Care instructions vary by material — check the individual product page, as some traditional metals require specific cleaning methods to maintain their finish.",
+      },
+    ],
+  },
+  religious: {
+    sections: [
+      {
+        title: "Explore Religious & Devotional Essentials",
+        description:
+          "Everyday worship and special religious occasions both rely on a set of familiar, trusted essentials. This category brings together devotional and worship items for South Asian households — a range that will grow over time as more specific product types are added.\n\n" +
+          "Whether for daily prayer, festive celebrations, or sacred rituals, find authentic essentials delivered directly to your doorstep across the Netherlands.",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1609137144822-26338b251174?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "Do you deliver religious and devotional items across the Netherlands?",
+        answer: "Yes — AsianSpices.online currently ships across the Netherlands, with further European markets planned as those regions come online.",
+      },
+      {
+        question: "What kinds of religious items will be available in this category?",
+        answer: "This category is still being built out — check back as specific product types are confirmed and added.",
+      },
+      {
+        question: "Will this category include items for more than one religious tradition?",
+        answer: "This hasn't been confirmed yet. The category is structured to potentially expand across multiple traditions depending on customer demand and catalog planning.",
+      },
+      {
+        question: "Can I request a specific religious or devotional item to be stocked?",
+        answer: "Product requests can typically be sent via customer service — check the site's contact page for how to get in touch.",
+      },
+      {
+        question: "Are these products suitable for daily use as well as special occasions?",
+        answer: "This will depend on the specific items added to the category — details will be available on individual product pages once live.",
+      },
+      {
+        question: "Do you sell items for specific festivals or religious occasions?",
+        answer: "Festival-specific product availability is still being planned — check back as the category develops, particularly around major occasions.",
+      },
+      {
+        question: "Are your religious products ethically and respectfully sourced?",
+        answer: "Sourcing details will be provided on individual product pages once specific products are confirmed and listed.",
+      },
+      {
+        question: "Can I buy religious items in bulk for an event or gathering?",
+        answer: "Bulk ordering options will depend on the specific products available — contact customer service for larger quantity needs once the range is live.",
+      },
+      {
+        question: "How should I store or care for devotional items?",
+        answer: "Care instructions will vary by product and material — specific guidance will be provided on individual product pages once available.",
+      },
+      {
+        question: "Will this category have its own set of subcategories?",
+        answer: "Yes — subcategories are planned but not yet finalized; this hub page will be updated with a full \"Browse by Type\" list once they're confirmed.",
+      },
+      {
+        question: "Are religious items suitable for gifting?",
+        answer: "Many devotional items are traditionally given as gifts for religious occasions — specific gifting-appropriate options will be detailed once the product range is confirmed.",
+      },
+      {
+        question: "Who can I contact with questions about this category before it's fully built out?",
+        answer: "Reach out via the site's customer service or contact page for the latest updates on this category's development.",
+      },
+    ],
+  },
   beverages: {
     sections: [
       {
@@ -786,17 +969,1077 @@ image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?auto=format
       },
     ],
   },
+  "weight-loss": {
+    sections: [
+      {
+        title: "Weight Management Support: Traditional Herbs for a Balanced Routine",
+        description:
+          "A healthy weight is supported by many things working together — diet, activity, sleep and stress all play a role, and no single herb replaces any of them. What traditional herbal wellness offers is support alongside those fundamentals: botanicals long used to support a normally functioning metabolism, a feeling of fullness after meals, and a sense of lightness as part of an everyday balanced routine.\n\n" +
+          "The herbs below are shared in that spirit — as traditional support for a healthy, active lifestyle, not as a substitute for medical advice or a promise of any specific result.\n\n" +
+          "Traditional Metabolism Support:\n" +
+          "Herbs such as Green Tea Extract, Ginger and Black Pepper (Piperine) have a long tradition of use in supporting a normally functioning metabolism as part of a balanced routine. From Ayurvedic tradition, Guggul (Commiphora mukul) has historically been associated with metabolic support in classical texts, alongside its more established traditional use for joint comfort.\n\n" +
+          "Fiber & Fullness Support:\n" +
+          "Glucomannan (Konjac) is the one ingredient on this page with an actual EU-authorised weight-loss claim: \"in the context of an energy-restricted diet, contributes to weight loss\" — but only when providing a daily intake of 3g in three 1g doses, taken with 1–2 glasses of water before meals, and only as part of an energy-restricted diet. It also requires a choking-risk warning for anyone with swallowing difficulties or who doesn't take it with enough fluid. This exact wording, dosage and warning must be verified by legal/compliance before publishing — it cannot be shortened or paraphrased.\n\n" +
+          "Other fiber-rich botanicals, such as Psyllium Husk and Fenugreek (Methi), are traditionally used to support a feeling of fullness after meals, which is a permitted claim category (satiety) distinct from a weight-loss claim.\n\n" +
+          "Traditional Digestive Support:\n" +
+          "Digestive tonics like Triphala and the classic Cumin-Coriander-Fennel (CCF) Blend (see our Grandma's Kitchen Remedies page) are traditionally used to support digestion and a feeling of lightness, and pair naturally with an active, balanced routine.\n\n" +
+          "Shop the Herbs in This Guide:\n" +
+          "• Green Tea Extract\n" +
+          "• Ginger\n" +
+          "• Black Pepper (Piperine)\n" +
+          "• Guggul (Commiphora mukul)\n" +
+          "• Glucomannan (Konjac)\n" +
+          "• Psyllium Husk\n" +
+          "• Fenugreek (Methi)\n" +
+          "• Triphala",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "Can herbs alone cause weight loss?",
+        answer: "No single herb is a substitute for a balanced diet and regular physical activity. Traditional herbs are best understood as support alongside these fundamentals, not a replacement for them.",
+      },
+      {
+        question: "Is Glucomannan proven to cause weight loss?",
+        answer: "Glucomannan is the only ingredient with an EU-authorised weight-loss claim, but that claim only applies in the context of an energy-restricted diet and a specific daily intake (3g, in three 1g doses, with water, before meals) — it isn't a claim that the ingredient alone causes weight loss.",
+      },
+      {
+        question: "How much weight will I lose using these products?",
+        answer: "We can't state or imply a specific amount or rate of weight loss — EU regulation prohibits this for all products, and individual results vary significantly based on diet, activity and many other factors.",
+      },
+      {
+        question: "Are these products a substitute for diet and exercise?",
+        answer: "No — these herbs are intended as traditional support alongside a balanced diet and regular physical activity, not a replacement for either.",
+      },
+      {
+        question: "What does 'supports metabolism' actually mean?",
+        answer: "It means the herb has a traditional or scientific association with normal metabolic processes — it does not mean the herb causes weight loss on its own.",
+      },
+      {
+        question: "Is Green Tea Extract safe to take daily?",
+        answer: "Green Tea Extract is commonly used daily by many people, but it does contain natural caffeine — check the product label for guidance and consult a healthcare professional if you're sensitive to caffeine or take medication.",
+      },
+      {
+        question: "What is Guggul traditionally used for?",
+        answer: "Guggul is a resin from Ayurvedic tradition historically associated with metabolic support in classical texts, and more established in modern use for joint comfort.",
+      },
+      {
+        question: "How should I take Glucomannan safely?",
+        answer: "Always take Glucomannan with plenty of water, as recommended on the product label — inadequate fluid intake or swallowing difficulties can pose a choking risk, which is why this warning is legally required on the product.",
+      },
+      {
+        question: "Can fiber supplements like Psyllium help me feel full?",
+        answer: "Psyllium Husk and similar fiber-rich ingredients are traditionally used to support a feeling of fullness after meals, which may support portion awareness as part of a balanced diet.",
+      },
+      {
+        question: "Are weight-management herbs safe for everyone?",
+        answer: "No — these products are not suitable for everyone. They're not recommended for anyone who is pregnant, breastfeeding, underweight, has a history of disordered eating, or has an existing health condition, without first consulting a healthcare professional.",
+      },
+      {
+        question: "Can I combine multiple weight-management herbs together?",
+        answer: "Some people combine herbs from different categories on this page, but it's best to introduce one new herb at a time, follow labeled dosages, and consult a healthcare professional, especially if combining with medication.",
+      },
+      {
+        question: "Why don't your product descriptions mention specific weight-loss results?",
+        answer: "EU regulation prohibits any claim referencing a specific rate or amount of weight loss for any product. We describe traditional use and general support instead, so you have accurate information to make your own decision.",
+      },
+      {
+        question: "Is it healthy to take weight-management supplements long-term?",
+        answer: "This depends on the specific herb — some are intended for continuous use, others for cycles. Long-term use of any supplement should be discussed with a healthcare professional, particularly a dietitian.",
+      },
+      {
+        question: "Can these herbs interact with medication?",
+        answer: "Some herbs, including Green Tea Extract and Guggul, can interact with certain medications. Always check with a doctor or pharmacist before combining herbal supplements with prescribed treatment.",
+      },
+      {
+        question: "What's the healthiest way to approach weight management?",
+        answer: "Most health professionals recommend a sustainable, balanced approach — a varied diet, regular movement, adequate sleep and stress management — with any supplement, herbal or otherwise, playing a supporting role rather than being relied on alone.",
+      },
+    ],
+  },
 };
 
 
-export const subcategoryContentMap: Record<
-  string,
-  {
-    sections: { title: string; description: string }[];
-    image: string;
-    faqs: { question: string; answer: string }[];
-  }
-> = {
+export const subcategoryContentMap: Record<string, CategoryContentItem> = {
+  "capsules": {
+    sections: [
+      {
+        title: "Herbal Supplement Capsules: Convenient Daily Wellness",
+        description:
+          "For anyone who wants the benefits of traditional herbs without measuring, mixing or tasting anything, capsules are the simplest way to build a herb into a daily routine. Each capsule contains a pre-measured amount of powdered herb, so dosing stays consistent every time.\n\n" +
+          "Why Choose Capsules:\n" +
+          "Capsules are popular for three reasons: consistent dosing (no guesswork with a spoon), no taste (useful for bitter herbs like Kutki or Chirata), and portability — they travel well and fit into a morning or evening routine alongside other supplements.\n\n" +
+          "How to Take Herbal Capsules:\n" +
+          "Most herbal capsules are taken with water, either on an empty stomach or with food depending on the herb — always follow the guidance on the product label. If you have difficulty swallowing capsules, some (though not all) can be opened and mixed into food or a smoothie; check the specific product page before doing this.\n\n" +
+          "Shop the Herbs & Spices in This Guide:\n" +
+          "• Ashwagandha Capsules\n" +
+          "• Turmeric Capsules\n" +
+          "• Shilajit Capsules\n" +
+          "• Panax Ginseng Capsules\n" +
+          "• Triphala Capsules\n" +
+          "• Guggulu Capsules\n" +
+          "• Milk Thistle Capsules\n" +
+          "• Brahmi (Bacopa Monnieri) Capsules\n" +
+          "• Guduchi (Giloy) Capsules\n" +
+          "• Arjuna Capsules",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What are herbal capsules made from?",
+        answer: "Herbal capsules typically contain powdered herb inside a gelatin or vegetarian (cellulose-based) shell. Shell material is listed on each product page.",
+      },
+      {
+        question: "Are herbal capsules vegan or vegetarian-friendly?",
+        answer: "Some are — check the shell material on the specific product page, as gelatin capsules are not vegan or vegetarian.",
+      },
+      {
+        question: "Should I take herbal capsules with food or on an empty stomach?",
+        answer: "This depends on the herb. Some, like Ashwagandha, are commonly taken with food to reduce any stomach sensitivity, while others are taken on an empty stomach for faster absorption. Check the label for specific guidance.",
+      },
+      {
+        question: "Can I open a capsule and mix the powder into food?",
+        answer: "Some capsules can be opened and mixed into food or a drink, but not all — check the specific product page, as some herbs are formulated for capsule delivery specifically.",
+      },
+      {
+        question: "How many capsules should I take per day?",
+        answer: "Recommended dosage varies by herb and product; always follow the label instructions and don't exceed the recommended daily amount.",
+      },
+      {
+        question: "Do herbal capsules expire?",
+        answer: "Yes, capsules have a best-by date printed on the packaging. Store in a cool, dry place to preserve potency until then.",
+      },
+      {
+        question: "Can I take multiple herbal capsules together?",
+        answer: "Many people combine capsules from different categories (for example, an energy herb in the morning and a calming herb in the evening), but introduce one new herb at a time and check for interactions.",
+      },
+      {
+        question: "Why do some capsules cost more than others?",
+        answer: "Price differences usually reflect the herb's rarity, sourcing region (e.g., high-altitude Himalayan herbs), extraction method, and concentration per capsule.",
+      },
+      {
+        question: "Are capsules more effective than powders?",
+        answer: "Not necessarily — capsules and powders of the same herb typically contain the same material, just in a different delivery format. Capsules offer convenience and precise dosing; powders offer flexibility.",
+      },
+      {
+        question: "Can I travel with herbal capsules?",
+        answer: "Yes, capsules are one of the most travel-friendly herbal formats since they don't require measuring or refrigeration.",
+      },
+      {
+        question: "Is it safe to take herbal capsules long-term?",
+        answer: "This depends on the herb — some are intended for continuous daily use, while others (like Milk Thistle) are traditionally used in cycles. Check product guidance.",
+      },
+      {
+        question: "Are herbal capsules safe during pregnancy?",
+        answer: "Several herbs available in capsule form, including Ashwagandha and Guggulu, are not recommended during pregnancy. Always consult a healthcare professional first.",
+      },
+      {
+        question: "What size are your herbal capsules?",
+        answer: "Capsule size (and mg per capsule) varies by product and is listed on each individual product page.",
+      },
+      {
+        question: "Can children take herbal capsules?",
+        answer: "Most herbal capsules on this site are formulated with adults in mind. Speak to a pediatrician before giving any herbal supplement to a child.",
+      },
+      {
+        question: "How should I store herbal capsules?",
+        answer: "Keep capsules in their original container, sealed, in a cool, dry place away from direct sunlight and humidity.",
+      },
+    ],
+  },
+  "powders": {
+    sections: [
+      {
+        title: "Herbal Supplement Powders: Traditional Botanical Powders",
+        description:
+          "Powdered herbs are the most traditional form of herbal supplementation — the same format used in Ayurvedic and Himalayan households for generations. A powder gives you full flexibility: stir it into water, blend it into a smoothie, or use it in a classic preparation like Golden Milk or Triphala water.\n\n" +
+          "Why Choose Powders:\n" +
+          "Powders offer three advantages over capsules: dosing flexibility (you decide the amount, from a pinch to a full teaspoon), versatility in the kitchen — turmeric and fenugreek powder can go straight into cooking as well as wellness drinks — and, generally, better value per serving since there's no capsule-manufacturing cost.\n\n" +
+          "How to Use Herbal Powders:\n" +
+          "Most powders are mixed with warm water, milk (dairy or plant-based), or a smoothie base. Herbs like Turmeric are traditionally paired with black pepper and a fat source (like milk or ghee) to support absorption. Store powders in an airtight container to protect against moisture, which can affect both potency and shelf life.\n\n" +
+          "Shop the Herbs & Spices in This Guide:\n" +
+          "• Turmeric Powder\n" +
+          "• Ashwagandha Powder\n" +
+          "• Triphala Powder\n" +
+          "• Amla (Indian Gooseberry) Powder\n" +
+          "• Fenugreek (Methi) Powder\n" +
+          "• Maca Root Powder\n" +
+          "• Ginger Powder\n" +
+          "• Moringa Powder\n" +
+          "• Cumin-Coriander-Fennel (CCF) Blend Powder",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "How much herbal powder should I take per day?",
+        answer: "Recommended serving size varies by herb — check the product label for guidance, typically starting with a smaller amount (such as 1/4 to 1/2 teaspoon) and adjusting from there.",
+      },
+      {
+        question: "What's the best way to mix herbal powders?",
+        answer: "Most powders mix well into warm water, milk, or a smoothie. Stronger-tasting or bitter powders are often masked better in a smoothie with fruit than in plain water.",
+      },
+      {
+        question: "Why is black pepper added to turmeric powder preparations?",
+        answer: "Black pepper contains piperine, a compound traditionally believed to help the body absorb turmeric's curcumin more effectively.",
+      },
+      {
+        question: "Can I cook with these herbal powders?",
+        answer: "Yes — powders like Turmeric, Ginger and Fenugreek are traditional kitchen spices as well as wellness herbs, so they can go directly into cooking.",
+      },
+      {
+        question: "How should I store herbal powders?",
+        answer: "Keep powders in a sealed, airtight container away from direct light and moisture. Humidity is the biggest risk to both flavor and potency.",
+      },
+      {
+        question: "How long do herbal powders stay fresh?",
+        answer: "Most herbal powders stay potent for 12–24 months when stored properly, though this varies by herb — check the product's best-by date.",
+      },
+      {
+        question: "Are powders more potent than capsules?",
+        answer: "Not necessarily — powders and capsules of the same herb usually come from the same base material. Powders simply let you control the exact amount yourself.",
+      },
+      {
+        question: "Can I take herbal powder on an empty stomach?",
+        answer: "This depends on the herb — some, like Triphala, are traditionally taken in the evening on a fairly empty stomach, while others are better taken with food. Check specific product guidance.",
+      },
+      {
+        question: "Is it normal for herbal powders to taste bitter?",
+        answer: "Yes, many traditional herbs (like Triphala, Kutki or Neem) are naturally bitter — this is expected and often considered part of their traditional use, though mixing with honey or a smoothie can help.",
+      },
+      {
+        question: "Can I use herbal powder in baking?",
+        answer: "Some powders, like Ginger or Turmeric, work well in baking; others (like Ashwagandha) are more commonly used in drinks. Check individual recipes and product guidance.",
+      },
+      {
+        question: "Are herbal powders suitable for smoothies?",
+        answer: "Yes — powders blend easily into smoothies and are one of the most popular ways to take herbs like Maca Root, Moringa and Ashwagandha.",
+      },
+      {
+        question: "Do herbal powders need refrigeration?",
+        answer: "Most herbal powders don't require refrigeration and are best kept in a cool, dry pantry — check the specific product label.",
+      },
+      {
+        question: "Is herbal powder the same as ground spice from the supermarket?",
+        answer: "Sourcing, potency and purity can vary significantly — our herbal powders are sourced and processed specifically for wellness use, with sourcing details listed per product.",
+      },
+      {
+        question: "Can I use these powders during pregnancy?",
+        answer: "Several powders, including Ashwagandha and Fenugreek in concentrated amounts, are not recommended during pregnancy. Always check with a healthcare professional.",
+      },
+      {
+        question: "What's the difference between Triphala powder and Triphala capsules?",
+        answer: "Both contain the same traditional blend of Amla, Haritaki and Bibhitaki — the powder form is traditionally mixed with warm water, while capsules offer a tasteless, pre-measured alternative.",
+      },
+    ],
+  },
+  "teas": {
+    sections: [
+      {
+        title: "Herbal Wellness Tea: Traditional Botanical Tea Blends",
+        description:
+          "Tea is the slowest and most ritual-based way to take a herb — and often the most enjoyable. Steeping dried leaves, roots or flowers in hot water has been a daily practice across cultures for centuries, from Ayurvedic Tulsi tea to Himalayan herbal infusions, long before 'wellness tea' became a modern shelf category.\n\n" +
+          "Why Choose Herbal Tea:\n" +
+          "Tea offers something capsules and powders don't: a built-in pause. The few minutes it takes to steep and sip a cup of Chamomile or Holy Basil (Tulsi) tea double as a small daily ritual, alongside the herb's traditional benefits. Herbal teas are also naturally hydrating and generally deliver a gentler dose than a concentrated powder or capsule.\n\n" +
+          "How to Brew for Best Results:\n" +
+          "Most herbal teas are steeped in water just off the boil (around 90–95°C) for 5–10 minutes, covered, to retain the herb's natural oils. Delicate flowers like Chamomile and Lemon Balm prefer slightly cooler water and a shorter steep, while roots like Valerian and Ginger benefit from a longer steep or gentle simmer to draw out their full flavor and traditional properties.\n\n" +
+          "Shop the Herbs & Spices in This Guide:\n" +
+          "• Holy Basil (Tulsi) Tea\n" +
+          "• Chamomile Tea\n" +
+          "• Valerian Root Tea\n" +
+          "• Ginger Tea\n" +
+          "• Lemon Balm Tea\n" +
+          "• Hibiscus Tea\n" +
+          "• Fennel (Saunf) Tea\n" +
+          "• Peppermint Tea\n" +
+          "• Green Tea",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "How long should I steep herbal tea?",
+        answer: "Most herbal teas are steeped for 5–10 minutes, covered. Delicate flowers like Chamomile need less time, while roots like Valerian or Ginger often benefit from a longer steep.",
+      },
+      {
+        question: "Does herbal tea contain caffeine?",
+        answer: "Most single-herb wellness teas (Tulsi, Chamomile, Valerian, Ginger) are naturally caffeine-free, with the exception of Green Tea, which contains a modest amount of natural caffeine.",
+      },
+      {
+        question: "What's the best herbal tea for winding down in the evening?",
+        answer: "Chamomile, Valerian Root and Lemon Balm are among the most traditionally used herbal teas for an evening wind-down routine.",
+      },
+      {
+        question: "Can I drink herbal tea every day?",
+        answer: "Many herbal teas, like Chamomile and Tulsi, are traditionally drunk daily, but some (like Valerian) are better reserved for occasional use — check specific product guidance.",
+      },
+      {
+        question: "How many cups of herbal tea can I drink per day?",
+        answer: "This varies by herb; most wellness teas suggest 1–3 cups daily, but always check the specific product label for guidance.",
+      },
+      {
+        question: "Can I drink herbal tea cold or as iced tea?",
+        answer: "Yes — most herbal teas, especially Hibiscus and Peppermint, work well as a cold brew or chilled iced tea.",
+      },
+      {
+        question: "Is herbal tea safe during pregnancy?",
+        answer: "Not all herbal teas are considered safe during pregnancy — some, like Tulsi in large amounts, are best avoided. Always check with a healthcare professional before drinking a new herbal tea while pregnant.",
+      },
+      {
+        question: "What water temperature is best for herbal tea?",
+        answer: "Most herbal teas are brewed with water just off the boil, around 90–95°C, rather than a full boil, to protect delicate aromatic oils.",
+      },
+      {
+        question: "Can I add honey or lemon to herbal tea?",
+        answer: "Yes — honey and lemon are commonly added to herbal teas like Ginger or Tulsi, and are traditionally paired together for soothing a scratchy throat.",
+      },
+      {
+        question: "How should I store loose-leaf herbal tea?",
+        answer: "Store loose tea in an airtight container away from light, heat and moisture, and use within about 12 months of opening for the best flavor.",
+      },
+      {
+        question: "What's the difference between herbal tea and green/black tea?",
+        answer: "Herbal teas (also called infusions) are made from herbs, flowers or roots and are naturally caffeine-free, while green and black tea come from the Camellia sinensis plant and contain natural caffeine.",
+      },
+      {
+        question: "Can herbal tea help with digestion after a meal?",
+        answer: "Peppermint and Fennel tea are among the most traditionally used herbal teas for easing digestive discomfort after a meal.",
+      },
+      {
+        question: "Are your herbal teas loose-leaf or tea bags?",
+        answer: "Format (loose-leaf vs. bagged) varies by product — check the individual product page for packaging details.",
+      },
+      {
+        question: "Can I reuse tea leaves for a second cup?",
+        answer: "Some herbal teas can be steeped a second time at a milder strength, but flavor and potency will be reduced compared to the first steep.",
+      },
+      {
+        question: "Can children drink herbal tea?",
+        answer: "Some herbal teas are generally considered gentle, but not all are suitable for children — check with a pediatrician before giving herbal tea to a child.",
+      },
+    ],
+  },
+  "face-oils": {
+    sections: [
+      {
+        title: "Herbal Face Oil: Traditional Botanical Oils for Nourished Skin",
+        description:
+          "Face oils are one of the oldest forms of skin care, used across Ayurvedic and Himalayan traditions long before modern serums existed. A good herbal face oil is typically applied after cleansing to nourish the skin, help lock in moisture, and leave a naturally healthy-looking finish.\n\n" +
+          "Nourish & Balance: Everyday Face Oils:\n" +
+          "Lightweight carrier oils like Sweet Almond Oil, Jojoba Oil and Rosehip Oil are traditionally used to nourish the skin without feeling heavy, and are suitable for daily use across most skin types.\n\n" +
+          "Traditional Glow: Ayurvedic & Himalayan Oil Blends:\n" +
+          "The classic Ayurvedic blend Kumkumadi Oil — traditionally infused with saffron and a combination of herbs — has centuries of use in Ayurvedic tradition, associated with radiance and evening out the look of the complexion. Neem Oil is traditionally used for its purifying reputation, often chosen by those with blemish-prone skin, while Himalayan Sandalwood-Infused Oil is valued in traditional practices for its calming aroma and association with soothed, balanced skin.\n\n" +
+          "Shop the Ingredients in This Guide:\n" +
+          "• Kumkumadi Oil\n" +
+          "• Rosehip Oil\n" +
+          "• Neem Oil\n" +
+          "• Sandalwood-Infused Oil\n" +
+          "• Sweet Almond Oil\n" +
+          "• Jojoba Oil\n" +
+          "• Moringa Oil\n" +
+          "• Tea Tree Facial Oil",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1608248597359-00624d567f67?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is a herbal face oil used for?",
+        answer: "A herbal face oil is typically applied after cleansing to nourish the skin, help lock in moisture, and leave a naturally healthy-looking finish.",
+      },
+      {
+        question: "What is Kumkumadi Oil?",
+        answer: "Kumkumadi Oil is a classic Ayurvedic face oil traditionally infused with saffron and other botanicals, associated in tradition with radiance and an even-looking complexion.",
+      },
+      {
+        question: "Is face oil suitable for oily skin?",
+        answer: "Yes — many lightweight oils like Jojoba are traditionally used even on oilier skin types, as they can help balance the skin's own oil production. Choose a lighter formulation if you have oily or acne-prone skin.",
+      },
+      {
+        question: "When should I apply face oil in my routine?",
+        answer: "Face oil is typically applied after cleansing (and after a water-based serum, if used), as the last step to help lock in hydration.",
+      },
+      {
+        question: "How many drops of face oil should I use?",
+        answer: "Most face oils only require 2–4 drops per application — a little goes a long way. Check specific product guidance.",
+      },
+      {
+        question: "Can I use face oil every day?",
+        answer: "Many herbal face oils are formulated for daily use, once or twice a day, but check the specific product page for guidance suited to your skin type.",
+      },
+      {
+        question: "Is Neem Oil good for blemish-prone skin?",
+        answer: "Neem Oil has a long tradition of use in Ayurvedic skincare for blemish-prone skin, valued for its purifying reputation.",
+      },
+      {
+        question: "Can face oil clog pores?",
+        answer: "Some oils are heavier than others — lighter oils like Jojoba and Rosehip are traditionally chosen for their non-heavy feel, but individual skin response varies. Patch test before full use.",
+      },
+      {
+        question: "What is Sandalwood-Infused Oil traditionally used for?",
+        answer: "Sandalwood-infused oil is valued in Himalayan and Ayurvedic tradition for its calming aroma and association with soothed, balanced-looking skin.",
+      },
+      {
+        question: "Can I mix face oil with my moisturizer?",
+        answer: "Yes — many people mix a few drops of face oil into their cream for extra nourishment, particularly in colder or drier weather.",
+      },
+      {
+        question: "Is Rosehip Oil good for scarring or uneven texture?",
+        answer: "Rosehip Oil has a long tradition of use in skincare routines focused on skin texture and tone, though results vary by individual.",
+      },
+      {
+        question: "How should I store herbal face oil?",
+        answer: "Store face oils in a cool, dark place away from direct sunlight, which can degrade the oil's quality over time.",
+      },
+      {
+        question: "Can face oil be used on sensitive skin?",
+        answer: "Some face oils are gentle enough for sensitive skin, but always patch test first, especially with fragranced blends like Kumkumadi Oil.",
+      },
+      {
+        question: "Does face oil expire?",
+        answer: "Yes — natural oils generally have a shelf life of 6–12 months once opened; check the product's Period-After-Opening symbol.",
+      },
+      {
+        question: "Can I use face oil around my eyes?",
+        answer: "Some lighter oils can be used gently around the eye area, but avoid direct contact with the eyes themselves. Check individual product guidance.",
+      },
+    ],
+  },
+  "cleansers": {
+    sections: [
+      {
+        title: "Herbal Face Cleanser: Traditional Botanical Face Wash",
+        description:
+          "Cleansing is the first and most repeated step in any skin care routine, which is why the choice of cleanser matters. Traditional herbal cleansers are formulated to lift away dirt, oil and impurities gently, without leaving the skin feeling tight or stripped the way some harsher, foaming washes can.\n\n" +
+          "Gentle Daily Cleansing:\n" +
+          "Ingredients like Aloe Vera, Rose Water and Besan (Chickpea Flour) are traditionally used in gentle daily cleansers, valued for clearing the skin without over-drying it — Besan in particular is a staple of traditional Ayurvedic bathing and cleansing rituals.\n\n" +
+          "Purifying Traditions: Neem & Turmeric Cleansers:\n" +
+          "For those seeking a deeper cleanse, Neem and Turmeric cleansers draw on centuries of Ayurvedic tradition, both valued for their purifying reputation and commonly chosen by those with oilier or blemish-prone skin. Tea Tree is another traditional favorite, often included in cleansers aimed at clearer-looking skin.\n\n" +
+          "Shop the Ingredients in This Guide:\n" +
+          "• Neem Face Cleanser\n" +
+          "• Turmeric Face Cleanser\n" +
+          "• Besan (Chickpea Flour) Cleanser\n" +
+          "• Aloe Vera Cleanser\n" +
+          "• Rose Water Cleanser\n" +
+          "• Tea Tree Cleanser\n" +
+          "• Multani Mitti (Fuller's Earth) Cleanser",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is a herbal face cleanser used for?",
+        answer: "A herbal face cleanser is a gentle, botanical-based face wash used to lift away dirt, oil, makeup and impurities without over-drying the skin.",
+      },
+      {
+        question: "What is Besan (Chickpea Flour) traditionally used for in skincare?",
+        answer: "Besan is a staple of traditional Ayurvedic bathing and cleansing rituals, mixed into a paste and used as a gentle exfoliating cleanser.",
+      },
+      {
+        question: "Is Neem Face Cleanser good for oily or acne-prone skin?",
+        answer: "Neem has a long tradition of use in Ayurvedic skincare, valued for its purifying reputation and commonly chosen by those with oilier or blemish-prone skin.",
+      },
+      {
+        question: "How often should I use a herbal cleanser?",
+        answer: "Most herbal cleansers are designed for twice-daily use — morning and evening — but check individual product guidance, especially for exfoliating formulas.",
+      },
+      {
+        question: "Can herbal cleansers remove makeup?",
+        answer: "Some herbal cleansers, particularly oil-based ones, can remove makeup effectively; check the specific product page, as not all cleansers are formulated for makeup removal.",
+      },
+      {
+        question: "Is Turmeric Cleanser safe for daily use?",
+        answer: "Turmeric cleansers are generally used daily or every other day; very fair skin may notice a slight temporary tint that fades after rinsing.",
+      },
+      {
+        question: "What is Rose Water Cleanser traditionally used for?",
+        answer: "Rose Water has a long tradition of use in skincare for its gentle, soothing reputation, often used as a light daily cleanser or toner.",
+      },
+      {
+        question: "Can herbal cleansers dry out my skin?",
+        answer: "Herbal cleansers are generally formulated to be gentler than harsh foaming washes, but individual skin response varies — if you notice dryness or tightness, consider a cream-based rather than a clay-based cleanser.",
+      },
+      {
+        question: "What's the difference between a cleanser and an exfoliating cleanser?",
+        answer: "A standard cleanser lifts away surface dirt and oil, while an exfoliating cleanser (like one with Besan) also gently removes dead skin cells, and is typically used less frequently — a few times a week rather than daily.",
+      },
+      {
+        question: "Can I use a herbal cleanser if I have sensitive skin?",
+        answer: "Many herbal cleansers are formulated to be gentle, but always patch test first, especially with ingredients like Turmeric or Tea Tree that can be more active.",
+      },
+      {
+        question: "Is Multani Mitti (Fuller's Earth) Cleanser suitable for dry skin?",
+        answer: "Multani Mitti has a traditionally mattifying, purifying reputation and tends to suit oilier skin types better than very dry skin — those with dry skin may prefer a cream-based cleanser instead.",
+      },
+      {
+        question: "Should I use warm or cold water with a herbal cleanser?",
+        answer: "Lukewarm water is generally recommended for cleansing, as very hot water can be drying and very cold water may not effectively remove oil-based impurities.",
+      },
+      {
+        question: "Can herbal cleansers be used to remove sunscreen?",
+        answer: "Oil-based or richer herbal cleansers are typically more effective at removing sunscreen than very light, water-based ones — check the specific product page.",
+      },
+      {
+        question: "Do herbal cleansers foam?",
+        answer: "Formulation varies by product — some herbal cleansers foam lightly, while others (like clay or oil-based cleansers) don't foam at all. This doesn't affect how well they clean the skin.",
+      },
+      {
+        question: "How should I store herbal cleansers?",
+        answer: "Keep cleansers tightly sealed in a cool, dry place, and avoid introducing water into powder or clay-based formulas until you're ready to use them.",
+      },
+    ],
+  },
+  "creams": {
+    sections: [
+      {
+        title: "Herbal Face Cream: Traditional Botanical Moisturizers",
+        description:
+          "A good herbal cream is the everyday backbone of a skin care routine — richer than a face oil, and designed to keep skin comfortably hydrated throughout the day or overnight. Traditional botanical creams combine soothing, moisture-rich ingredients with herbs long valued for their skin-supportive reputation.\n\n" +
+          "Everyday Hydration: Botanical Moisturizers:\n" +
+          "Ingredients like Aloe Vera, Shea Butter and Calendula are widely used in traditional and modern skin care for their soothing, moisture-rich reputation, making them well suited to everyday use across most skin types.\n\n" +
+          "Traditional Radiance: Ayurvedic & Himalayan Cream Blends:\n" +
+          "Himalayan Turmeric Cream draws on turmeric's long-standing traditional association with an even, healthy-looking complexion. Multani Mitti (Fuller's Earth) Cream is a classic Ayurvedic ingredient traditionally used for its purifying, mattifying reputation, while Manjistha Cream has a long history in Ayurvedic tradition as a botanical associated with skin clarity.\n\n" +
+          "Shop the Ingredients in This Guide:\n" +
+          "• Aloe Vera Cream\n" +
+          "• Turmeric Cream\n" +
+          "• Calendula Cream\n" +
+          "• Shea Butter Cream\n" +
+          "• Multani Mitti (Fuller's Earth) Cream\n" +
+          "• Manjistha Cream\n" +
+          "• Neem Cream",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is a herbal face cream used for?",
+        answer: "A herbal face cream is a daily moisturizer formulated with botanical ingredients, used to keep skin hydrated and comfortable throughout the day or overnight.",
+      },
+      {
+        question: "What is Multani Mitti (Fuller's Earth)?",
+        answer: "Multani Mitti is a classic Ayurvedic clay-based ingredient traditionally used for its purifying, mattifying reputation, often chosen for oilier skin types.",
+      },
+      {
+        question: "Is Turmeric Cream good for uneven skin tone?",
+        answer: "Turmeric has a long-standing traditional association with an even, healthy-looking complexion, and is a common ingredient in Ayurvedic brightening creams.",
+      },
+      {
+        question: "Can I use herbal cream both morning and night?",
+        answer: "Yes — many herbal creams are formulated for twice-daily use, though richer night creams may be designed specifically for overnight hydration. Check product guidance.",
+      },
+      {
+        question: "What is Manjistha traditionally used for in skincare?",
+        answer: "Manjistha is a botanical with a long history in Ayurvedic tradition, associated with supporting skin clarity and an even-looking tone.",
+      },
+      {
+        question: "Is Aloe Vera Cream good for sensitive or irritated skin?",
+        answer: "Aloe Vera has a long tradition of use in skincare for its soothing reputation, often chosen for sensitive or easily irritated skin — but always patch test first.",
+      },
+      {
+        question: "Can herbal creams stain the skin, given ingredients like Turmeric?",
+        answer: "Turmeric-based creams can occasionally leave a slight temporary tint on very fair skin; this typically fades shortly after application and washes off with cleanser.",
+      },
+      {
+        question: "Are herbal creams suitable for oily skin?",
+        answer: "Lighter formulations, and ingredients like Multani Mitti, are traditionally favored for oilier skin types, while richer creams with Shea Butter suit drier skin.",
+      },
+      {
+        question: "How much cream should I apply?",
+        answer: "A small, pea-sized amount is usually enough to cover the face and neck — check specific product guidance for richer or more concentrated formulas.",
+      },
+      {
+        question: "Do herbal creams contain SPF?",
+        answer: "SPF content varies by product — check the individual product label, and consider a separate sunscreen if the cream doesn't include SPF.",
+      },
+      {
+        question: "Can I use herbal cream under makeup?",
+        answer: "Yes — most herbal moisturizing creams work well as a base under makeup once fully absorbed.",
+      },
+      {
+        question: "How should I store herbal face cream?",
+        answer: "Store in a cool, dry place with the lid tightly closed to prevent contamination and preserve the natural ingredients.",
+      },
+      {
+        question: "Does herbal cream expire?",
+        answer: "Yes — check the Period-After-Opening symbol on the packaging, typically 6–12 months once opened.",
+      },
+      {
+        question: "Is Neem Cream good for blemish-prone skin?",
+        answer: "Neem has a long tradition of use in Ayurvedic skincare for its purifying reputation, often chosen by those with blemish-prone or oily skin.",
+      },
+      {
+        question: "Can herbal cream be used on the body as well as the face?",
+        answer: "Some herbal face creams are formulated specifically for facial skin; check the product page to confirm whether a cream is suitable for body use as well.",
+      },
+    ],
+  },
+  "hair-oils": {
+    sections: [
+      {
+        title: "Herbal Hair Oils: Traditional Ayurvedic Scalp & Hair Oils",
+        description:
+          "Hair oiling is one of the oldest and most consistent rituals in Ayurvedic hair care — a weekly scalp massage that's stayed largely unchanged for centuries. Herbal hair oils combine a nourishing carrier oil (often sesame or coconut) with botanicals traditionally infused to support the scalp and the look and feel of hair over time.\n\n" +
+          "Traditional Scalp & Hair Nourishment:\n" +
+          "Himalayan Bhringraj — often called the 'king of hair' in Ayurvedic tradition — is one of the most widely used oils for scalp nourishment. Amla (Indian Gooseberry) Oil and Brahmi (Bacopa Monnieri) Oil are traditionally used alongside Bhringraj, often blended together, to support the appearance of stronger, healthier-looking hair over consistent use.\n\n" +
+          "Everyday Conditioning Oils:\n" +
+          "Base oils like Coconut Oil and Fenugreek (Methi)-Infused Oil are traditionally used for everyday conditioning, valued for their moisturizing reputation. Curry Leaf Oil and Rosemary Oil are also widely used in traditional hair care routines, often added to a base oil in small amounts as part of a scalp massage blend.\n\n" +
+          "Shop the Ingredients in This Guide:\n" +
+          "• Bhringraj Hair Oil\n" +
+          "• Amla Hair Oil\n" +
+          "• Brahmi (Bacopa Monnieri) Hair Oil\n" +
+          "• Fenugreek (Methi) Hair Oil\n" +
+          "• Coconut Hair Oil\n" +
+          "• Curry Leaf Hair Oil\n" +
+          "• Rosemary Hair Oil",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is Bhringraj Hair Oil traditionally used for?",
+        answer: "Bhringraj is often called the 'king of hair' in Ayurvedic tradition, and its oil is one of the most widely used botanicals for supporting scalp nourishment and the appearance of healthy hair.",
+      },
+      {
+        question: "How often should I use herbal hair oil?",
+        answer: "Many people use hair oil 1–3 times a week, applying it before a wash and leaving it on for a few hours or overnight, though frequency can vary by hair type.",
+      },
+      {
+        question: "How long should I leave hair oil in before washing?",
+        answer: "Traditional use ranges from 30 minutes to overnight, depending on the oil and your hair type — check the specific product guidance.",
+      },
+      {
+        question: "Can hair oil help with hair growth?",
+        answer: "Ingredients like Bhringraj and Amla have a long tradition of use in routines associated with supporting scalp health, which is often linked to the appearance of healthier-looking hair over time, though individual results vary.",
+      },
+      {
+        question: "Is coconut oil good for all hair types?",
+        answer: "Coconut oil is widely used across hair types, but it can feel heavy on very fine hair — those with finer hair may prefer a lighter oil or a smaller amount.",
+      },
+      {
+        question: "Can I apply hair oil to dry or wet hair?",
+        answer: "Hair oil is traditionally applied to dry hair and scalp before washing, though some lighter oils are also used on damp hair as a finishing treatment. Check specific product guidance.",
+      },
+      {
+        question: "Does Amla Hair Oil help with premature greying?",
+        answer: "Amla has a traditional reputation in Ayurvedic hair care associated with hair health, though there's no guarantee regarding premature greying, which has multiple underlying causes.",
+      },
+      {
+        question: "Can herbal hair oil cause scalp irritation?",
+        answer: "As with any topical product, some people may experience sensitivity — always patch test on a small area of skin before full scalp application.",
+      },
+      {
+        question: "How much oil should I use per application?",
+        answer: "This varies by hair length and thickness — start with a small amount (a few teaspoons) and increase as needed to cover your scalp and hair evenly.",
+      },
+      {
+        question: "Can I leave herbal hair oil in overnight?",
+        answer: "Yes, many people leave hair oil in overnight as a deeper treatment — just use a towel on your pillow to avoid staining.",
+      },
+      {
+        question: "Is Brahmi Oil the same as Bhringraj Oil?",
+        answer: "No — they're different herbs, though both are widely used in Ayurvedic hair care and are sometimes blended together in the same product.",
+      },
+      {
+        question: "How do I wash out herbal hair oil completely?",
+        answer: "You may need to shampoo twice to fully remove oil residue, particularly with heavier oils like coconut or sesame-based blends.",
+      },
+      {
+        question: "Can hair oil help with a dry, itchy scalp?",
+        answer: "Some herbal oils, like coconut and Bhringraj, are traditionally used for their moisturizing reputation and may help with dryness, but persistent itching should be assessed by a dermatologist.",
+      },
+      {
+        question: "How should I store herbal hair oil?",
+        answer: "Store in a cool, dry place away from direct sunlight; some oils may benefit from refrigeration in very warm climates — check the product label.",
+      },
+      {
+        question: "Can I use herbal hair oil on color-treated hair?",
+        answer: "Most herbal hair oils are gentle enough for colored hair, but check the specific product page, as some infused oils may not be recommended immediately after coloring.",
+      },
+    ],
+  },
+  "shampoos": {
+    sections: [
+      {
+        title: "Herbal Shampoos: Traditional Botanical Hair Cleansers",
+        description:
+          "Long before commercial shampoo existed, Ayurvedic households relied on a handful of naturally cleansing botanicals to wash hair — gentler than many modern formulas, but just as effective at clearing everyday buildup. Our herbal shampoos draw on these same traditional cleansing agents.\n\n" +
+          "Traditional Cleansing Botanicals:\n" +
+          "Shikakai (sometimes called 'fruit for hair') and Reetha (Soapnut) are two of the most historically significant Ayurvedic cleansing agents, both naturally foaming and traditionally used to wash hair gently without over-stripping its natural oils.\n\n" +
+          "Everyday Herbal Shampoo Blends:\n" +
+          "Blended formulas commonly include Hibiscus, Amla and Neem, each contributing a different traditional benefit — Hibiscus for its conditioning reputation, Amla for scalp nourishment, and Neem for its purifying properties — making these a popular everyday choice for those seeking a gentler wash.\n\n" +
+          "Shop the Ingredients in This Guide:\n" +
+          "• Shikakai Shampoo\n" +
+          "• Reetha (Soapnut) Shampoo\n" +
+          "• Hibiscus Shampoo\n" +
+          "• Amla Shampoo\n" +
+          "• Neem Shampoo",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is Shikakai and why is it used in shampoo?",
+        answer: "Shikakai is sometimes called 'fruit for hair' in Ayurvedic tradition and is a naturally foaming cleansing agent traditionally used to wash hair gently without over-stripping its natural oils.",
+      },
+      {
+        question: "What is Reetha (Soapnut)?",
+        answer: "Reetha, or soapnut, is a naturally foaming fruit traditionally used in Ayurveda as a gentle hair and scalp cleanser.",
+      },
+      {
+        question: "Are herbal shampoos as effective at cleansing as regular shampoo?",
+        answer: "Herbal shampoos are generally gentler and may produce less foam than sulfate-based shampoos, but they're traditionally considered effective at clearing everyday dirt and oil buildup.",
+      },
+      {
+        question: "How often should I use herbal shampoo?",
+        answer: "Most herbal shampoos can be used as often as you'd normally wash your hair, though those with drier hair may prefer washing every other day.",
+      },
+      {
+        question: "Can herbal shampoo help with an oily scalp?",
+        answer: "Neem and Amla-based shampoos are traditionally chosen for oilier scalps, valued for their purifying reputation.",
+      },
+      {
+        question: "Is herbal shampoo suitable for color-treated hair?",
+        answer: "Many herbal shampoos are gentle enough for colored hair, but check the specific product page, as ingredient combinations vary.",
+      },
+      {
+        question: "Why does herbal shampoo foam less than regular shampoo?",
+        answer: "Herbal shampoos often rely on naturally foaming agents like Shikakai and Reetha rather than synthetic sulfates, which typically produce a lighter lather — this doesn't mean it's cleaning less effectively.",
+      },
+      {
+        question: "Can herbal shampoo help with dandruff?",
+        answer: "Neem-based shampoos are traditionally associated with scalp comfort, but persistent dandruff should be assessed by a dermatologist.",
+      },
+      {
+        question: "Do I need conditioner after using herbal shampoo?",
+        answer: "This depends on your hair type — herbal shampoos are generally gentler than sulfate shampoos, but those with dry or textured hair may still prefer a conditioner or hair oil afterward.",
+      },
+      {
+        question: "Is herbal shampoo suitable for children?",
+        answer: "Some gentle herbal shampoos are suitable for children, but check the specific product label, and consult a pediatrician if unsure.",
+      },
+      {
+        question: "Can I use herbal shampoo daily?",
+        answer: "Many herbal shampoos are mild enough for daily use, but check the specific product guidance, especially for very dry or curly hair types.",
+      },
+      {
+        question: "What's the difference between Amla Shampoo and Hibiscus Shampoo?",
+        answer: "Amla is traditionally associated with scalp nourishment, while Hibiscus is traditionally valued for its conditioning reputation — many blends combine both.",
+      },
+      {
+        question: "How should I store herbal shampoo?",
+        answer: "Store in a cool, dry place, and keep the cap tightly closed to preserve the formula's natural ingredients.",
+      },
+      {
+        question: "Does herbal shampoo expire?",
+        answer: "Yes — check the Period-After-Opening symbol on the packaging, typically 6–12 months once opened.",
+      },
+      {
+        question: "Can herbal shampoo be used on a sensitive scalp?",
+        answer: "Herbal shampoos are often gentler than sulfate-based formulas, but always patch test and check the ingredient list if you have a known sensitivity.",
+      },
+    ],
+  },
+  "hair-masks": {
+    sections: [
+      {
+        title: "Herbal Hair Masks: Traditional Deep Conditioning Treatments",
+        description:
+          "A hair mask is the deep-conditioning step in a traditional hair care routine — a more concentrated treatment than daily oil or shampoo, usually applied once a week to give hair extra nourishment and support its overall condition.\n\n" +
+          "Traditional Deep-Conditioning Masks:\n" +
+          "Henna is one of the most well-known Ayurvedic hair mask ingredients, traditionally used for its conditioning reputation as well as its natural reddish tint. Fenugreek (Methi) Hair Mask and Hibiscus Hair Mask are traditionally used for their moisturizing and conditioning reputation, especially for dry or frizzy hair.\n\n" +
+          "Nourishing Combination Blends:\n" +
+          "Combination masks blending Bhringraj, Amla and Shikakai bring together several traditional Ayurvedic ingredients in one weekly treatment, each contributing its own long-standing role in hair care tradition.\n\n" +
+          "Shop the Ingredients in This Guide:\n" +
+          "• Henna Hair Mask\n" +
+          "• Fenugreek (Methi) Hair Mask\n" +
+          "• Hibiscus Hair Mask\n" +
+          "• Bhringraj Hair Mask\n" +
+          "• Amla-Reetha-Shikakai Combination Mask",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is a herbal hair mask used for?",
+        answer: "A herbal hair mask is a concentrated, deep-conditioning treatment usually applied weekly to give hair extra nourishment beyond what daily oil or shampoo provides.",
+      },
+      {
+        question: "How often should I use a hair mask?",
+        answer: "Most herbal hair masks are used once a week, though those with very dry or damaged hair may use them slightly more often.",
+      },
+      {
+        question: "What is Henna Hair Mask traditionally used for?",
+        answer: "Henna is a well-known Ayurvedic hair mask ingredient traditionally valued for its conditioning reputation, along with its natural reddish tint on hair.",
+      },
+      {
+        question: "Will a Henna Hair Mask change my hair color?",
+        answer: "Yes — Henna can impart a natural reddish tint, particularly on lighter or grey hair. Check the specific product page and consider a strand test first if color change is a concern.",
+      },
+      {
+        question: "How long should I leave a herbal hair mask on?",
+        answer: "This varies by product, but many traditional masks are left on for 30 minutes to a few hours, and some (like Henna) are left on longer for the reddish tint to develop.",
+      },
+      {
+        question: "Is Fenugreek Hair Mask good for dry or frizzy hair?",
+        answer: "Fenugreek has a long tradition of use for its moisturizing and conditioning reputation, often chosen for dry or frizzy hair types.",
+      },
+      {
+        question: "Do I apply hair mask before or after shampoo?",
+        answer: "This depends on the specific mask — some are applied before shampooing as a pre-wash treatment, others after as a conditioning step. Check the product's specific instructions.",
+      },
+      {
+        question: "Can herbal hair masks help with dry, damaged hair?",
+        answer: "Masks combining Hibiscus, Fenugreek and Amla are traditionally used for their moisturizing reputation, often chosen by those with dry or damaged hair.",
+      },
+      {
+        question: "How do I rinse out a herbal hair mask?",
+        answer: "Most masks are rinsed thoroughly with warm water; powder or clay-based masks (like Henna) may require a shampoo wash afterward to fully remove residue.",
+      },
+      {
+        question: "Can I mix my own herbal hair mask at home?",
+        answer: "Some herbal hair mask powders are designed to be mixed with water, yogurt or oil at home before application — check the specific product's mixing instructions.",
+      },
+      {
+        question: "Is a hair mask the same as a conditioner?",
+        answer: "A hair mask is generally more concentrated and left on longer than a standard conditioner, making it a deeper, less frequent treatment.",
+      },
+      {
+        question: "Can herbal hair masks be used on color-treated hair?",
+        answer: "Most herbal hair masks are gentle enough for colored hair, but Henna specifically can alter hair color — check the product page if this is a concern.",
+      },
+      {
+        question: "How should I store herbal hair mask powder?",
+        answer: "Store powder-based masks in an airtight container away from moisture, which can cause clumping and affect potency over time.",
+      },
+      {
+        question: "Can herbal hair masks be left on overnight?",
+        answer: "Some lighter oil-based masks can be left on overnight, but powder or clay-based masks like Henna are generally not recommended for overnight use — check specific product guidance.",
+      },
+      {
+        question: "Are herbal hair masks suitable for a sensitive scalp?",
+        answer: "Always patch test before full application, as some ingredients (particularly Henna) can occasionally cause sensitivity in certain individuals.",
+      },
+    ],
+  },
+  "weight-loss": {
+    sections: [
+      {
+        title: "Weight Management Support: Traditional Herbs for a Balanced Routine",
+        description:
+          "A healthy weight is supported by many things working together — diet, activity, sleep and stress all play a role, and no single herb replaces any of them. What traditional herbal wellness offers is support alongside those fundamentals: botanicals long used to support a normally functioning metabolism, a feeling of fullness after meals, and a sense of lightness as part of an everyday balanced routine.\n\n" +
+          "The herbs below are shared in that spirit — as traditional support for a healthy, active lifestyle, not as a substitute for medical advice or a promise of any specific result.\n\n" +
+          "Traditional Metabolism Support:\n" +
+          "Herbs such as Green Tea Extract, Ginger and Black Pepper (Piperine) have a long tradition of use in supporting a normally functioning metabolism as part of a balanced routine. From Ayurvedic tradition, Guggul (Commiphora mukul) has historically been associated with metabolic support in classical texts, alongside its more established traditional use for joint comfort.\n\n" +
+          "Fiber & Fullness Support:\n" +
+          "Glucomannan (Konjac) is the one ingredient on this page with an actual EU-authorised weight-loss claim: \"in the context of an energy-restricted diet, contributes to weight loss\" — but only when providing a daily intake of 3g in three 1g doses, taken with 1–2 glasses of water before meals, and only as part of an energy-restricted diet. It also requires a choking-risk warning for anyone with swallowing difficulties or who doesn't take it with enough fluid. This exact wording, dosage and warning must be verified by legal/compliance before publishing — it cannot be shortened or paraphrased.\n\n" +
+          "Other fiber-rich botanicals, such as Psyllium Husk and Fenugreek (Methi), are traditionally used to support a feeling of fullness after meals, which is a permitted claim category (satiety) distinct from a weight-loss claim.\n\n" +
+          "Traditional Digestive Support:\n" +
+          "Digestive tonics like Triphala and the classic Cumin-Coriander-Fennel (CCF) Blend (see our Grandma's Kitchen Remedies page) are traditionally used to support digestion and a feeling of lightness, and pair naturally with an active, balanced routine.\n\n" +
+          "Shop the Herbs in This Guide:\n" +
+          "• Green Tea Extract\n" +
+          "• Ginger\n" +
+          "• Black Pepper (Piperine)\n" +
+          "• Guggul (Commiphora mukul)\n" +
+          "• Glucomannan (Konjac)\n" +
+          "• Psyllium Husk\n" +
+          "• Fenugreek (Methi)\n" +
+          "• Triphala",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "Can herbs alone cause weight loss?",
+        answer: "No single herb is a substitute for a balanced diet and regular physical activity. Traditional herbs are best understood as support alongside these fundamentals, not a replacement for them.",
+      },
+      {
+        question: "Is Glucomannan proven to cause weight loss?",
+        answer: "Glucomannan is the only ingredient with an EU-authorised weight-loss claim, but that claim only applies in the context of an energy-restricted diet and a specific daily intake (3g, in three 1g doses, with water, before meals) — it isn't a claim that the ingredient alone causes weight loss.",
+      },
+      {
+        question: "How much weight will I lose using these products?",
+        answer: "We can't state or imply a specific amount or rate of weight loss — EU regulation prohibits this for all products, and individual results vary significantly based on diet, activity and many other factors.",
+      },
+      {
+        question: "Are these products a substitute for diet and exercise?",
+        answer: "No — these herbs are intended as traditional support alongside a balanced diet and regular physical activity, not a replacement for either.",
+      },
+      {
+        question: "What does 'supports metabolism' actually mean?",
+        answer: "It means the herb has a traditional or scientific association with normal metabolic processes — it does not mean the herb causes weight loss on its own.",
+      },
+      {
+        question: "Is Green Tea Extract safe to take daily?",
+        answer: "Green Tea Extract is commonly used daily by many people, but it does contain natural caffeine — check the product label for guidance and consult a healthcare professional if you're sensitive to caffeine or take medication.",
+      },
+      {
+        question: "What is Guggul traditionally used for?",
+        answer: "Guggul is a resin from Ayurvedic tradition historically associated with metabolic support in classical texts, and more established in modern use for joint comfort.",
+      },
+      {
+        question: "How should I take Glucomannan safely?",
+        answer: "Always take Glucomannan with plenty of water, as recommended on the product label — inadequate fluid intake or swallowing difficulties can pose a choking risk, which is why this warning is legally required on the product.",
+      },
+      {
+        question: "Can fiber supplements like Psyllium help me feel full?",
+        answer: "Psyllium Husk and similar fiber-rich ingredients are traditionally used to support a feeling of fullness after meals, which may support portion awareness as part of a balanced diet.",
+      },
+      {
+        question: "Are weight-management herbs safe for everyone?",
+        answer: "No — these products are not suitable for everyone. They're not recommended for anyone who is pregnant, breastfeeding, underweight, has a history of disordered eating, or has an existing health condition, without first consulting a healthcare professional.",
+      },
+      {
+        question: "Can I combine multiple weight-management herbs together?",
+        answer: "Some people combine herbs from different categories on this page, but it's best to introduce one new herb at a time, follow labeled dosages, and consult a healthcare professional, especially if combining with medication.",
+      },
+      {
+        question: "Why don't your product descriptions mention specific weight-loss results?",
+        answer: "EU regulation prohibits any claim referencing a specific rate or amount of weight loss for any product. We describe traditional use and general support instead, so you have accurate information to make your own decision.",
+      },
+      {
+        question: "Is it healthy to take weight-management supplements long-term?",
+        answer: "This depends on the specific herb — some are intended for continuous use, others for cycles. Long-term use of any supplement should be discussed with a healthcare professional, particularly a dietitian.",
+      },
+      {
+        question: "Can these herbs interact with medication?",
+        answer: "Some herbs, including Green Tea Extract and Guggul, can interact with certain medications. Always check with a doctor or pharmacist before combining herbal supplements with prescribed treatment.",
+      },
+      {
+        question: "What's the healthiest way to approach weight management?",
+        answer: "Most health professionals recommend a sustainable, balanced approach — a varied diet, regular movement, adequate sleep and stress management — with any supplement, herbal or otherwise, playing a supporting role rather than being relied on alone.",
+      },
+    ],
+  },
+  "others": {
+    sections: [
+      {
+        title: "Explore Other Products",
+        description:
+          "This category holds products that don't yet fit neatly into one of our other sections. As the catalog grows, items here may move into a more specific category — the same way new dedicated categories like Kitchen Appliance have been split out over time.\n\n" +
+          "What Belongs Here:\n" +
+          "• Newly added products that haven't yet been assigned a specific category\n" +
+          "• Items that don't fit the scope of any existing category\n" +
+          "• A temporary home for products while a more specific category is being planned",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "Do you deliver products in this category across the Netherlands?",
+        answer: "Yes — AsianSpices.online currently ships across the Netherlands, with further European markets planned as those regions come online.",
+      },
+      {
+        question: "What kinds of products are in the Others category?",
+        answer: "This category holds items that don't yet fit into one of our other specific categories — check back as the catalog is organized further.",
+      },
+      {
+        question: "Will items in this category eventually be moved elsewhere?",
+        answer: "Yes — as the product range grows, items here may be reorganized into more specific categories.",
+      },
+      {
+        question: "Is this category permanent?",
+        answer: "This category is primarily intended as a flexible holding space; its long-term role will depend on how the overall catalog develops.",
+      },
+      {
+        question: "How do I find a specific product if I'm not sure which category it's in?",
+        answer: "Use the site's search function, which should return relevant products regardless of which category they're currently listed under.",
+      },
+      {
+        question: "Can I suggest a new category for a product I'd like to see here?",
+        answer: "Product and category suggestions can typically be sent via customer service — check the site's contact page for how to get in touch.",
+      },
+      {
+        question: "Will this category always contain a mix of unrelated items?",
+        answer: "The goal is for this to be a smaller, temporary section rather than a large permanent mix — specific items are expected to move into dedicated categories over time.",
+      },
+      {
+        question: "Are products in this category still covered by your standard policies (shipping, returns, etc.)?",
+        answer: "Yes — all products on the site, regardless of category, are covered by the same shipping and returns policies. Check the relevant policy page for details.",
+      },
+    ],
+  },
+  "plates": {
+    sections: [
+      {
+        title: "Explore Plates",
+        description:
+          "From a simple everyday steel plate to a full thali set for serving a complete meal, this category covers the dinnerware styles commonly used across South Asian households.\n\n" +
+          "Everyday Steel & Melamine Plates:\n" +
+          "Stainless Steel Plates are a household staple — durable, easy to clean and long-lasting. Melamine Plates offer a lighter, often more decorative alternative, popular for everyday family meals.\n\n" +
+          "Traditional Thali Sets:\n" +
+          "A Thali Set — a plate with small compartments or accompanying bowls — is the traditional way to serve a full meal with multiple dishes at once, commonly used both at home and for special occasions.\n\n" +
+          "Shop Plates:\n" +
+          "• Stainless Steel Plates\n" +
+          "• Melamine Plates\n" +
+          "• Thali Set\n" +
+          "• Steel Thali Plate (Compartmented)",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "What is a thali plate?",
+        answer: "A thali plate is a traditional serving plate, often with small compartments or served alongside small bowls (katoris), designed to hold several dishes at once for a complete meal.",
+      },
+      {
+        question: "Are stainless steel plates safe for everyday use?",
+        answer: "Yes — stainless steel is a widely used, durable, food-safe material common in South Asian households for daily dining.",
+      },
+      {
+        question: "Can I put steel plates in the microwave?",
+        answer: "No — stainless steel plates should not be used in the microwave, as metal can cause sparking and damage to the appliance.",
+      },
+      {
+        question: "Are melamine plates safe for food use?",
+        answer: "Melamine plates sold for food use are manufactured to food-safety standards, but should generally not be used in the microwave — check the individual product page for specific guidance.",
+      },
+      {
+        question: "How should I clean stainless steel plates?",
+        answer: "Stainless steel plates are generally dishwasher safe, though hand washing can help maintain their finish over time — check the individual product page for specific care instructions.",
+      },
+      {
+        question: "What's the difference between a thali set and a regular plate?",
+        answer: "A thali set is specifically designed for serving a complete meal with multiple dishes, either through built-in compartments or accompanying small bowls, while a regular plate is a single flat serving surface.",
+      },
+      {
+        question: "Are your plates dishwasher safe?",
+        answer: "This varies by material — check the individual product page, as some traditional metal dinnerware is best hand washed to preserve its finish.",
+      },
+      {
+        question: "Do you sell plates in sets or individually?",
+        answer: "Availability varies by product — check the individual product page for set versus individual piece options.",
+      },
+      {
+        question: "What sizes do your plates come in?",
+        answer: "Size varies by product — check the individual product page for specific dimensions.",
+      },
+      {
+        question: "Are melamine plates durable for daily use?",
+        answer: "Melamine is generally considered durable and chip-resistant, making it a popular choice for everyday family use, though quality can vary by brand — check the individual product page.",
+      },
+      {
+        question: "Can thali plates be used for serving guests as well as everyday meals?",
+        answer: "Yes — thali sets are commonly used both for everyday family meals and for serving guests, particularly for festive or special occasions.",
+      },
+      {
+        question: "Do you sell children's plates or smaller sizes?",
+        answer: "Size range availability varies by product — check the site for smaller or children's options if needed.",
+      },
+      {
+        question: "Are your steel plates made from food-grade stainless steel?",
+        answer: "Food-grade material details should be listed on the individual product page — check for specific grade and certification information.",
+      },
+      {
+        question: "Can I buy matching bowls (katoris) for my thali plate?",
+        answer: "Matching bowl/katori availability varies by product — check the individual product page or related listings for complete set options.",
+      },
+      {
+        question: "Are these plates suitable for gifting, for example for a housewarming?",
+        answer: "Yes — traditional thali sets in particular are a popular gifting choice for housewarmings and other occasions.",
+      },
+    ],
+  },
   "coffee": {
     sections: [
       {
@@ -2098,6 +3341,81 @@ image: "https://images.unsplash.com/photo-1564894809611-1742fc40ed80?auto=format
       {
         question: "What's a classic dish made with Rajma?",
         answer: "Rajma Chawal — kidney bean curry served with rice — is one of the most iconic comfort food dishes made with Rajma.",
+      },
+    ],
+  },
+  "oil": {
+    sections: [
+      {
+        title: "Oil & Ghee: Everyday Cooking Oils and Traditional Ghee",
+        description:
+          "The right fat is the starting point for almost every South Asian dish — from the pungent bite of mustard oil in Bengali and Punjabi cooking to a spoonful of ghee finishing off a dal. Our Oil & Ghee range covers the everyday cooking oils and traditional ghee used across South Asian kitchens.\n\n" +
+          "Browse by Type:\n" +
+          "• Cooking Oil: Mustard, sunflower, sesame, coconut and other everyday cooking oils.\n" +
+          "• Ghee: Traditional cow and buffalo ghee, plus vegetable ghee (vanaspati).",
+      },
+    ],
+    image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&q=80&w=1000",
+    faqs: [
+      {
+        question: "Do you deliver oil and ghee across the Netherlands?",
+        answer: "Yes — AsianSpices.online currently ships across the Netherlands, with further European markets planned as those regions come online.",
+      },
+      {
+        question: "What's the difference between ghee and regular butter?",
+        answer: "Ghee is clarified butter with the milk solids and water removed, giving it a higher smoke point, longer shelf life, and a distinct nutty flavour compared to regular butter.",
+      },
+      {
+        question: "Is mustard oil legal to sell for cooking in the EU?",
+        answer: "Regulations around mustard oil vary depending on erucic acid content and labelling — check the individual product page for compliance and intended-use information specific to the EU market.",
+      },
+      {
+        question: "How should I store cooking oil and ghee?",
+        answer: "Store in a cool, dry place away from direct sunlight; ghee doesn't require refrigeration if kept sealed and used with a clean, dry spoon, but check individual product guidance.",
+      },
+      {
+        question: "Which oil is best for deep frying?",
+        answer: "Oils with a higher smoke point, such as sunflower or vegetable oil, are generally preferred for deep frying — check the individual product's smoke point information.",
+      },
+      {
+        question: "Is ghee suitable for lactose-intolerant people?",
+        answer: "Ghee has most of the milk solids removed during clarification, so many lactose-intolerant individuals tolerate it better than butter, but this varies by individual — consult a healthcare professional if you have a diagnosed intolerance.",
+      },
+      {
+        question: "What's the shelf life of an opened bottle of oil?",
+        answer: "This varies by oil type — check the best-before date on individual packaging, and store away from heat and light to preserve freshness.",
+      },
+      {
+        question: "Are your oils cold-pressed?",
+        answer: "Extraction method varies by product — check the individual product page for cold-pressed or other processing details.",
+      },
+      {
+        question: "Is ghee vegan?",
+        answer: "No — traditional ghee is made from dairy (cow or buffalo milk). Vegetable ghee (vanaspati) is a separate, plant-based alternative — check the individual product page.",
+      },
+      {
+        question: "Can I reuse cooking oil after frying?",
+        answer: "Oil can sometimes be reused a limited number of times if strained and stored properly, but repeated reuse degrades quality and is generally not recommended for health and flavour reasons.",
+      },
+      {
+        question: "Do you sell flavoured or infused oils?",
+        answer: "Product range varies — check the site for any flavoured or infused oil options.",
+      },
+      {
+        question: "What's the difference between pure ghee and vegetable ghee (vanaspati)?",
+        answer: "Pure ghee is made from dairy butterfat, while vegetable ghee (vanaspati) is a hydrogenated vegetable oil product designed to mimic ghee's texture — check individual product labels, as they have different nutritional profiles.",
+      },
+      {
+        question: "Can I buy oil and ghee in bulk or larger tins?",
+        answer: "Bulk and larger pack sizes vary by product — check the individual product page for available sizes.",
+      },
+      {
+        question: "Are your oils suitable for high-heat cooking like tempering (tadka)?",
+        answer: "Many oils used in South Asian cooking, like mustard and sunflower oil, are suited to the high heat used in tempering — check individual product smoke point details.",
+      },
+      {
+        question: "Is ghee healthier than regular cooking oil?",
+        answer: "Nutritional comparisons depend on the specific product and how it's used — ghee and various oils each have different fat compositions; consult a nutritionist or dietitian for guidance specific to your dietary needs.",
       },
     ],
   },
@@ -3796,5 +5114,49 @@ if (subcategoryContentMap["spice-powder"]) {
   subcategoryContentMap["spice-powders"] = subcategoryContentMap["spice-powder"];
   subcategoryContentMap["ground-spices"] = subcategoryContentMap["spice-powder"];
 }
-
-
+if (categoryContent["kitchen-appliance"]) {
+  categoryContent["kitchen-appliances"] = categoryContent["kitchen-appliance"];
+}
+if (categoryContent["kitchen-appliances"]) {
+  categoryContent["kitchen-appliance"] = categoryContent["kitchen-appliances"];
+}
+if (categoryContent["others"]) {
+  categoryContent["other"] = categoryContent["others"];
+}
+if (categoryContent["other"]) {
+  categoryContent["others"] = categoryContent["other"];
+}
+if (subcategoryContentMap["others"]) {
+  subcategoryContentMap["other"] = subcategoryContentMap["others"];
+}
+if (subcategoryContentMap["other"]) {
+  subcategoryContentMap["others"] = subcategoryContentMap["other"];
+}
+if (subcategoryContentMap["face-oils"]) {
+  subcategoryContentMap["face-oil"] = subcategoryContentMap["face-oils"];
+}
+if (subcategoryContentMap["creams"]) {
+  subcategoryContentMap["cream"] = subcategoryContentMap["creams"];
+}
+if (subcategoryContentMap["cleansers"]) {
+  subcategoryContentMap["cleanser"] = subcategoryContentMap["cleansers"];
+}
+if (subcategoryContentMap["hair-oils"]) {
+  subcategoryContentMap["hair-oil"] = subcategoryContentMap["hair-oils"];
+}
+if (subcategoryContentMap["shampoos"]) {
+  subcategoryContentMap["shampoo"] = subcategoryContentMap["shampoos"];
+}
+if (subcategoryContentMap["hair-masks"]) {
+  subcategoryContentMap["hair-mask"] = subcategoryContentMap["hair-masks"];
+}
+if (subcategoryContentMap["oil"]) {
+  subcategoryContentMap["oils"] = subcategoryContentMap["oil"];
+  subcategoryContentMap["oil-ghee"] = subcategoryContentMap["oil"];
+  subcategoryContentMap["oil-and-ghee"] = subcategoryContentMap["oil"];
+}
+if (categoryContent["religious"]) {
+  subcategoryContentMap["all-religious"] = categoryContent["religious"];
+  subcategoryContentMap["all-regious"] = categoryContent["religious"];
+  subcategoryContentMap["all-religious-items"] = categoryContent["religious"];
+}
