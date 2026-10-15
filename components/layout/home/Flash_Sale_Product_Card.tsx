@@ -193,9 +193,9 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
               realPrice = Number(
                 Math.max(0, baseWithTax - discountValue).toFixed(2),
               );
-            } else if (saleFromDb > 0 && netBase > 0 && saleFromDb < netBase) {
+            } else if (saleFromDb > 0 && netBase > 0 && saleFromDb < netBase && taxRate != null) {
               realPrice = Number(
-                (baseWithTax * (saleFromDb / netBase)).toFixed(2),
+                (saleFromDb * (1 + taxRate)).toFixed(2),
               );
             }
             // Green = exact sale amount (base − sale)
