@@ -33,7 +33,7 @@ export default function HomeFaqs() {
 
             <div className="relative z-10 flex flex-col sm:min-h-[400px] lg:min-h-[480px] lg:flex-row lg:items-stretch">
               <div className="relative z-10 w-full px-6 py-8 sm:px-8 sm:py-10 md:px-10 md:py-12 lg:w-[48%] lg:pb-12 xl:w-[46%] xl:px-12">
-                <h2 className="text-[1.7rem] font-bold leading-[1.15] tracking-tight text-[#1a1208] sm:text-[2rem] md:text-[2.2rem] lg:text-[2.6rem] xl:text-[2.9rem]">
+                <h3 className="text-[1.7rem] font-bold leading-[1.15] tracking-tight text-[#1a1208] sm:text-[2rem] md:text-[2.2rem] lg:text-[2.6rem] xl:text-[2.9rem]">
                   Be the First to
                   <br />
                   <span className="text-white">Experience</span>
@@ -41,7 +41,7 @@ export default function HomeFaqs() {
                   Flavor at Your
                   <br />
                   <span className="text-white">Fingertips.</span>
-                </h2>
+                </h3>
                 <p className="mt-4 max-w-[19rem] text-sm leading-relaxed text-white sm:mt-5 sm:text-[15px] lg:max-w-[22rem] lg:text-base xl:max-w-[24rem] xl:text-[1.05rem]">
                   Sign up now and be the first to unlock our spice-powered app.
                   <br />
@@ -101,11 +101,11 @@ export default function HomeFaqs() {
               <Clock className="h-3.5 w-3.5" aria-hidden />
               FAQ
             </div>
-            <h2
+            <h3
               className={`${greatVibes.className} text-4xl leading-none text-gray-900 sm:text-5xl md:text-[3.25rem]`}
             >
               FAQs
-            </h2>
+            </h3>
             <p className="mt-2 text-sm text-gray-600">
               Common Questions From our Customers.
             </p>

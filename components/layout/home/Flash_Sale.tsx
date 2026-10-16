@@ -48,9 +48,9 @@ export default function FlashSale() {
           <p className="text-[9px] font-semibold uppercase tracking-[0.12em] opacity-90 sm:text-[11px]">
             Limited Time Offer
           </p>
-          <h2 className="text-[11px] font-semibold leading-tight sm:text-xs md:text-sm">
+          <h3 className="text-[11px] font-semibold leading-tight sm:text-xs md:text-sm">
             Grab these exclusive deals before time runs out!
-          </h2>
+          </h3>
         </div>
 
         <div className="w-full max-w-full shrink-0 overflow-x-auto sm:w-auto">

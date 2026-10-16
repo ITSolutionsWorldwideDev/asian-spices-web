@@ -47,7 +47,7 @@ const QUICK_LINKS = [
   { label: "About Us", href: "/about-us" },
   { label: "Our Products", href: "/products" },
   { label: "Recipes", href: "/recipes" },
-  { label: "Blog", href: "/recipes" },
+  // { label: "Blog", href: "/recipes" },
   { label: "Contact", href: "/contact-us" },
 ] as const;
 
@@ -112,7 +112,7 @@ const FooterContent = () => {
               />
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-white/60">
-              Our Journey with Spices Began in 1970. Today, We Bring Decades of Experience and Authentic Asian Flavours to Your Kitchen.
+             Our story began with the people, traditions, and authentic flavours of Asia finding a home across Europe. Over the decades, these rich culinary traditions have shaped our understanding of spices, ingredients, and the art of bringing people together through food. Today, we carry that legacy forward, bringing generations of knowledge, authentic Asian flavours, and a passion for quality to kitchens everywhere.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
