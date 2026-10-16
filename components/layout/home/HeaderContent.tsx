@@ -91,7 +91,7 @@ const HeaderContent = ({ current }: SpiceFrameProps) => {
           </button>
 
           {/* <button className="flex justify-center items-center border border-white px-6 py-3 rounded-xl font-semibold hover:bg-white/20 transition space-x-3">
-            <FaRegCirclePlay /> <span><Link href="/about">Watch Story</Link></span>
+            <FaRegCirclePlay /> <span><Link href="/about-us">Watch Story</Link></span>
           </button> */}
         </div>
 

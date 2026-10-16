@@ -148,7 +148,7 @@ const Story = ({ className = "" }: { className?: string }) => {
           {/* Kept in-flow so it stays inside the section on all screen sizes */}
           <div className="pt-2">
             <Link
-              href="/about"
+              href="/about-us"
               className="group relative inline-flex max-w-full items-center overflow-hidden rounded-lg bg-linear-to-r from-orange-300 to-amber-600 px-5 py-3 font-bold text-white sm:px-6"
             >
               <span className="relative z-10 inline-flex items-center">
