@@ -51,9 +51,9 @@ const Story = ({ className = "" }: { className?: string }) => {
         {/* Content: mobile pe pehle (order-1), desktop pe right (xl:order-2) */}
         <div className="order-1 flex min-w-0 flex-col gap-6 sm:gap-8 xl:order-2">
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+            <h3 className="text-2xl font-bold text-gray-900 sm:text-3xl">
               Bringing Authentic Asian spices to Every Home
-            </h2>
+            </h3>
             <p className="text-gray-600">
               Founded in 2026, Asian Spices is a modern online marketplace
               dedicated to bringing the rich and diverse flavors of Asia
