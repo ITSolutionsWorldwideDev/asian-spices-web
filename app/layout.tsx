@@ -30,11 +30,11 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: normalizeCanonicalPath(pathname),
     },
-    title: "Asian Spices Online | Authentic Indian & Asian Groceries NL",
+    title: "Asian Grocery Store & Supermarket Online | Asian Spices online",
     description:
-      "Shop premium Asian spices, rice, lentils & pantry staples online in the Netherlands. Authentic ingredients, fast NL delivery, and recipes to match.",
+      "Shop premium Asian spices at grocery store & Supermarket: spices, rice, lentils, snacks and everyday essentials from across Asia, picked for your kitchen",
     keywords:
-      "inventory management, admin dashboard, bootstrap template, invoicing, estimates, business management, responsive admin, POS system",
+      "estimates, business management, responsive admin,",
     icons: {
       // Absolute path is required — relative "favicon.ico" resolves to
       // /{category}/favicon.ico on nested routes and causes SEO 404s.
@@ -53,10 +53,10 @@ export async function generateMetadata(): Promise<Metadata> {
           url: "https://www.asianspices.online/assets/as-thumbnail.png",
           width: 1200,
           height: 630,
-          alt: "Asian Spices Platform",
+          alt: "Asian Spices - Authentic Asian Groceries & Spices Online",
         },
       ],
-      locale: "en_US",
+      locale: "nl_NL",
       type: "website",
     },
   };

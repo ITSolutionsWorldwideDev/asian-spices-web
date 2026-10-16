@@ -31,7 +31,7 @@ const banners: {
     
  
     overlay: {
-      line1: "Asian Grocery Shop",
+      line1: "Asian Supermarket & Grocery Store Online:",
       line2Lead: "Spices, Snacks ",
       line2: "& Everyday Essentials",
       description:
@@ -47,7 +47,7 @@ const banners: {
     alt: "Asian Spices grocery bag",
     overlay: {
       line1: "Indian Grocery Store & Tropical Market",
-      line2: "Favorites, Online",
+      line2: "Favourites, Online",
       description:
         "Authentic Indian spices, ghee, and tropical essentials, sourced for the true taste of home, delivered nationwide.",
       ctaLabel: "Explore Online Grocery",
@@ -60,7 +60,7 @@ const banners: {
     src: "/assets/home/homeheaderimages/banner-1.jpg",
     alt: "Asian Spices grocery products in a wheat field",
     overlay: {
-      line1: "Asian Supermarket",
+      line1: "Asian Market Store:",
       line2: "Authentic Food from Across Asia",
       description:
         "Discover Asian spices, sauces, noodles, snacks, and everyday food essentials, bringing the authentic taste of Asia to your kitchen.",
@@ -135,17 +135,21 @@ export default function Header() {
                   >
                     {overlay.line1}
                   </span>
+                  {" "}
                   <span className="mt-0.5 block sm:mt-1.5">
                     {overlay.line2Lead && (
-                      <span
-                        className={`text-[#EE9933] ${
-                          isLight
-                            ? ""
-                            : "drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
-                        }`}
-                      >
-                        {overlay.line2Lead}
-                      </span>
+                      <>
+                        <span
+                          className={`text-[#EE9933] ${
+                            isLight
+                              ? ""
+                              : "drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
+                          }`}
+                        >
+                          {overlay.line2Lead.trimEnd()}
+                        </span>
+                        {" "}
+                      </>
                     )}
                     <span
                       className={
