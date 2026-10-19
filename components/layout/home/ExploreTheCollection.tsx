@@ -129,9 +129,9 @@ export default function ExploreTheCollection() {
     <section className="w-full py-8 sm:py-10 md:py-12">
       <div className="mb-4 flex items-center justify-between gap-3 sm:mb-6 sm:items-end">
         <div className="min-w-0">
-          <h3 className="font-serif text-2xl font-bold tracking-tight text-stone-900 sm:text-4xl md:text-5xl">
+          <h2 className="font-serif text-2xl font-bold tracking-tight text-stone-900 sm:text-4xl md:text-5xl">
             Explore The Collection
-          </h3>
+          </h2>
           <p className="mt-0.5 text-xs font-medium text-orange-500 sm:mt-1 sm:text-base">
             Shop by Categories
           </p>

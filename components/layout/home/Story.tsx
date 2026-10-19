@@ -51,9 +51,9 @@ const Story = ({ className = "" }: { className?: string }) => {
         {/* Content: mobile pe pehle (order-1), desktop pe right (xl:order-2) */}
         <div className="order-1 flex min-w-0 flex-col justify-center gap-6 sm:gap-8 xl:order-2 xl:self-center">
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
               Authentic Asian Spices Online, Bringing the Taste of Asia to Your Kitchen
-            </h3>
+            </h2>
             <p className="text-gray-600">
              Asian Spices is an online destination for authentic Asian spices, herbs, pantry staples and kitchen essentials. We offer our own range of quality products, and we also give independent Asian shops and sellers a place to reach customers online. The result is a wider choice of ingredients in one convenient place.
             </p>

@@ -131,10 +131,10 @@ const FooterContent = () => {
 
           {/* Quick Links */}
           <div className="border-b border-white/10 pb-8 sm:border-b-0 sm:pb-0">
-            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+            <p className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
               <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
               <span>Quick Links</span>
-            </h3>
+            </p>
             <ul className="space-y-3">
               {QUICK_LINKS.map((link) => (
                 <li key={link.label}>
@@ -151,10 +151,10 @@ const FooterContent = () => {
 
           {/* Customer Service */}
           <div className="border-b border-white/10 pb-8 sm:border-b-0 sm:pb-0">
-            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+            <p className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
               <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
               <span>Customer Service</span>
-            </h3>
+            </p>
             <ul className="space-y-3">
               {CUSTOMER_SERVICE.map((link) => (
                 <li key={link.label}>
@@ -171,10 +171,10 @@ const FooterContent = () => {
 
           {/* Get In Touch */}
           <div>
-            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+            <p className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
               <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
               <span>Get In Touch</span>
-            </h3>
+            </p>
             <ul className="space-y-3 text-sm text-white/60">
               <li className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:border-0 sm:bg-transparent sm:p-0">
                 <Mail

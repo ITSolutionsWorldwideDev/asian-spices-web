@@ -100,10 +100,10 @@ export default function WhyChooseUs() {
               </div>
 
               <div className="relative z-10 px-5 pt-8 text-center sm:pt-10 lg:pt-12">
-                <h3 className="text-3xl font-bold leading-[1.15] lg:text-[2.15rem]">
-                  <span className="block text-orange-400">Why Choose</span>
-                  <span className="block text-white">Asian Spices</span>
-                </h3>
+                <h2 className="text-3xl font-bold leading-[1.15] lg:text-[2.15rem]">
+                  <span className="block text-orange-400">Benefits of</span>
+                  <span className="block text-white">Online Shopping</span>
+                </h2>
               </div>
 
               {/* MOBILE image — normal flow, card ke neeche thora sa hang */}

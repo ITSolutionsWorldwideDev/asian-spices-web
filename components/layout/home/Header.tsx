@@ -85,7 +85,6 @@ export default function Header() {
   const current = banners[index];
   const overlay = current.overlay;
   const isLight = overlay?.theme === "light";
-  const HeadingTag = current.id === 1 ? "h1" : "h2";
 
   return (
     /* Flash Sale section ke sath exact side padding match kar di hai */
@@ -119,73 +118,84 @@ export default function Header() {
             }`}
           />
 
-          {overlay && (
-            <div
-              key={current.id}
-              className="relative z-10 flex h-full items-center px-4 py-4 sm:px-10 md:px-14 lg:px-16"
-            >
-              <div className="w-full max-w-[min(100%,25rem)] animate-fade-in sm:max-w-md md:max-w-lg lg:max-w-xl">
-                <HeadingTag className="text-[1.15rem] font-bold leading-[1.15] tracking-tight sm:text-3xl md:text-4xl lg:text-[3.35rem]">
-                  <span
-                    className={`block text-[#EE9933] ${
+          {banners.map((banner, i) => {
+            const overlay = banner.overlay;
+            if (!overlay) return null;
+            const isLight = overlay.theme === "light";
+            const HeadingTag = banner.id === 1 ? "h1" : "h2";
+            const isActive = i === index;
+
+            return (
+              <div
+                key={banner.id}
+                className={`absolute inset-0 z-10 flex h-full items-center px-4 py-4 sm:px-10 md:px-14 lg:px-16 transition-opacity duration-700 ${
+                  isActive
+                    ? "opacity-100 pointer-events-auto"
+                    : "opacity-0 pointer-events-none"
+                }`}
+              >
+                <div className="w-full max-w-[min(100%,25rem)] sm:max-w-md md:max-w-lg lg:max-w-xl">
+                  <HeadingTag className="text-[1.15rem] font-bold leading-[1.15] tracking-tight sm:text-3xl md:text-4xl lg:text-[3.35rem]">
+                    <span
+                      className={`block text-[#EE9933] ${
+                        isLight
+                          ? ""
+                          : "drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
+                      }`}
+                    >
+                      {overlay.line1}
+                    </span>{" "}
+                    <span className="mt-0.5 block sm:mt-1.5">
+                      {overlay.line2Lead && (
+                        <>
+                          <span
+                            className={`text-[#EE9933] ${
+                              isLight
+                                ? ""
+                                : "drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
+                            }`}
+                          >
+                            {overlay.line2Lead.trimEnd()}
+                          </span>{" "}
+                        </>
+                      )}
+                      <span
+                        className={
+                          isLight
+                            ? "text-zinc-900"
+                            : "text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
+                        }
+                      >
+                        {overlay.line2}
+                      </span>
+                    </span>
+                  </HeadingTag>
+
+                  <p
+                    className={`mt-1.5 max-w-sm text-[11px] font-medium leading-relaxed sm:mt-3 sm:text-base sm:font-normal md:mt-6 md:text-lg ${
                       isLight
-                        ? ""
-                        : "drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
+                        ? "text-zinc-800"
+                        : "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] sm:text-white/95 sm:drop-shadow-none"
                     }`}
                   >
-                    {overlay.line1}
-                  </span>
-                  {" "}
-                  <span className="mt-0.5 block sm:mt-1.5">
-                    {overlay.line2Lead && (
-                      <>
-                        <span
-                          className={`text-[#EE9933] ${
-                            isLight
-                              ? ""
-                              : "drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
-                          }`}
-                        >
-                          {overlay.line2Lead.trimEnd()}
-                        </span>
-                        {" "}
-                      </>
-                    )}
-                    <span
-                      className={
-                        isLight
-                          ? "text-zinc-900"
-                          : "text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
-                      }
-                    >
-                      {overlay.line2}
-                    </span>
-                  </span>
-                </HeadingTag>
+                    {overlay.description}
+                  </p>
 
-                <p
-                  className={`mt-1.5 max-w-sm text-[11px] font-medium leading-relaxed sm:mt-3 sm:text-base sm:font-normal md:mt-6 md:text-lg ${
-                    isLight
-                      ? "text-zinc-800"
-                      : "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] sm:text-white/95 sm:drop-shadow-none"
-                  }`}
-                >
-                  {overlay.description}
-                </p>
-
-                <Link
-                  href={overlay.ctaHref}
-                  className={`mt-2.5 inline-flex min-h-[44px] items-center justify-center rounded-full px-5 py-2.5 text-xs font-bold transition sm:mt-5 sm:min-h-0 sm:px-8 sm:py-3.5 sm:text-base sm:font-semibold ${
-                    isLight
-                      ? "bg-[#D34827] text-white hover:bg-[#c03f20]"
-                      : "bg-[#EE9933] text-[#1a1208] hover:bg-[#e08a28]"
-                  }`}
-                >
-                  {overlay.ctaLabel}
-                </Link>
+                  <Link
+                    href={overlay.ctaHref}
+                    tabIndex={isActive ? 0 : -1}
+                    className={`mt-2.5 inline-flex min-h-[44px] items-center justify-center rounded-full px-5 py-2.5 text-xs font-bold transition sm:mt-5 sm:min-h-0 sm:px-8 sm:py-3.5 sm:text-base sm:font-semibold ${
+                      isLight
+                        ? "bg-[#D34827] text-white hover:bg-[#c03f20]"
+                        : "bg-[#EE9933] text-[#1a1208] hover:bg-[#e08a28]"
+                    }`}
+                  >
+                    {overlay.ctaLabel}
+                  </Link>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })}
 
           {/* Slide dots cleanly positioned with touch-friendly tap area */}
           <div className="absolute bottom-1.5 left-1/2 z-20 flex -translate-x-1/2 items-center sm:bottom-3">

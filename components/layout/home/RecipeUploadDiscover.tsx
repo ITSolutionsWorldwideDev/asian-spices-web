@@ -91,9 +91,9 @@ export default function RecipeUploadDiscover() {
           <span className="inline-block w-fit self-start rounded-full bg-[#FFF2E8] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[#F27A21]">
             Upload & Get Reward
           </span>
-          <h3 className="mt-4 break-words text-xl font-bold text-stone-900 sm:text-2xl md:text-3xl">
+          <h2 className="mt-4 break-words text-xl font-bold text-stone-900 sm:text-2xl md:text-3xl">
             Upload Your Recipe Videos & Get Rewards
-          </h3>
+          </h2>
           <p className="mt-3 text-sm leading-relaxed break-words text-stone-500 sm:text-base">
             Show off your kitchen setup! Upload a video of yourself prepping
             ingredients, sizzling pans, or serving up final plates. Every clip
