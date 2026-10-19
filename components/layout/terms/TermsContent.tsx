@@ -78,12 +78,36 @@ function ContactCards({
   );
 }
 
+function renderFormattedText(text: string) {
+  if (!text) return text;
+
+  if (text.includes("42041922")) {
+    const parts = text.split("42041922");
+    return (
+      <>
+        {parts[0]}
+        <a
+          href="https://www.kvk.nl/bestellen/#/42041922000065449916"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-orange-600 hover:text-orange-700 underline underline-offset-2 font-medium"
+        >
+          42041922
+        </a>
+        {parts.slice(1).join("42041922")}
+      </>
+    );
+  }
+
+  return text;
+}
+
 function renderBlock(block: Block, index: number) {
   switch (block.type) {
     case "paragraph":
       return (
         <p key={index} className="mt-4 text-[15px] leading-relaxed text-gray-600">
-          {block.text}
+          {renderFormattedText(block.text)}
         </p>
       );
     case "subheading":
@@ -103,7 +127,7 @@ function renderBlock(block: Block, index: number) {
         >
           {block.items.map((item, i) => (
             <li key={i} className="list-disc marker:text-orange-400">
-              {item}
+              {renderFormattedText(item)}
             </li>
           ))}
         </ul>

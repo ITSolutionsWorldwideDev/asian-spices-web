@@ -99,12 +99,32 @@
         },
         {
           "type": "table",
-          "headers": ["Productcategorie", "Retour mogelijk?", "Termijn"],
+          "headers": [
+            "Productcategorie",
+            "Retour mogelijk?",
+            "Termijn"
+          ],
           "rows": [
-            ["Vers fruit / diepvriesproducten", "Nee, uitgesloten van herroepingsrecht. Alleen klachtrecht bij ondeugdelijk product.", "Klacht melden binnen 1 dag na ontvangst"],
-            ["Verpakte specerijen/voeding, ongeopend", "Ja", "Wettelijk 14 dagen (herroeping) / 3 dagen (praktische klachtenmelding)"],
-            ["Verpakte specerijen/voeding, geopend", "Nee, vervalt door verbroken verzegeling", "N.v.t."],
-            ["Overige retailartikelen (non-food)", "Ja", "30 dagen"]
+            [
+              "Vers fruit / diepvriesproducten",
+              "Nee, uitgesloten van herroepingsrecht. Alleen klachtrecht bij ondeugdelijk product.",
+              "Klacht melden binnen 1 dag na ontvangst"
+            ],
+            [
+              "Verpakte specerijen/voeding, ongeopend",
+              "Ja",
+              "Wettelijk 14 dagen (herroeping) / 3 dagen (praktische klachtenmelding)"
+            ],
+            [
+              "Verpakte specerijen/voeding, geopend",
+              "Nee, vervalt door verbroken verzegeling",
+              "N.v.t."
+            ],
+            [
+              "Overige retailartikelen (non-food)",
+              "Ja",
+              "30 dagen"
+            ]
           ]
         },
         {
@@ -206,7 +226,7 @@
           "type": "list",
           "items": [
             "E-mail: support@asianspices.online",
-            "Telefoon: 010-7660786",
+            "Telefoon: +31 6 44844844",
             "Adres: Slakkenveen 341, 3205 GK Spijkenisse"
           ]
         }

@@ -82,18 +82,84 @@
         },
         {
           "type": "table",
-          "headers": ["Cookienaam", "Aanbieder", "Doel", "Type", "Bewaartermijn"],
+          "headers": [
+            "Cookienaam",
+            "Aanbieder",
+            "Doel",
+            "Type",
+            "Bewaartermijn"
+          ],
           "rows": [
-            ["(sessie-cookie)", "Asian Spices", "Houdt de sessie van de klant actief (bijv. inlogstatus)", "Noodzakelijk", "Sessie"],
-            ["(winkelwagen-cookie)", "Asian Spices", "Onthoudt de inhoud van de winkelwagen", "Noodzakelijk", "Tot 30 of 90 dagen (zie Privacyverklaring)"],
-            ["(cookie-consent-cookie)", "Asian Spices", "Onthoudt de cookiekeuze van de bezoeker", "Noodzakelijk", "6 maanden"],
-            ["_ga", "Google Analytics 4", "Onderscheidt unieke bezoekers", "Analytisch", "2 jaar"],
-            ["ga<container-ID>", "Google Analytics 4", "Houdt sessiestatus bij", "Analytisch", "2 jaar"],
-            ["_clck", "Microsoft Clarity", "Onthoudt de Clarity-gebruikers-ID tussen bezoeken", "Analytisch", "1 jaar"],
-            ["_clsk", "Microsoft Clarity", "Groepeert meerdere paginaweergaven in één sessie-opname", "Analytisch", "1 dag"],
-            ["CLID", "Microsoft Clarity", "Herkent of dit de eerste keer is dat Clarity deze gebruiker ziet", "Analytisch", "1 jaar"],
-            ["MUID", "Microsoft Clarity", "Identificeert unieke browsers op Microsoft-domeinen", "Analytisch", "1 jaar"],
-            ["ANONCHK / MR / SM", "Microsoft Clarity", "Ondersteunende technische cookies voor werking van Clarity", "Analytisch", "1 jaar"]
+            [
+              "(sessie-cookie)",
+              "Asian Spices",
+              "Houdt de sessie van de klant actief (bijv. inlogstatus)",
+              "Noodzakelijk",
+              "Sessie"
+            ],
+            [
+              "(winkelwagen-cookie)",
+              "Asian Spices",
+              "Onthoudt de inhoud van de winkelwagen",
+              "Noodzakelijk",
+              "Tot 30 of 90 dagen (zie Privacyverklaring)"
+            ],
+            [
+              "(cookie-consent-cookie)",
+              "Asian Spices",
+              "Onthoudt de cookiekeuze van de bezoeker",
+              "Noodzakelijk",
+              "6 maanden"
+            ],
+            [
+              "_ga",
+              "Google Analytics 4",
+              "Onderscheidt unieke bezoekers",
+              "Analytisch",
+              "2 jaar"
+            ],
+            [
+              "ga<container-ID>",
+              "Google Analytics 4",
+              "Houdt sessiestatus bij",
+              "Analytisch",
+              "2 jaar"
+            ],
+            [
+              "_clck",
+              "Microsoft Clarity",
+              "Onthoudt de Clarity-gebruikers-ID tussen bezoeken",
+              "Analytisch",
+              "1 jaar"
+            ],
+            [
+              "_clsk",
+              "Microsoft Clarity",
+              "Groepeert meerdere paginaweergaven in één sessie-opname",
+              "Analytisch",
+              "1 dag"
+            ],
+            [
+              "CLID",
+              "Microsoft Clarity",
+              "Herkent of dit de eerste keer is dat Clarity deze gebruiker ziet",
+              "Analytisch",
+              "1 jaar"
+            ],
+            [
+              "MUID",
+              "Microsoft Clarity",
+              "Identificeert unieke browsers op Microsoft-domeinen",
+              "Analytisch",
+              "1 jaar"
+            ],
+            [
+              "ANONCHK / MR / SM",
+              "Microsoft Clarity",
+              "Ondersteunende technische cookies voor werking van Clarity",
+              "Analytisch",
+              "1 jaar"
+            ]
           ]
         },
         {
@@ -157,7 +223,7 @@
           "type": "list",
           "items": [
             "E-mail: support@asianspices.online",
-            "Telefoon: 010-7660786",
+            "Telefoon: +31 6 44844844",
             "Adres: Slakkenveen 341, 3205 GK Spijkenisse"
           ]
         },

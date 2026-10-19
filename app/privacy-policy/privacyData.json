@@ -60,7 +60,7 @@
             "Website: www.asianspices.online",
             "Algemeen e-mailadres: info@asianspices.online",
             "Privacyverzoeken: support@asianspices.online",
-            "Telefoonnummer: 010-7660786",
+            "Telefoonnummer: +31 6 44844844",
             "Contactkanalen: E-mail, chatbot, contactformulier en telefoon",
             "Privacycontact: Klantenservice"
           ]
@@ -666,31 +666,103 @@
         },
         {
           "type": "table",
-          "headers": ["Gegevenscategorie", "Bewaartermijn"],
+          "headers": [
+            "Gegevenscategorie",
+            "Bewaartermijn"
+          ],
           "rows": [
-            ["Facturen en fiscale basisadministratie", "7 jaar (10 jaar bij toepasselijke OSS-/IOSS-verplichting)"],
-            ["Routinematige chatbot- en contactformuliergegevens", "6 maanden"],
-            ["Formele klachten, technische escalaties, factureringskwesties", "24 maanden na definitieve afhandeling (langer bij lopend geschil)"],
-            ["E-mailverzendlogs in cPanel", "30 dagen"],
-            ["Back-ups (cloud database- en deployment)", "30 dagen (doorlopende, versleutelde cyclus)"],
-            ["Klantaccount", "Tot 24 maanden na laatste activiteit"],
-            ["Bestelgeschiedenis in klantaccount", "Zichtbaar zolang account actief is; fiscale gegevens intern 7 (of 10) jaar"],
-            ["Niet-fiscale gastbestelgegevens", "24 maanden na voltooiing bestelling"],
-            ["Winkelwagen (gast)", "30 dagen na laatste activiteit"],
-            ["Winkelwagen (ingelogde klant)", "90 dagen na laatste activiteit, of tot afronding/lediging"],
-            ["Applicatie- en foutlogs", "30 dagen"],
-            ["Toegangs- en beveiligingslogs", "90 dagen (langer bij incident/onderzoek)"],
-            ["Beheer- en auditlogs", "12 maanden"],
-            ["Mailboxinhoud (routinematig)", "12 maanden na afhandeling"],
-            ["Mailboxinhoud (formele klachten/geschillen)", "24 maanden na afhandeling"],
-            ["Mailboxinhoud (fiscaal/wettelijk)", "7 jaar"],
-            ["Nieuwsbriefinschrijving en toestemmingsbewijs", "Zolang actief; na afmelding 5 jaar bewijs"],
-            ["Cookiekeuze en toestemmingsbewijs", "6 maanden"],
-            ["Reviews", "Zolang gepubliceerd; uitnodigings-/verificatiegegevens max. 24 maanden"],
-            ["Telefoonopnames (routinematig)", "Max. 3 maanden"],
-            ["Telefoonopnames (formele klacht/geschil)", "Max. 24 maanden na afhandeling, of langer"],
-            ["Afgewezen partneraanvragen", "6 maanden na definitieve afwijzing"],
-            ["Partneraccount na beëindiging", "Niet-financieel: max. 12 maanden; financieel/fiscaal: wettelijke termijn"]
+            [
+              "Facturen en fiscale basisadministratie",
+              "7 jaar (10 jaar bij toepasselijke OSS-/IOSS-verplichting)"
+            ],
+            [
+              "Routinematige chatbot- en contactformuliergegevens",
+              "6 maanden"
+            ],
+            [
+              "Formele klachten, technische escalaties, factureringskwesties",
+              "24 maanden na definitieve afhandeling (langer bij lopend geschil)"
+            ],
+            [
+              "E-mailverzendlogs in cPanel",
+              "30 dagen"
+            ],
+            [
+              "Back-ups (cloud database- en deployment)",
+              "30 dagen (doorlopende, versleutelde cyclus)"
+            ],
+            [
+              "Klantaccount",
+              "Tot 24 maanden na laatste activiteit"
+            ],
+            [
+              "Bestelgeschiedenis in klantaccount",
+              "Zichtbaar zolang account actief is; fiscale gegevens intern 7 (of 10) jaar"
+            ],
+            [
+              "Niet-fiscale gastbestelgegevens",
+              "24 maanden na voltooiing bestelling"
+            ],
+            [
+              "Winkelwagen (gast)",
+              "30 dagen na laatste activiteit"
+            ],
+            [
+              "Winkelwagen (ingelogde klant)",
+              "90 dagen na laatste activiteit, of tot afronding/lediging"
+            ],
+            [
+              "Applicatie- en foutlogs",
+              "30 dagen"
+            ],
+            [
+              "Toegangs- en beveiligingslogs",
+              "90 dagen (langer bij incident/onderzoek)"
+            ],
+            [
+              "Beheer- en auditlogs",
+              "12 maanden"
+            ],
+            [
+              "Mailboxinhoud (routinematig)",
+              "12 maanden na afhandeling"
+            ],
+            [
+              "Mailboxinhoud (formele klachten/geschillen)",
+              "24 maanden na afhandeling"
+            ],
+            [
+              "Mailboxinhoud (fiscaal/wettelijk)",
+              "7 jaar"
+            ],
+            [
+              "Nieuwsbriefinschrijving en toestemmingsbewijs",
+              "Zolang actief; na afmelding 5 jaar bewijs"
+            ],
+            [
+              "Cookiekeuze en toestemmingsbewijs",
+              "6 maanden"
+            ],
+            [
+              "Reviews",
+              "Zolang gepubliceerd; uitnodigings-/verificatiegegevens max. 24 maanden"
+            ],
+            [
+              "Telefoonopnames (routinematig)",
+              "Max. 3 maanden"
+            ],
+            [
+              "Telefoonopnames (formele klacht/geschil)",
+              "Max. 24 maanden na afhandeling, of langer"
+            ],
+            [
+              "Afgewezen partneraanvragen",
+              "6 maanden na definitieve afwijzing"
+            ],
+            [
+              "Partneraccount na beëindiging",
+              "Niet-financieel: max. 12 maanden; financieel/fiscaal: wettelijke termijn"
+            ]
           ]
         }
       ]
@@ -877,7 +949,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Telefoon: 010-7660786"
+          "text": "Telefoon: +31 6 44844844"
         },
         {
           "type": "paragraph",
@@ -899,7 +971,7 @@
             {
               "icon": "phone",
               "label": "Telefoon",
-              "value": "010-7660786"
+              "value": "+31 6 44844844"
             },
             {
               "icon": "privacy",

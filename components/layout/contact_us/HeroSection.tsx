@@ -41,7 +41,16 @@ export default function HeroSection() {
                   <td className="px-6 py-4 font-medium text-stone-700 bg-stone-50">
                     Chamber of Commerce Number
                   </td>
-                  <td className="px-6 py-4 text-stone-600">42041922</td>
+                  <td className="px-6 py-4 text-stone-600">
+                    <a
+                      href="https://www.kvk.nl/bestellen/#/42041922000065449916"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-orange-600 hover:text-orange-700 underline underline-offset-2 font-medium"
+                    >
+                      42041922
+                    </a>
+                  </td>
                 </tr>
               </tbody>
             </table>
