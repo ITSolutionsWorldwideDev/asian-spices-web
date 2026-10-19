@@ -63,7 +63,7 @@ const AboutUs = () => {
           <div className="grid items-center gap-8 lg:grid-cols-[1fr_minmax(260px,300px)] lg:gap-12">
             <div className="max-w-3xl">
               <p className="inline-flex rounded-full border border-amber-200/35 bg-amber-200/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-amber-100">
-                About Asian Spices · Est. 2026 · Amsterdam, Netherlands
+                About Asian Spices · Est. 2026 ·  Netherlands
               </p>
               <h1 className="mt-6 text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl xl:text-7xl">
                 Bringing{" "}

@@ -14,10 +14,9 @@ import SubscribeNewsletter from "./SubscribeNewsletter";
 const TICKER_ITEMS = [
   "FRESHNESS GUARANTEED",
   "DELIVERED ACROSS NL",
-  "RETAIL & WHOLESALE",
-  "EST. 2026 - AMSTERDAM",
   "AUTHENTIC ASIAN FLAVORS",
   "FREE RECIPES INCLUDED",
+  "EST. 2026 - NETHERLAND",
 ] as const;
 
 const SOCIAL_LINKS = [
