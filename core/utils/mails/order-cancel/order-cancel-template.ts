@@ -52,7 +52,7 @@ export interface OrderCancelEmailData {
  *   1. Al betaald (iDEAL, Bancontact, creditcard) -> TERUGBETALING GESTART
  *   2. Achteraf betalen (Klarna, Riverty) -> NIETS MEER BETALEN
  *   3. Punten of kortingscode -> SALDO BIJGEWERKT
- * - 1-3 werkdagen highlight banner
+ * - Binnen 7 dagen highlight banner
  * - "Altijd welkom terug" invitation card with dark green button to webshop
  * - Customer Support Banner & Outlook/Gmail bulletproof footer
  */
@@ -399,7 +399,7 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
                             iDEAL, Bancontact of creditcard
                           </div>
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; line-height: 18px; color: #52525b; margin-bottom: 8px;">
-                            &euro; ${totalAmount} wordt binnen 1 tot 3 werkdagen automatisch teruggestort op de rekening waarmee u heeft betaald.
+                            &euro; ${totalAmount} wordt binnen 7 dagen automatisch teruggestort op de rekening waarmee u heeft betaald.
                           </div>
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 10px; font-weight: 800; color: #166534; letter-spacing: 0.5px;">
                             &#10003; TERUGBETALING GESTART
@@ -462,15 +462,15 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
                       </tr>
                     </table>
 
-                    <!-- 1-3 werkdagen verwerkingstijd Box -->
+                    <!-- 7 dagen verwerkingstijd Box -->
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#fff7ed" style="background-color: #fff7ed; border-radius: 10px; border: 1px solid #fed7aa; padding: 14px 16px;">
                       <tr>
-                        <td width="52" valign="middle" style="font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 700; color: #b45309; line-height: 1;">
-                          1&ndash;3
+                        <td width="36" valign="middle" style="font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 700; color: #b45309; line-height: 1;">
+                          7
                         </td>
                         <td valign="middle" style="padding-left: 10px;">
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 800; color: #18181b;">
-                            werkdagen verwerkingstijd
+                            dagen verwerkingstijd
                           </div>
                           <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; color: #71717a; margin-top: 2px;">
                             De zichtbaarheid van de terugbetaling kan per bank verschillen.
@@ -592,12 +592,12 @@ export function generateOrderCancelEmailHtml(data: OrderCancelEmailData = {}): s
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
                                   <tr>
                                     <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
-                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block;">
+                                      <a href="https://www.tiktok.com/@asianspices.online?lang=en" target="_blank" style="text-decoration: none; display: inline-block;">
                                         <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
                                       </a>
                                     </td>
                                     <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
-                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                      <a href="https://www.tiktok.com/@asianspices.online?lang=en" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
                                         TikTok
                                       </a>
                                     </td>
@@ -760,7 +760,7 @@ TOTAAL GEANNULEERD: € ${totalAmount}
 --------------------------------------------------
 WAT GEBEURT ER MET UW BETALING?
 1. Al betaald (iDEAL, Bancontact, creditcard):
-   € ${totalAmount} wordt binnen 1 tot 3 werkdagen automatisch teruggestort.
+   € ${totalAmount} wordt binnen 7 dagen automatisch teruggestort.
    [✓ Terugbetaling gestart]
 
 2. Achteraf betalen (Klarna, Riverty):
@@ -771,7 +771,7 @@ WAT GEBEURT ER MET UW BETALING?
    Ingezette spaarpunten zijn automatisch teruggezet op uw accountsaldo.
    [✓ Saldo bijgewerkt]
 
-Verwerkingstijd: 1-3 werkdagen.
+Verwerkingstijd: binnen 7 dagen.
 
 --------------------------------------------------
 TOCH NOG TREK IN AZIATISCHE GERECHTEN?

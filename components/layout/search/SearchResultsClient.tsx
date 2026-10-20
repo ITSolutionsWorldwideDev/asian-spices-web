@@ -205,8 +205,7 @@ export default function SearchResultsClient({
       {/* Interactive Filter Pills */}
       {totalProducts > 0 && totalRecipes > 0 && (
         <div
-          className="notranslate relative z-10 -mx-4 overflow-x-auto px-4 py-1 min-w-0 max-w-[calc(100vw-1rem)] scrollbar-hide sm:mx-0 sm:max-w-full sm:overflow-visible sm:p-0"
-          translate="no"
+          className="relative z-10 -mx-4 overflow-x-auto px-4 py-1 min-w-0 max-w-[calc(100vw-1rem)] scrollbar-hide sm:mx-0 sm:max-w-full sm:overflow-visible sm:p-0"
         >
           <div className="inline-flex items-center gap-2 rounded-2xl bg-white p-1.5 shadow-sm ring-1 ring-gray-200/80">
             <button

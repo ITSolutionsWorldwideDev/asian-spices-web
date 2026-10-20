@@ -16,13 +16,13 @@ interface Props {
 const METHODS = [
   {
     id: "paynl" as const,
-    label: "Pay.nl",
+    label: "Ideal | Wero",
     description: "Pay securely via iDEAL and other methods",
     logo: {
-      src: "/assets/payment/paynl.svg",
-      alt: "Pay.nl",
-      width: 48,
-      height: 48,
+      src: "/assets/payment/ideal-wero.svg",
+      alt: "Ideal | Wero",
+      width: 100,
+      height: 32,
     },
   },
   // {

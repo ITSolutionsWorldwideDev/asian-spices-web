@@ -249,3 +249,22 @@ a font,
   scrollbar-width: none;
 }
 
+/* Swiper navigation arrow styling to match site brand UI */
+:root {
+  --swiper-navigation-color: #FE8C00;
+  --swiper-theme-color: #FE8C00;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: #FE8C00 !important;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  color: #e57e00 !important;
+  transform: scale(1.1);
+}
+
+

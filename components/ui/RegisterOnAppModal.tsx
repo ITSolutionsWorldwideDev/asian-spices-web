@@ -62,8 +62,7 @@ export default function RegisterOnAppModal() {
       aria-label="App early access"
       onClick={closeModal}
       style={{ zIndex: MODAL_Z_INDEX }}
-      translate="no"
-      className="notranslate fixed inset-0 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm md:p-6"
+      className="fixed inset-0 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm md:p-6"
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -83,7 +82,7 @@ export default function RegisterOnAppModal() {
         </button>
 
         <div className="pointer-events-auto p-1 pt-2">
-          <RegisterOnApp />
+          <RegisterOnApp onSuccess={closeModal} />
         </div>
       </div>
     </div>,

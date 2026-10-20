@@ -142,7 +142,7 @@ export default function AddressForm({
   const isBilling = watch("is_billing_address");
 
   return (
-    <div className="notranslate w-full" translate="no">
+    <div className="w-full">
       {/* HEADER */}
       <div className="mb-6 border-b pb-4">
         <h3 className="text-xl font-semibold text-gray-900">

@@ -2,7 +2,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useZodForm } from "@/hooks/useZodForm";
@@ -12,11 +12,22 @@ import {
 } from "@/lib/validation/newsletter";
 import { getErrorMessage } from "@/lib/form/getErrorMessage";
 
-const RegisterOnApp: React.FC = () => {
+interface RegisterOnAppProps {
+  onSuccess?: () => void;
+}
+
+const RegisterOnApp: React.FC<RegisterOnAppProps> = ({ onSuccess }) => {
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [status, setStatus] = useState<{
     type: "success" | "error";
     message: string;
   } | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const {
     register,
@@ -47,6 +58,9 @@ const RegisterOnApp: React.FC = () => {
           message: "You're on the list — we'll email you when the app launches!",
         });
         reset({ email: "", privacyConsent: false, wantsAppLaunchNotice: true });
+        timerRef.current = setTimeout(() => {
+          onSuccess?.();
+        }, 1000);
         return;
       }
 

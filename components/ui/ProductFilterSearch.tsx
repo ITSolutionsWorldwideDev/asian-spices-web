@@ -32,7 +32,7 @@ export default function ProductFilterSearch() {
   }, [search]);
 
   return (
-    <div className="notranslate mb-6 p-4 border rounded-xl bg-white shadow-sm" translate="no">
+    <div className="mb-6 p-4 border rounded-xl bg-white shadow-sm">
       {/* 🔍 Search */}
       <input
         type="text"

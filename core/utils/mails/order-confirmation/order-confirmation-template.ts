@@ -657,7 +657,7 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                     <!-- Social text links commented out
                     <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700;">
                       <a href="https://www.instagram.com/asianspicessocial/" target="_blank" style="color: #0284c7; text-decoration: underline; margin-right: 14px;">Instagram</a>
-                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="color: #0284c7; text-decoration: underline; margin-right: 14px;">TikTok</a>
+                      <a href="https://www.tiktok.com/@asianspices.online?lang=en" target="_blank" style="color: #0284c7; text-decoration: underline; margin-right: 14px;">TikTok</a>
                       <a href="https://www.facebook.com/asianspices.online/" target="_blank" style="color: #0284c7; text-decoration: underline; margin-right: 14px;">Facebook</a>
                       <a href="https://www.youtube.com/@AsianSpices-p5c" target="_blank" style="color: #0284c7; text-decoration: underline;">YouTube</a>
                     </div>
@@ -777,12 +777,12 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse;">
                                   <tr>
                                     <td valign="middle" align="center" style="padding-right: 7px; line-height: 1;">
-                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block;">
+                                      <a href="https://www.tiktok.com/@asianspices.online?lang=en" target="_blank" style="text-decoration: none; display: inline-block;">
                                         <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; outline: none; width: 16px; height: 16px;" />
                                       </a>
                                     </td>
                                     <td valign="middle" align="left" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; line-height: 16px; white-space: nowrap;">
-                                      <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                      <a href="https://www.tiktok.com/@asianspices.online?lang=en" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
                                         TikTok
                                       </a>
                                     </td>
