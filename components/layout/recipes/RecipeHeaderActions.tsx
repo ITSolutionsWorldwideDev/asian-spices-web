@@ -81,8 +81,7 @@ export default function RecipeHeaderActions({
 
   return (
     <div
-      className="notranslate flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-3 text-white"
-      translate="no"
+      className="flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-3 text-white"
     >
       <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
         <div className="inline-flex items-center gap-2">

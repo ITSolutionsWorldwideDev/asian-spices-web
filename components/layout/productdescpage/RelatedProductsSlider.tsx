@@ -19,7 +19,7 @@ export default function RelatedProductsSlider({ products }: any) {
   const { taxRules, taxRulesLoaded } = useGlobalStore();
 
   return (
-    <div className="relative w-full px-2 sm:px-4">
+    <div className="relative w-full px-2 sm:px-4 [--swiper-navigation-color:#FE8C00] [--swiper-theme-color:#FE8C00]">
       <Swiper
         modules={[Autoplay, Navigation, Keyboard]}
         loop={true}

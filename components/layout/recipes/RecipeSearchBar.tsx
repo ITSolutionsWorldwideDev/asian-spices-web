@@ -68,8 +68,7 @@ export default function RecipeSearchBar({
   return (
     <form
       onSubmit={handleSubmit}
-      translate="no"
-      className="notranslate w-full min-w-0 bg-white rounded-2xl border shadow-sm p-2 sm:p-3 flex items-center gap-2 sm:gap-3 overflow-hidden"
+      className="w-full min-w-0 bg-white rounded-2xl border shadow-sm p-2 sm:p-3 flex items-center gap-2 sm:gap-3 overflow-hidden"
     >
       <Search size={20} className="text-gray-400 shrink-0 ml-1" />
 

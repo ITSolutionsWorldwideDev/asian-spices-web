@@ -50,8 +50,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div
-      className="notranslate min-h-dvh flex items-center justify-center px-3 py-6 sm:px-6 sm:py-10 bg-gradient-to-br from-orange-50 via-white to-amber-50"
-      translate="no"
+      className="min-h-dvh flex items-center justify-center px-3 py-6 sm:px-6 sm:py-10 bg-gradient-to-br from-orange-50 via-white to-amber-50"
     >
       <div className="w-full max-w-md rounded-2xl sm:rounded-3xl bg-white/90 backdrop-blur-xl border border-white/40 p-4 sm:p-6 md:p-8 shadow-xl">
         <div className="flex justify-center mb-4 sm:mb-6">
@@ -92,9 +91,10 @@ export default function ForgotPasswordPage() {
               type="email"
               required
               placeholder="name@example.com"
+              translate="no"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full mt-1.5 px-3.5 py-3 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+              className="notranslate w-full mt-1.5 px-3.5 py-3 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
             />
           </div>
 

@@ -9,7 +9,7 @@ const CartandWhishBtn = () => {
   const itemInCart = cart.length;
 
   return (
-    <div className="notranslate flex shrink-0 items-center gap-1" translate="no">
+    <div className="flex shrink-0 items-center gap-1">
       <Link
         href="/wishlist"
         aria-label="Wishlist"

@@ -453,7 +453,7 @@ export default function FilterSidebar({
   );
 
   return (
-    <div className="notranslate" translate="no">
+    <div>
       {/* ── Mobile Filter Trigger Bar & Drawer (Mobile Only: lg:hidden) ── */}
       <div className="block lg:hidden w-full mb-3">
         <div className="flex items-center gap-2.5">

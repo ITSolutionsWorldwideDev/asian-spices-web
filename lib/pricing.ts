@@ -60,7 +60,9 @@ export function calculateTotals(
 
   const isStandardMethod =
     shippingCodeOrName?.toLowerCase() === "standard" ||
-    shippingCodeOrName?.toLowerCase() === "standard delivery";
+    shippingCodeOrName?.toLowerCase() === "standard delivery" ||
+    shippingCodeOrName?.toLowerCase() === "standard shipping" ||
+    shippingCodeOrName?.toLowerCase().includes("standard");
 
   const shipping =
     subtotal >= FREE_SHIPPING_THRESHOLD && isStandardMethod ? 0 : shippingCost;
@@ -174,7 +176,9 @@ export function calculateTotals(
   const tax = subtotal * taxRate;
   const isStandardMethod =
     shippingCodeOrName?.toLowerCase() === "standard" ||
-    shippingCodeOrName?.toLowerCase() === "standard delivery";
+    shippingCodeOrName?.toLowerCase() === "standard delivery" ||
+    shippingCodeOrName?.toLowerCase() === "standard shipping" ||
+    shippingCodeOrName?.toLowerCase().includes("standard");
 
   const shipping =
     subtotal >= FREE_SHIPPING_THRESHOLD && isStandardMethod ? 0 : shippingCost;

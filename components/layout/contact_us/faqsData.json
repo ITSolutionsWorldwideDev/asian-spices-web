@@ -78,10 +78,7 @@
           "question": "What is your process for preventing transaction fraud?",
           "answer": "We use automated payment screening, secure checkout layers, and manual verification for high-value orders."
         },
-        {
-          "question": "Where can I view your complete Terms & Conditions and Privacy Policy?",
-          "answer": "Links to our full Terms, Conditions, and GDPR-compliant Privacy Policies are permanently accessible in the website footer. LINK?"
-        },
+        
         {
           "question": "How is VAT and tax handled on orders?",
           "answer": "Taxes are automatically calculated and applied at checkout according to local state and country Tax Laws."
@@ -596,10 +593,7 @@
               "question": "Why is my tracking link not updating?",
               "answer": "Tracking can take up to 24 hours to update after the package leaves our facility."
             },
-            {
-              "question": "Do you ship to P.O. boxes?",
-              "answer": "No, we require a physical residential or business address for delivery."
-            },
+           
             {
               "question": "What is the shipping cost?",
               "answer": "Shipping is calculated at checkout based on package weight and your location."
@@ -678,10 +672,7 @@
           "id": "returns-refunds-damages",
           "name": "Returns, Refunds & Damages",
           "faqs": [
-            {
-              "question": "What is the return window?",
-              "answer": "You have 14 days from the date of delivery to request a return."
-            },
+          
             {
               "question": "Are food items returnable?",
               "answer": "Yes, food items are returnable."
@@ -706,10 +697,7 @@
               "question": "What happens if a product arrives damaged?",
               "answer": "Contact us with a photo within 48 hours. The platform handles it and will issue a replacement or refund."
             },
-            {
-              "question": "Do I need the original receipt to return?",
-              "answer": "No, just your 6-digit order number is sufficient."
-            },
+           
             {
               "question": "Where do I drop off my return?",
               "answer": "Once approved, you will receive a return shipping label with drop-off instructions."
@@ -770,10 +758,7 @@
               "question": "Do you provide the return label?",
               "answer": "Yes, a digital label is provided upon return approval."
             },
-            {
-              "question": "Can I return items bought with a gift card?",
-              "answer": "Yes, the refund will be re-issued to the original gift card."
-            },
+           
             {
               "question": "What if I return an item after 14 days?",
               "answer": "Returns outside the 14-day window are rejected and shipped back to you."
@@ -844,10 +829,7 @@
               "question": "Can sellers sell counterfeit items?",
               "answer": "No, counterfeit products are strictly prohibited and result in immediate bans."
             },
-            {
-              "question": "What categories can sellers use?",
-              "answer": "Sellers may only list in 4 categories: Spices, Kitchen Utilities, Food Items, and Recipes."
-            },
+            
             {
               "question": "How are fake sellers handled?",
               "answer": "They are immediately banned, and their funds are frozen."

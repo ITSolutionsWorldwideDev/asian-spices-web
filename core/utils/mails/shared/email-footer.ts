@@ -57,12 +57,12 @@ export function renderEmailSocialFooter(options: EmailFooterOptions = {}): strin
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                               <tr>
                                 <td valign="middle" style="padding-right: 7px; line-height: 1;">
-                                  <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: inline-block;">
+                                  <a href="https://www.tiktok.com/@asianspices.online?lang=en" target="_blank" style="text-decoration: none; display: inline-block;">
                                     <img src="${tiktokIconSrc}" alt="TikTok" width="16" height="16" style="display: block; width: 16px; height: 16px; border: 0;" />
                                   </a>
                                 </td>
                                 <td valign="middle" style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #18181b; white-space: nowrap;">
-                                  <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
+                                  <a href="https://www.tiktok.com/@asianspices.online?lang=en" target="_blank" style="text-decoration: none; color: #18181b; display: inline-block;">
                                     TikTok
                                   </a>
                                 </td>

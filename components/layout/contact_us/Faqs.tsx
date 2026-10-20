@@ -235,7 +235,7 @@ const Faqs = () => {
 
       <div className="mt-6">
         <Link
-          href="/"
+          href="/products"
           className="inline-flex items-center gap-2 text-orange-500 text-sm font-semibold hover:underline"
         >
           Browse Products <ArrowRight className="w-4 h-4" />

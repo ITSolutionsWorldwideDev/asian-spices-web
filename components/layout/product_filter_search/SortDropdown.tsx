@@ -53,8 +53,7 @@ export default function SortDropdown() {
 
   return (
     <div
-      className="notranslate flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between mb-5"
-      translate="no"
+      className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between mb-5"
     >
       {/* =========================
           🔍 SEARCH BAR

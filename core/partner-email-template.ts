@@ -361,7 +361,7 @@ export function generatePartnerVerificationEmailHtml(data: EmailTemplateData): s
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e4e4e7; mso-border-alt: solid #e4e4e7 1pt; border-radius: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
                         <tr>
                           <td align="center" valign="middle" style="padding: 7px 14px; border: 0; border: none; mso-border-alt: none; mso-padding-alt: 7px 14px;">
-                            <a href="https://www.tiktok.com/@asianspices0" target="_blank" style="text-decoration: none; display: block; border: 0; outline: none;">
+                            <a href="https://www.tiktok.com/@asianspices.online?lang=en" target="_blank" style="text-decoration: none; display: block; border: 0; outline: none;">
                               <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border: 0;">
                                 <tr>
                                   <td valign="middle" align="center" style="padding-right: 7px; border: 0; line-height: 1;">

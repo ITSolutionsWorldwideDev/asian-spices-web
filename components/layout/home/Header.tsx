@@ -92,8 +92,8 @@ export default function Header() {
       <Nav />
 
       <div className="relative isolate mx-auto w-full max-w-[90rem] overflow-hidden rounded-[1.25rem] bg-[#f6d7cf] shadow-lg sm:rounded-[1.75rem] md:rounded-[2rem] lg:rounded-[2.5rem]">
-        {/* Mobile par height kam (h-[260px]) aur desktop par original rakhi hai */}
-        <div className="relative h-[260px] w-full sm:h-[320px] md:h-[400px] lg:h-[480px]">
+        {/* Mobile par height kam aur desktop par balanced rakhi hai */}
+        <div className="relative h-[280px] w-full sm:h-[340px] md:h-[420px] lg:h-[490px] xl:h-[520px]">
           {banners.map((banner, i) => (
             <Image
               key={banner.id}
@@ -128,14 +128,14 @@ export default function Header() {
             return (
               <div
                 key={banner.id}
-                className={`absolute inset-0 z-10 flex h-full items-center px-4 py-4 sm:px-10 md:px-14 lg:px-16 transition-opacity duration-700 ${
+                className={`absolute inset-0 z-10 flex h-full items-center px-4 py-4 sm:px-8 md:px-12 lg:px-16 transition-opacity duration-700 ${
                   isActive
                     ? "opacity-100 pointer-events-auto"
                     : "opacity-0 pointer-events-none"
                 }`}
               >
-                <div className="w-full max-w-[min(100%,25rem)] sm:max-w-md md:max-w-lg lg:max-w-xl">
-                  <HeadingTag className="text-[1.15rem] font-bold leading-[1.15] tracking-tight sm:text-3xl md:text-4xl lg:text-[3.35rem]">
+                <div className="w-full max-w-[min(100%,25rem)] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
+                  <HeadingTag className="text-[1.15rem] font-bold leading-[1.15] tracking-tight sm:text-2xl md:text-3xl lg:text-[2.25rem] xl:text-[2.65rem] 2xl:text-[2.9rem]">
                     <span
                       className={`block text-[#EE9933] ${
                         isLight
@@ -145,7 +145,7 @@ export default function Header() {
                     >
                       {overlay.line1}
                     </span>{" "}
-                    <span className="mt-0.5 block sm:mt-1.5">
+                    <span className="mt-0.5 block sm:mt-1">
                       {overlay.line2Lead && (
                         <>
                           <span
@@ -172,7 +172,7 @@ export default function Header() {
                   </HeadingTag>
 
                   <p
-                    className={`mt-1.5 max-w-sm text-[11px] font-medium leading-relaxed sm:mt-3 sm:text-base sm:font-normal md:mt-6 md:text-lg ${
+                    className={`mt-1.5 max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl text-[11px] font-medium leading-relaxed sm:mt-2.5 sm:text-sm md:mt-3 md:text-base ${
                       isLight
                         ? "text-zinc-800"
                         : "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] sm:text-white/95 sm:drop-shadow-none"
@@ -184,7 +184,7 @@ export default function Header() {
                   <Link
                     href={overlay.ctaHref}
                     tabIndex={isActive ? 0 : -1}
-                    className={`mt-2.5 inline-flex min-h-[44px] items-center justify-center rounded-full px-5 py-2.5 text-xs font-bold transition sm:mt-5 sm:min-h-0 sm:px-8 sm:py-3.5 sm:text-base sm:font-semibold ${
+                    className={`mt-2.5 inline-flex min-h-[44px] items-center justify-center rounded-full px-5 py-2.5 text-xs font-bold transition sm:mt-4 sm:min-h-0 sm:px-7 sm:py-3 sm:text-sm md:text-base sm:font-semibold ${
                       isLight
                         ? "bg-[#D34827] text-white hover:bg-[#c03f20]"
                         : "bg-[#EE9933] text-[#1a1208] hover:bg-[#e08a28]"

@@ -31,7 +31,7 @@ const BUSINESS = {
   sameAs: [
     "https://www.facebook.com/asianspices.online/",
     "https://www.instagram.com/asianspicessocial/",
-    "https://www.tiktok.com/@asianspices.online",
+    "https://www.tiktok.com/@asianspices.online?lang=en",
     "https://www.youtube.com/@AsianSpices-p5c",
     "https://x.com/asianspicee50",
   ],

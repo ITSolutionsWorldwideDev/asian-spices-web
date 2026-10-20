@@ -18,8 +18,7 @@ export default function AccountTabs() {
 
   return (
     <div
-      className="notranslate lg:hidden flex justify-around bg-white border rounded-xl p-2 mb-6 shadow-sm"
-      translate="no"
+      className="lg:hidden flex justify-around bg-white border rounded-xl p-2 mb-6 shadow-sm"
     >
       {tabs.map((tab) => {
         const Icon = tab.icon;

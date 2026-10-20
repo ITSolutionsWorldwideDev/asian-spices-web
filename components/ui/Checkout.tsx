@@ -150,7 +150,10 @@ export default function Checkout() {
 
   const handleAddressChange = useCallback(
     async (address: any) => {
-      if (!address) return;
+      if (!address) {
+        setSelectedAddress(null);
+        return;
+      }
       setSelectedAddress(address);
       const activeCountry = address?.country || "NL";
 
@@ -415,8 +418,10 @@ export default function Checkout() {
           },
           promoCode: appliedPromo?.code || null,
           shippingMethod: selectedOption
-            ? selectedOption.name
-            : "Standard Delivery",
+            ? selectedOption.name?.toLowerCase() === "standard"
+              ? "Standard Shipping"
+              : selectedOption.name
+            : "Standard Shipping",
           // The rate this shipping method actually costs, in EUR, before any
           // free-shipping discount is applied - saved so a later partial
           // cancellation that drops the order back below the free-shipping
@@ -595,7 +600,11 @@ export default function Checkout() {
             shipping={convertedTotals.shipping}
             total={checkoutTotal}
             shippingMethodName={
-              selectedOption ? selectedOption.name : "Shipping"
+              selectedOption
+                ? selectedOption.name?.toLowerCase() === "standard"
+                  ? "Standard Shipping"
+                  : selectedOption.name
+                : "Shipping"
             }
             deliveryDaysText={deliveryDaysString}
             promoDiscount={discountConverted}

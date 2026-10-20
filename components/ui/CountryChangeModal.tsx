@@ -16,8 +16,7 @@ export default function CountryChangeModal() {
 
   return (
     <div
-      className="notranslate fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in"
-      translate="no"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in"
     >
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 w-full max-w-md rounded-xl p-6 shadow-2xl mx-4 transform scale-100 transition-transform duration-200">
         

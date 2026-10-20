@@ -31,7 +31,7 @@ const SOCIAL_LINKS = [
   },
   {
     label: "TikTok",
-    href: "https://www.tiktok.com/@asianspices0",
+    href: "https://www.tiktok.com/@asianspices.online?lang=en",
     Icon: FaTiktok,
   },
   {
@@ -188,17 +188,27 @@ const FooterContent = () => {
                 </a>
               </li>
               <li className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:border-0 sm:bg-transparent sm:p-0">
-                <MapPin
-                  className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
-                  aria-hidden
-                />
-                <span className="leading-relaxed">
+                <a
+                  href="https://maps.app.goo.gl/Qaw4W3sgskPEXyx56"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="View location on Google Maps"
+                  className="mt-0.5 shrink-0 text-orange-500 transition hover:text-orange-400"
+                >
+                  <MapPin className="h-4 w-4" aria-hidden />
+                </a>
+                <a
+                  href="https://maps.app.goo.gl/Qaw4W3sgskPEXyx56"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="leading-relaxed transition hover:text-orange-400"
+                >
                   Slakkenveen 341
                   <br />
                   3205 GK Spijkenisse
                   <br />
                   Netherlands
-                </span>
+                </a>
               </li>
             </ul>
           </div>
