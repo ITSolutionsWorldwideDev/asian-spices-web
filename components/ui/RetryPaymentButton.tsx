@@ -47,6 +47,10 @@ export default function RetryPaymentButton({
           };
       }
 
+      try {
+        sessionStorage.setItem("pendingCheckoutOrderId", String(orderId));
+      } catch {}
+
       window.location.href = data.redirectUrl;
     } catch (err: any) {
       console.error(err);

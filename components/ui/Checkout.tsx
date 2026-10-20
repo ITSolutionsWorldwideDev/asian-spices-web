@@ -108,6 +108,38 @@ export default function Checkout() {
   }, []);
 
   useEffect(() => {
+    const cancelAbandonedCheckoutOrder = async () => {
+      try {
+        const pendingOrderId = sessionStorage.getItem("pendingCheckoutOrderId");
+        if (!pendingOrderId) return;
+
+        sessionStorage.removeItem("pendingCheckoutOrderId");
+
+        await fetch("/api/paynl/confirm", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId: pendingOrderId,
+            statusAction: "cancelled",
+          }),
+        });
+      } catch (err) {
+        console.error("Failed to update abandoned checkout order:", err);
+      }
+    };
+
+    cancelAbandonedCheckoutOrder();
+
+    const handlePageShow = () => {
+      hide();
+      cancelAbandonedCheckoutOrder();
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, [hide]);
+
+  useEffect(() => {
     if (session?.user?.email) {
       setFormData((prev) => ({
         ...prev,
@@ -423,11 +455,23 @@ export default function Checkout() {
         const data = await payment.json();
 
         if (!data.success) {
+          await fetch("/api/paynl/confirm", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId,
+              statusAction: "failed",
+            }),
+          }).catch(() => {});
+
           throw {
             message: "Failed to initiate payment. Please try again.",
             code: "PAYMENT_FAILED",
           };
         }
+        try {
+          sessionStorage.setItem("pendingCheckoutOrderId", String(orderId));
+        } catch {}
         // Redirect user to payment gateway
         window.location.href = data.redirectUrl;
       }

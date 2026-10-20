@@ -38,6 +38,10 @@ export default function PayPalCaptureHandler({
 
     const capture = async () => {
       try {
+        sessionStorage.removeItem("pendingCheckoutOrderId");
+      } catch {}
+
+      try {
         show("Confirming your PayPal payment...");
 
         const res = await fetch("/api/paypal/capture", {

@@ -16,7 +16,6 @@ import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
 import { validatePromo } from "@/app/api/checkout/promo/route";
 import {
   sendGuestAccountCreatedEmail,
-  sendOrderConfirmationEmail,
 } from "@/core/email-templates";
 
 export async function POST(req: NextRequest) {
@@ -524,20 +523,6 @@ export async function POST(req: NextRequest) {
           emailResult.error,
         );
       }
-    }
-
-    // Send order confirmation email directly upon order placement
-    try {
-      const orderEmailResult = await sendOrderConfirmationEmail(order_id);
-      if (!orderEmailResult?.success && !orderEmailResult?.alreadySent) {
-        console.error(
-          "[Order Confirmation Email Failed]",
-          email,
-          orderEmailResult?.error,
-        );
-      }
-    } catch (orderEmailErr) {
-      console.error("[Order Confirmation Email Exception]:", orderEmailErr);
     }
 
     return NextResponse.json({

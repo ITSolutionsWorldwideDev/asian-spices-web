@@ -4,13 +4,49 @@ import React from "react";
 import Nav from "@/components/ui/Nav";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { pool } from "@/core/db";
+import RetryPaymentButton from "@/components/ui/RetryPaymentButton";
 
 interface Props {
-  searchParams: { orderId?: string; token?: string };
+  searchParams: Promise<{ orderId?: string; token?: string }>;
 }
 
-export default function Page({ searchParams }: Props) {
-  const token = searchParams?.token;
+export default async function Page({ searchParams }: Props) {
+  const params = await searchParams;
+  const orderId = params?.orderId;
+  const token = params?.token;
+
+  let orderMeta: {
+    total: number;
+    email: string;
+    paymentMethod: "paynl" | "paypal";
+    alreadyPaid: boolean;
+  } | null = null;
+
+  if (orderId) {
+    try {
+      const orderRes = await pool.query(
+        `UPDATE store_orders
+         SET payment_status = CASE WHEN payment_status = 'paid' THEN 'paid' ELSE 'failed' END,
+             updated_at = CASE WHEN payment_status = 'paid' THEN updated_at ELSE NOW() END
+         WHERE id = $1
+         RETURNING total_amount, customer_email, payment_method, payment_status`,
+        [orderId],
+      );
+
+      if (orderRes.rows.length > 0) {
+        const row = orderRes.rows[0];
+        orderMeta = {
+          total: Number(row.total_amount || 0),
+          email: row.customer_email || "",
+          paymentMethod: row.payment_method === "paypal" ? "paypal" : "paynl",
+          alreadyPaid: row.payment_status === "paid",
+        };
+      }
+    } catch (err) {
+      console.error("Failed to mark cancelled checkout order:", err);
+    }
+  }
 
   return (
     <div>
@@ -44,14 +80,26 @@ export default function Page({ searchParams }: Props) {
             Your order was not completed. You can try again anytime.
           </p>
 
-          <Link
-            href="/checkout"
-            className="text-blue-600 underline mt-4 inline-block"
-          >
-            Return to Checkout
-          </Link>
+          <div className="flex flex-wrap items-center gap-4 mt-4">
+            {orderId && orderMeta && !orderMeta.alreadyPaid && (
+              <RetryPaymentButton
+                orderId={orderId}
+                amount={orderMeta.total}
+                email={orderMeta.email}
+                paymentMethod={orderMeta.paymentMethod}
+              />
+            )}
+
+            <Link
+              href="/checkout"
+              className="text-blue-600 underline mt-4 inline-block"
+            >
+              Return to Checkout
+            </Link>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+

@@ -116,6 +116,18 @@ export async function POST(req: NextRequest) {
 
       console.error("PayPal capture error:", captureData);
 
+      await pool
+        .query(
+          `UPDATE store_orders
+           SET payment_status = 'failed',
+               updated_at = NOW()
+           WHERE id = $1 AND payment_status != 'paid'`,
+          [orderId],
+        )
+        .catch((dbErr) =>
+          console.error("Failed to mark PayPal order as failed:", dbErr),
+        );
+
       return NextResponse.json(
         { success: false, error: captureData },
         { status: 400 },
