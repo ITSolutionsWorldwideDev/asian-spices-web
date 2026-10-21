@@ -10,6 +10,7 @@ import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
 import { DeferredBibiChatWidget } from "@/components/chatbot/DeferredBibiChatWidget";
 import { DeferredGuruChatWidget } from "@/components/chatbot/DeferredGuruChatWidget";
 import { DeferredGenieChatWidget } from "@/components/chatbot/DeferredGenieChatWidget";
+import { DeferredFurkiChatWidget } from "@/components/chatbot/DeferredFurkiChatWidget";
 import SessionWatcher from "@/components/auth/SessionWatcher";
 
 function isRecipePath(pathname: string | null) {
@@ -19,12 +20,21 @@ function isRecipePath(pathname: string | null) {
     pathname.startsWith("/account/recipes");
 }
 
+// Pre-launch gate pages, no chat there.
+function isGatePath(pathname: string | null) {
+  if (!pathname) return false;
+  return pathname.startsWith("/site-access") || pathname.startsWith("/coming-soon");
+}
+
 export default function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isHealthPage = pathname?.startsWith("/healthyliving") ?? false;
   const isRecipePage = isRecipePath(pathname);
   const isPartnerRegistrationPage =
     pathname?.startsWith("/partner-registration") ?? false;
+  // Furki (customer support) covers every page that has no dedicated bot.
+  const isFurkiPage =
+    !isHealthPage && !isRecipePage && !isPartnerRegistrationPage && !isGatePath(pathname);
 
   return (
     <SessionProvider refetchOnWindowFocus={false} refetchInterval={60}>
@@ -35,6 +45,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           {isHealthPage ? <DeferredGuruChatWidget /> : null}
           {isRecipePage ? <DeferredBibiChatWidget /> : null}
           {isPartnerRegistrationPage ? <DeferredGenieChatWidget /> : null}
+          {isFurkiPage ? <DeferredFurkiChatWidget /> : null}
           <CookieConsentBanner />
         </CartSyncProvider>
       </GlobalDataProvider>
