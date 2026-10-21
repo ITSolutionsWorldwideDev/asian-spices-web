@@ -650,10 +650,7 @@
               "question": "Are liquids safe from freezing in transit?",
               "answer": "Our packaging is insulated against standard temperature changes during transit."
             },
-            {
-              "question": "What courier do you use?",
-              "answer": "We partner with top-tier national logistics providers. The specific courier is shown on your tracking page."
-            },
+            
             {
               "question": "Do you offer contactless delivery?",
               "answer": "Yes, couriers default to safe-drop contactless delivery where applicable."
@@ -793,10 +790,7 @@
               "question": "What is the seller commission percentage?",
               "answer": "The platform takes a standard percentage fee per sale (refer to your vendor agreement for exact rates)."
             },
-            {
-              "question": "When are sellers paid?",
-              "answer": "Sellers are paid strictly on a Monthly schedule."
-            },
+          
             {
               "question": "Can sellers withdraw earnings anytime?",
               "answer": "No, sellers can only receive their funds After the Month is complete."
@@ -862,10 +856,7 @@
               "question": "How do I upload my spice catalog?",
               "answer": "Through the Vendor Dashboard via manual entry or bulk CSV upload."
             },
-            {
-              "question": "Can I list a kitchen appliance without a warranty?",
-              "answer": "No, all electrical appliances must carry a standard 1-year manufacturer warranty."
-            },
+            
             {
               "question": "Where do I see my monthly sales report?",
               "answer": "Detailed analytics are available in your Vendor Dashboard under \"Reports.\""
@@ -940,10 +931,7 @@
               "question": "Where are the Terms & Conditions?",
               "answer": "The Terms & Conditions are located in the footer of every webpage."
             },
-            {
-              "question": "How do you prevent fraud?",
-              "answer": "We utilize active AI screening on checkouts and verify high-risk transactions manually."
-            },
+           
             {
               "question": "Can I change my email address?",
               "answer": "Yes, you can update your email in account settings (requires email verification)."
@@ -1002,18 +990,9 @@
               "question": "Where are your spices from?",
               "answer": "They are authentic organic spices coming directly from India and Pakistan."
             },
-            {
-              "question": "Are the spices 100% organic?",
-              "answer": "Yes, they are certified organic and free from synthetic chemicals."
-            },
-            {
-              "question": "Do the spices contain artificial colors?",
-              "answer": "No, they contain zero artificial colors or dyes."
-            },
-            {
-              "question": "Are there preservatives in the ground spices?",
-              "answer": "No, our spices are 100% pure with no preservatives."
-            },
+           
+           
+            
             {
               "question": "How long do ground spices last?",
               "answer": "Ground spices retain peak flavor for 1 to 2 years if stored properly."
@@ -1034,10 +1013,7 @@
               "question": "Are your spices safe from cross-contamination?",
               "answer": "Check individual labels, but they are processed in facilities adhering to strict hygiene standards."
             },
-            {
-              "question": "Do you sell bulk spice bags?",
-              "answer": "Yes, bulk weights are available on the product pages."
-            },
+            
             {
               "question": "Are your spices irradiated?",
               "answer": "No, they are naturally processed and completely non-irradiated."
@@ -1054,10 +1030,7 @@
               "question": "How do I know the spice heat level?",
               "answer": "We provide a heat scale (Mild, Medium, Hot, Extra Hot) on all chili-based product descriptions."
             },
-            {
-              "question": "Are the spice bags resealable?",
-              "answer": "Yes, most of our retail bags feature a zip-lock seal for freshness."
-            },
+          
             {
               "question": "Do you test for heavy metals?",
               "answer": "Yes, all organic batches are rigorously tested at origin for absolute purity."
@@ -1086,10 +1059,7 @@
               "question": "Can I request a custom blend?",
               "answer": "Currently, we only sell pre-packaged traditional blends."
             },
-            {
-              "question": "How do I know the harvest date?",
-              "answer": "The harvest season and packing date are printed on the back label."
-            },
+         
             {
               "question": "Do you carry salt-free spice blends?",
               "answer": "Yes, many of our pure spice mixes contain absolutely zero added salt."
@@ -1104,22 +1074,13 @@
           "id": "kitchen-appliances",
           "name": "Kitchen Appliances",
           "faqs": [
-            {
-              "question": "Do electrical appliances have a warranty?",
-              "answer": "Yes, all electrical appliances feature a 1-year manufacturer warranty."
-            },
+            
             {
               "question": "Are appliances compatible with local voltage?",
               "answer": "Yes, all listed appliances are manufactured with standard local voltage and plugs."
             },
-            {
-              "question": "Do you sell spare parts?",
-              "answer": "Yes, replacement blades and jars are available in the utility section."
-            },
-            {
-              "question": "Are the blenders BPA-free?",
-              "answer": "Yes, all plastic food-contact surfaces are certified BPA-free."
-            },
+            
+           
             {
               "question": "Can mixers grind hard whole spices?",
               "answer": "Yes, models specifically rated 750W or higher are designed for heavy spice grinding."
@@ -1160,14 +1121,8 @@
               "question": "Can I return an appliance if I don't like it?",
               "answer": "Yes, but only if it is completely unused and in its original sealed box within 14 days."
             },
-            {
-              "question": "Who services the warranty?",
-              "answer": "The platform facilitates coordination with authorized brand service centers."
-            },
-            {
-              "question": "Can I see a demo of the appliance?",
-              "answer": "Demo videos are embedded directly on the product listing pages."
-            },
+           
+            
             {
               "question": "Does the 1-year warranty cover accidental drops?",
               "answer": "No, the warranty covers mechanical and electrical faults, not physical damage."
@@ -1283,18 +1238,6 @@
             {
               "question": "Can I buy all the ingredients for a recipe at once?",
               "answer": "Yes! Our recipe pages feature a \"Buy Ingredients\" button that auto-fills your cart."
-            },
-            {
-              "question": "Can I submit my own recipe?",
-              "answer": "Not currently, recipes are curated by our platform culinary experts."
-            },
-            {
-              "question": "Do you have a mobile app?",
-              "answer": "Currently, we operate via our mobile-optimized website, no app download is needed."
-            },
-            {
-              "question": "How do I leave a product review?",
-              "answer": "You will receive an email prompt to leave a review 7 days after your delivery."
             },
             {
               "question": "Can I upload photos in my review?",
