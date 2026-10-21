@@ -30,6 +30,7 @@ type Filters = {
   brands: string[];
   minPrice?: string;
   maxPrice?: string;
+  rate?: string | number;
   search?: string;
   page: number;
   sort: string;
@@ -148,6 +149,7 @@ export default async function CategoryPage({
     brands?: string;
     min?: string;
     max?: string;
+    rate?: string;
     search?: string;
     page?: string;
     sort?: string;
@@ -193,6 +195,7 @@ export default async function CategoryPage({
     brands: clean(query.brands),
     minPrice: query.min,
     maxPrice: query.max,
+    rate: query.rate,
     search: query.search,
     sort: query.sort || "newest",
     page: Number(query.page || 1),

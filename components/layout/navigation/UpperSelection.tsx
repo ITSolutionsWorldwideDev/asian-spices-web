@@ -138,9 +138,33 @@ export default function UpperSelection() {
               key={c.id}
               type="button"
               onMouseDown={(e) => e.preventDefault()}
-              onClick={() => {
-                setSelectedCurrency(c.code);
+              onClick={async () => {
+                const oldRate = useCurrencyStore.getState().rate || 1;
+                await setSelectedCurrency(c.code);
                 setCurrencyOpen(false);
+
+                if (typeof window !== "undefined") {
+                  document.cookie = `selected_currency=${c.code}; path=/; max-age=31536000; SameSite=Lax`;
+                  const url = new URL(window.location.href);
+                  const curMin = url.searchParams.get("min");
+                  const curMax = url.searchParams.get("max");
+                  const newRate = useCurrencyStore.getState().rate || 1;
+
+                  if (curMin || curMax) {
+                    if (curMin && oldRate > 0) {
+                      const convertedMin = Math.round((Number(curMin) / oldRate) * newRate);
+                      url.searchParams.set("min", String(convertedMin));
+                    }
+                    if (curMax && oldRate > 0) {
+                      const convertedMax = Math.round((Number(curMax) / oldRate) * newRate);
+                      url.searchParams.set("max", String(convertedMax));
+                    }
+                    url.searchParams.set("rate", String(newRate));
+                    router.replace(`${url.pathname}?${url.searchParams.toString()}`, { scroll: false });
+                  }
+                }
+
+                router.refresh();
               }}
               className={`flex w-full items-center gap-1.5 px-3 py-2.5 text-left text-xs hover:bg-gray-50 ${
                 selectedCurrency === c.code

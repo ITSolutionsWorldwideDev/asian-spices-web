@@ -128,17 +128,21 @@ export const getProducts = async (filters: any) => {
     query += ` AND p.brand_id = ANY($${index}::uuid[])`;
     values.push(brands);
   }
-  // 🔹 Price (GLOBAL BASE PRICE or fallback logic later)
+  // 🔹 Price (converts from user's active currency rate to base EUR)
+  const conversionRate = Number((filters as any)?.rate) > 0 ? Number((filters as any)?.rate) : 1;
+
   if (minPrice) {
     index++;
+    const effectiveMin = Number(minPrice) / conversionRate;
     query += ` AND COALESCE(cat.min_offered_price, p.base_price) >= $${index}`;
-    values.push(minPrice);
+    values.push(effectiveMin);
   }
 
   if (maxPrice) {
     index++;
+    const effectiveMax = Number(maxPrice) / conversionRate;
     query += ` AND COALESCE(cat.min_offered_price, p.base_price) <= $${index}`;
-    values.push(maxPrice);
+    values.push(effectiveMax);
   }
 
   if (searchParamIndex !== null) {
@@ -631,16 +635,20 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
   }
 
   // 🔹 Price Range Constraints
+  const conversionRate = Number((filters as any)?.rate) > 0 ? Number((filters as any)?.rate) : 1;
+
   if (minPrice) {
     index++;
+    const effectiveMin = Number(minPrice) / conversionRate;
     productConditions += ` AND p.base_price >= $${index}`;
-    values.push(minPrice);
+    values.push(effectiveMin);
   }
 
   if (maxPrice) {
     index++;
+    const effectiveMax = Number(maxPrice) / conversionRate;
     productConditions += ` AND p.base_price <= $${index}`;
-    values.push(maxPrice);
+    values.push(effectiveMax);
   }
 
   // 🔹 Text Search Constraint — name, brand, slug, weight, or full-text vector
@@ -712,16 +720,20 @@ export const getCategories = async (filters: any = {}) => {
     values.push(brands);
   }
 
+  const subcategoryConversionRate = Number((filters as any)?.rate) > 0 ? Number((filters as any)?.rate) : 1;
+
   if (minPrice) {
     index++;
+    const effectiveMin = Number(minPrice) / subcategoryConversionRate;
     productConditions += ` AND p.base_price >= $${index}`;
-    values.push(minPrice);
+    values.push(effectiveMin);
   }
 
   if (maxPrice) {
     index++;
+    const effectiveMax = Number(maxPrice) / subcategoryConversionRate;
     productConditions += ` AND p.base_price <= $${index}`;
-    values.push(maxPrice);
+    values.push(effectiveMax);
   }
 
   if (search) {
@@ -782,16 +794,20 @@ export const getBrands = async (category: string, filters: any = {}) => {
   }
 
   // 🔹 Price filters
+  const subcategoryListConversionRate = Number((filters as any)?.rate) > 0 ? Number((filters as any)?.rate) : 1;
+
   if (minPrice !== undefined && minPrice !== "") {
     index++;
+    const effectiveMin = Number(minPrice) / subcategoryListConversionRate;
     productConditions += ` AND p.base_price >= $${index}`;
-    values.push(minPrice);
+    values.push(effectiveMin);
   }
 
   if (maxPrice !== undefined && maxPrice !== "") {
     index++;
+    const effectiveMax = Number(maxPrice) / subcategoryListConversionRate;
     productConditions += ` AND p.base_price <= $${index}`;
-    values.push(maxPrice);
+    values.push(effectiveMax);
   }
 
   // 🔹 Search — name, brand, slug, weight, or full-text vector

@@ -32,6 +32,7 @@ interface PageProps {
     brands?: string;
     min?: string;
     max?: string;
+    rate?: string;
     search?: string;
     page?: string;
   }>;
@@ -43,6 +44,7 @@ type Filters = {
   brands: string[];
   minPrice?: string;
   maxPrice?: string;
+  rate?: string | number;
   search?: string;
   page: number;
 };
@@ -87,6 +89,7 @@ export default async function KitchenAppliancesPage({
     brands: cleanArray(params.brands),
     minPrice: params.min,
     maxPrice: params.max,
+    rate: params.rate,
     search: params.search,
     page: Number(params.page || 1),
   };

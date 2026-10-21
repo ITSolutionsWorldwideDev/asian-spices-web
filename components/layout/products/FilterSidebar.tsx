@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
+import { useCurrencyStore } from "@/store/useCurrencyStore";
 
 // =========================
 // 🔹 COLLAPSIBLE
@@ -127,6 +128,10 @@ export default function FilterSidebar({
   // Segments of /spices/aromas-colours
   const [activeCategorySlug, activeSubSlug] = pathname.split("/").filter(Boolean);
 
+  const { symbol, rate, selectedCurrency } = useCurrencyStore();
+  const currentSymbol =
+    symbol || (selectedCurrency === "EUR" ? "€" : selectedCurrency || "€");
+
   const [min, setMin] = useState(searchParams.get("min") || "");
   const [max, setMax] = useState(searchParams.get("max") || "");
 
@@ -134,6 +139,40 @@ export default function FilterSidebar({
     setMin(searchParams.get("min") || "");
     setMax(searchParams.get("max") || "");
   }, [searchParams]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const urlMin = searchParams.get("min") || "";
+      const urlMax = searchParams.get("max") || "";
+      const currentMin = min.trim();
+      const currentMax = max.trim();
+
+      if (currentMin === urlMin && currentMax === urlMax) return;
+
+      const params = new URLSearchParams(searchParams.toString());
+      if (currentMin) {
+        params.set("min", currentMin);
+      } else {
+        params.delete("min");
+      }
+
+      if (currentMax) {
+        params.set("max", currentMax);
+      } else {
+        params.delete("max");
+      }
+
+      if (currentMin || currentMax) {
+        params.set("rate", String(rate || 1));
+      } else {
+        params.delete("rate");
+      }
+
+      updateUrl(params);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [min, max, rate]);
 
   useEffect(() => {
     if (mobileOpen) {
@@ -249,11 +288,12 @@ export default function FilterSidebar({
   const activeChips: { label: string; onRemove: () => void }[] = [];
   if (min || max) {
     activeChips.push({
-      label: `€${min || "0"} - €${max || "∞"}`,
+      label: `${currentSymbol}${min || "0"} - ${currentSymbol}${max || "∞"}`,
       onRemove: () => {
         const params = new URLSearchParams(searchParams.toString());
         params.delete("min");
         params.delete("max");
+        params.delete("rate");
         setMin("");
         setMax("");
         updateUrl(params);
@@ -287,32 +327,26 @@ export default function FilterSidebar({
         <div className="flex gap-3">
           <div className="w-1/2">
             <label className="block text-xs text-gray-500 mb-1 font-medium">
-              Min (€)
+              Min ({currentSymbol})
             </label>
             <input
               type="number"
               placeholder="0"
               value={min}
-              onChange={(e) => {
-                setMin(e.target.value);
-                updateSingle("min", e.target.value);
-              }}
+              onChange={(e) => setMin(e.target.value)}
               className="w-full h-11 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-100"
             />
           </div>
 
           <div className="w-1/2">
             <label className="block text-xs text-gray-500 mb-1 font-medium">
-              Max (€)
+              Max ({currentSymbol})
             </label>
             <input
               type="number"
               placeholder="Any"
               value={max}
-              onChange={(e) => {
-                setMax(e.target.value);
-                updateSingle("max", e.target.value);
-              }}
+              onChange={(e) => setMax(e.target.value)}
               className="w-full h-11 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-100"
             />
           </div>
