@@ -160,11 +160,18 @@ async function renderProductPage(
     getProductReviewsSummary(product.id),
   ]);
 
+  const enrichedProduct = {
+    ...product,
+    rating: Number(product.rating || reviewStats?.average || 0),
+    avg_rating: Number(product.avg_rating || reviewStats?.average || 0),
+    reviews: Number(product.reviews || reviewStats?.total || 0),
+  };
+
   return (
     <>
-      <JsonLd data={getProductJsonLd(product, reviewStats)} />
+      <JsonLd data={getProductJsonLd(enrichedProduct, reviewStats)} />
       <ProductDescrption
-        product={JSON.parse(JSON.stringify(product))}
+        product={JSON.parse(JSON.stringify(enrichedProduct))}
         relatedProducts={JSON.parse(JSON.stringify(relatedProducts || []))}
         category={product.category_name || categoryLabel}
       />

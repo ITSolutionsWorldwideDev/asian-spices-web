@@ -8,6 +8,7 @@ import GoogleTagManager, {
   GoogleTagManagerBody,
   GoogleTagManagerHead,
 } from "@/components/GoogleTagManager";
+import { MetaPixelHead, MetaPixelBody } from "@/components/MetaPixel";
 import CountryChangeModal from "@/components/ui/CountryChangeModal";
 import CartToast from "@/components/ui/CartToast";
 import { getSiteBaseUrl } from "@/lib/sitemap-urls";
@@ -78,10 +79,13 @@ export default async function RootLayout({
         <GoogleTagManagerHead />
         {/* Site-wide LocalBusiness + overall AggregateRating (schema.org) */}
         <JsonLd data={getLocalBusinessJsonLd(siteReviews)} />
+        {/* Meta Pixel Code */}
+        <MetaPixelHead />
       </head>
       <body>
         {/* GTM noscript must be immediately after opening <body> */}
         <GoogleTagManagerBody />
+        <MetaPixelBody />
 
         <GoogleTagManager />
 

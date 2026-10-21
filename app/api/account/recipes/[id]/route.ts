@@ -36,7 +36,7 @@ export async function GET(
         r.title,
         r.slug,
         r.short_description,
-        r.origin,
+        NULL::text AS origin,
         r.preparation_time,
         r.cooking_time,
         r.servings,

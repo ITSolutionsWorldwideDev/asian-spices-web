@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -146,7 +146,7 @@ export default function Checkout() {
         email: session.user.email,
       }));
     }
-  }, [session]);
+  }, [session?.user?.email]);
 
   const handleAddressChange = useCallback(
     async (address: any) => {
@@ -255,20 +255,27 @@ export default function Checkout() {
   const checkoutSubtotal = Math.max(0, finalTotals.subtotal - recipeDiscountAmount);
   const checkoutTotal = checkoutSubtotal + finalTotals.shipping;
 
+  const userIdentifier = session?.user?.email || (session?.user as any)?.id;
+  const lastLoadedUserRef = useRef<string | null>(null);
+
   useEffect(() => {
+    if (!userIdentifier) {
+      lastLoadedUserRef.current = null;
+      return;
+    }
+    if (lastLoadedUserRef.current === userIdentifier) return;
+
     const loadAddresses = async () => {
-      if (!session?.user) return;
-
       try {
-        show("Loading Addresses...");
-
         const res = await fetch("/api/account/addresses");
+        if (!res.ok) return;
 
         const rawData = await res.json();
         const data = JSON.parse(JSON.stringify(rawData));
 
         const addressList = data.addresses || [];
         setAddresses(addressList);
+        lastLoadedUserRef.current = userIdentifier;
 
         const defaultAddr = addressList?.find((a: any) => a.is_default);
 
@@ -277,13 +284,11 @@ export default function Checkout() {
         }
       } catch (err) {
         console.error("Failed to load addresses", err);
-      } finally {
-        hide();
       }
     };
 
     loadAddresses();
-  }, [session, handleAddressChange]);
+  }, [userIdentifier, handleAddressChange]);
 
   useEffect(() => {
     if (formData.country) {

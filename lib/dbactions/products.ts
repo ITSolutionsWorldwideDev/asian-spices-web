@@ -282,6 +282,30 @@ export const getProductBySlug = async (
           )
       ) AS reviews,
       COALESCE(
+        (
+          SELECT ROUND(AVG(rv.rating)::numeric, 1)::float
+          FROM store_product_reviews rv
+          WHERE rv.product_id = p.id
+            AND (
+              rv.status IS NULL
+              OR rv.status IN ('approved', 'pending', 'published')
+            )
+        ),
+        0
+      ) AS rating,
+      COALESCE(
+        (
+          SELECT ROUND(AVG(rv.rating)::numeric, 1)::float
+          FROM store_product_reviews rv
+          WHERE rv.product_id = p.id
+            AND (
+              rv.status IS NULL
+              OR rv.status IN ('approved', 'pending', 'published')
+            )
+        ),
+        0
+      ) AS avg_rating,
+      COALESCE(
         json_agg(
           DISTINCT jsonb_build_object(
             'id', pi.id,
@@ -353,6 +377,9 @@ export const getProductBySlug = async (
 
   return {
     ...row,
+    rating: Number(row.rating || row.avg_rating || 0),
+    avg_rating: Number(row.avg_rating || row.rating || 0),
+    reviews: Number(row.reviews || 0),
     images: row.images || [],
     highlights: row.highlights || [], // Safely fall back if column doesn't exist
   };

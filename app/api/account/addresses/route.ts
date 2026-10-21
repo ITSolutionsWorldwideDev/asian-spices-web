@@ -27,12 +27,42 @@ export async function GET() {
       [session.user.id],
     );
 
+    // Deduplicate addresses (keeping default or newest) and cleanup redundant duplicates
+    const seen = new Set<string>();
+    const uniqueRows: typeof rows = [];
+    const duplicateIds: any[] = [];
+
+    for (const addr of rows) {
+      const key = [
+        addr.address_line1?.trim().toLowerCase() || "",
+        addr.address_line2?.trim().toLowerCase() || "",
+        addr.postal_code?.trim().toLowerCase() || "",
+        addr.city?.trim().toLowerCase() || "",
+        addr.country?.trim().toLowerCase() || "",
+      ].join("|");
+
+      if (seen.has(key)) {
+        duplicateIds.push(addr.id);
+      } else {
+        seen.add(key);
+        uniqueRows.push(addr);
+      }
+    }
+
+    if (duplicateIds.length > 0) {
+      await client
+        .query(`DELETE FROM store_customer_addresses WHERE id = ANY($1)`, [
+          duplicateIds,
+        ])
+        .catch((e) =>
+          console.error("Failed to cleanup duplicate addresses:", e),
+        );
+    }
+
     return NextResponse.json({
       success: true,
-      addresses: rows,
+      addresses: uniqueRows,
     });
-
-    // return NextResponse.json({ addresses: rows });
   } catch (err) {
     console.error("GET ADDRESSES ERROR:", err);
 
@@ -93,6 +123,38 @@ export async function POST(req: Request) {
       `,
       [customer_id],
     );
+
+    // =========================
+    // CHECK DUPLICATE ADDRESS
+    // =========================
+    const { rows: duplicateCheck } = await client.query(
+      `
+      SELECT id FROM store_customer_addresses
+      WHERE customer_id = $1
+        AND LOWER(TRIM(address_line1)) = LOWER(TRIM($2))
+        AND LOWER(TRIM(COALESCE(address_line2, ''))) = LOWER(TRIM(COALESCE($3, '')))
+        AND LOWER(TRIM(COALESCE(postal_code, ''))) = LOWER(TRIM(COALESCE($4, '')))
+        AND LOWER(TRIM(COALESCE(city, ''))) = LOWER(TRIM(COALESCE($5, '')))
+        AND LOWER(TRIM(COALESCE(country, ''))) = LOWER(TRIM(COALESCE($6, '')))
+      LIMIT 1
+      `,
+      [
+        customer_id,
+        data.address_line1 || "",
+        data.address_line2 || "",
+        data.postal_code || "",
+        data.city || "",
+        data.country || "",
+      ],
+    );
+
+    if (duplicateCheck.length > 0) {
+      await client.query("ROLLBACK");
+      return NextResponse.json(
+        { error: "Address already exists" },
+        { status: 409 },
+      );
+    }
 
     const isFirstAddress = existingAddresses.length === 0;
 

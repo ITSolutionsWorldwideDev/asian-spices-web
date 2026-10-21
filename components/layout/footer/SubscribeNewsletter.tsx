@@ -77,19 +77,19 @@ const SubscribeNewsletter = ({
         translate="no"
         className="notranslate mx-auto w-full max-w-2xl space-y-4"
       >
-        <div className="mx-auto flex w-full max-w-xl flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
+        <div className="mx-auto flex w-full max-w-md flex-col items-stretch gap-3 sm:max-w-xl sm:flex-row sm:items-center sm:justify-center sm:gap-3">
           <input
             {...register("email")}
             type="email"
             placeholder="Enter your email"
-            className="h-12 w-full min-w-0 flex-1 rounded-full border border-white/15 bg-[#2a3038] px-6 text-sm text-white outline-none placeholder:text-white/45 focus:border-orange-400/70 focus:ring-2 focus:ring-orange-500/20 sm:max-w-[340px]"
+            className="box-border flex h-12 min-h-[48px] w-full min-w-0 flex-1 rounded-full border border-white/15 bg-[#2a3038] px-6 text-sm text-white outline-none placeholder:text-white/45 transition focus:border-orange-400/70 focus:ring-2 focus:ring-orange-500/20"
             disabled={isSubmitting}
             aria-label="Email address"
           />
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-linear-to-r from-orange-500 to-orange-700 px-7 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(234,88,12,0.28)] transition hover:from-orange-400 hover:to-orange-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex h-12 min-h-[48px] w-full shrink-0 items-center justify-center gap-2 rounded-full bg-linear-to-r from-orange-500 to-orange-700 px-7 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(234,88,12,0.28)] transition hover:from-orange-400 hover:to-orange-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             <Send className="h-4 w-4" strokeWidth={2} />
             {isSubmitting ? "Subscribing..." : "Subscribe"}

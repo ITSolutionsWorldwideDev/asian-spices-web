@@ -78,7 +78,7 @@ function TickerBar() {
 const FooterContent = () => {
   return (
     // NOTE: Yahan se 'overflow-hidden' hata diya hai aur bottom padding add ki hai taake kuch bhi cut na ho
-    <div className="relative z-10 mt-20 w-full bg-[#141414] text-white pb-16 sm:pb-10">
+    <div className="relative z-10 mt-20 w-full bg-[#141414] text-white pb-28 sm:pb-20 xl:pb-10">
       <TickerBar />
 
       {/* Newsletter */}

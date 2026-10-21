@@ -9,7 +9,7 @@ export default function CartToast() {
   const hide = useToastStore((s) => s.hide);
   const popupRef = useRef<HTMLDivElement>(null);
   const [style, setStyle] = useState<React.CSSProperties>({
-    bottom: "1.25rem",
+    bottom: "1.5rem",
     left: "50%",
     transform: "translateX(-50%)",
   });
@@ -18,52 +18,89 @@ export default function CartToast() {
     if (!toast) return;
 
     const popup = popupRef.current;
-    if (!toast.anchor || !popup) {
-      setStyle({
-        bottom: "1.25rem",
-        left: "50%",
-        transform: "translateX(-50%)",
-        top: undefined,
-        width: undefined,
-        maxWidth: "28rem",
-      });
-      return;
-    }
+    if (!popup) return;
 
-    const { top, left, width, height } = toast.anchor;
-    const popupRect = popup.getBoundingClientRect();
-    const popupH = popupRect.height || 88;
-    const popupW = Math.min(Math.max(width - 8, 240), 360, window.innerWidth - 24);
-    const centerX = left + width / 2;
+    const updatePosition = () => {
+      const winW = window.innerWidth;
+      const winH = window.innerHeight;
+      const popupRect = popup.getBoundingClientRect();
+      const popupH = popupRect.height || 88;
+      const popupW = Math.min(360, Math.max(260, winW - 32));
 
-    let x = centerX;
-    const half = popupW / 2;
-    x = Math.max(half + 12, Math.min(window.innerWidth - half - 12, x));
+      // Safe top clearance below sticky navbar
+      const navSafeTop = winW < 1280 ? 115 : 90;
+      // Safe bottom clearance (accounts for mobile bottom navbar ~70-80px on smaller screens)
+      const bottomSafe = winW < 1280 ? 85 : 24;
 
-    const gap = 10;
-    const belowY = top + height + gap;
-    const fitsBelow = belowY + popupH <= window.innerHeight - 12;
-    const aboveY = top - gap;
+      // Fallback helper: always-visible centered toast
+      const setCenteredFallback = () => {
+        setStyle({
+          bottom: `${bottomSafe}px`,
+          left: "50%",
+          transform: "translateX(-50%)",
+          top: undefined,
+          width: popupW,
+          maxWidth: "calc(100vw - 32px)",
+        });
+      };
 
-    if (fitsBelow) {
-      setStyle({
-        top: belowY,
-        left: x,
-        transform: "translateX(-50%)",
-        width: popupW,
-        maxWidth: popupW,
-        bottom: undefined,
-      });
-    } else {
-      setStyle({
-        top: aboveY,
-        left: x,
-        transform: "translate(-50%, -100%)",
-        width: popupW,
-        maxWidth: popupW,
-        bottom: undefined,
-      });
-    }
+      if (!toast.anchor || winH < 450) {
+        setCenteredFallback();
+        return;
+      }
+
+      const { top, left, width, height } = toast.anchor;
+
+      // If anchor card is completely out of the viewport, fall back to safe bottom center
+      if (top + height < 0 || top > winH) {
+        setCenteredFallback();
+        return;
+      }
+
+      // Horizontal alignment: Center above/below the card, clamped strictly within viewport margins
+      const centerX = left + width / 2;
+      let targetLeft = centerX - popupW / 2;
+      targetLeft = Math.max(16, Math.min(winW - popupW - 16, targetLeft));
+
+      const gap = 10;
+      const belowY = top + height + gap;
+      const fitsBelow = belowY + popupH <= winH - bottomSafe;
+
+      const aboveY = top - gap - popupH;
+      const fitsAbove = aboveY >= navSafeTop;
+
+      if (fitsBelow) {
+        setStyle({
+          top: `${belowY}px`,
+          left: `${targetLeft}px`,
+          transform: "none",
+          width: popupW,
+          maxWidth: "calc(100vw - 32px)",
+          bottom: undefined,
+        });
+      } else if (fitsAbove) {
+        setStyle({
+          top: `${aboveY}px`,
+          left: `${targetLeft}px`,
+          transform: "none",
+          width: popupW,
+          maxWidth: "calc(100vw - 32px)",
+          bottom: undefined,
+        });
+      } else {
+        // Neither fits (common on high zoom levels where card height exceeds viewport)
+        // Never hide or clip: place in safe visible area at bottom
+        setCenteredFallback();
+      }
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, { passive: true });
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition);
+    };
   }, [toast]);
 
   if (!toast) return null;
@@ -76,8 +113,11 @@ export default function CartToast() {
       role="status"
       aria-live="polite"
       translate="no"
-      className="notranslate pointer-events-none fixed z-[9998]"
-      style={style}
+      className="notranslate pointer-events-none fixed"
+      style={{
+        ...style,
+        zIndex: 10000000,
+      }}
     >
       <div className="animate-fade-in pointer-events-auto overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-[0_16px_48px_rgba(0,0,0,0.15)]">
         <div

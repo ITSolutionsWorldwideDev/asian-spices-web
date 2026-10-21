@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
         r.title,
         r.slug,
         r.short_description,
-        r.origin,
+        NULL::text AS origin,
         r.thumbnail_url,
         r.youtube_url,
         r.status,

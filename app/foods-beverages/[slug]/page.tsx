@@ -65,12 +65,19 @@ export default async function FoodAndBeveragesDetailPage({
     getProductReviewsSummary(product.id),
   ]);
 
-  const serializedProduct = JSON.parse(JSON.stringify(product));
+  const enrichedProduct = {
+    ...product,
+    rating: Number(product.rating || reviewStats?.average || 0),
+    avg_rating: Number(product.avg_rating || reviewStats?.average || 0),
+    reviews: Number(product.reviews || reviewStats?.total || 0),
+  };
+
+  const serializedProduct = JSON.parse(JSON.stringify(enrichedProduct));
   const serializedRelatedProducts = JSON.parse(JSON.stringify(relatedProducts || []));
 
   return (
     <>
-      <JsonLd data={getProductJsonLd(product, reviewStats)} />
+      <JsonLd data={getProductJsonLd(enrichedProduct, reviewStats)} />
       <ProductDescrption
         product={serializedProduct}
         relatedProducts={serializedRelatedProducts}

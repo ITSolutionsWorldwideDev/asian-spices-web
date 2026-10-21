@@ -2,7 +2,6 @@
 
 "use client";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
-import { useLoaderStore } from "@/store/useLoaderStore";
 
 import { useEffect, useState, useRef } from "react";
 
@@ -65,7 +64,6 @@ export default function ShippingForm({
   const [countries, setCountries] = useState<Country[]>([]);
   const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
   const [loadingOptions, setLoadingOptions] = useState(false);
-  const { show, hide } = useLoaderStore();
 
   const { symbol, rate } = useCurrencyStore();
 
@@ -123,14 +121,13 @@ export default function ShippingForm({
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        show("Loading Countries...");
         const res = await fetch("/api/countries?shippable=true");
-        const data = await res.json();
-        setCountries(data);
+        if (res.ok) {
+          const data = await res.json();
+          setCountries(data);
+        }
       } catch (err) {
         console.error("Failed to load countries", err);
-      } finally {
-        hide();
       }
     };
 

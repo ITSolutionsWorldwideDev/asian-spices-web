@@ -89,8 +89,8 @@ export default function RecipeDetailHeader({
 
   return (
     <section className="relative">
-      {/* HERO — full-width banner (original size) */}
-      <div className="relative h-[420px] overflow-hidden sm:h-[520px] md:h-[600px] lg:h-[640px]">
+      {/* HERO — full-width banner with dynamic height and safe top padding */}
+      <div className="relative flex min-h-[480px] flex-col justify-end overflow-hidden sm:min-h-[540px] md:min-h-[600px] lg:h-[640px]">
         <Image
           src={getRecipeImageSrc(recipe.thumbnail_url)}
           alt={recipe.title}
@@ -101,14 +101,14 @@ export default function RecipeDetailHeader({
           className="object-cover object-center"
         />
 
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/25" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/35" />
 
         <div className="absolute inset-x-0 top-0 z-20">
           <Nav />
         </div>
 
-        <div className="absolute inset-0 z-10 flex items-end">
-          <div className="container mx-auto px-4 pb-8 sm:px-6 sm:pb-10 md:pb-12">
+        <div className="relative z-10 w-full pt-[7.5rem] pb-8 sm:pt-32 sm:pb-10 md:pb-12">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-3xl">
               {recipe.category_slug ? (
                 <Link
@@ -123,18 +123,18 @@ export default function RecipeDetailHeader({
                 </span>
               )}
 
-              <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+              <h1 className="text-2xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]">
                 {recipe.title}
               </h1>
 
               {recipe.short_description && (
-                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/90 sm:mt-4 sm:text-base md:text-[17px]">
+                <p className="mt-2.5 max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed text-white/90">
                   {recipe.short_description}
                 </p>
               )}
             </div>
 
-            <div className="mt-5 sm:mt-6">
+            <div className="mt-4 sm:mt-6">
               <RecipeHeaderActions
                 recipeId={recipe.id}
                 title={recipe.title}

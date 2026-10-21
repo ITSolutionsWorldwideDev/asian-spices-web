@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import ReviewsSection from "../tetimonials/ReviewsSection";
 import WriteReviewForm from "../reviews/WriteReviewForm";
 
@@ -10,6 +11,7 @@ interface ProductTabsProps {
 }
 
 export default function ProductTabs({ product }: ProductTabsProps) {
+  const router = useRouter();
   const [reviewRefresh, setReviewRefresh] = useState(0);
   const [reviewCount, setReviewCount] = useState<number>(product?.reviews || 0);
 
@@ -104,6 +106,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 setActiveTab(`Reviews (${next})` as Tab);
                 return next;
               });
+              router.refresh();
             }}
           />
         )}
