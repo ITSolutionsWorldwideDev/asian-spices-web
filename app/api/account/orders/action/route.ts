@@ -180,7 +180,7 @@ export async function POST(request: Request) {
           );
           await client.query(
             `UPDATE store_orders
-             SET order_status = 'cancelled', subtotal = 0, tax_amount = 0, shipping_amount = 0, total_amount = 0, updated_at = now()
+             SET order_status = 'cancelled', fulfillment_status = 'close', updated_at = now()
              WHERE id = $1;`,
             [orderId],
           );
@@ -274,10 +274,7 @@ export async function POST(request: Request) {
         UPDATE store_orders
         SET
           order_status = 'cancelled',
-          subtotal = 0,
-          tax_amount = 0,
-          shipping_amount = 0,
-          total_amount = 0,
+          fulfillment_status = 'close',
           updated_at = now()
         WHERE id = $1;
       `;

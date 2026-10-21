@@ -209,7 +209,7 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
     activeDropdownLink?.children &&
     createPortal(
       <div
-        className="hidden xl:block"
+        className="hidden nav:block"
         style={{
           position: "fixed",
           left: 0,
@@ -414,13 +414,13 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
           createPortal(
             <div className="notranslate" translate="no">
               <div
-                className="fixed inset-0 z-[1000000] bg-black/35 xl:hidden"
+                className="fixed inset-0 z-[1000000] bg-black/35 nav:hidden"
                 onClick={closeMobileMenu}
                 aria-hidden
               />
 
               <nav
-                className="fixed inset-x-0 top-0 z-[1000001] max-h-[94vh] overflow-y-auto rounded-b-2xl bg-white shadow-xl xl:hidden"
+                className="fixed inset-x-0 top-0 z-[1000001] max-h-[94vh] overflow-y-auto rounded-b-2xl bg-white shadow-xl nav:hidden"
                 aria-label="Mobile menu"
               >
                 {/* Header */}

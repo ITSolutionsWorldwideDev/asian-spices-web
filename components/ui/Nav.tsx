@@ -67,7 +67,7 @@ const Nav: React.FC = () => {
   );
 
   const mobileHeader = (
-    <div className="pointer-events-auto w-full bg-white shadow-sm border-b border-gray-100 xl:hidden">
+    <div className="pointer-events-auto w-full bg-white shadow-sm border-b border-gray-100 nav:hidden">
       <div className="flex min-h-[3.25rem] items-center justify-between gap-1.5 px-2.5 pt-2 pb-1.5 sm:gap-2 sm:px-5 sm:pt-2.5">
         <div className="flex min-w-0 items-center gap-1.5 sm:gap-3">
           <ResponsiveNavigation mobileOnly />
@@ -120,7 +120,7 @@ const Nav: React.FC = () => {
 
       {/* Desktop: floating logo + pill */}
       <div
-        className={`hidden px-3 transition-all duration-300 sm:px-5 xl:block ${
+        className={`hidden px-3 transition-all duration-300 sm:px-5 nav:block ${
           scrolled ? "py-2 sm:py-2.5" : "py-3 sm:py-4"
         }`}
       >
@@ -128,7 +128,7 @@ const Nav: React.FC = () => {
           className={`container relative mx-auto flex items-center p-2 transition-all duration-300 ${
             scrolled
               ? "min-h-12 justify-center sm:min-h-14"
-              : "min-h-14 justify-between sm:min-h-16 xl:min-h-20"
+              : "min-h-14 justify-between sm:min-h-16 nav:min-h-20"
           }`}
         >
           <div
@@ -163,7 +163,7 @@ const Nav: React.FC = () => {
   return (
     <>
       {/* Reserves header height so content does not jump under the fixed bar */}
-      <div className="h-[7rem] shrink-0 sm:h-[7.5rem] md:h-[8rem] xl:h-28" aria-hidden />
+      <div className="h-[7rem] shrink-0 sm:h-[7.5rem] md:h-[8rem] nav:h-28" aria-hidden />
       {mounted ? (
         <>
           {createPortal(bar, document.body)}
@@ -171,7 +171,7 @@ const Nav: React.FC = () => {
             <>
               {/* Pushes page content above the floating mobile bottom nav */}
               <div
-                className="h-[4.75rem] shrink-0 xl:hidden"
+                className="h-[4.75rem] shrink-0 nav:hidden"
                 style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
                 aria-hidden
               />
