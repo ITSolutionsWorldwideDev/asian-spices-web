@@ -101,14 +101,14 @@ function FurkiAvatar({ size }: { size: number }) {
 
   return (
     <div
-      className="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#1f1b18] shadow-[0_12px_28px_rgba(31,27,24,0.2)] ring-1 ring-[rgba(226,102,27,0.25)]"
+      className="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-[0_12px_28px_rgba(31,27,24,0.2)] ring-1 ring-[rgba(226,102,27,0.25)]"
       style={{ width: size, height: size }}
     >
       {hasError ? (
         <Headset className="h-1/2 w-1/2 text-[#f2a65a]" />
       ) : (
         <Image
-          src="/assets/chatbot/furki-avatar.webp"
+          src="/assets/chatbot/furki-avatar-cutout.webp"
           alt="Furki"
           fill
           className="object-cover"
