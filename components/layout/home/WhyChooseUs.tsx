@@ -26,7 +26,7 @@ const features = [
     icon: "mingcute_medal-fill.png",
   },
   {
-    title: "No Parking, No Hassle:",
+    title: "No Parking, No Hassle",
     desc: "Order online and save time. We bring it to you.",
     iconBg: "bg-linear-to-b from-pink-400 to-rose-500",
     icon: "hugeicons_trade-up.png",
@@ -99,8 +99,8 @@ export default function WhyChooseUs() {
                 />
               </div>
 
-              <div className="relative z-10 px-5 pt-8 text-center sm:pt-10 lg:pt-12">
-                <h2 className="text-3xl font-bold leading-[1.15] lg:text-[2.15rem]">
+              <div className="relative z-10 px-4 pt-8 text-center sm:px-5 sm:pt-10 lg:pt-12">
+                <h2 className="mx-auto max-w-[280px] text-2xl font-bold leading-tight sm:max-w-none sm:text-3xl lg:text-[2.15rem]">
                   <span className="block text-orange-400">Benefits of</span>
                   <span className="block text-white">Online Shopping</span>
                 </h2>

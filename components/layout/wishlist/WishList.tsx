@@ -111,7 +111,9 @@ export default function WishList() {
         <div className="mt-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div>
             <div className="flex items-center gap-4 flex-wrap">
-              <h1 className="text-4xl font-bold text-gray-900">My Wishlist</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
+                My Wishlist
+              </h1>
 
               <div className="px-4 py-1 rounded-full bg-orange-500 text-white text-sm font-medium">
                 {wishlist.length} Items

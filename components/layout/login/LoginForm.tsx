@@ -4,7 +4,7 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -41,6 +41,7 @@ export default function LoginForm() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   /* ---------------- HELPERS ---------------- */
 
@@ -253,9 +254,9 @@ export default function LoginForm() {
           {/* Password */}
           <div>
             <label className="text-sm text-gray-600 font-bold">Password</label>
-            <div className="relative">
+            <div className="relative mt-2">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 translate="no"
                 value={form.password}
@@ -263,11 +264,10 @@ export default function LoginForm() {
                 className="
                 notranslate
                 w-full
-                mt-2
                 min-h-[44px]
                 px-4
                 py-3
-                pr-10
+                pr-11
                 rounded-xl
                 border
                 border-slate-200
@@ -281,11 +281,15 @@ export default function LoginForm() {
                 focus:ring-4
                 focus:ring-orange-100
                 "
-                // className="w-full mt-1 px-4 py-3 border  border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
               />
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm sm:right-4">
-                🔒
-              </span>
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-0 top-0 bottom-0 flex min-h-[44px] w-11 items-center justify-center text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer transition-colors"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
             {errors.password && <p className="error">{errors.password}</p>}
 

@@ -42,8 +42,8 @@ export async function POST(req: NextRequest) {
     if (!cartItems?.length) {
       return errorResponse("Cart is empty", "EMPTY_CART");
     }
-
     // Enforce minimum order in base EUR (ignore converted client pricing)
+
     const merchandiseSubtotalEur = cartItems.reduce(
       (
         sum: number,
@@ -62,13 +62,13 @@ export async function POST(req: NextRequest) {
         "MIN_ORDER_AMOUNT",
       );
     }
-
     // Re-validate any applied promo code against the server's own view of the
     // order (not the client-submitted discount) before trusting pricing.discount -
     // otherwise a tampered request could claim a discount for a nonexistent or
     // expired code. Full cross-currency amount reconciliation isn't done here
     // (the client's currency conversion rate isn't sent to this route), but a
     // fabricated/invalid code is always rejected outright.
+
     const promoCodeInput =
       typeof promoCode === "string" ? promoCode.trim() : "";
 
