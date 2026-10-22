@@ -27,6 +27,7 @@
   }
   26%,
   50% {
+    
     /* Step 2: SPICE (Red) */
     --color-one: white;
     --color-two: #ef4444; /* red-500 */
