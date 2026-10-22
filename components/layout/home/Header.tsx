@@ -24,52 +24,52 @@ const banners: {
   alt: string;
   overlay?: BannerOverlay;
 }[] = [
-  {
-    id: 1,
-    src: "/assets/home/homeheaderimages/banner-2.jpg",
-    alt: "Asian Spices product collection",
-    
- 
-    overlay: {
-      line1: "Asian Supermarket & Grocery Store Online:",
-      line2Lead: "Spices, Snacks ",
-      line2: "& Everyday Essentials",
-      description:
-        "Shop authentic Asian spices, groceries, and food products online with nationwide delivery straight to your door.",
-      ctaLabel: "Explore our Products",
-      ctaHref: "/products",
-      theme: "dark",
+    {
+      id: 1,
+      src: "/assets/home/homeheaderimages/banner-2.jpg",
+      alt: "Asian Spices product collection",
+
+
+      overlay: {
+        line1: "Asian Supermarket & Grocery Store Online:",
+        line2Lead: "Spices, Snacks ",
+        line2: "& Everyday Essentials",
+        description:
+          "Shop authentic Asian spices, groceries, and food products online with nationwide delivery straight to your door.",
+        ctaLabel: "Explore our Products",
+        ctaHref: "/products",
+        theme: "dark",
+      },
     },
-  },
-  {
-    id: 2,
-    src: "/assets/home/homeheaderimages/banner-3.jpg",
-    alt: "Asian Spices grocery bag",
-    overlay: {
-      line1: "Indian Grocery Store & Tropical Market",
-      line2: "Favourites, Online",
-      description:
-        "Authentic Indian spices, ghee, and tropical essentials, sourced for the true taste of home, delivered nationwide.",
-      ctaLabel: "Explore Online Grocery",
-      ctaHref: "/products",
-      theme: "dark",
+    {
+      id: 2,
+      src: "/assets/home/homeheaderimages/banner-3.jpg",
+      alt: "Asian Spices grocery bag",
+      overlay: {
+        line1: "Indian Grocery Store & Tropical Market",
+        line2: "Favourites, Online",
+        description:
+          "Authentic Indian spices, ghee, and tropical essentials, sourced for the true taste of home, delivered nationwide.",
+        ctaLabel: "Explore Online Grocery",
+        ctaHref: "/products",
+        theme: "dark",
+      },
     },
-  },
-  {
-    id: 3,
-    src: "/assets/home/homeheaderimages/banner-1.jpg",
-    alt: "Asian Spices grocery products in a wheat field",
-    overlay: {
-      line1: "Asian Market Store:",
-      line2: "Authentic Food from Across Asia",
-      description:
-        "Discover Asian spices, sauces, noodles, snacks, and everyday food essentials, bringing the authentic taste of Asia to your kitchen.",
-      ctaLabel: "Explore Asian Market",
-      ctaHref: "/products",
-      theme: "light",
+    {
+      id: 3,
+      src: "/assets/home/homeheaderimages/banner-1.jpg",
+      alt: "Asian Spices grocery products in a wheat field",
+      overlay: {
+        line1: "Asian Market Store:",
+        line2: "Authentic Food from Across Asia",
+        description:
+          "Discover Asian spices, sauces, noodles, snacks, and everyday food essentials, bringing the authentic taste of Asia to your kitchen.",
+        ctaLabel: "Explore Asian Market",
+        ctaHref: "/products",
+        theme: "light",
+      },
     },
-  },
-];
+  ];
 
 export default function Header() {
   const [index, setIndex] = useState(0);
@@ -102,20 +102,18 @@ export default function Header() {
               fill
               priority={i === 0}
               sizes="100vw"
-              className={`absolute inset-0 z-0 h-full w-full scale-[1.25] sm:scale-[1.08] object-cover object-center transition-opacity duration-700 ${
-                i === index ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute inset-0 z-0 h-full w-full scale-[1.25] sm:scale-[1.08] object-cover object-center transition-opacity duration-700 ${i === index ? "opacity-100" : "opacity-0"
+                }`}
             />
           ))}
 
           {/* Mobile-only gradient overlay for dark banners */}
           <div
             aria-hidden
-            className={`pointer-events-none absolute inset-0 z-[1] transition-all duration-700 ${
-              isLight
+            className={`pointer-events-none absolute inset-0 z-[1] transition-all duration-700 ${isLight
                 ? "hidden"
                 : "bg-gradient-to-r from-black/80 via-black/50 to-transparent md:hidden"
-            }`}
+              }`}
           />
 
           {banners.map((banner, i) => {
@@ -128,20 +126,18 @@ export default function Header() {
             return (
               <div
                 key={banner.id}
-                className={`absolute inset-0 z-10 flex h-full items-center px-4 py-4 sm:px-8 md:px-12 lg:px-16 transition-opacity duration-700 ${
-                  isActive
+                className={`absolute inset-0 z-10 flex h-full items-center px-4 py-4 sm:px-8 md:px-12 lg:px-16 transition-opacity duration-700 ${isActive
                     ? "opacity-100 pointer-events-auto"
                     : "opacity-0 pointer-events-none"
-                }`}
+                  }`}
               >
                 <div className="w-full max-w-[min(100%,25rem)] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
                   <HeadingTag className="text-[1.15rem] font-bold leading-[1.15] tracking-tight sm:text-2xl md:text-3xl lg:text-[2.25rem] xl:text-[2.65rem] 2xl:text-[2.9rem]">
                     <span
-                      className={`block text-[#EE9933] ${
-                        isLight
+                      className={`block text-[#EE9933] ${isLight
                           ? ""
                           : "drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
-                      }`}
+                        }`}
                     >
                       {overlay.line1}
                     </span>{" "}
@@ -149,11 +145,10 @@ export default function Header() {
                       {overlay.line2Lead && (
                         <>
                           <span
-                            className={`text-[#EE9933] ${
-                              isLight
+                            className={`text-[#EE9933] ${isLight
                                 ? ""
                                 : "drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:drop-shadow-none"
-                            }`}
+                              }`}
                           >
                             {overlay.line2Lead.trimEnd()}
                           </span>{" "}
@@ -172,11 +167,10 @@ export default function Header() {
                   </HeadingTag>
 
                   <p
-                    className={`mt-1.5 max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl text-[11px] font-medium leading-relaxed sm:mt-2.5 sm:text-sm md:mt-3 md:text-base ${
-                      isLight
+                    className={`mt-1.5 max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl text-[11px] font-medium leading-relaxed sm:mt-2.5 sm:text-sm md:mt-3 md:text-base ${isLight
                         ? "text-zinc-800"
                         : "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] sm:text-white/95 sm:drop-shadow-none"
-                    }`}
+                      }`}
                   >
                     {overlay.description}
                   </p>
@@ -184,11 +178,10 @@ export default function Header() {
                   <Link
                     href={overlay.ctaHref}
                     tabIndex={isActive ? 0 : -1}
-                    className={`mt-2.5 inline-flex min-h-[44px] items-center justify-center rounded-full px-5 py-2.5 text-xs font-bold transition sm:mt-4 sm:min-h-0 sm:px-7 sm:py-3 sm:text-sm md:text-base sm:font-semibold ${
-                      isLight
+                    className={`mt-2.5 inline-flex min-h-[44px] items-center justify-center rounded-full px-5 py-2.5 text-xs font-bold transition sm:mt-4 sm:min-h-0 sm:px-7 sm:py-3 sm:text-sm md:text-base sm:font-semibold ${isLight
                         ? "bg-[#D34827] text-white hover:bg-[#c03f20]"
                         : "bg-[#EE9933] text-[#1a1208] hover:bg-[#e08a28]"
-                    }`}
+                      }`}
                   >
                     {overlay.ctaLabel}
                   </Link>
@@ -208,11 +201,10 @@ export default function Header() {
                 className="group flex min-h-[44px] min-w-[32px] items-center justify-center p-2 focus:outline-none"
               >
                 <span
-                  className={`block h-1.5 rounded-full transition-all sm:h-2 ${
-                    i === index
+                  className={`block h-1.5 rounded-full transition-all sm:h-2 ${i === index
                       ? "w-5 bg-[#EE9933] sm:w-6"
                       : "w-1.5 bg-white/50 group-hover:bg-white/85 sm:w-2"
-                  }`}
+                    }`}
                 />
               </button>
             ))}

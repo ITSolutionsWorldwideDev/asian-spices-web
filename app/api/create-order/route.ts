@@ -519,7 +519,7 @@ export async function POST(req: NextRequest) {
         .catch(() => {});
     }
 
-    if (guestTempPassword) {
+    /* if (guestTempPassword) {
       // Guest order: Send account creation email (with password & login link)
       const emailResult = await sendGuestAccountCreatedEmail({
         email,
@@ -534,7 +534,7 @@ export async function POST(req: NextRequest) {
           emailResult.error,
         );
       }
-    }
+    } */
 
     return NextResponse.json({
       success: true,
