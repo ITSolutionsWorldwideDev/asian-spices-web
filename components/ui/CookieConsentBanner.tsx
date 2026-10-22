@@ -25,27 +25,33 @@ export default function CookieConsentBanner() {
 
   return (
     <div
-      className="notranslate fixed bottom-4 left-4 right-4 z-[100] rounded-xl border border-gray-200 bg-white p-4 shadow-2xl md:left-auto md:max-w-xl"
-      translate="no"
+      role="region"
+      aria-label="Cookie consent"
+      className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom))] left-3 right-3 z-[999999] max-h-[85vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-4 shadow-2xl sm:left-auto sm:right-4 sm:max-w-md xl:bottom-4 xl:max-w-lg"
     >
-      <p className="text-sm text-gray-700">
+      <p className="text-xs leading-relaxed text-gray-700 sm:text-sm">
         We use only necessary cookies required for login, cart, and secure site
         functionality.{" "}
-        <a href="/cookies" className="font-semibold text-orange-600 underline">
+        <a
+          href="/cookies"
+          className="font-semibold text-orange-600 underline underline-offset-2 hover:text-orange-700"
+        >
           Read our Cookie Policy
         </a>
       </p>
 
-      <div className="mt-3 flex flex-wrap items-center gap-2">
+      <div className="mt-3 flex items-center gap-2 sm:gap-2.5">
         <button
+          type="button"
           onClick={handleChoice}
-          className="rounded-md bg-black px-4 py-2 text-sm font-semibold text-white"
+          className="flex-1 cursor-pointer rounded-lg bg-black px-4 py-2 text-center text-xs font-semibold text-white shadow-sm transition hover:bg-neutral-800 active:scale-95 sm:flex-initial sm:text-sm"
         >
           Accept Cookies
         </button>
         <button
+          type="button"
           onClick={handleChoice}
-          className="rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700"
+          className="flex-1 cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-center text-xs font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 active:scale-95 sm:flex-initial sm:text-sm"
         >
           Reject Cookies
         </button>

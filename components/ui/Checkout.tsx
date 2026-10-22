@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -108,17 +108,52 @@ export default function Checkout() {
   }, []);
 
   useEffect(() => {
+    const cancelAbandonedCheckoutOrder = async () => {
+      try {
+        const pendingOrderId = sessionStorage.getItem("pendingCheckoutOrderId");
+        if (!pendingOrderId) return;
+
+        sessionStorage.removeItem("pendingCheckoutOrderId");
+
+        await fetch("/api/paynl/confirm", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId: pendingOrderId,
+            statusAction: "cancelled",
+          }),
+        });
+      } catch (err) {
+        console.error("Failed to update abandoned checkout order:", err);
+      }
+    };
+
+    cancelAbandonedCheckoutOrder();
+
+    const handlePageShow = () => {
+      hide();
+      cancelAbandonedCheckoutOrder();
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, [hide]);
+
+  useEffect(() => {
     if (session?.user?.email) {
       setFormData((prev) => ({
         ...prev,
         email: session.user.email,
       }));
     }
-  }, [session]);
+  }, [session?.user?.email]);
 
   const handleAddressChange = useCallback(
     async (address: any) => {
-      if (!address) return;
+      if (!address) {
+        setSelectedAddress(null);
+        return;
+      }
       setSelectedAddress(address);
       const activeCountry = address?.country || "NL";
 
@@ -220,20 +255,27 @@ export default function Checkout() {
   const checkoutSubtotal = Math.max(0, finalTotals.subtotal - recipeDiscountAmount);
   const checkoutTotal = checkoutSubtotal + finalTotals.shipping;
 
+  const userIdentifier = session?.user?.email || (session?.user as any)?.id;
+  const lastLoadedUserRef = useRef<string | null>(null);
+
   useEffect(() => {
+    if (!userIdentifier) {
+      lastLoadedUserRef.current = null;
+      return;
+    }
+    if (lastLoadedUserRef.current === userIdentifier) return;
+
     const loadAddresses = async () => {
-      if (!session?.user) return;
-
       try {
-        show("Loading Addresses...");
-
         const res = await fetch("/api/account/addresses");
+        if (!res.ok) return;
 
         const rawData = await res.json();
         const data = JSON.parse(JSON.stringify(rawData));
 
         const addressList = data.addresses || [];
         setAddresses(addressList);
+        lastLoadedUserRef.current = userIdentifier;
 
         const defaultAddr = addressList?.find((a: any) => a.is_default);
 
@@ -242,13 +284,11 @@ export default function Checkout() {
         }
       } catch (err) {
         console.error("Failed to load addresses", err);
-      } finally {
-        hide();
       }
     };
 
     loadAddresses();
-  }, [session, handleAddressChange]);
+  }, [userIdentifier, handleAddressChange]);
 
   useEffect(() => {
     if (formData.country) {
@@ -383,8 +423,10 @@ export default function Checkout() {
           },
           promoCode: appliedPromo?.code || null,
           shippingMethod: selectedOption
-            ? selectedOption.name
-            : "Standard Delivery",
+            ? selectedOption.name?.toLowerCase() === "standard"
+              ? "Standard Shipping"
+              : selectedOption.name
+            : "Standard Shipping",
           // The rate this shipping method actually costs, in EUR, before any
           // free-shipping discount is applied - saved so a later partial
           // cancellation that drops the order back below the free-shipping
@@ -423,11 +465,23 @@ export default function Checkout() {
         const data = await payment.json();
 
         if (!data.success) {
+          await fetch("/api/paynl/confirm", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId,
+              statusAction: "failed",
+            }),
+          }).catch(() => {});
+
           throw {
             message: "Failed to initiate payment. Please try again.",
             code: "PAYMENT_FAILED",
           };
         }
+        try {
+          sessionStorage.setItem("pendingCheckoutOrderId", String(orderId));
+        } catch {}
         // Redirect user to payment gateway
         window.location.href = data.redirectUrl;
       }
@@ -551,7 +605,11 @@ export default function Checkout() {
             shipping={convertedTotals.shipping}
             total={checkoutTotal}
             shippingMethodName={
-              selectedOption ? selectedOption.name : "Shipping"
+              selectedOption
+                ? selectedOption.name?.toLowerCase() === "standard"
+                  ? "Standard Shipping"
+                  : selectedOption.name
+                : "Shipping"
             }
             deliveryDaysText={deliveryDaysString}
             promoDiscount={discountConverted}

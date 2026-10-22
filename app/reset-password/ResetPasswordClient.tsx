@@ -95,8 +95,7 @@ export default function ResetPasswordClient() {
 
   return (
     <div
-      className="notranslate min-h-dvh overflow-x-hidden overflow-y-auto bg-gray-100"
-      translate="no"
+      className="min-h-dvh overflow-x-hidden overflow-y-auto bg-gray-100"
     >
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-6 sm:py-8 md:px-8 md:py-10 lg:px-10 lg:py-12 xl:px-12">
         <div className="grid w-full grid-cols-1 items-stretch gap-4 sm:gap-6 md:grid-cols-2 md:gap-8 lg:gap-10 xl:gap-12">
@@ -169,11 +168,12 @@ export default function ResetPasswordClient() {
                     pattern="\d{6}"
                     maxLength={6}
                     placeholder="6-digit code"
+                    translate="no"
                     value={otp}
                     onChange={(e) =>
                       setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
                     }
-                    className="w-full mt-1.5 px-3.5 py-3 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100 tracking-widest font-mono"
+                    className="notranslate w-full mt-1.5 px-3.5 py-3 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100 tracking-widest font-mono"
                   />
                 </div>
 
@@ -186,9 +186,10 @@ export default function ResetPasswordClient() {
                       type={showPassword ? "text" : "password"}
                       required
                       placeholder="Minimum 6 characters"
+                      translate="no"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-3.5 py-3 pr-11 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+                      className="notranslate w-full px-3.5 py-3 pr-11 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
                     />
                     <button
                       type="button"
@@ -210,9 +211,10 @@ export default function ResetPasswordClient() {
                       type={showConfirmPassword ? "text" : "password"}
                       required
                       placeholder="Confirm password"
+                      translate="no"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full px-3.5 py-3 pr-11 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+                      className="notranslate w-full px-3.5 py-3 pr-11 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
                     />
                     <button
                       type="button"

@@ -45,7 +45,7 @@ export default function MobileBottomNav() {
     <nav
       aria-label="Mobile bottom navigation"
       translate="no"
-      className="notranslate pointer-events-none fixed inset-x-0 bottom-0 z-[999998] px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] xl:hidden"
+      className="notranslate pointer-events-none fixed inset-x-0 bottom-0 z-[999998] px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] nav:hidden"
     >
       <div className="pointer-events-auto mx-auto flex w-full max-w-md items-stretch justify-between gap-0.5 rounded-full bg-white px-1.5 py-1.5 shadow-[0_8px_28px_rgba(0,0,0,0.14)] ring-1 ring-black/5">
         {items.map(({ key, label, href, match, Icon }) => {

@@ -12,6 +12,7 @@ import { getProductPath } from "@/lib/product-path";
 import { stripHtml } from "@/lib/product-metadata";
 import { resolveTaxRate } from "@/lib/tax";
 import { useGlobalStore } from "@/store/useGlobalStore";
+import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { anchorFromClick } from "@/lib/cart-toast-anchor";
 import { Tag } from "lucide-react";
 import CartPlusIcon from "@/components/ui/CartPlusIcon";
@@ -33,6 +34,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
   const isLoggedIn = !!session?.user;
   const { addToCart } = useCartStore();
   const { taxRules, taxRulesLoaded } = useGlobalStore();
+  const { symbol, rate } = useCurrencyStore();
 
   const getPickQty = (productId: string) => qtyByProduct[productId] ?? 1;
 
@@ -193,9 +195,9 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
               realPrice = Number(
                 Math.max(0, baseWithTax - discountValue).toFixed(2),
               );
-            } else if (saleFromDb > 0 && netBase > 0 && saleFromDb < netBase) {
+            } else if (saleFromDb > 0 && netBase > 0 && saleFromDb < netBase && taxRate != null) {
               realPrice = Number(
-                (baseWithTax * (saleFromDb / netBase)).toFixed(2),
+                (saleFromDb * (1 + taxRate)).toFixed(2),
               );
             }
             // Green = exact sale amount (base − sale)
@@ -204,11 +206,25 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
             }
           }
 
+          let badgeText = item.off;
+          if (dtype === "fixed" && hasDiscountMeta) {
+            const converted = discountValue * rate;
+            const formatted =
+              converted % 1 === 0
+                ? converted.toFixed(0)
+                : converted.toFixed(2);
+            badgeText = `${symbol}${formatted} OFF`;
+          }
+
           const displayItem = {
             ...item,
+            off: badgeText,
             base_price: realPrice ?? 0,
             oldPrice: baseWithTax ?? 0,
-            save: greenDbSale > 0 ? `€${greenDbSale.toFixed(2)}` : "",
+            save:
+              greenDbSale > 0
+                ? `${symbol}${(greenDbSale * rate).toFixed(2)}`
+                : "",
           };
 
           return (
@@ -219,10 +235,10 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
               <div className="relative flex flex-col flex-1">
                 {/* Badges Container */}
                 <div className="absolute left-2.5 top-2.5 z-20 pointer-events-none sm:left-4 sm:top-4">
-                  {item.off && (
+                  {badgeText && (
                     <span className="rounded-full bg-red-500 px-2 py-0.5 text-[11px] font-bold text-white shadow-sm flex items-center sm:px-2.5 sm:py-1 sm:text-xs">
                       <Tag className="mr-1 w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
-                      <span>{item.off}</span>
+                      <span>{badgeText}</span>
                     </span>
                   )}
                 </div>
@@ -276,11 +292,11 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                     ) : (
                       <>
                         <span className="text-lg font-bold text-orange-500 sm:text-xl">
-                          €{realPrice.toFixed(2)}
+                          {symbol}{(realPrice * rate).toFixed(2)}
                         </span>
                         {baseWithTax > realPrice && (
                           <span className="text-xs sm:text-sm text-gray-400 line-through font-medium">
-                            €{baseWithTax.toFixed(2)}
+                            {symbol}{(baseWithTax * rate).toFixed(2)}
                           </span>
                         )}
                       </>
@@ -290,7 +306,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                   <div className="min-h-[1.375rem] mt-1 flex items-center">
                     {realPrice != null && greenDbSale > 0 ? (
                       <p className="text-green-600 text-xs font-semibold flex items-center bg-green-50/70 py-0.5 px-2 rounded-md w-fit">
-                        You save €{greenDbSale.toFixed(2)}
+                        You save {symbol}{(greenDbSale * rate).toFixed(2)}
                       </p>
                     ) : null}
                   </div>

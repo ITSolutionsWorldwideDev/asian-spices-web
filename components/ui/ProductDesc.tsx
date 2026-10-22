@@ -201,10 +201,10 @@ export default function ProductDesc({
       .toLowerCase();
 
   const numericRating =
-    typeof product.rating === "number" ? Number(product.rating) : 0;
+    Number(product?.rating ?? (product as any)?.avg_rating ?? 0) || 0;
   const displayedRating = numericRating > 0 ? numericRating.toFixed(1) : null;
   const displayedReviews =
-    typeof product.reviews === "number" ? Number(product.reviews) : 0;
+    Number(product?.reviews ?? (product as any)?.reviewCount ?? 0) || 0;
   const stockCount = Number((product as any)?.total_available_stock || 0);
 
   const addConfiguredQuantity = (e: React.MouseEvent<HTMLElement>) => {
@@ -335,7 +335,7 @@ export default function ProductDesc({
               <span className="text-xs sm:text-sm text-gray-500">No rating yet</span>
             )}
             <span className="text-xs sm:text-sm font-semibold text-orange-500">
-              ({displayedReviews} reviews)
+              ({displayedReviews} {displayedReviews === 1 ? "review" : "reviews"})
             </span>
           </div>
 

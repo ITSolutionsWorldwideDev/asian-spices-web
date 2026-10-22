@@ -45,21 +45,26 @@ function sortNutrients(items: RecipeNutrient[]) {
 export async function getRecipeNutrition(
   recipeId: string,
 ): Promise<RecipeNutrient[]> {
-  const { rows } = await runQuery<RecipeNutrient>(
-    `
-    SELECT
-      nutrition_id,
-      recipe_id,
-      nutrient_name,
-      value,
-      unit,
-      daily_value_percent
-    FROM recipe_nutrition
-    WHERE recipe_id = $1
-    ORDER BY nutrient_name ASC
-    `,
-    [recipeId],
-  );
+  try {
+    const { rows } = await runQuery<RecipeNutrient>(
+      `
+      SELECT
+        nutrition_id,
+        recipe_id,
+        nutrient_name,
+        value,
+        unit,
+        daily_value_percent
+      FROM recipe_nutrition
+      WHERE recipe_id = $1
+      ORDER BY nutrient_name ASC
+      `,
+      [recipeId],
+    );
 
-  return sortNutrients(rows);
+    return sortNutrients(rows);
+  } catch (err) {
+    // Gracefully fallback to empty array if recipe_nutrition table does not exist
+    return [];
+  }
 }

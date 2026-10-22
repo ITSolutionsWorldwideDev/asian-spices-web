@@ -32,6 +32,10 @@ export default function PaynlReturnHandler({
       called = true;
 
       try {
+        sessionStorage.removeItem("pendingCheckoutOrderId");
+      } catch {}
+
+      try {
         const res = await fetch("/api/paynl/confirm", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

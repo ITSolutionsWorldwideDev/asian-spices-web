@@ -14,8 +14,6 @@ import SubscribeNewsletter from "./SubscribeNewsletter";
 const TICKER_ITEMS = [
   "FRESHNESS GUARANTEED",
   "DELIVERED ACROSS NL",
-  "RETAIL & WHOLESALE",
-  "EST. 2026 - AMSTERDAM",
   "AUTHENTIC ASIAN FLAVORS",
   "FREE RECIPES INCLUDED",
 ] as const;
@@ -33,7 +31,7 @@ const SOCIAL_LINKS = [
   },
   {
     label: "TikTok",
-    href: "https://www.tiktok.com/@asianspices0",
+    href: "https://www.tiktok.com/@asianspices.online?lang=en",
     Icon: FaTiktok,
   },
   {
@@ -47,7 +45,7 @@ const QUICK_LINKS = [
   { label: "About Us", href: "/about-us" },
   { label: "Our Products", href: "/products" },
   { label: "Recipes", href: "/recipes" },
-  { label: "Blog", href: "/recipes" },
+  // { label: "Blog", href: "/recipes" },
   { label: "Contact", href: "/contact-us" },
 ] as const;
 
@@ -80,7 +78,7 @@ function TickerBar() {
 const FooterContent = () => {
   return (
     // NOTE: Yahan se 'overflow-hidden' hata diya hai aur bottom padding add ki hai taake kuch bhi cut na ho
-    <div className="relative z-10 mt-20 w-full bg-[#141414] text-white pb-16 sm:pb-10">
+    <div className="relative z-10 mt-20 w-full bg-[#141414] text-white pb-28 sm:pb-20 xl:pb-10">
       <TickerBar />
 
       {/* Newsletter */}
@@ -112,7 +110,7 @@ const FooterContent = () => {
               />
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-white/60">
-              Our Journey with Spices Began in 1970. Today, We Bring Decades of Experience and Authentic Asian Flavours to Your Kitchen.
+             Our story began with the people, traditions, and authentic flavours of Asia finding a home across Europe. Over the decades, these rich culinary traditions have shaped our understanding of spices, ingredients, and the art of bringing people together through food. Today, we carry that legacy forward, bringing generations of knowledge, authentic Asian flavours, and a passion for quality to kitchens everywhere.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
@@ -132,10 +130,10 @@ const FooterContent = () => {
 
           {/* Quick Links */}
           <div className="border-b border-white/10 pb-8 sm:border-b-0 sm:pb-0">
-            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+            <p className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
               <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
               <span>Quick Links</span>
-            </h3>
+            </p>
             <ul className="space-y-3">
               {QUICK_LINKS.map((link) => (
                 <li key={link.label}>
@@ -152,10 +150,10 @@ const FooterContent = () => {
 
           {/* Customer Service */}
           <div className="border-b border-white/10 pb-8 sm:border-b-0 sm:pb-0">
-            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+            <p className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
               <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
               <span>Customer Service</span>
-            </h3>
+            </p>
             <ul className="space-y-3">
               {CUSTOMER_SERVICE.map((link) => (
                 <li key={link.label}>
@@ -172,10 +170,10 @@ const FooterContent = () => {
 
           {/* Get In Touch */}
           <div>
-            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+            <p className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
               <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
               <span>Get In Touch</span>
-            </h3>
+            </p>
             <ul className="space-y-3 text-sm text-white/60">
               <li className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:border-0 sm:bg-transparent sm:p-0">
                 <Mail
@@ -190,17 +188,27 @@ const FooterContent = () => {
                 </a>
               </li>
               <li className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:border-0 sm:bg-transparent sm:p-0">
-                <MapPin
-                  className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
-                  aria-hidden
-                />
-                <span className="leading-relaxed">
+                <a
+                  href="https://maps.app.goo.gl/Qaw4W3sgskPEXyx56"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="View location on Google Maps"
+                  className="mt-0.5 shrink-0 text-orange-500 transition hover:text-orange-400"
+                >
+                  <MapPin className="h-4 w-4" aria-hidden />
+                </a>
+                <a
+                  href="https://maps.app.goo.gl/Qaw4W3sgskPEXyx56"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="leading-relaxed transition hover:text-orange-400"
+                >
                   Slakkenveen 341
                   <br />
                   3205 GK Spijkenisse
                   <br />
                   Netherlands
-                </span>
+                </a>
               </li>
             </ul>
           </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { getProductPath } from "@/lib/product-path";
+import { useCurrencyStore } from "@/store/useCurrencyStore";
 
 interface FlashSaleProduct {
   id: string | number;
@@ -42,6 +43,7 @@ const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
 );
 
 const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
+  const { symbol, rate = 1 } = useCurrencyStore();
   const filledStars = Math.max(0, Math.min(5, Math.round(Number(item.rating) || 0)));
   const stars = [1, 2, 3, 4, 5].map((i) => i <= filledStars);
   const reviewCount = Number(item.reviews) || 0;
@@ -65,7 +67,7 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
         </div>
 
         <div className="flex flex-col justify-between py-1 min-w-0">
-          <h2 className="text-base font-semibold text-gray-800 leading-tight line-clamp-2">
+          <h4 className="text-base font-semibold text-gray-800 leading-tight line-clamp-2">
             {item.title}
             {item.weight &&
             !item.title
@@ -73,15 +75,17 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
               .includes(String(item.weight).toLowerCase().trim())
               ? ` ${item.weight}`
               : ""}
-          </h2>
+          </h4>
 
           <div className="flex items-baseline space-x-1.5 my-1">
             <span className="text-2xl font-black text-orange-500">
-              €{item.base_price.toFixed(2)}
+              {symbol}{(item.base_price * rate).toFixed(2)}
             </span>
-            <span className="text-sm text-gray-400 line-through">
-              €{item.oldPrice.toFixed(2)}
-            </span>
+            {item.oldPrice > item.base_price && (
+              <span className="text-sm text-gray-400 line-through">
+                {symbol}{(item.oldPrice * rate).toFixed(2)}
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-1">
@@ -156,9 +160,9 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
          
 
         <div className="grow">
-          <h2 className="text-xl font-serif font-semibold text-gray-800 ">
+          <h4 className="text-xl font-serif font-semibold text-gray-800 ">
             {item.title}
-          </h2>
+          </h4>
 
           <div className="flex items-baseline space-x-2 mb-3">
             <span className="text-4xl font-bold text-orange-500">

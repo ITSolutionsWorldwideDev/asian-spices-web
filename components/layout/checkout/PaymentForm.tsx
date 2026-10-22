@@ -16,26 +16,26 @@ interface Props {
 const METHODS = [
   {
     id: "paynl" as const,
-    label: "Pay.nl",
+    label: "Ideal | Wero",
     description: "Pay securely via iDEAL and other methods",
     logo: {
-      src: "/assets/payment/paynl.svg",
-      alt: "Pay.nl",
-      width: 48,
-      height: 48,
+      src: "/assets/payment/ideal-wero.svg",
+      alt: "Ideal | Wero",
+      width: 100,
+      height: 32,
     },
   },
-  // {
-  //   id: "paypal" as const,
-  //   label: "PayPal",
-  //   description: "Pay with your PayPal account",
-  //   logo: {
-  //     src: "/assets/payment/paypal.svg",
-  //     alt: "PayPal",
-  //     width: 90,
-  //     height: 24,
-  //   },
-  // },
+  {
+    id: "paypal" as const,
+    label: "PayPal",
+    description: "Pay with your PayPal account",
+    logo: {
+      src: "/assets/payment/paypal.svg",
+      alt: "PayPal",
+      width: 90,
+      height: 24,
+    },
+  },
 ];
 
 export default function PaymentForm({

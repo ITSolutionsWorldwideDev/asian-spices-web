@@ -128,6 +128,7 @@ export async function sendOrderConfirmationEmail(orderId: string, customClient?:
       `SELECT 
          o.id,
          o.order_number, 
+         o.payment_status,
          COALESCE(
            NULLIF(TRIM(o.customer_email), ''), 
            NULLIF(TRIM(c.email), ''), 
@@ -186,6 +187,17 @@ export async function sendOrderConfirmationEmail(orderId: string, customClient?:
       return { success: false, error: "Order context missing" };
 
     const order = orderQuery.rows[0];
+
+    if (String(order.payment_status || "").toLowerCase() !== "paid") {
+      console.log(
+        `[Email Skipped] Order ${orderId} payment_status is '${order.payment_status}' — confirmation email only sends when payment is 'paid'`,
+      );
+      return {
+        success: false,
+        error: "Order payment is not confirmed as paid",
+      };
+    }
+
     const recipientEmail = order.customer_email?.trim();
 
     if (!recipientEmail) {

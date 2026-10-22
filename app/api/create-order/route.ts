@@ -16,7 +16,6 @@ import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
 import { validatePromo } from "@/app/api/checkout/promo/route";
 import {
   sendGuestAccountCreatedEmail,
-  sendOrderConfirmationEmail,
 } from "@/core/email-templates";
 
 export async function POST(req: NextRequest) {
@@ -227,53 +226,64 @@ export async function POST(req: NextRequest) {
     }
 
     // ====================================================
-    // 2️⃣ ADDRESS
+    // 2️⃣ ADDRESS (prevent duplicate insertion)
     // ====================================================
 
-    await client.query(
+    const existingAddressCheck = await client.query(
       `
-        INSERT INTO store_customer_addresses
-        (
-          customer_id,
-          label,
-          address_line1,
-          address_line2,
-          city,
-          state,
-          postal_code,
-          country,
-          latitude,
-          longitude
-        )
-        VALUES (
-          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10
-        )
-
-        ON CONFLICT
-        (
-          customer_id,
-          address_line1,
-          address_line2,
-          city,
-          state,
-          postal_code,
-          country
-        )
-        DO NOTHING
+        SELECT id FROM store_customer_addresses
+        WHERE customer_id = $1
+          AND LOWER(TRIM(address_line1)) = LOWER(TRIM($2))
+          AND LOWER(TRIM(COALESCE(address_line2, ''))) = LOWER(TRIM(COALESCE($3, '')))
+          AND LOWER(TRIM(COALESCE(postal_code, ''))) = LOWER(TRIM(COALESCE($4, '')))
+          AND LOWER(TRIM(COALESCE(city, ''))) = LOWER(TRIM(COALESCE($5, '')))
+          AND LOWER(TRIM(COALESCE(country, ''))) = LOWER(TRIM(COALESCE($6, '')))
+        LIMIT 1
       `,
       [
         customer_id,
-        "Home",
-        shippingAddress.address_line1,
-        shippingAddress.address_line2,
-        shippingAddress.city,
-        shippingAddress.state,
-        shippingAddress.postal_code,
-        shippingAddress.country,
-        latitude,
-        longitude,
+        shippingAddress.address_line1 || "",
+        shippingAddress.address_line2 || "",
+        shippingAddress.postal_code || "",
+        shippingAddress.city || "",
+        shippingAddress.country || "",
       ],
     );
+
+    if (existingAddressCheck.rowCount === 0) {
+      await client.query(
+        `
+          INSERT INTO store_customer_addresses
+          (
+            customer_id,
+            label,
+            address_line1,
+            address_line2,
+            city,
+            state,
+            postal_code,
+            country,
+            latitude,
+            longitude
+          )
+          VALUES (
+            $1,$2,$3,$4,$5,$6,$7,$8,$9,$10
+          )
+        `,
+        [
+          customer_id,
+          "Home",
+          shippingAddress.address_line1,
+          shippingAddress.address_line2 || null,
+          shippingAddress.city,
+          shippingAddress.state || null,
+          shippingAddress.postal_code,
+          shippingAddress.country,
+          latitude,
+          longitude,
+        ],
+      );
+    }
 
     // ====================================================
     // 3️⃣ VALIDATE PRODUCTS EXIST (before creating order)
@@ -509,7 +519,7 @@ export async function POST(req: NextRequest) {
         .catch(() => {});
     }
 
-    if (guestTempPassword) {
+    /* if (guestTempPassword) {
       // Guest order: Send account creation email (with password & login link)
       const emailResult = await sendGuestAccountCreatedEmail({
         email,
@@ -524,21 +534,7 @@ export async function POST(req: NextRequest) {
           emailResult.error,
         );
       }
-    }
-
-    // Send order confirmation email directly upon order placement
-    try {
-      const orderEmailResult = await sendOrderConfirmationEmail(order_id);
-      if (!orderEmailResult?.success && !orderEmailResult?.alreadySent) {
-        console.error(
-          "[Order Confirmation Email Failed]",
-          email,
-          orderEmailResult?.error,
-        );
-      }
-    } catch (orderEmailErr) {
-      console.error("[Order Confirmation Email Exception]:", orderEmailErr);
-    }
+    } */
 
     return NextResponse.json({
       success: true,

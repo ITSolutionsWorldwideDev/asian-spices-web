@@ -146,6 +146,19 @@ async function handlePaynlNotification(req: NextRequest) {
         console.error("[Email Trigger Error PayNL Webhook]:", emailErr);
       }
     }
+  } else if (paymentStatus === "failed" && reference) {
+    try {
+      await pool.query(
+        `UPDATE store_orders
+         SET payment_status = 'failed',
+             transaction_id = COALESCE($1, transaction_id),
+             updated_at = NOW()
+         WHERE id = $2 AND payment_status != 'paid'`,
+        [transactionId || null, reference],
+      );
+    } catch (failTxErr) {
+      console.error("Paynl failed status update error:", failTxErr);
+    }
   }
 
   // Pay.nl expects a 200 OK response with "TRUE" to confirm receipt

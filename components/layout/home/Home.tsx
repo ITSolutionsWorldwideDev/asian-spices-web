@@ -89,7 +89,7 @@ export default function Homei() {
 
           <WhyChooseUs />
 
-          <HomeFaqs />
+          {/* <HomeFaqs /> */}
 
           <DeferredMount
             rootMargin="300px"

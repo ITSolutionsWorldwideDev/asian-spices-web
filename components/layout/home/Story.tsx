@@ -8,7 +8,7 @@ const Story = ({ className = "" }: { className?: string }) => {
     <div
       className={`container mx-auto overflow-x-hidden px-4 pt-2 pb-10 sm:px-6 sm:pt-4 sm:pb-12 lg:px-8 ${className}`}
     >
-      <section className="grid items-start gap-10 xl:grid-cols-2 xl:gap-12">
+      <section className="grid items-start xl:items-center gap-10 xl:grid-cols-2 xl:gap-12">
         {/* Images: mobile pe second (order-2), desktop pe left (xl:order-1) */}
         <div className="order-2 space-y-6 xl:order-1">
           {/* Full 100% Organic banner — whole image, no empty bg */}
@@ -49,36 +49,24 @@ const Story = ({ className = "" }: { className?: string }) => {
         </div>
 
         {/* Content: mobile pe pehle (order-1), desktop pe right (xl:order-2) */}
-        <div className="order-1 flex min-w-0 flex-col gap-6 sm:gap-8 xl:order-2">
+        <div className="order-1 flex min-w-0 flex-col justify-center gap-6 sm:gap-8 xl:order-2 xl:self-center">
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-              Bringing Authentic Asian spices to Every Home
+              Authentic Asian Spices Online, Bringing the Taste of Asia to Your Kitchen
             </h2>
             <p className="text-gray-600">
-              Founded in 2026, Asian Spices is a modern online marketplace
-              dedicated to bringing the rich and diverse flavors of Asia
-              directly to your doorstep. We make it easy for home cooks, food
-              enthusiasts, and professional chefs to discover premium spices,
-              authentic ingredients, kitchen essentials, and traditional
-              recipes—all in one convenient destination.
+             Asian Spices is an online destination for authentic Asian spices, herbs, pantry staples and kitchen essentials. We offer our own range of quality products, and we also give independent Asian shops and sellers a place to reach customers online. The result is a wider choice of ingredients in one convenient place.
             </p>
             <p className="text-gray-600">
-              Our mission is to preserve the authenticity of Asian cuisine while
-              making high-quality products accessible to everyone. Every product
-              in our collection is carefully selected to ensure freshness,
-              quality, and the genuine taste that makes every dish memorable.
+              Our mission is simple: to respect the authenticity of Asian cuisine while making quality ingredients easy to find and accessible to everyone. We select our products for freshness, aroma and genuine taste, so each dish turns out the way it should.
             </p>
             <p className="text-gray-600">
-              Beyond shopping, Asian Spices is a growing community where cooking
-              meets culture. Through our recipe library, healthy living tips,
-              and expert cooking inspiration, we help you create delicious meals
-              with confidence. Whether you&apos;re preparing a cherished family
-              recipe or experimenting with new flavors, Asian Spices is your
-              trusted partner for authentic ingredients and an exceptional
-              online shopping experience.
+            We’re also a place where cooking meets culture. Our recipes, healthy-living tips and cooking inspiration help you cook with confidence, whether you’re recreating a family favourite or trying something new. Discover your next favourite spice with us.
             </p>
           </div>
 
+          {/* Stats and Learn More button section - commented out */}
+          {/*
           <div className="grid grid-cols-2 gap-3 pt-2 sm:gap-6">
             <div className="flex items-center gap-2.5 sm:gap-4">
               <div className="shrink-0 rounded-lg bg-orange-50 p-2 sm:p-3 shadow-sm">
@@ -145,7 +133,6 @@ const Story = ({ className = "" }: { className?: string }) => {
             </div>
           </div>
 
-          {/* Kept in-flow so it stays inside the section on all screen sizes */}
           <div className="pt-2">
             <Link
               href="/about-us"
@@ -158,6 +145,7 @@ const Story = ({ className = "" }: { className?: string }) => {
               <span className="absolute inset-0 origin-center scale-x-0 bg-linear-to-r from-orange-500 to-amber-200 transition-transform duration-500 ease-out group-hover:scale-x-100" />
             </Link>
           </div>
+          */}
         </div>
       </section>
     </div>

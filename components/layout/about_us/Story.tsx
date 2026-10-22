@@ -22,9 +22,7 @@ export default function Story() {
           </div>
 
           {/* Est. badge — right of spices image, mid-height */}
-          <span className="absolute right-0 top-[18%] z-20 rounded-full bg-[#1a120c] px-4 py-[0.55rem] text-[12px] font-medium tracking-wide text-white shadow-md sm:px-5 sm:text-[13px]">
-            Est. 2026
-          </span>
+          
 
           {/* Farm image — overlaps bottom-right of spices */}
           <div className="relative z-20 ml-auto mt-[-18%] w-[58%] overflow-hidden rounded-[1.4rem] shadow-[0_20px_45px_-8px_rgba(0,0,0,0.28)]">
@@ -80,28 +78,59 @@ export default function Story() {
 
           <div className="mt-5 max-w-xl space-y-4 text-[15px] leading-[1.7] text-[#5C5C5C] sm:mt-6 sm:text-[15.5px] sm:leading-[1.75]">
             <p>
-              Founded in 2026, Asian Spices is a modern online marketplace
-              dedicated to bringing the rich and diverse flavors of Asia
-              directly to your doorstep. We make it easy for home cooks, food
-              enthusiasts, and professional chefs to discover premium spices,
-              authentic ingredients, kitchen essentials, and traditional
-              recipes — all in one convenient destination.
+             Our story begins with the people, traditions, and authentic flavours of Asia, and with the way they found a home across Europe. Today, Asian Spices is a modern online marketplace and Asian grocery shop that carries that heritage forward, bringing the rich and diverse flavours of Asia to your doorstep across the Netherlands. We make it easy for home cooks, food enthusiasts, and professional chefs to discover premium spices, authentic ingredients, kitchen essentials, and traditional recipes, all in one convenient destination.
             </p>
             <p>
-              Our mission is to preserve the authenticity of Asian cuisine while
-              making high-quality products accessible to everyone. Every product
-              in our collection is carefully selected to ensure freshness,
-              quality, and the genuine taste that makes every dish memorable.
+             For generations, these culinary traditions have shaped how we understand spices, ingredients, and the art of bringing people together through food. Our mission is to preserve the authenticity of Asian cuisine while making high-quality products accessible to everyone. Every product in our collection is carefully selected for freshness, quality, and the genuine taste that makes every dish memorable.
             </p>
             <p>
-              Beyond shopping, Asian Spices is a growing community where cooking
-              meets culture. Through our recipe library, healthy living tips,
-              and expert cooking inspiration, we help you create delicious meals
-              with confidence. Whether you&apos;re preparing a cherished family
-              recipe or experimenting with new flavors, Asian Spices is your
-              trusted partner for authentic ingredients and an exceptional
-              online shopping experience.
+              Beyond shopping, Asian Spices is a growing community where cooking meets culture. Through our recipe library, healthy living tips, and expert cooking inspiration, we help you create delicious meals with confidence. Whether you're preparing a cherished family recipe or experimenting with new flavours, Asian Spices is your trusted partner for authentic ingredients and an exceptional online shopping experience.
             </p>
+
+            {/* Company Details */}
+            <div className="mt-6 rounded-2xl border border-[#E8DFC8] bg-white/75 p-4 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#C06C28]">
+                Company Details
+              </p>
+              <p className="mt-1 font-semibold text-[#1A120C] text-sm sm:text-[15px]">
+                Asian Spices Online B.V.
+              </p>
+              <ul className="mt-2.5 space-y-1.5 text-xs sm:text-[13.5px] leading-relaxed text-[#5C5C5C]">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#C06C28] font-bold">•</span>
+                  <span>Slakkenveen 341, 3205 GK Spijkenisse, Netherlands</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-[#C06C28] font-bold">•</span>
+                  <span>
+                    Email:{" "}
+                    <a
+                      href="mailto:support@asianspices.online"
+                      className="font-medium text-[#C06C28] hover:underline"
+                    >
+                      support@asianspices.online
+                    </a>
+                  </span>
+                </li>
+                <li className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                  <span className="text-[#C06C28] font-bold">•</span>
+                  <span>
+                    KVK #:{" "}
+                    <a
+                      href="https://www.kvk.nl/bestellen/#/42041922000065449916"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-[#C06C28] underline underline-offset-2 hover:text-[#a85c22]"
+                    >
+                      42041922
+                    </a>
+                  </span>
+                  <span className="text-[#D4CBC0]">|</span>
+                  <span>BTW (VAT) Number: NL869440317B01</span>
+                </li>
+              </ul>
+            </div>
+
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3 sm:gap-4">

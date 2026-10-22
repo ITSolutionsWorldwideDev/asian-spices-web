@@ -48,6 +48,7 @@ type Filters = {
   brands: string[];
   minPrice?: string;
   maxPrice?: string;
+  rate?: string | number;
   search?: string;
   page: number;
   sort: string;
@@ -160,11 +161,18 @@ async function renderProductPage(
     getProductReviewsSummary(product.id),
   ]);
 
+  const enrichedProduct = {
+    ...product,
+    rating: Number(product.rating || reviewStats?.average || 0),
+    avg_rating: Number(product.avg_rating || reviewStats?.average || 0),
+    reviews: Number(product.reviews || reviewStats?.total || 0),
+  };
+
   return (
     <>
-      <JsonLd data={getProductJsonLd(product, reviewStats)} />
+      <JsonLd data={getProductJsonLd(enrichedProduct, reviewStats)} />
       <ProductDescrption
-        product={JSON.parse(JSON.stringify(product))}
+        product={JSON.parse(JSON.stringify(enrichedProduct))}
         relatedProducts={JSON.parse(JSON.stringify(relatedProducts || []))}
         category={product.category_name || categoryLabel}
       />
@@ -181,6 +189,7 @@ export default async function CategorySlugPage({
     brands?: string;
     min?: string;
     max?: string;
+    rate?: string;
     search?: string;
     page?: string;
     sort?: string;
@@ -221,6 +230,7 @@ export default async function CategorySlugPage({
       brands: clean(query.brands),
       minPrice: query.min,
       maxPrice: query.max,
+      rate: query.rate,
       search: query.search,
       sort: query.sort || "newest",
       page: Number(query.page || 1),

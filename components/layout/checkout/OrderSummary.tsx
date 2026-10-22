@@ -349,7 +349,11 @@ export default function OrderSummary({
         )}
 
         <div className="flex justify-between mt-3">
-          <span>{shippingMethodName}</span>
+          <span>
+            {shippingMethodName?.toLowerCase() === "standard"
+              ? "Standard Shipping"
+              : shippingMethodName}
+          </span>
           <span className={hasFreeShipping ? "text-[#00A63E]" : ""}>
             {hasFreeShipping
               ? "FREE"

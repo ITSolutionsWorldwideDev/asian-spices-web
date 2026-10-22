@@ -25,8 +25,26 @@ export default function OrdersPage() {
     try {
       show("Loading Orders...");
 
+      try {
+        const pendingOrderId = sessionStorage.getItem("pendingCheckoutOrderId");
+        if (pendingOrderId) {
+          sessionStorage.removeItem("pendingCheckoutOrderId");
+          await fetch("/api/paynl/confirm", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId: pendingOrderId,
+              statusAction: "cancelled",
+            }),
+          });
+        }
+      } catch (cancelErr) {
+        console.error("Failed to mark abandoned payment as failed:", cancelErr);
+      }
+
       const res = await fetch(
         `/api/account/orders?page=${currentPage}&limit=${recordsPerPage}`,
+        { cache: "no-store" },
       );
       const data = await res.json();
 
@@ -54,7 +72,15 @@ export default function OrdersPage() {
 
   useEffect(() => {
     loadOrders();
-  }, [loadOrders]);
+
+    const handlePageShow = () => {
+      hide();
+      loadOrders();
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, [loadOrders, hide]);
 
   return (
     <div className="space-y-6">

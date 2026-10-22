@@ -80,6 +80,12 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
   }, [orderId]);
 
   useEffect(() => {
+    try {
+      sessionStorage.removeItem("pendingCheckoutOrderId");
+    } catch {}
+  }, []);
+
+  useEffect(() => {
     if (order?.payment_status === "paid") {
       clearCart();
     }
@@ -147,6 +153,9 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
             orderId={order.id}
             amount={order.total_amount}
             email={order.customer_email || ""}
+            paymentMethod={
+              order.payment_method === "paypal" ? "paypal" : "paynl"
+            }
           />
         </div>
       </div>

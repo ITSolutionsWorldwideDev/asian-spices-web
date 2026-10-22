@@ -2,9 +2,8 @@
 
 "use client";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
-import { useLoaderStore } from "@/store/useLoaderStore";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import {
   SHIPPING_OPTIONS,
@@ -42,6 +41,13 @@ type Country = {
   iso2: string;
 };
 
+// All 27 EU member state ISO codes
+const EU_COUNTRY_CODES = new Set([
+  "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR",
+  "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL",
+  "PL", "PT", "RO", "SK", "SI", "ES", "SE",
+]);
+
 export default function ShippingForm({
   data,
   setFormData,
@@ -58,7 +64,6 @@ export default function ShippingForm({
   const [countries, setCountries] = useState<Country[]>([]);
   const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
   const [loadingOptions, setLoadingOptions] = useState(false);
-  const { show, hide } = useLoaderStore();
 
   const { symbol, rate } = useCurrencyStore();
 
@@ -73,24 +78,56 @@ export default function ShippingForm({
 
   const hasFreeShipping = shipping === 0;
 
+  const isEuCountry = data.country
+    ? EU_COUNTRY_CODES.has(data.country.toUpperCase())
+    : true;
+
   const handleChange = (field: string, value: string) => {
     setFormData((prev: any) => ({
       ...prev,
       [field]: value,
+      ...(field === "country" && EU_COUNTRY_CODES.has(value.toUpperCase())
+        ? { state: "" }
+        : {}),
     }));
+  };
+
+  const firstNameInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUseNewAddress = () => {
+    setSelectedAddress(null);
+    setFormData((prev: any) => ({
+      ...prev,
+      firstName: "",
+      lastName: "",
+      address: "",
+      appartment: "",
+      city: "",
+      state: "",
+      zip: "",
+    }));
+
+    setTimeout(() => {
+      if (firstNameInputRef.current) {
+        firstNameInputRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        firstNameInputRef.current.focus();
+      }
+    }, 50);
   };
 
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        show("Loading Countries...");
         const res = await fetch("/api/countries?shippable=true");
-        const data = await res.json();
-        setCountries(data);
+        if (res.ok) {
+          const data = await res.json();
+          setCountries(data);
+        }
       } catch (err) {
         console.error("Failed to load countries", err);
-      } finally {
-        hide();
       }
     };
 
@@ -221,8 +258,8 @@ export default function ShippingForm({
 
         <button
           type="button"
-          onClick={() => setSelectedAddress(null)}
-          className="text-sm text-blue-500 underline mb-4"
+          onClick={handleUseNewAddress}
+          className="text-sm text-blue-500 hover:text-blue-700 underline mb-4 cursor-pointer text-left inline-block"
         >
           Use a new address
         </button>
@@ -234,6 +271,7 @@ export default function ShippingForm({
                 First Name<span className="text-red-700 ms-1">*</span>
               </label>
               <input
+                ref={firstNameInputRef}
                 type="text"
                 name="firstName"
                 className="w-full bg-[#F3F3F5] rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -290,7 +328,7 @@ export default function ShippingForm({
             />
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className={!isEuCountry ? "grid md:grid-cols-2 gap-4" : ""}>
             <div>
               <label className="block text-sm mb-1">
                 City<span className="text-red-700 ms-1">*</span>
@@ -307,19 +345,22 @@ export default function ShippingForm({
               )}
             </div>
 
-            <div>
-              <label className="block text-sm mb-1">State</label>
-              <input
-                type="text"
-                name="state"
-                className="w-full bg-[#F3F3F5] rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                value={data.state}
-                onChange={(e) => handleChange("state", e.target.value)}
-              />
-              {errors.state && (
-                <p className="text-red-500 text-sm mt-1">{errors.state}</p>
-              )}
-            </div>
+            {/* State field — removed / commented out for all EU countries */}
+            {!isEuCountry && (
+              <div>
+                <label className="block text-sm mb-1">State</label>
+                <input
+                  type="text"
+                  name="state"
+                  className="w-full bg-[#F3F3F5] rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  value={data.state}
+                  onChange={(e) => handleChange("state", e.target.value)}
+                />
+                {errors.state && (
+                  <p className="text-red-500 text-sm mt-1">{errors.state}</p>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -419,7 +460,11 @@ export default function ShippingForm({
                       className="accent-orange-500"
                     />
                     <div>
-                      <p className="font-medium text-gray-900">{option.name}</p>
+                      <p className="font-medium text-gray-900">
+                        {option.name?.toLowerCase() === "standard"
+                          ? "Standard Shipping"
+                          : option.name}
+                      </p>
                       <p className="text-sm text-gray-500">
                         {option.minDays === option.maxDays
                           ? `${option.minDays} business day${option.minDays > 1 ? "s" : ""}`

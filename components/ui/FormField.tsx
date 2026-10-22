@@ -12,7 +12,7 @@ export function FormField({
   children: ReactNode;
 }) {
   return (
-    <div className="notranslate space-y-1" translate="no">
+    <div className="space-y-1">
       {label ? (
         <label className="text-sm font-medium text-gray-700">{label}</label>
       ) : null}

@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
     brands,
     minPrice: searchParams.get("min") || searchParams.get("minPrice"),
     maxPrice: searchParams.get("max") || searchParams.get("maxPrice"),
+    rate: searchParams.get("rate") || "1",
     search: searchParams.get("search"),
     sort: searchParams.get("sort") || "newest",
     page: Number(searchParams.get("page") || "1"),

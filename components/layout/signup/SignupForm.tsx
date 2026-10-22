@@ -138,9 +138,7 @@ export default function SignupForm() {
 
   return (
     <div
-      translate="no"
       className="
-        notranslate
         min-h-screen
         flex items-center justify-center
         px-4 py-10
@@ -299,9 +297,10 @@ export default function SignupForm() {
                 <input
                   type="email"
                   placeholder="name@example.com"
+                  translate="no"
                   value={form.email}
                   onChange={(e) => handleChange("email", e.target.value)}
-                  className={`w-full mt-1.5 rounded-xl border ${errors.email ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"} bg-white px-3.5 py-3 text-sm transition-all duration-200 focus:border-orange-400 focus:ring-4 focus:outline-none`}
+                  className={`notranslate w-full mt-1.5 rounded-xl border ${errors.email ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"} bg-white px-3.5 py-3 text-sm transition-all duration-200 focus:border-orange-400 focus:ring-4 focus:outline-none`}
                 />
                 {errors.email && (
                   <p className="mt-1 text-xs font-medium text-red-500">
@@ -317,9 +316,10 @@ export default function SignupForm() {
                 <input
                   type="tel"
                   placeholder="+31 6 12345678"
+                  translate="no"
                   value={form.phone}
                   onChange={(e) => handleChange("phone", e.target.value)}
-                  className={`w-full mt-1.5 rounded-xl border ${errors.phone ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"} bg-white px-3.5 py-3 text-sm transition-all duration-200 focus:border-orange-400 focus:ring-4 focus:outline-none`}
+                  className={`notranslate w-full mt-1.5 rounded-xl border ${errors.phone ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"} bg-white px-3.5 py-3 text-sm transition-all duration-200 focus:border-orange-400 focus:ring-4 focus:outline-none`}
                 />
                 {errors.phone && (
                   <p className="mt-1 text-xs font-medium text-red-500">
@@ -336,9 +336,10 @@ export default function SignupForm() {
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Minimum 8 characters"
+                    translate="no"
                     value={form.password}
                     onChange={(e) => handleChange("password", e.target.value)}
-                    className={`w-full rounded-xl border ${errors.password ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"} bg-white px-3.5 py-3 pr-11 text-sm transition-all duration-200 focus:border-orange-400 focus:ring-4 focus:outline-none`}
+                    className={`notranslate w-full rounded-xl border ${errors.password ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"} bg-white px-3.5 py-3 pr-11 text-sm transition-all duration-200 focus:border-orange-400 focus:ring-4 focus:outline-none`}
                   />
                   <button
                     type="button"
@@ -364,9 +365,10 @@ export default function SignupForm() {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm your password"
+                    translate="no"
                     value={form.confirmPassword}
                     onChange={(e) => handleChange("confirmPassword", e.target.value)}
-                    className={`w-full rounded-xl border ${errors.confirmPassword ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"} bg-white px-3.5 py-3 pr-11 text-sm transition-all duration-200 focus:border-orange-400 focus:ring-4 focus:outline-none`}
+                    className={`notranslate w-full rounded-xl border ${errors.confirmPassword ? "border-red-400 focus:ring-red-100" : "border-slate-200 focus:ring-orange-100"} bg-white px-3.5 py-3 pr-11 text-sm transition-all duration-200 focus:border-orange-400 focus:ring-4 focus:outline-none`}
                   />
                   <button
                     type="button"

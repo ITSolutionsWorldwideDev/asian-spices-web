@@ -35,8 +35,7 @@ export default function AccountSidebar() {
 
   return (
     <aside
-      className="notranslate bg-white rounded-2xl p-4 shadow-sm border h-fit sticky top-24"
-      translate="no"
+      className="bg-white rounded-2xl p-4 shadow-sm border h-fit sticky top-24"
     >
       <nav className="flex flex-col gap-2">
         {navItems.map((item) => {

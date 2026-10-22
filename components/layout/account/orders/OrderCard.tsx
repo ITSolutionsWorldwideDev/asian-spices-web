@@ -18,6 +18,7 @@ import OrderTimeline from "@/components/ui/OrderTimeline";
 import OrderSummaryReadOnly from "../../checkout/OrderSummaryReadOnly";
 import OrderActionWorkflow from "./OrderActionWorkflow";
 import CancelItemsWorkflow from "./CancelItemsWorkflow";
+import RetryPaymentButton from "@/components/ui/RetryPaymentButton";
 
 export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
   const [downloading, setDownloading] = useState(false);
@@ -288,6 +289,22 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
             /* Read Only View */
             <>
               <OrderTimeline status={progressStatus} />
+
+              {progressStatus === "failed" &&
+                order.order_status?.toLowerCase() !== "cancelled" && (
+                  <div className="flex justify-start">
+                    <RetryPaymentButton
+                      orderId={order.id}
+                      amount={Number(order.total_amount || 0)}
+                      email={order.customer_email || ""}
+                      paymentMethod={
+                        order.payment_method?.toLowerCase() === "paypal"
+                          ? "paypal"
+                          : "paynl"
+                      }
+                    />
+                  </div>
+                )}
 
               <OrderSummaryReadOnly
                 items={

@@ -39,7 +39,9 @@ export interface Product {
   highlights?: string[];
 
   rating?: number;
+  avg_rating?: number;
   reviews?: number;
+  reviewCount?: number;
 
   unit?: string;
   weight?: string | number | null;

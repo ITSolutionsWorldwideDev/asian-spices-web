@@ -45,9 +45,14 @@ export async function GET(request: Request) {
     const uniqueOptionsMap = new Map();
     rows.forEach((row:any) => {
       if (!uniqueOptionsMap.has(row.method_id)) {
+        const name =
+          row.method_name?.toLowerCase() === "standard"
+            ? "Standard Shipping"
+            : row.method_name;
+
         uniqueOptionsMap.set(row.method_id, {
           id: row.method_id,
-          name: row.method_name,
+          name: name,
           code: row.method_code,
           price: Number(row.price),
           minDays: row.min_delivery_days,

@@ -374,8 +374,7 @@ export default function ProductCard({
           <button
             type="button"
             onClick={() => setShowAll(!showAll)}
-            translate="no"
-            className="notranslate flex items-center justify-center px-10 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2 font-semibold rounded-lg transition cursor-pointer shadow"
+            className="flex items-center justify-center px-10 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2 font-semibold rounded-lg transition cursor-pointer shadow"
           >
             {showAll ? (
               "See Less"

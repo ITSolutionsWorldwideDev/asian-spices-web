@@ -25,7 +25,7 @@ const contactCards = [
   // },
   {
     icon: Clock,
-    label: "BUSINESS HOURS",
+    label: "BUSINESS SUPPORT HOURS",
     value: "Mon – Fri: 10AM – 5PM",
     subtext: "Weekend: Closed",
   },

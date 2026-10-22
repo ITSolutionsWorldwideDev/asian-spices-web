@@ -52,7 +52,7 @@
         },
         {
           "question": "Do you offer international shipping?",
-          "answer": "No, we do not offer international shipping at this time (Policy pending internal discussion with Furkan)."
+          "answer": "No, we do not offer international shipping at this time."
         },
         {
           "question": "Can users delete their accounts?",
@@ -78,10 +78,7 @@
           "question": "What is your process for preventing transaction fraud?",
           "answer": "We use automated payment screening, secure checkout layers, and manual verification for high-value orders."
         },
-        {
-          "question": "Where can I view your complete Terms & Conditions and Privacy Policy?",
-          "answer": "Links to our full Terms, Conditions, and GDPR-compliant Privacy Policies are permanently accessible in the website footer. LINK?"
-        },
+        
         {
           "question": "How is VAT and tax handled on orders?",
           "answer": "Taxes are automatically calculated and applied at checkout according to local state and country Tax Laws."
@@ -596,10 +593,7 @@
               "question": "Why is my tracking link not updating?",
               "answer": "Tracking can take up to 24 hours to update after the package leaves our facility."
             },
-            {
-              "question": "Do you ship to P.O. boxes?",
-              "answer": "No, we require a physical residential or business address for delivery."
-            },
+           
             {
               "question": "What is the shipping cost?",
               "answer": "Shipping is calculated at checkout based on package weight and your location."
@@ -656,10 +650,7 @@
               "question": "Are liquids safe from freezing in transit?",
               "answer": "Our packaging is insulated against standard temperature changes during transit."
             },
-            {
-              "question": "What courier do you use?",
-              "answer": "We partner with top-tier national logistics providers. The specific courier is shown on your tracking page."
-            },
+            
             {
               "question": "Do you offer contactless delivery?",
               "answer": "Yes, couriers default to safe-drop contactless delivery where applicable."
@@ -678,10 +669,7 @@
           "id": "returns-refunds-damages",
           "name": "Returns, Refunds & Damages",
           "faqs": [
-            {
-              "question": "What is the return window?",
-              "answer": "You have 14 days from the date of delivery to request a return."
-            },
+          
             {
               "question": "Are food items returnable?",
               "answer": "Yes, food items are returnable."
@@ -706,10 +694,7 @@
               "question": "What happens if a product arrives damaged?",
               "answer": "Contact us with a photo within 48 hours. The platform handles it and will issue a replacement or refund."
             },
-            {
-              "question": "Do I need the original receipt to return?",
-              "answer": "No, just your 6-digit order number is sufficient."
-            },
+           
             {
               "question": "Where do I drop off my return?",
               "answer": "Once approved, you will receive a return shipping label with drop-off instructions."
@@ -770,10 +755,7 @@
               "question": "Do you provide the return label?",
               "answer": "Yes, a digital label is provided upon return approval."
             },
-            {
-              "question": "Can I return items bought with a gift card?",
-              "answer": "Yes, the refund will be re-issued to the original gift card."
-            },
+           
             {
               "question": "What if I return an item after 14 days?",
               "answer": "Returns outside the 14-day window are rejected and shipped back to you."
@@ -808,10 +790,7 @@
               "question": "What is the seller commission percentage?",
               "answer": "The platform takes a standard percentage fee per sale (refer to your vendor agreement for exact rates)."
             },
-            {
-              "question": "When are sellers paid?",
-              "answer": "Sellers are paid strictly on a Monthly schedule."
-            },
+          
             {
               "question": "Can sellers withdraw earnings anytime?",
               "answer": "No, sellers can only receive their funds After the Month is complete."
@@ -844,10 +823,7 @@
               "question": "Can sellers sell counterfeit items?",
               "answer": "No, counterfeit products are strictly prohibited and result in immediate bans."
             },
-            {
-              "question": "What categories can sellers use?",
-              "answer": "Sellers may only list in 4 categories: Spices, Kitchen Utilities, Food Items, and Recipes."
-            },
+            
             {
               "question": "How are fake sellers handled?",
               "answer": "They are immediately banned, and their funds are frozen."
@@ -880,10 +856,7 @@
               "question": "How do I upload my spice catalog?",
               "answer": "Through the Vendor Dashboard via manual entry or bulk CSV upload."
             },
-            {
-              "question": "Can I list a kitchen appliance without a warranty?",
-              "answer": "No, all electrical appliances must carry a standard 1-year manufacturer warranty."
-            },
+            
             {
               "question": "Where do I see my monthly sales report?",
               "answer": "Detailed analytics are available in your Vendor Dashboard under \"Reports.\""
@@ -958,10 +931,7 @@
               "question": "Where are the Terms & Conditions?",
               "answer": "The Terms & Conditions are located in the footer of every webpage."
             },
-            {
-              "question": "How do you prevent fraud?",
-              "answer": "We utilize active AI screening on checkouts and verify high-risk transactions manually."
-            },
+           
             {
               "question": "Can I change my email address?",
               "answer": "Yes, you can update your email in account settings (requires email verification)."
@@ -1020,18 +990,9 @@
               "question": "Where are your spices from?",
               "answer": "They are authentic organic spices coming directly from India and Pakistan."
             },
-            {
-              "question": "Are the spices 100% organic?",
-              "answer": "Yes, they are certified organic and free from synthetic chemicals."
-            },
-            {
-              "question": "Do the spices contain artificial colors?",
-              "answer": "No, they contain zero artificial colors or dyes."
-            },
-            {
-              "question": "Are there preservatives in the ground spices?",
-              "answer": "No, our spices are 100% pure with no preservatives."
-            },
+           
+           
+            
             {
               "question": "How long do ground spices last?",
               "answer": "Ground spices retain peak flavor for 1 to 2 years if stored properly."
@@ -1052,10 +1013,7 @@
               "question": "Are your spices safe from cross-contamination?",
               "answer": "Check individual labels, but they are processed in facilities adhering to strict hygiene standards."
             },
-            {
-              "question": "Do you sell bulk spice bags?",
-              "answer": "Yes, bulk weights are available on the product pages."
-            },
+            
             {
               "question": "Are your spices irradiated?",
               "answer": "No, they are naturally processed and completely non-irradiated."
@@ -1072,10 +1030,7 @@
               "question": "How do I know the spice heat level?",
               "answer": "We provide a heat scale (Mild, Medium, Hot, Extra Hot) on all chili-based product descriptions."
             },
-            {
-              "question": "Are the spice bags resealable?",
-              "answer": "Yes, most of our retail bags feature a zip-lock seal for freshness."
-            },
+          
             {
               "question": "Do you test for heavy metals?",
               "answer": "Yes, all organic batches are rigorously tested at origin for absolute purity."
@@ -1104,10 +1059,7 @@
               "question": "Can I request a custom blend?",
               "answer": "Currently, we only sell pre-packaged traditional blends."
             },
-            {
-              "question": "How do I know the harvest date?",
-              "answer": "The harvest season and packing date are printed on the back label."
-            },
+         
             {
               "question": "Do you carry salt-free spice blends?",
               "answer": "Yes, many of our pure spice mixes contain absolutely zero added salt."
@@ -1122,22 +1074,13 @@
           "id": "kitchen-appliances",
           "name": "Kitchen Appliances",
           "faqs": [
-            {
-              "question": "Do electrical appliances have a warranty?",
-              "answer": "Yes, all electrical appliances feature a 1-year manufacturer warranty."
-            },
+            
             {
               "question": "Are appliances compatible with local voltage?",
               "answer": "Yes, all listed appliances are manufactured with standard local voltage and plugs."
             },
-            {
-              "question": "Do you sell spare parts?",
-              "answer": "Yes, replacement blades and jars are available in the utility section."
-            },
-            {
-              "question": "Are the blenders BPA-free?",
-              "answer": "Yes, all plastic food-contact surfaces are certified BPA-free."
-            },
+            
+           
             {
               "question": "Can mixers grind hard whole spices?",
               "answer": "Yes, models specifically rated 750W or higher are designed for heavy spice grinding."
@@ -1178,14 +1121,8 @@
               "question": "Can I return an appliance if I don't like it?",
               "answer": "Yes, but only if it is completely unused and in its original sealed box within 14 days."
             },
-            {
-              "question": "Who services the warranty?",
-              "answer": "The platform facilitates coordination with authorized brand service centers."
-            },
-            {
-              "question": "Can I see a demo of the appliance?",
-              "answer": "Demo videos are embedded directly on the product listing pages."
-            },
+           
+            
             {
               "question": "Does the 1-year warranty cover accidental drops?",
               "answer": "No, the warranty covers mechanical and electrical faults, not physical damage."
@@ -1301,18 +1238,6 @@
             {
               "question": "Can I buy all the ingredients for a recipe at once?",
               "answer": "Yes! Our recipe pages feature a \"Buy Ingredients\" button that auto-fills your cart."
-            },
-            {
-              "question": "Can I submit my own recipe?",
-              "answer": "Not currently, recipes are curated by our platform culinary experts."
-            },
-            {
-              "question": "Do you have a mobile app?",
-              "answer": "Currently, we operate via our mobile-optimized website, no app download is needed."
-            },
-            {
-              "question": "How do I leave a product review?",
-              "answer": "You will receive an email prompt to leave a review 7 days after your delivery."
             },
             {
               "question": "Can I upload photos in my review?",

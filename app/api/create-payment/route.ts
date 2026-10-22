@@ -136,7 +136,6 @@ export async function POST(req: NextRequest) {
         SET transaction_id = $1,
             payment_method = $2,
             customer_email = COALESCE(NULLIF(TRIM(customer_email), ''), $4),
-            payment_status = 'pending',
             updated_at = NOW()
         WHERE id = $3
         `,
@@ -178,7 +177,8 @@ export async function POST(req: NextRequest) {
         `UPDATE store_orders 
          SET transaction_id = $1, 
              payment_method = $2, 
-             customer_email = COALESCE(NULLIF(TRIM(customer_email), ''), $4) 
+             customer_email = COALESCE(NULLIF(TRIM(customer_email), ''), $4),
+             updated_at = NOW()
          WHERE id = $3`,
         [orderData.id, "paypal", order.id, customerEmail?.trim()?.toLowerCase() || null],
       );

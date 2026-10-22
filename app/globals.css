@@ -4,6 +4,10 @@
 
 /* --- TAILWIND V4 CUSTOM THEME EXTENSIONS --- */
 @theme {
+  /* Lower xl from 80rem (1280px) to 75rem (1200px) so Edge (1272px) and Chrome (1280px) match across all xl:* utilities */
+  --breakpoint-xl: 75rem;
+  --breakpoint-nav: 75rem;
+
   --animate-marquee: marquee 30s linear infinite;
 
   @keyframes marquee {
@@ -23,6 +27,7 @@
   }
   26%,
   50% {
+    
     /* Step 2: SPICE (Red) */
     --color-one: white;
     --color-two: #ef4444; /* red-500 */
@@ -248,4 +253,23 @@ a font,
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Swiper navigation arrow styling to match site brand UI */
+:root {
+  --swiper-navigation-color: #FE8C00;
+  --swiper-theme-color: #FE8C00;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: #FE8C00 !important;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  color: #e57e00 !important;
+  transform: scale(1.1);
+}
+
 
