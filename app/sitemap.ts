@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllSitemapEntries, getSiteBaseUrl } from "@/lib/sitemap-urls";
+import { getAllSitemapEntries, getSiteBaseUrl } from "@/lib/seo/sitemap-urls";
 
 export const revalidate = 3600;
 

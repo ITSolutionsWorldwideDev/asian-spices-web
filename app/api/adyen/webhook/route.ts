@@ -61,28 +61,3 @@ export async function POST(req: Request) {
   }
 }
 
-/* if (eventCode === "AUTHORISATION") {
-      const isSuccess = success === "true";
-
-      // 🔑 Extract tenantId from reference
-      const tenantId = merchantReference.split("-")[1];
-
-      // ✅ Map iDIN response
-      const identityData = mapIDINResponse(additionalData);
-
-      // ✅ Update verification record
-      // await updateVerification(merchantReference, {
-      //   status: isSuccess ? "verified" : "failed",
-      //   psp_reference: pspReference,
-      //   ...identityData,
-      //   raw_response: notification,
-      // });
-
-      // ✅ Update tenant
-      // await updateTenant(tenantId, {
-      //   idin_verified: isSuccess,
-      //   idin_status: isSuccess ? "verified" : "failed",
-      // });
-
-      console.log("Tenant updated:", tenantId);
-    } */

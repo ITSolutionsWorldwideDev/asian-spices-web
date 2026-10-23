@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { runQuery } from "@/core/db";
 import { sendAccountWelcomeEmail } from "@/core/email-templates";
-import { verifyRecaptcha, generateSignupAuthToken } from "@/lib/recaptcha";
+import { verifyRecaptcha, generateSignupAuthToken } from "@/lib/integrations/recaptcha";
 
 export async function POST(req: NextRequest) {
   try {

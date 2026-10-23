@@ -1,7 +1,7 @@
 // proxy.ts (Next.js 16; formerly middleware)
 
 import { NextRequest, NextResponse } from "next/server";
-import { isGoogleSiteVerifier, placeGtmSnippets } from "./lib/gtm";
+import { isGoogleSiteVerifier, placeGtmSnippets } from "./lib/seo/gtm";
 
 const COOKIE_NAME = "site-access";
 const GTM_REWRITE_HEADER = "x-gtm-placement-rewrite";

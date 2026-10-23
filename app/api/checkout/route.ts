@@ -6,8 +6,8 @@ import { randomUUID } from "crypto";
 import { getServerSession } from "next-auth";
 import { webAuthOptions } from "@/core/auth";
 import { assignNextStore } from "@/core/order-routing";
-import { generateNextOrderNumber } from "@/core/order-number";
-import { MIN_ORDER_AMOUNT_EUR } from "@/lib/pricing";
+import { generateNextOrderNumber } from "@/core/order-routing/order-number";
+import { MIN_ORDER_AMOUNT_EUR } from "@/lib/commerce/pricing";
 
 export async function POST(req: NextRequest) {
   // const store_id = randomUUID();

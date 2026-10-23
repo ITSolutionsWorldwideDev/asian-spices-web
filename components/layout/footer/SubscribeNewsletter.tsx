@@ -10,7 +10,7 @@ import {
   newsletterSchema,
   type NewsletterFormData,
 } from "@/lib/validation/newsletter";
-import { getErrorMessage } from "@/lib/form/getErrorMessage";
+import { getErrorMessage } from "@/lib/validation/getErrorMessage";
 
 type SubscribeNewsletterProps = {
   variant?: "light" | "dark";

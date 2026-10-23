@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Search, UtensilsCrossed, ShoppingBag, Mic, X, ArrowRight, Loader2 } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
-import { getProductPath } from "@/lib/product-path";
+import { getProductPath } from "@/lib/catalog/product-path";
 
 type Suggestion = {
   label: string;

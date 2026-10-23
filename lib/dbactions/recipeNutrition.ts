@@ -1,4 +1,4 @@
-import { runQuery } from "@/core/db";
+import { pool } from "@/core/db";
 
 export type RecipeNutrient = {
   nutrition_id: string;
@@ -46,7 +46,7 @@ export async function getRecipeNutrition(
   recipeId: string,
 ): Promise<RecipeNutrient[]> {
   try {
-    const { rows } = await runQuery<RecipeNutrient>(
+    const { rows } = await pool.query<RecipeNutrient>(
       `
       SELECT
         nutrition_id,
@@ -64,7 +64,14 @@ export async function getRecipeNutrition(
 
     return sortNutrients(rows);
   } catch (err) {
-    // Gracefully fallback to empty array if recipe_nutrition table does not exist
+    // Dev DB may not have this table yet (Postgres 42P01 = undefined_table)
+    const code =
+      err && typeof err === "object" && "code" in err
+        ? String((err as { code: unknown }).code)
+        : undefined;
+    if (code !== "42P01") {
+      console.error("[getRecipeNutrition]", err);
+    }
     return [];
   }
 }

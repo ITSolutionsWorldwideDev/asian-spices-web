@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/validation/contact";
 import { sendContactFormEmail } from "@/core/email-templates";
-import { verifyRecaptcha } from "@/lib/recaptcha";
+import { verifyRecaptcha } from "@/lib/integrations/recaptcha";
 
 export async function POST(req: Request) {
   try {

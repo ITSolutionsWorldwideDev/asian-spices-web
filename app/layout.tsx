@@ -2,17 +2,17 @@
 
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import Providers from "./providers";
+import Providers from "@/components/providers/Providers";
 import GlobalLoader from "@/components/ui/GlobalLoader";
 import GoogleTagManager, {
   GoogleTagManagerBody,
   GoogleTagManagerHead,
-} from "@/components/GoogleTagManager";
-import { MetaPixelHead, MetaPixelBody } from "@/components/MetaPixel";
+} from "@/components/seo/GoogleTagManager";
+import { MetaPixelHead, MetaPixelBody } from "@/components/seo/MetaPixel";
 import CountryChangeModal from "@/components/ui/CountryChangeModal";
 import CartToast from "@/components/ui/CartToast";
-import { getSiteBaseUrl } from "@/lib/sitemap-urls";
-import { getLocalBusinessJsonLd } from "@/lib/schema";
+import { getSiteBaseUrl } from "@/lib/seo/sitemap-urls";
+import { getLocalBusinessJsonLd } from "@/lib/seo/schema";
 import { getSiteReviewsSummary } from "@/lib/dbactions/products";
 import JsonLd from "@/components/seo/JsonLd";
 import "./globals.css";

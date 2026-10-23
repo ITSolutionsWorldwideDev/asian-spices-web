@@ -5,7 +5,7 @@ import { persist } from "zustand/middleware";
 import { useCurrencyStore } from "./useCurrencyStore";
 import { useGlobalStore } from "./useGlobalStore";
 import { useToastStore, type CartActionOptions } from "./useToastStore";
-import { calculateTotals } from "@/lib/pricing";
+import { calculateTotals } from "@/lib/commerce/pricing";
 
 export interface CartItem {
   id: string;

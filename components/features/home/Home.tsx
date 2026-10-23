@@ -1,0 +1,111 @@
+// apps/web/components/layout/home/Home.tsx
+
+import React, { Suspense } from "react";
+import Image from "next/image";
+import Header from "./Header";
+// import AnnouncementBar from "./AnnouncementBar";
+// import Collections from "./Collections";
+import FlashSale from "./FlashSale";
+import ExploreTheCollection from "./ExploreTheCollection";
+// import Premium_Spice_Collection from "./PremiumSpiceCollection";
+// import Smart_Appliances from "./SmartAppliances";
+import Story from "./Story";
+// import Spicy_Story from "./SpicyStory";
+import RecipeUploadDiscover from "./RecipeUploadDiscover";
+import WhyChooseUs from "./WhyChooseUs";
+import HomeFaqs from "./HomeFaqs";
+import Reviews from "@/components/features/reviews/Reviews";
+import Footer from "@/components/layout/Footer";
+import RegisterOnAppModal from "@/components/ui/RegisterOnAppModal";
+import DeferredMount from "@/components/ui/DeferredMount";
+// import HeadingDescription from "@/components/ui/HeadingDescription";
+
+function SectionSkeleton({ className = "h-64" }: { className?: string }) {
+  return (
+    <div
+      className={`container mx-auto my-10 animate-pulse rounded-2xl bg-gray-100 ${className}`}
+      aria-hidden
+    />
+  );
+}
+
+export default function Homei() {
+  return (
+    <div className="bg-white">
+      {/* Hero + nav paint first — nothing DB-related above the fold */}
+      <Header />
+      {/* <AnnouncementBar /> */}
+
+      <div className="container relative mx-auto min-w-0">
+        <Image
+          src="/assets/home/collections/collection-bg.webp"
+          alt="Decorative spice pattern with star anise, cloves, and peppercorns"
+          fill
+          sizes="(max-width: 1280px) 100vw, 1280px"
+          className="object-cover opacity-90"
+          priority={false}
+        />
+        <div className="relative bg-white/80">
+          {/* Flash sale shell is static; product cards fetch client-side inside */}
+          <div className="px-3 pt-10 pb-2 sm:px-4 sm:pt-14 sm:pb-4 md:pt-20 md:pb-6">
+            <div className="min-w-0 max-w-full px-4">
+              {/* <HeadingDescription
+                heading="Explore Our Collection"
+                description="Discover authentic recipes from across Asia, each category carefully curated for quality and flavor."
+              /> */}
+              <FlashSale />
+              <ExploreTheCollection />
+              <RecipeUploadDiscover />
+            </div>
+          </div>
+
+          {/* Category cards — own Suspense so they don't block sections below */}
+          {/* <Suspense fallback={<SectionSkeleton className="h-96" />}>
+            <Collections />
+          </Suspense> */}
+
+          {/* Mid-page: defer heavy product-card island until near viewport */}
+          {/* <DeferredMount
+            rootMargin="250px"
+            fallback={<SectionSkeleton className="h-80" />}
+          >
+            <Premium_Spice_Collection />
+          </DeferredMount>
+
+          <DeferredMount
+            rootMargin="250px"
+            fallback={<SectionSkeleton className="h-[480px]" />}
+          >
+            <Smart_Appliances />
+          </DeferredMount> */}
+
+          <DeferredMount rootMargin="200px" fallback={<SectionSkeleton />}>
+            <Story />
+          </DeferredMount>
+
+          {/* <Suspense fallback={<SectionSkeleton className="h-96" />}>
+            <Spicy_Story />
+          </Suspense> */}
+
+          <WhyChooseUs />
+
+          {/* <HomeFaqs /> */}
+
+          <DeferredMount
+            rootMargin="300px"
+            fallback={<SectionSkeleton className="h-48" />}
+          >
+            <Reviews />
+          </DeferredMount>
+        </div>
+      </div>
+
+      <Footer />
+
+      {/* Modal after first paint — idle so empty sentinel still mounts */}
+      <DeferredMount strategy="idle" idleTimeoutMs={3000} fallback={null}>
+        <RegisterOnAppModal />
+      </DeferredMount>
+    </div>
+  );
+}

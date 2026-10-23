@@ -1,0 +1,622 @@
+// apps/web/components/ui/Checkout.tsx
+
+"use client";
+
+import { useEffect, useState, useCallback, useRef } from "react";
+import { useSession } from "next-auth/react";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+
+import Nav from "@/components/layout/Nav";
+import OrderSummary from "./OrderSummary";
+import ContactForm from "./ContactForm";
+import ShippingForm from "./ShippingForm";
+import PaymentForm from "./PaymentForm";
+
+import { checkoutSchema } from "@/lib/validation/checkout";
+import { useLoaderStore } from "@/store/useLoaderStore";
+import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { useGlobalStore } from "@/store/useGlobalStore";
+import { useCartStore } from "@/store/useCartStore";
+
+import {
+  calculateTotals,
+  convertTotals,
+  convertPrice,
+  applyDiscount,
+  MIN_ORDER_AMOUNT_EUR,
+  calculateRecipeLikeDiscountAmount,
+  SHIPPING_OPTIONS,
+} from "@/lib/commerce/pricing";
+import { useRecipeDiscountStore } from "@/store/useRecipeDiscountStore";
+
+export type CheckoutData = {
+  email: string;
+  phone: string;
+
+  firstName: string;
+  lastName: string;
+  address: string;
+  appartment: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+
+  latitude?: number;
+  longitude?: number;
+
+  cardNumber: string;
+  expiry: string;
+};
+
+export default function Checkout() {
+  const { data: session } = useSession();
+  const isLoggedIn = !!session;
+
+  const { show, hide } = useLoaderStore();
+  const { cart, clearCart } = useCartStore();
+  const { rate, selectedCurrency } = useCurrencyStore();
+
+  const { taxRules, taxRulesLoaded, selectedCountry, setSelectedCountry, fetchInitialData } =
+    useGlobalStore();
+
+  const [addresses, setAddresses] = useState<any[]>([]);
+  const [selectedAddress, setSelectedAddress] = useState<any>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [apiError, setApiError] = useState<string | null>(null);
+
+  const [shippingMethod, setShippingMethod] = useState<string>("standard");
+
+  const [appliedPromo, setAppliedPromo] = useState<{
+    code: string;
+    discountAmountEur: number;
+  } | null>(null);
+
+  const [availableShippingOptions, setAvailableShippingOptions] = useState<
+    any[]
+  >([]);
+
+  const [formData, setFormData] = useState<CheckoutData>({
+    email: "",
+    phone: "",
+
+    firstName: "",
+    lastName: "",
+    address: "",
+    appartment: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: selectedCountry || "NL",
+
+    latitude: 0,
+    longitude: 0,
+
+    cardNumber: "",
+    expiry: "",
+  });
+
+  useEffect(() => {
+    if (selectedCountry) {
+      setFormData((prev) => ({ ...prev, country: selectedCountry }));
+    }
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    fetchInitialData();
+  }, []);
+
+  useEffect(() => {
+    const cancelAbandonedCheckoutOrder = async () => {
+      try {
+        const pendingOrderId = sessionStorage.getItem("pendingCheckoutOrderId");
+        if (!pendingOrderId) return;
+
+        sessionStorage.removeItem("pendingCheckoutOrderId");
+
+        await fetch("/api/paynl/confirm", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId: pendingOrderId,
+            statusAction: "cancelled",
+          }),
+        });
+      } catch (err) {
+        console.error("Failed to update abandoned checkout order:", err);
+      }
+    };
+
+    cancelAbandonedCheckoutOrder();
+
+    const handlePageShow = () => {
+      hide();
+      cancelAbandonedCheckoutOrder();
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, [hide]);
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      setFormData((prev) => ({
+        ...prev,
+        email: session.user.email,
+      }));
+    }
+  }, [session?.user?.email]);
+
+  const handleAddressChange = useCallback(
+    async (address: any) => {
+      if (!address) {
+        setSelectedAddress(null);
+        return;
+      }
+      setSelectedAddress(address);
+      const activeCountry = address?.country || "NL";
+
+      setFormData((prev) => ({
+        ...prev,
+        phone: address.phone || "",
+        firstName: address.first_name || address.firstName || "",
+        lastName: address.last_name || address.lastName || "",
+        address: address.address_line1 || address.address || "",
+        appartment: address.address_line2 || address.appartment || "",
+        city: address.city || "",
+        state: address.state || "",
+        zip: address.postal_code || address.zip || "",
+        country: activeCountry,
+      }));
+
+      await setSelectedCountry(activeCountry);
+    },
+    [setSelectedCountry],
+  );
+  console.log(formData, "formData");
+
+  const selectedOption = availableShippingOptions.find(
+    (opt: any) =>
+      String(opt.id) === String(shippingMethod) ||
+      opt.code?.toLowerCase() === shippingMethod.toLowerCase(),
+  );
+
+  const isStandardOption =
+    selectedOption?.code?.toLowerCase() === "standard" ||
+    selectedOption?.name?.toLowerCase().includes("standard") ||
+    shippingMethod === "standard";
+
+  const baseSubtotal = cart.reduce(
+    (acc, item) => acc + item.base_price * item.quantity,
+    0,
+  );
+
+  const FREE_SHIPPING_THRESHOLD = 50;
+  const qualifiesForFreeStandard = baseSubtotal >= FREE_SHIPPING_THRESHOLD;
+
+  const currentShippingPrice = selectedOption
+    ? qualifiesForFreeStandard && isStandardOption
+      ? 0
+      : selectedOption.price
+    : 5.99;
+
+  useEffect(() => {
+    if (availableShippingOptions.length > 0) {
+      const hasActiveSelection = availableShippingOptions.some(
+        (opt: any) => String(opt.id) === String(shippingMethod),
+      );
+
+      if (!hasActiveSelection) {
+        const standardDbOption = availableShippingOptions.find(
+          (opt: any) =>
+            opt.code?.toLowerCase() === "standard" ||
+            opt.name?.toLowerCase().includes("standard"),
+        );
+
+        setShippingMethod(
+          String(
+            standardDbOption
+              ? standardDbOption.id
+              : availableShippingOptions[0].id,
+          ),
+        );
+      }
+    }
+  }, [availableShippingOptions, shippingMethod]);
+
+  const totals = calculateTotals(
+    cart,
+    currentShippingPrice,
+    taxRules,
+    selectedOption?.name || selectedOption?.code || shippingMethod,
+    taxRulesLoaded,
+  );
+
+  const convertedTotals = convertTotals(totals, rate || 1, selectedCurrency);
+  const appliedRecipeDiscount = useRecipeDiscountStore(
+    (state) => state.appliedDiscount,
+  );
+  const discountConverted = convertPrice(
+    appliedPromo?.discountAmountEur || 0,
+    rate || 1,
+    selectedCurrency,
+  );
+  const finalTotals = applyDiscount(convertedTotals, discountConverted);
+  const recipeDiscountAmount = appliedRecipeDiscount
+    ? calculateRecipeLikeDiscountAmount(
+        finalTotals.subtotal,
+        appliedRecipeDiscount,
+        rate || 1,
+      )
+    : 0;
+  const totalDiscount = (finalTotals.discount || 0) + recipeDiscountAmount;
+  // Recipe like discount also reduces subtotal; shipping is added after.
+  const checkoutSubtotal = Math.max(0, finalTotals.subtotal - recipeDiscountAmount);
+  const checkoutTotal = checkoutSubtotal + finalTotals.shipping;
+
+  const userIdentifier = session?.user?.email || (session?.user as any)?.id;
+  const lastLoadedUserRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!userIdentifier) {
+      lastLoadedUserRef.current = null;
+      return;
+    }
+    if (lastLoadedUserRef.current === userIdentifier) return;
+
+    const loadAddresses = async () => {
+      try {
+        const res = await fetch("/api/account/addresses");
+        if (!res.ok) return;
+
+        const rawData = await res.json();
+        const data = JSON.parse(JSON.stringify(rawData));
+
+        const addressList = data.addresses || [];
+        setAddresses(addressList);
+        lastLoadedUserRef.current = userIdentifier;
+
+        const defaultAddr = addressList?.find((a: any) => a.is_default);
+
+        if (defaultAddr) {
+          await handleAddressChange(defaultAddr);
+        }
+      } catch (err) {
+        console.error("Failed to load addresses", err);
+      }
+    };
+
+    loadAddresses();
+  }, [userIdentifier, handleAddressChange]);
+
+  useEffect(() => {
+    if (formData.country) {
+      setSelectedCountry(formData.country);
+    }
+  }, [formData.country, setSelectedCountry]);
+
+  const isFormValid = checkoutSchema.safeParse(formData).success;
+  const meetsMinOrder = totals.subtotal >= MIN_ORDER_AMOUNT_EUR;
+  const minOrderRemaining = Math.max(0, MIN_ORDER_AMOUNT_EUR - totals.subtotal);
+
+  const placeOrder = async (method: "paynl" | "paypal") => {
+    if (!meetsMinOrder) {
+      setApiError(
+        `Minimum order amount is €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}. Add €${minOrderRemaining.toFixed(2)} more to continue.`,
+      );
+      return;
+    }
+
+    const result = checkoutSchema.safeParse(formData);
+
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+
+      result.error.issues.forEach((err) => {
+        const field = err.path[0] as string;
+        if (field) fieldErrors[field] = err.message;
+      });
+
+      setErrors(fieldErrors);
+
+      const firstField = result.error.issues[0]?.path[0] as string;
+
+      if (firstField) {
+        const el = document.querySelector(
+          `[name="${firstField}"]`,
+        ) as HTMLInputElement | null;
+
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          el.focus();
+        }
+      }
+      return;
+    }
+
+    setErrors({});
+
+    try {
+      show("Placing your order...");
+      const geocodeAddress = async (address: string) => {
+        try {
+          const res = await fetch(
+            `/api/geocode?address=${encodeURIComponent(address)}`,
+          );
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            throw new Error(data?.error || "Geocoding failed");
+          }
+
+          const lat = Number(data?.lat);
+          const lng = Number(data?.lng);
+
+          if (isNaN(lat) || isNaN(lng)) {
+            throw new Error("Invalid coordinates received");
+          }
+
+          return { latitude: lat, longitude: lng };
+        } catch (error) {
+          console.error("Geocode error:", error);
+          throw error;
+        }
+      };
+
+      let latitude = formData.latitude;
+      let longitude = formData.longitude;
+
+      if (!latitude || !longitude) {
+        const fullAddress = [formData.zip, formData.country]
+          .filter(Boolean)
+          .join(", ");
+
+        const geo = await geocodeAddress(fullAddress);
+
+        latitude = geo.latitude;
+        longitude = geo.longitude;
+
+        setFormData((prev) => ({
+          ...prev,
+          latitude,
+          longitude,
+        }));
+      }
+
+      if (!cart.length) {
+        setApiError("Your cart is empty.");
+        return;
+      }
+
+      const res = await fetch("/api/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          customer: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+          },
+          shippingAddress: {
+            address_line1: formData.address,
+            address_line2: formData.appartment,
+            city: formData.city,
+            state: formData.state,
+            postal_code: formData.zip,
+            country: formData.country,
+
+            latitude,
+            longitude,
+          },
+          cartItems: cart,
+          pricing: {
+            subtotal: checkoutSubtotal,
+            discount: totalDiscount,
+            tax_amount: convertedTotals.tax,
+            shipping: convertedTotals.shipping,
+            total: checkoutTotal,
+          },
+          promoCode: appliedPromo?.code || null,
+          shippingMethod: selectedOption
+            ? selectedOption.name?.toLowerCase() === "standard"
+              ? "Standard Shipping"
+              : selectedOption.name
+            : "Standard Shipping",
+          // The rate this shipping method actually costs, in EUR, before any
+          // free-shipping discount is applied - saved so a later partial
+          // cancellation that drops the order back below the free-shipping
+          // threshold can re-charge the real rate instead of a guess.
+          shippingBaseAmount: selectedOption
+            ? selectedOption.price
+            : SHIPPING_OPTIONS.standard.price,
+          payment_status: "pending",
+          order_status: "pending",
+        }),
+      });
+      const order = await res.json();
+
+      if (!res.ok || !order.success) {
+        throw {
+          message: order.error || "Order failed",
+          code: order.code,
+        };
+      }
+
+      const orderId = order.orderId;
+
+      // Initiate payment
+      if (method === "paynl" || method === "paypal") {
+        const payment = await fetch("/api/create-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId,
+            amount: checkoutTotal,
+            customerEmail: formData.email,
+            paymentMethod: method,
+          }),
+        });
+
+        const data = await payment.json();
+
+        if (!data.success) {
+          await fetch("/api/paynl/confirm", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId,
+              statusAction: "failed",
+            }),
+          }).catch(() => {});
+
+          throw {
+            message: "Failed to initiate payment. Please try again.",
+            code: "PAYMENT_FAILED",
+          };
+        }
+        try {
+          sessionStorage.setItem("pendingCheckoutOrderId", String(orderId));
+        } catch {}
+        // Redirect user to payment gateway
+        window.location.href = data.redirectUrl;
+      }
+    } catch (err: any) {
+      setApiError(err.message || "Something went wrong");
+
+      if (err.code === "NO_STORE_AVAILABLE") {
+        setApiError(
+          "Some items are not available together. Try removing a few items.",
+        );
+      }
+
+      if (err.code === "OUT_OF_STOCK") {
+        setApiError(
+          "One or more products are out of stock. Please update your cart.",
+        );
+      }
+
+      if (err.code === "INVALID_PRODUCTS") {
+        setApiError(
+          "Some products in your cart are outdated. Please clear your cart and add them again.",
+        );
+      }
+
+      if (err.code === "NO_NEARBY_STORES") {
+        setApiError("We currently don’t deliver to your area.");
+      }
+
+      if (err.code === "MISSING_LOCATION") {
+        setApiError("Please enter your full delivery address.");
+      }
+
+      if (err.code === "PAYMENT_FAILED") {
+        setApiError("Failed to initiate payment. Please try again.");
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } finally {
+      hide();
+    }
+  };
+
+  const deliveryDaysString = selectedOption
+    ? selectedOption.minDays === selectedOption.maxDays
+      ? `Delivery in ${selectedOption.minDays} business day${selectedOption.minDays > 1 ? "s" : ""}`
+      : `Delivery in ${selectedOption.minDays}-${selectedOption.maxDays} business days`
+    : "";
+
+  return (
+    <div className="notranslate" translate="no">
+      <div className="bg-black">
+        <Nav />
+      </div>
+
+      <div className="container mx-auto px-6 py-10">
+        <div className="mb-10">
+          <Link href="/cart">
+            <p className="text-sm text-gray-500 flex items-center cursor-pointer">
+              <ArrowLeft className="size-[15]" /> Back to Cart
+            </p>
+          </Link>
+          <h1 className="text-2xl font-semibold mt-2">Checkout</h1>
+        </div>
+
+        {!isLoggedIn && (
+          <div className="bg-yellow-50 p-4 rounded mb-4">
+            <p className="text-sm">
+              Already have an account?{" "}
+              <Link href="/login" className="underline">
+                Login
+              </Link>
+            </p>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-[60%_35%] gap-8">
+          <div className="space-y-8">
+            {apiError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+                {apiError}
+              </div>
+            )}
+            <ContactForm
+              data={formData}
+              setFormData={setFormData}
+              errors={errors}
+            />
+
+            <ShippingForm
+              data={formData}
+              setFormData={setFormData}
+              shippingMethod={shippingMethod}
+              setShippingMethod={setShippingMethod}
+              subtotal={convertedTotals.subtotal}
+              shipping={convertedTotals.shipping}
+              errors={errors}
+              addresses={addresses}
+              selectedAddress={selectedAddress}
+              // setSelectedAddress={setSelectedAddress}
+              setSelectedAddress={handleAddressChange}
+              onShippingOptionsFetched={(options) =>
+                setAvailableShippingOptions(options)
+              }
+            />
+            <PaymentForm
+              placeOrder={placeOrder}
+              disabled={!isFormValid || !meetsMinOrder}
+              minOrderMessage={
+                meetsMinOrder
+                  ? undefined
+                  : `Minimum order amount is €${MIN_ORDER_AMOUNT_EUR.toFixed(2)}. Add €${minOrderRemaining.toFixed(2)} more to continue.`
+              }
+            />
+          </div>
+
+          <OrderSummary
+            items={cart}
+            shippingMethod={shippingMethod}
+            subtotal={convertedTotals.subtotal}
+            tax={convertedTotals.tax}
+            shipping={convertedTotals.shipping}
+            total={checkoutTotal}
+            shippingMethodName={
+              selectedOption
+                ? selectedOption.name?.toLowerCase() === "standard"
+                  ? "Standard Shipping"
+                  : selectedOption.name
+                : "Shipping"
+            }
+            deliveryDaysText={deliveryDaysString}
+            promoDiscount={discountConverted}
+            onPromoApplied={setAppliedPromo}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

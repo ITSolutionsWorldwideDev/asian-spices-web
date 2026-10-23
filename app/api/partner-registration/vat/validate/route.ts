@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkEuVatNumber } from "@/core/vies";
+import { checkEuVatNumber } from "@/core/partner-registration/vies";
 
 export async function POST(req: NextRequest) {
   try {

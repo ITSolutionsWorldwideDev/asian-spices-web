@@ -3,7 +3,7 @@ import {
   ingredientSearchPatterns,
   pickBestProductMatch,
   type IngredientProductMatch,
-} from "@/lib/ingredientProductMatch";
+} from "@/lib/catalog/ingredientProductMatch";
 
 export async function getProductsMatchingIngredientNames(
   names: string[],

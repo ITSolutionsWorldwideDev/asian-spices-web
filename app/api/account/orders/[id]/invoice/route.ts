@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { webAuthOptions } from "@/core/auth";
 import { pool } from "@/core/db";
-import { invoiceNumberFromOrderNumber } from "@/core/invoice-number";
+import { invoiceNumberFromOrderNumber } from "@/core/order-routing/invoice-number";
 import { jsPDF } from "jspdf";
 import fs from "fs";
 import path from "path";

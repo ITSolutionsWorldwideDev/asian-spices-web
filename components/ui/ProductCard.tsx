@@ -13,8 +13,8 @@ import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useSession } from "next-auth/react";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import { anchorFromClick } from "@/lib/cart-toast-anchor";
-import { getProductPath } from "@/lib/product-path";
-import { resolveTaxRate } from "@/lib/tax";
+import { getProductPath } from "@/lib/catalog/product-path";
+import { resolveTaxRate } from "@/lib/commerce/tax";
 
 type Product = {
   id: string;

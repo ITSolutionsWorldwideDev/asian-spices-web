@@ -1,7 +1,7 @@
 // app/page.tsx
 
 import type { Metadata } from "next";
-import Homei from "@/components/layout/home/Home";
+import Homei from "@/components/features/home/Home";
 
 export const metadata: Metadata = {
   title: "Asian Grocery Store & Supermarket Online | Asian Spices online",

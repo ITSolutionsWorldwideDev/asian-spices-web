@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { authorizeUser } from "./authorize";
 import { AUTH_ROLES } from "./constants";
-import { verifyRecaptcha, verifySignupAuthToken } from "@/lib/recaptcha";
+import { verifyRecaptcha, verifySignupAuthToken } from "@/lib/integrations/recaptcha";
 
 type AppType = "admin" | "web";
 
