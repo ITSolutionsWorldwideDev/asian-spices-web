@@ -33,7 +33,7 @@ export function GuruChatWidget({
         aria-hidden={!isWidgetOpen}
         className={
           panelClassName ??
-          `fixed inset-x-3 bottom-[7.25rem] top-24 z-40 sm:inset-x-auto sm:bottom-[8rem] sm:right-5 sm:top-24 sm:w-[min(700px,calc(100vw-2rem))] xl:w-[720px] ${
+          `fixed inset-x-2 bottom-[calc(4.75rem+env(safe-area-inset-bottom)+0.5rem)] top-16 z-[999999] sm:inset-x-auto sm:bottom-24 sm:right-5 sm:top-20 sm:w-[min(700px,calc(100vw-2rem))] nav:bottom-6 nav:right-6 nav:top-24 xl:w-[720px] ${
             isWidgetOpen
               ? "pointer-events-auto visible"
               : "pointer-events-none invisible"
@@ -49,25 +49,25 @@ export function GuruChatWidget({
         transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
         className={
           launcherClassName ??
-          "fixed bottom-5 right-5 z-50 sm:bottom-6 sm:right-6"
+          "fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom)+0.75rem)] right-3 z-[999990] sm:right-5 nav:bottom-6 nav:right-6"
         }
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           {!isWidgetOpen ? (
-            <div className="rounded-full border border-[rgba(255,255,255,0.48)] bg-[rgba(240,246,232,0.6)] px-4 py-2 text-sm font-medium text-[#4f6b38] shadow-[0_12px_28px_rgba(35,24,19,0.14)]">
+            <div className="hidden min-[420px]:block rounded-full border border-[rgba(255,255,255,0.48)] bg-[rgba(240,246,232,0.85)] backdrop-blur-xs px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-[#4f6b38] shadow-[0_12px_28px_rgba(35,24,19,0.14)]">
               Hey, I can help you
             </div>
           ) : null}
           <button
             type="button"
             onClick={() => setIsWidgetOpen((current) => !current)}
-            className="group relative flex h-[104px] w-[104px] items-center justify-center rounded-full border border-[rgba(122,158,84,0.4)] bg-[rgba(240,246,232,0.5)] shadow-[0_18px_44px_rgba(35,24,19,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_50px_rgba(35,24,19,0.28)] sm:h-[112px] sm:w-[112px]"
+            className="group relative flex h-16 w-16 sm:h-20 sm:w-20 nav:h-[104px] nav:w-[104px] items-center justify-center rounded-full border border-[rgba(122,158,84,0.4)] bg-[rgba(240,246,232,0.85)] shadow-[0_12px_32px_rgba(35,24,19,0.2)] backdrop-blur-xs transition hover:-translate-y-0.5 hover:shadow-[0_20px_46px_rgba(35,24,19,0.28)]"
             aria-label={
               isWidgetOpen ? "Close Guru chat widget" : "Open Guru chat widget"
             }
           >
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.4),transparent_46%),linear-gradient(160deg,rgba(122,158,84,0.12),rgba(255,179,71,0.08))]" />
-            <div className="relative flex h-[90px] w-[90px] items-center justify-center overflow-hidden rounded-full sm:h-[98px] sm:w-[98px]">
+            <div className="relative flex h-14 w-14 sm:h-[72px] sm:w-[72px] nav:h-[90px] nav:w-[90px] items-center justify-center overflow-hidden rounded-full">
               <Image
                 src="/assets/chatbot/guru-avatar.jpeg"
                 alt="Guru logo"

@@ -39,17 +39,17 @@ export default async function AccountLayout({
         />
       </div>
 
-      <div className=" bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center p-6">
-        <div className="container mx-auto px-4 py-10 flex-1">
+      <div className="bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center p-2.5 sm:p-6 w-full max-w-full overflow-x-hidden">
+        <div className="container mx-auto px-1 sm:px-4 py-6 sm:py-10 flex-1 min-w-0 max-w-full">
           <UserMenu email={user?.email} />
           <AccountTabs />
           <OrderStats />
-          <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6 sm:gap-8 min-w-0">
             <div className="hidden lg:block">
               <AccountSidebar />
             </div>
             <main
-              className="notranslate bg-white rounded-2xl p-6 shadow-sm border min-h-100"
+              className="notranslate bg-white rounded-2xl p-3.5 sm:p-6 shadow-sm border min-h-100 min-w-0 overflow-hidden"
               translate="no"
             >
               {children}

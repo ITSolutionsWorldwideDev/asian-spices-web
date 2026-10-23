@@ -84,19 +84,19 @@ export default function OrdersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">Order History</h2>
-        <span className="text-sm text-gray-500 font-medium">
+      <div className="flex flex-wrap justify-between items-center gap-2">
+        <h2 className="text-lg sm:text-xl font-bold">Order History</h2>
+        <span className="text-xs sm:text-sm text-gray-500 font-medium">
           Total Orders: {paginationMeta.totalRecords}
         </span>
       </div>
 
       {orders.length === 0 ? (
-        <p className="text-gray-500">No orders found.</p>
+        <p className="text-gray-500 text-sm">No orders found.</p>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-4 min-w-0">
           {orders.map((order: any) => (
-            <div key={order.id}>
+            <div key={order.id} className="min-w-0">
               <OrderCard
                 order={order}
                 isOpen={expandedId === order.id}

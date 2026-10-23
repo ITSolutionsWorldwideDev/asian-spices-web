@@ -69,7 +69,7 @@ export function GenieChatWidget({
         aria-hidden={!panelVisible}
         className={
           panelClassName ??
-          `fixed inset-x-3 bottom-[7.25rem] top-24 z-40 sm:inset-x-auto sm:bottom-[8rem] sm:right-5 sm:top-24 sm:w-[min(700px,calc(100vw-2rem))] xl:w-[720px] ${
+          `fixed inset-x-2 bottom-[calc(4.75rem+env(safe-area-inset-bottom)+0.5rem)] top-16 z-[999999] sm:inset-x-auto sm:bottom-24 sm:right-5 sm:top-20 sm:w-[min(700px,calc(100vw-2rem))] nav:bottom-6 nav:right-6 nav:top-24 xl:w-[720px] ${
             panelVisible
               ? "pointer-events-auto visible"
               : "pointer-events-none invisible"
@@ -88,7 +88,7 @@ export function GenieChatWidget({
         transition={{ duration: 0.24, ease: "easeOut" }}
         aria-label="Reopen Genie chat"
         aria-hidden={!isTucked}
-        className={`fixed bottom-24 right-0 z-50 flex flex-col items-center gap-1.5 rounded-l-xl border border-r-0 border-[rgba(79,70,229,0.35)] bg-[rgba(238,242,255,0.96)] px-1.5 py-3 text-[#3730A3] shadow-[0_10px_28px_rgba(11,31,77,0.22)] backdrop-blur transition-[padding,background] hover:bg-[#EEF2FF] hover:pl-2.5 ${
+        className={`fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom)+1.5rem)] nav:bottom-24 right-0 z-[999990] flex flex-col items-center gap-1.5 rounded-l-xl border border-r-0 border-[rgba(79,70,229,0.35)] bg-[rgba(238,242,255,0.96)] px-1.5 py-3 text-[#3730A3] shadow-[0_10px_28px_rgba(11,31,77,0.22)] backdrop-blur transition-[padding,background] hover:bg-[#EEF2FF] hover:pl-2.5 ${
           isTucked ? "pointer-events-auto" : "pointer-events-none"
         }`}
       >
@@ -117,12 +117,12 @@ export function GenieChatWidget({
           transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
           className={
             launcherClassName ??
-            "fixed bottom-5 right-5 z-50 sm:bottom-6 sm:right-6"
+            "fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom)+0.75rem)] right-3 z-[999990] sm:right-5 nav:bottom-6 nav:right-6"
           }
         >
-          <div className="group relative flex items-center gap-3">
+          <div className="group relative flex items-center gap-2.5 sm:gap-3">
             {!isWidgetOpen ? (
-              <div className="rounded-full border border-[rgba(255,255,255,0.48)] bg-[rgba(238,242,255,0.75)] px-4 py-2 text-sm font-medium text-[#3730A3] shadow-[0_12px_28px_rgba(11,31,77,0.2)]">
+              <div className="hidden min-[420px]:block rounded-full border border-[rgba(255,255,255,0.48)] bg-[rgba(238,242,255,0.85)] backdrop-blur-xs px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-[#3730A3] shadow-[0_12px_28px_rgba(11,31,77,0.2)]">
                 ✨ Need help?
               </div>
             ) : null}
@@ -133,12 +133,12 @@ export function GenieChatWidget({
                   type="button"
                   onClick={tuckAway}
                   aria-label="Hide Genie"
-                  className="absolute -right-1 -top-1 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-[rgba(79,70,229,0.3)] bg-white text-[#3730A3] opacity-0 shadow-md transition hover:bg-[#EEF2FF] focus-visible:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100 max-sm:opacity-100"
+                  className="absolute -right-1 -top-1 z-10 flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full border border-[rgba(79,70,229,0.3)] bg-white text-[#3730A3] opacity-0 shadow-md transition hover:bg-[#EEF2FF] focus-visible:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100 max-sm:opacity-100"
                 >
                   <svg
                     viewBox="0 0 24 24"
                     aria-hidden="true"
-                    className="h-3.5 w-3.5"
+                    className="h-3 w-3 sm:h-3.5 sm:w-3.5"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth={2.2}
@@ -152,7 +152,7 @@ export function GenieChatWidget({
               <button
                 type="button"
                 onClick={() => setIsWidgetOpen((current) => !current)}
-                className="relative flex h-[104px] w-[104px] items-center justify-center rounded-full border border-[rgba(79,70,229,0.4)] bg-[rgba(238,242,255,0.55)] shadow-[0_18px_44px_rgba(11,31,77,0.3)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_50px_rgba(11,31,77,0.36)] sm:h-[112px] sm:w-[112px]"
+                className="relative flex h-16 w-16 sm:h-20 sm:w-20 nav:h-[104px] nav:w-[104px] items-center justify-center rounded-full border border-[rgba(79,70,229,0.4)] bg-[rgba(238,242,255,0.85)] shadow-[0_12px_32px_rgba(11,31,77,0.25)] backdrop-blur-xs transition hover:-translate-y-0.5 hover:shadow-[0_20px_46px_rgba(11,31,77,0.36)]"
                 aria-label={
                   isWidgetOpen
                     ? "Close Genie chat widget"
@@ -160,7 +160,7 @@ export function GenieChatWidget({
                 }
               >
                 <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.4),transparent_46%),linear-gradient(160deg,rgba(37,99,235,0.16),rgba(79,70,229,0.1))]" />
-                <div className="relative flex h-[90px] w-[90px] items-center justify-center overflow-hidden rounded-full sm:h-[98px] sm:w-[98px]">
+                <div className="relative flex h-14 w-14 sm:h-[72px] sm:w-[72px] nav:h-[90px] nav:w-[90px] items-center justify-center overflow-hidden rounded-full">
                   <Image
                     src="/assets/chatbot/genie-avatar.jpeg"
                     alt="Genie logo"

@@ -60,8 +60,8 @@ export default function OrderSummaryReadOnly({
   let totalOrderSavings = 0;
 
   return (
-    <div className="bg-white rounded-xl border p-6">
-      <h2 className="font-semibold mb-4">Order Summary</h2>
+    <div className="bg-white rounded-xl border p-3.5 sm:p-6 min-w-0 overflow-hidden">
+      <h2 className="font-semibold mb-4 text-sm sm:text-base">Order Summary</h2>
 
       <div className="space-y-4 mb-6">
         {items.map((item: any) => {
@@ -105,9 +105,9 @@ export default function OrderSummaryReadOnly({
           return (
             <div
               key={item.id}
-              className={`flex gap-4 ${isCancelled ? "opacity-50" : ""}`}
+              className={`flex gap-3 sm:gap-4 ${isCancelled ? "opacity-50" : ""}`}
             >
-              <div className="relative h-14 w-14 rounded-lg overflow-hidden">
+              <div className="relative h-12 w-12 sm:h-14 sm:w-14 rounded-lg overflow-hidden shrink-0">
                 <Image
                   src={item.image || "/placeholder.png"}
                   alt={item.title || "Product item"}

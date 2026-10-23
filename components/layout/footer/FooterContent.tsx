@@ -175,25 +175,25 @@ const FooterContent = () => {
               <span>Get In Touch</span>
             </p>
             <ul className="space-y-3 text-sm text-white/60">
-              <li className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:border-0 sm:bg-transparent sm:p-0">
+              <li className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:items-start sm:border-0 sm:bg-transparent sm:p-0">
                 <Mail
-                  className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
+                  className="h-4 w-4 shrink-0 text-orange-500 sm:mt-0.5"
                   aria-hidden
                 />
                 <a
                   href="mailto:Support@asianspices.online"
-                  className="break-all transition hover:text-orange-400"
+                  className="break-all text-xs transition hover:text-orange-400 sm:text-sm"
                 >
                   Support@asianspices.online
                 </a>
               </li>
-              <li className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:border-0 sm:bg-transparent sm:p-0">
+              <li className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:items-start sm:border-0 sm:bg-transparent sm:p-0">
                 <a
                   href="https://maps.app.goo.gl/Qaw4W3sgskPEXyx56"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="View location on Google Maps"
-                  className="mt-0.5 shrink-0 text-orange-500 transition hover:text-orange-400"
+                  className="shrink-0 text-orange-500 transition hover:text-orange-400 sm:mt-0.5"
                 >
                   <MapPin className="h-4 w-4" aria-hidden />
                 </a>
@@ -201,13 +201,18 @@ const FooterContent = () => {
                   href="https://maps.app.goo.gl/Qaw4W3sgskPEXyx56"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="leading-relaxed transition hover:text-orange-400"
+                  className="text-xs leading-relaxed transition hover:text-orange-400 sm:text-sm"
                 >
-                  Slakkenveen 341
-                  <br />
-                  3205 GK Spijkenisse
-                  <br />
-                  Netherlands
+                  <span className="sm:hidden">
+                    Slakkenveen 341, 3205 GK Spijkenisse, Netherlands
+                  </span>
+                  <span className="hidden sm:inline">
+                    Slakkenveen 341
+                    <br />
+                    3205 GK Spijkenisse
+                    <br />
+                    Netherlands
+                  </span>
                 </a>
               </li>
             </ul>

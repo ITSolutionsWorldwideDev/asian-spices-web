@@ -171,23 +171,25 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
 
   return (
     <div
-      className="notranslate border rounded-2xl p-5 bg-white transition-all duration-300 ease-in-out"
+      className="notranslate border rounded-2xl p-3.5 sm:p-5 bg-white transition-all duration-300 ease-in-out min-w-0 overflow-hidden"
       translate="no"
     >
-      <div className="flex justify-between items-center">
-        <div>
-          <p className="font-semibold">{order.order_number?.replace(/^#+\s*/, "")}</p>
-          <p className="text-sm text-gray-500">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2.5">
+        <div className="min-w-0">
+          <p className="font-semibold text-sm sm:text-base break-all">
+            {order.order_number?.replace(/^#+\s*/, "")}
+          </p>
+          <p className="text-xs sm:text-sm text-gray-500">
             {new Date(order.created_at).toLocaleDateString()}
           </p>
         </div>
 
-        <div className="flex gap-3 items-center flex-wrap">
+        <div className="flex gap-2 items-center flex-wrap">
           {isPaid && (
             <button
               onClick={handleDownloadInvoice}
               disabled={downloading}
-              className="inline-flex items-center gap-1.5 px-3 py-1 text-xs cursor-pointer border border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-100 disabled:opacity-50 font-medium rounded-full transition"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs cursor-pointer border border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-100 disabled:opacity-50 font-medium rounded-full transition"
             >
               {downloading ? (
                 <span className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
@@ -199,7 +201,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
           )}
 
           <span
-            className={`px-3 py-1 text-xs font-medium rounded-full uppercase tracking-wider ${
+            className={`px-2.5 py-1 text-[11px] sm:text-xs font-medium rounded-full uppercase tracking-wider ${
               ["confirmed", "fulfilled", "delivered"].includes(
                 order.order_status?.toLowerCase(),
               )
@@ -213,7 +215,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
           </span>
 
           <span
-            className={`px-3 py-1 text-xs font-medium rounded-full uppercase tracking-wider ${
+            className={`px-2.5 py-1 text-[11px] sm:text-xs font-medium rounded-full uppercase tracking-wider ${
               order.payment_status === "paid"
                 ? "bg-green-100 text-green-600"
                 : order.payment_status === "failed"
@@ -226,15 +228,15 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
         </div>
       </div>
 
-      <div className="mt-3 flex justify-between items-center">
-        <p className="font-bold text-lg">
+      <div className="mt-3 flex justify-between items-center gap-2 pt-2 border-t border-gray-100">
+        <p className="font-bold text-base sm:text-lg">
           {symbol}
           {(rate * Number(order.total_amount || 0)).toFixed(2)}
         </p>
 
         <button
           onClick={handleToggleClick}
-          className="flex items-center gap-1 text-sm text-blue-600 font-semibold"
+          className="flex items-center gap-1 text-xs sm:text-sm text-blue-600 font-semibold cursor-pointer shrink-0"
         >
           {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           {isOpen ? "Hide Details" : "View Details"}
@@ -242,7 +244,7 @@ export default function OrderCard({ order, isOpen, onToggle, onRefresh }: any) {
       </div>
 
       {isOpen && (
-        <div className="mt-6 border-t pt-4 space-y-4">
+        <div className="mt-4 border-t pt-4 space-y-4 min-w-0 overflow-hidden">
           {/* Action A: Cancel Form */}
           {isCancelActive ? (
             <div className="bg-red-50/30 p-4 rounded-xl border border-dashed border-red-200 space-y-4">
