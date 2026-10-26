@@ -270,8 +270,8 @@ export default function NavSearch({ variant = "desktop" }: NavSearchProps) {
             isMobile
               ? `w-full rounded-full border border-gray-200/90 bg-gray-50/90 py-2.5 pl-10 ${
                   hasText ? "pr-20" : "pr-11"
-                } text-[16px] sm:text-sm text-gray-800 shadow-sm outline-none placeholder:text-gray-400 focus:bg-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all`
-              : "w-full rounded-full border border-gray-200 bg-white py-2 pl-4 pr-12 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-orange-300"
+                } text-[16px] sm:text-sm text-gray-800 shadow-sm outline-none placeholder:text-gray-400 focus:bg-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:hidden`
+              : "w-full rounded-full border border-gray-200 bg-white py-2 pl-4 pr-12 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-orange-300 [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:hidden"
           }
           aria-label="Search products and recipes"
           autoComplete="off"

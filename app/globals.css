@@ -272,4 +272,14 @@ a font,
   transform: scale(1.1);
 }
 
+/* Hide default browser search cancel (cross) and decoration buttons (Chrome/Safari/Edge/Mobile) */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
 

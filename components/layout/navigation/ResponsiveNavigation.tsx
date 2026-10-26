@@ -124,6 +124,9 @@ const ResponsiveNavigation = ({ mobileOnly = false }: ResponsiveNavigationProps)
 
   useEffect(() => {
     document.body.style.overflow = mobileMenu ? "hidden" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [mobileMenu]);
 
   useEffect(() => {

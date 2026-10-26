@@ -11,6 +11,7 @@ import { DeferredBibiChatWidget } from "@/components/chatbot/DeferredBibiChatWid
 import { DeferredGuruChatWidget } from "@/components/chatbot/DeferredGuruChatWidget";
 import { DeferredGenieChatWidget } from "@/components/chatbot/DeferredGenieChatWidget";
 import SessionWatcher from "@/components/auth/SessionWatcher";
+import ScrollToTop from "@/components/ui/ScrollToTop";
 
 function isRecipePath(pathname: string | null) {
   if (!pathname) return false;
@@ -29,6 +30,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider refetchOnWindowFocus={false} refetchInterval={60}>
       <SessionWatcher />
+      <ScrollToTop />
       <GlobalDataProvider>
         <CartSyncProvider>
           {children}
