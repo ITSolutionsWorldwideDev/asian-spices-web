@@ -351,7 +351,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                 <button
                   type="button"
                   aria-label={`Add ${pickQty} ${item.title} to cart`}
-                  className="cursor-pointer shrink-0 h-11 w-11 sm:h-12 sm:w-auto sm:min-w-[76px] sm:px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="cursor-pointer shrink-0 h-11 w-14 sm:h-12 sm:w-16 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.96] shadow-xs hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
                   onClick={(e) => {
                     if (realPrice == null || baseWithTax == null) return;
                     addToCart(
@@ -379,7 +379,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                   }}
                   disabled={realPrice == null}
                 >
-                  <CartPlusIcon className="h-7 w-auto" />
+                  <CartPlusIcon className="h-5.5 w-auto sm:h-6 shrink-0" />
                 </button>
               </div>
 

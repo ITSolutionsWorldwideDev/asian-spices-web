@@ -300,12 +300,12 @@ export default function ProductCard({
                 </Link>
               </div>
 
-              {/* Qty picker + cart — flexible stepper & cart button that never overflows */}
+              {/* Qty picker + cart — clean, proportional stepper & cart button */}
               <div
-                className="notranslate mt-4 pt-1 flex min-w-0 items-stretch gap-2"
+                className="notranslate mt-4 pt-1 flex min-w-0 items-center gap-2 sm:gap-2.5"
                 translate="no"
               >
-                <div className="inline-flex h-11 sm:h-12 shrink-0 items-stretch overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div className="inline-flex h-11 sm:h-12 shrink-0 items-stretch overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xs">
                   <button
                     type="button"
                     aria-label={`Decrease quantity of ${product.name}`}
@@ -339,7 +339,7 @@ export default function ProductCard({
                 <button
                   type="button"
                   aria-label={`Add ${pickQty} ${product.name} to cart`}
-                  className="cursor-pointer flex-1 min-w-[44px] h-11 sm:h-12 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="cursor-pointer shrink-0 h-11 w-14 sm:h-12 sm:w-16 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.96] shadow-xs hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
                   onClick={(e) => {
                     if (currentPrice == null) return;
                     addToCart(
@@ -367,7 +367,7 @@ export default function ProductCard({
                   }}
                   disabled={currentPrice == null}
                 >
-                  <CartPlusIcon className="h-6 w-auto sm:h-7 shrink-0" />
+                  <CartPlusIcon className="h-5.5 w-auto sm:h-6 shrink-0" />
                 </button>
               </div>
             </div>

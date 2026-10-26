@@ -457,9 +457,9 @@ export default function ProductDesc({
                   aria-label={`Add ${pendingQty} ${product.name} to cart`}
                   onClick={addConfiguredQuantity}
                   disabled={!priceReady}
-                  className="cursor-pointer shrink-0 h-12 w-12 sm:h-14 sm:w-auto sm:min-w-[100px] sm:px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="cursor-pointer shrink-0 h-12 w-16 sm:h-14 sm:w-20 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 shadow-xs hover:shadow-sm"
                 >
-                  <CartPlusIcon className="h-7 w-auto sm:h-9 shrink-0" />
+                  <CartPlusIcon className="h-6 w-auto sm:h-7 shrink-0" />
                 </button>
                 <button
                   type="button"
