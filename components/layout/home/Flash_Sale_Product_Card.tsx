@@ -49,7 +49,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
     async function loadSaleItems() {
       try {
         const res = await fetch(
-          "/api/products?sale_only=true&sort=random&limit=5",
+          "/api/products?sale_only=true&sort=random",
         );
         const json = await res.json();
 
