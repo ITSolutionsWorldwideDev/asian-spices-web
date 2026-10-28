@@ -259,7 +259,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                   <div className="relative block h-48 w-full overflow-hidden rounded-xl bg-gray-50 sm:h-52">
                     <Image
                       src={
-                        item.image.startsWith("http")
+                        item.image.startsWith("http") || item.image.startsWith("/")
                           ? item.image
                           : `/assets/home/hot_sale/${item.image}`
                       }

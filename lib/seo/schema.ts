@@ -48,6 +48,23 @@ function absoluteUrl(path: string): string {
   return encodeURI(full);
 }
 
+function toMerchantImageUrl(rawUrl: string): string {
+  const full = absoluteUrl(rawUrl);
+  // Rewrite UploadThing CDN URLs (`*.ufs.sh/f/<id>` or `utfs.io/f/<id>`) to our
+  // own `/product-images/<id>.jpg` route so UploadThing's `x-robots-tag: noindex`
+  // header is stripped and Google Merchant Center gets a clean `.jpg` URL with `X-Robots-Tag: all`.
+  const ufsMatch = full.match(
+    /^https?:\/\/(?:[a-z0-9-]+\.ufs\.sh|utfs\.io)\/f\/([^/?#]+)/i,
+  );
+  if (ufsMatch) {
+    const idOrFile = decodeURIComponent(ufsMatch[1]);
+    const hasValidExt = /\.(jpg|jpeg|png|webp|gif|bmp|tiff?)$/i.test(idOrFile);
+    const filename = hasValidExt ? idOrFile : `${idOrFile}.jpg`;
+    return `${getSiteBaseUrl()}/product-images/${encodeURIComponent(filename)}`;
+  }
+  return full;
+}
+
 export type SchemaReviewStats = {
   average: number | string | null | undefined;
   total: number | string | null | undefined;
@@ -162,7 +179,7 @@ export function getProductJsonLd(
     .sort((a, b) => Number(!!b.is_primary) - Number(!!a.is_primary))
     .map((img) => img.url)
     .filter(Boolean)
-    .map(absoluteUrl);
+    .map(toMerchantImageUrl);
 
   const fullName = product.weight
     ? `${product.name} ${product.weight}`

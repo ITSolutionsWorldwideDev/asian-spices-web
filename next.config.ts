@@ -63,6 +63,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "www.asianspices.online",
+      },
+      {
+        protocol: "https",
+        hostname: "asianspices.online",
+      },
+      {
+        protocol: "https",
         hostname: "img.youtube.com",
         pathname: "/**",
       },

@@ -1,6 +1,7 @@
 // apps/web/lib/dbactions/products.ts
 
 import { pool } from "@/core/db";
+import { toCleanImageUrl } from "@/lib/media/toCleanImageUrl";
 
 export const getProducts = async (filters: any) => {
   const {
@@ -236,7 +237,10 @@ export const getProducts = async (filters: any) => {
   // console.log("values ====", values);
 
   const result = await pool.query(query, values);
-  return result.rows;
+  return result.rows.map((row: any) => ({
+    ...row,
+    image: row.image ? toCleanImageUrl(row.image) : row.image,
+  }));
 };
 
 // apps/web/lib/dbactions/products.ts
@@ -384,7 +388,10 @@ export const getProductBySlug = async (
     rating: Number(row.rating || row.avg_rating || 0),
     avg_rating: Number(row.avg_rating || row.rating || 0),
     reviews: Number(row.reviews || 0),
-    images: row.images || [],
+    images: (row.images || []).map((img: any) => ({
+      ...img,
+      url: img?.url ? toCleanImageUrl(img.url) : img?.url,
+    })),
     highlights: row.highlights || [], // Safely fall back if column doesn't exist
   };
 };
@@ -432,7 +439,10 @@ export const getRelatedProducts = async (
     category_id,
     countryCode.toUpperCase(),
   ]);
-  return result.rows;
+  return result.rows.map((row: any) => ({
+    ...row,
+    image: row.image ? toCleanImageUrl(row.image) : row.image,
+  }));
 };
 
 export const getProductReviews = async (productId: string, page = 1) => {

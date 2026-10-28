@@ -60,7 +60,11 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
 
         <div className="w-24 h-24 relative shrink-0 border border-gray-100 rounded-lg overflow-hidden bg-gray-50">
           <img
-            src={item.image.startsWith("http") ? item.image : `/assets/home/hot_sale/${item.image}`}
+            src={
+              item.image.startsWith("http") || item.image.startsWith("/")
+                ? item.image
+                : `/assets/home/hot_sale/${item.image}`
+            }
             alt={item.weight ? `${item.title} ${item.weight}` : item.title}
             className="w-full h-full object-contain"
           />
