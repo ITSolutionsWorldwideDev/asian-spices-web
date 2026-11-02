@@ -73,7 +73,7 @@ export default async function RootLayout({
   const siteReviews = await getSiteReviewsSummary();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* GTM must be as high as possible in <head> for Search Console verification */}
         <GoogleTagManagerHead />

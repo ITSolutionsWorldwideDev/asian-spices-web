@@ -96,14 +96,18 @@ const SubscribeNewsletter = ({
           </button>
         </div>
 
-        <label className="mx-auto flex w-full max-w-xl cursor-pointer items-center justify-center gap-2 text-center">
+        <div className="mx-auto flex w-full max-w-xl items-center justify-center gap-2 text-center">
           <input
+            id="newsletter-privacy-dark"
             type="checkbox"
             {...register("privacyConsent")}
-            className="h-3.5 w-3.5 shrink-0 cursor-pointer rounded border-white/30 accent-orange-500"
+            className="h-4 w-4 shrink-0 cursor-pointer rounded border-white/30 accent-orange-500"
             disabled={isSubmitting}
           />
-          <span className="text-[11px] leading-relaxed text-white/40">
+          <label
+            htmlFor="newsletter-privacy-dark"
+            className="cursor-pointer text-[11px] leading-relaxed text-white/40 select-none"
+          >
             I agree to receive the newsletter and to the{" "}
             <Link
               href="/privacy-policy"
@@ -115,8 +119,8 @@ const SubscribeNewsletter = ({
               Privacy Policy
             </Link>
             .
-          </span>
-        </label>
+          </label>
+        </div>
 
         {errors.email && (
           <p className="text-center text-xs text-red-400">
@@ -167,18 +171,22 @@ const SubscribeNewsletter = ({
         </button>
       </div>
 
-      <label className="flex items-start gap-2 cursor-pointer text-left">
+      <div className="flex items-start gap-2 text-left">
         <input
+          id="newsletter-privacy-light"
           type="checkbox"
           {...register("privacyConsent")}
           className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 accent-orange-500"
           disabled={isSubmitting}
         />
-        <span className="text-xs leading-relaxed text-gray-800">
+        <label
+          htmlFor="newsletter-privacy-light"
+          className="cursor-pointer text-xs leading-relaxed text-gray-800 select-none"
+        >
           I want to receive the Asian Spices newsletter and agree to the
           processing of my email as described in the{" "}
           <Link
-            href="/privacy"
+            href="/privacy-policy"
             target="_blank"
             rel="noopener noreferrer"
             className="font-semibold text-orange-700 underline hover:text-orange-800"
@@ -187,8 +195,8 @@ const SubscribeNewsletter = ({
             Privacy Policy
           </Link>
           .
-        </span>
-      </label>
+        </label>
+      </div>
 
       {errors.email && (
         <p className="text-xs text-red-500">{getErrorMessage(errors.email)}</p>

@@ -4,7 +4,7 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { ArrowRight, Heart, Tag } from "lucide-react";
+import { ArrowDown, ArrowUp, Heart, Tag } from "lucide-react";
 import CartPlusIcon from "@/components/ui/CartPlusIcon";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
@@ -377,11 +377,14 @@ export default function ProductCard({
             className="flex items-center justify-center px-10 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-amber-600 hover:to-amber-400 text-white py-2 font-semibold rounded-lg transition cursor-pointer shadow"
           >
             {showAll ? (
-              "See Less"
+              <>
+                See Less
+                <ArrowUp className="ml-5 h-4 w-4" />
+              </>
             ) : (
               <>
                 See More
-                <ArrowRight className="ml-5 h-4 w-4" />
+                <ArrowDown className="ml-5 h-4 w-4" />
               </>
             )}
           </button>

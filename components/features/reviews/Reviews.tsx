@@ -9,7 +9,7 @@ const Reviews = () => {
 <section className="container mx-auto -mt-8 pb-16 px-4 md:px-8">      <HeadingDescription
         heading="Customer Reviews"
         text="Loved by Food Enthusiasts"
-        description="Join thousands of satisfied customers who trust Asian Spice for authentic flavors"
+        description="Join thousands of satisfied customers who trust Asian Spices for authentic flavors"
       />
       
       {/* Pass a target productId if you want item-specific feedback, 

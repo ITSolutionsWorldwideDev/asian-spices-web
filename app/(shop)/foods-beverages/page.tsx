@@ -37,7 +37,7 @@ interface PageProps {
     page?: string;
   }>;
 }
-             
+
 type Filters = {
   category: string;
   subcategories: string[];
@@ -113,7 +113,7 @@ export default async function KitchenAppliancesPage({
         fallback={
           <div className="text-center py-20 text-gray-500 font-medium">
             Loading items...
-          </div>
+      </div>
         }
       >
         <FoodsBeveragesContent filters={filters} />

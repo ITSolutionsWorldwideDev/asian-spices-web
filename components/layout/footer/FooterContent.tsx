@@ -130,11 +130,11 @@ const FooterContent = () => {
 
           {/* Quick Links */}
           <div className="border-b border-white/10 pb-8 sm:border-b-0 sm:pb-0">
-            <p className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
               <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
               <span>Quick Links</span>
-            </p>
-            <ul className="space-y-3">
+            </h3>
+            <ul className="space-y-3" suppressHydrationWarning>
               {QUICK_LINKS.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -150,11 +150,11 @@ const FooterContent = () => {
 
           {/* Customer Service */}
           <div className="border-b border-white/10 pb-8 sm:border-b-0 sm:pb-0">
-            <p className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
               <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
               <span>Customer Service</span>
-            </p>
-            <ul className="space-y-3">
+            </h3>
+            <ul className="space-y-3" suppressHydrationWarning>
               {CUSTOMER_SERVICE.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -170,11 +170,11 @@ const FooterContent = () => {
 
           {/* Get In Touch */}
           <div>
-            <p className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-wider text-white uppercase sm:text-base">
               <span className="h-3.5 w-1 rounded-full bg-orange-500" aria-hidden />
               <span>Get In Touch</span>
-            </p>
-            <ul className="space-y-3 text-sm text-white/60">
+            </h3>
+            <ul className="space-y-3 text-sm text-white/60" suppressHydrationWarning>
               <li className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 transition hover:border-white/20 sm:border-0 sm:bg-transparent sm:p-0">
                 <Mail
                   className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
@@ -203,11 +203,11 @@ const FooterContent = () => {
                   rel="noopener noreferrer"
                   className="leading-relaxed transition hover:text-orange-400"
                 >
-                  Slakkenveen 341
-                  <br />
-                  3205 GK Spijkenisse
-                  <br />
-                  Netherlands
+                  <span className="sm:block">Slakkenveen 341</span>
+                  <span className="inline sm:hidden">, </span>
+                  <span className="sm:block">3205 GK Spijkenisse</span>
+                  <span className="inline sm:hidden">, </span>
+                  <span className="sm:block">Netherlands</span>
                 </a>
               </li>
             </ul>
@@ -237,7 +237,7 @@ const FooterContent = () => {
 
         {/* Bottom credit — Powered by + logo */}
         <div className="flex flex-col gap-4 border-t border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <p className="text-xs text-white/45 sm:text-sm">
+          <p className="text-xs text-white/45 sm:text-sm" suppressHydrationWarning>
             © {new Date().getFullYear()} Asian Spices. All rights reserved.
           </p>
 

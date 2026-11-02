@@ -1,75 +1,75 @@
 {
   "meta": {
-    "badge": "Bezorging & Logistiek",
-    "title": "Verzendinformatie",
-    "subtitle": "Op deze pagina lees je hoe wij jouw bestelling verzenden, wat de kosten zijn en welke levertijd je kunt verwachten.",
-    "lastUpdated": "22 september 2026",
-    "effectiveFrom": "22 september 2026"
+    "badge": "Delivery & Logistics",
+    "title": "Shipping Information",
+    "subtitle": "On this page, you can read how we ship your order, what the costs are, and what delivery time you can expect.",
+    "lastUpdated": "22 September 2026",
+    "effectiveFrom": "22 September 2026"
   },
   "support": {
-    "heading": "Vragen over bezorging?",
-    "text": "Onze klantenservice helpt je graag met vragen over verzending, bezorging en tracking.",
+    "heading": "Questions about delivery?",
+    "text": "Our customer service team is happy to assist you with questions regarding shipping, delivery, and tracking.",
     "email": "support@asianspices.online"
   },
   "sections": [
     {
       "id": "verzendgebied",
-      "title": "1. Verzendgebied",
+      "title": "1. Shipping Area",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Op dit moment verzendt Asian Spices uitsluitend binnen Nederland. Zodra wij uitbreiden naar andere Europese markten, wordt deze pagina aangevuld met de dan geldende landen, kosten en levertijden (zie ook sectie 9)."
+          "text": "Currently, Asian Spices ships exclusively within the Netherlands. As soon as we expand to other European markets, this page will be updated with the applicable countries, costs, and delivery times (see also section 9)."
         }
       ]
     },
     {
       "id": "verzendkosten",
-      "title": "2. Verzendkosten",
+      "title": "2. Shipping Costs",
       "blocks": [
         {
           "type": "list",
           "items": [
-            "Bestellingen onder € 50: vaste verzendkosten van € 6,95.",
-            "Bestellingen vanaf € 50: gratis verzending.",
-            "Minimale bestelwaarde: € 10,00 per bestelling.",
-            "Diepvries- en verse producten: dezelfde verzendtarieven en minimale bestelwaarde zijn van toepassing; er geldt geen aparte drempel voor deze productcategorieën."
+            "Orders below €50: flat shipping fee of €6.95.",
+            "Orders of €50 or more: free shipping.",
+            "Minimum order value: €10.00 per order.",
+            "Frozen and fresh products: the same shipping rates and minimum order value apply; there is no separate threshold for these product categories."
           ]
         }
       ]
     },
     {
       "id": "verwerkings-levertijd",
-      "title": "3. Verwerkings- en levertijd",
+      "title": "3. Processing and Delivery Time",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Volgens de Nederlandse wet moet een webwinkel een bestelling uiterlijk binnen 30 dagen na aankoop leveren, tenzij een andere levertermijn is afgesproken. Wordt deze termijn niet gehaald, dan heeft de klant het recht om de koop te ontbinden."
+          "text": "According to Dutch law, an online store must deliver an order within 30 days after purchase at the latest, unless a different delivery period has been agreed upon. If this deadline is not met, the customer has the right to cancel the purchase."
         },
         {
           "type": "paragraph",
-          "text": "Asian Spices streeft naar een veel kortere levertijd dan deze wettelijke maximumtermijn:"
+          "text": "Asian Spices aims for a significantly shorter delivery time than this statutory maximum:"
         },
         {
           "type": "list",
           "items": [
-            "Bestellingen geplaatst vóór 11:00 uur: worden dezelfde werkdag verzonden.",
-            "Bestellingen geplaatst na 11:00 uur: worden de volgende werkdag verzonden.",
-            "Verwachte levertijd na verzending: 3 tot 4 werkdagen."
+            "Orders placed before 11:00 AM: dispatched the same business day.",
+            "Orders placed after 11:00 AM: dispatched the next business day.",
+            "Expected delivery time after dispatch: 3 to 4 business days."
           ]
         },
         {
           "type": "paragraph",
-          "text": "Rond feestdagen of drukke periodes kunnen afwijkende levertijden gelden; dit wordt indien van toepassing apart gecommuniceerd."
+          "text": "Different delivery times may apply around public holidays or busy peak periods; this will be communicated separately if applicable."
         }
       ]
     },
     {
       "id": "vervoerders",
-      "title": "4. Vervoerders",
+      "title": "4. Carriers",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Voor bezorgingen binnen Nederland werkt Asian Spices samen met CheapCargo."
+          "text": "For deliveries within the Netherlands, Asian Spices partners with CheapCargo."
         }
       ]
     },
@@ -79,73 +79,73 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Zodra je bestelling is verzonden, ontvang je automatisch een track & trace-link. De status van je zending is ook zichtbaar in je klantaccount."
+          "text": "As soon as your order has been dispatched, you will automatically receive a track & trace link. The status of your shipment is also visible in your customer account."
         }
       ]
     },
     {
       "id": "bezorging",
-      "title": "6. Bezorging",
+      "title": "6. Delivery",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Bij aflevering is doorgaans geen handtekening vereist; de vervoerder probeert het pakket op het opgegeven adres af te leveren."
+          "text": "Generally, no signature is required upon delivery; the carrier will attempt to deliver the package to the specified address."
         },
         {
           "type": "paragraph",
-          "text": "Is niemand thuis bij bezorging? Dan wordt het pakket teruggestuurd naar ons magazijn. Zodra dit gebeurt, informeren wij de klant per e-mail, waarna een nieuwe bezorging kan worden aangevraagd via de klantenservice."
+          "text": "Is no one home at delivery? The package will then be returned to our warehouse. Once this happens, we notify the customer by email, after which a new delivery can be requested through customer service."
         }
       ]
     },
     {
       "id": "verpakking",
-      "title": "7. Verpakking",
+      "title": "7. Packaging",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Onze kruiden en specerijen worden verpakt in beschermende, luchtdichte verpakkingen om versheid, geur en kwaliteit tijdens het transport te waarborgen, passend bij onze “Freshness Guaranteed”-belofte."
+          "text": "Our herbs and spices are packaged in protective, airtight packaging to ensure freshness, aroma, and quality during transport, in line with our “Freshness Guaranteed” promise."
         }
       ]
     },
     {
       "id": "beschadigde-zendingen",
-      "title": "8. Beschadigde, vertraagde of zoekgeraakte zendingen",
+      "title": "8. Damaged, Delayed, or Lost Shipments",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Komt een pakket beschadigd aan, is de levering vertraagd of komt deze niet aan? Neem dan contact op met onze klantenservice via support@asianspices.online."
+          "text": "If a package arrives damaged, is delayed, or does not arrive at all, please contact our customer service at support@asianspices.online."
         },
         {
           "type": "paragraph",
-          "text": "Meld zichtbare schade bij aflevering bij voorkeur binnen 24 uur na ontvangst. Meld een vertraagde of vermiste zending binnen 14 dagen na de verwachte leverdatum."
+          "text": "Please report visible damage upon delivery preferably within 24 hours of receipt. Report a delayed or missing shipment within 14 days of the expected delivery date."
         },
         {
           "type": "paragraph",
-          "text": "Het risico tijdens transport ligt bij Asian Spices (de verkoper) tot het moment van aflevering aan de klant (zie ook onze Algemene Voorwaarden, artikel 6)."
+          "text": "The risk during transit lies with Asian Spices (the seller) until the moment of delivery to the customer (see also our Terms & Conditions, Article 6)."
         }
       ]
     },
     {
       "id": "internationale-verzending",
-      "title": "9. Internationale verzending (toekomstig)",
+      "title": "9. International Shipping (Future)",
       "blocks": [
         {
           "type": "callout",
-          "text": "Zodra Asian Spices uitbreidt naar andere Europese markten, worden hier landspecifieke verzendkosten, levertijden en eventuele douane-/importinformatie (indien van toepassing buiten de EU) toegevoegd.",
+          "text": "As soon as Asian Spices expands to other European markets, country-specific shipping rates, delivery times, and any customs/import details (if applicable outside the EU) will be added here.",
           "variant": "info"
         }
       ]
     },
     {
       "id": "contact-bezorging",
-      "title": "10. Vragen over je bezorging",
+      "title": "10. Questions About Your Delivery",
       "blocks": [
         {
           "type": "list",
           "items": [
-            "E-mail: support@asianspices.online",
-            "Telefoon: +31 6 44844844",
-            "Adres: Slakkenveen 341, 3205 GK Spijkenisse"
+            "Email: support@asianspices.online",
+            "Phone: +31 6 44844844",
+            "Address: Slakkenveen 341, 3205 GK Spijkenisse"
           ]
         }
       ]
