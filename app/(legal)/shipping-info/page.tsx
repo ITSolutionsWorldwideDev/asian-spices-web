@@ -8,9 +8,9 @@ import shippingData from "@/data/legal/shippingData.json";
 
 export function generateMetadata() {
   return {
-    title: "Verzendinformatie | Asian Spices",
+    title: "Shipping Information | Asian Spices",
     description:
-      "Lees alles over verzending bij Asian Spices Online B.V.: verzendkosten binnen Nederland, levertijden, minimale bestelwaarde en vervoerders.",
+      "Learn everything about shipping at Asian Spices Online B.V.: shipping costs within the Netherlands, delivery times, minimum order value, and carriers.",
     alternates: {
       canonical: "/shipping-info",
     },

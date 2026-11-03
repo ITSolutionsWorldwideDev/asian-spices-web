@@ -8,9 +8,12 @@ import privacyData from "@/data/legal/privacyData.json";
 
 export function generateMetadata() {
   return {
-    title: "Privacyverklaring | Asian Spices",
+    title: "Privacy Policy | Asian Spices",
     description:
-      "Lees de privacyverklaring van Asian Spices: welke persoonsgegevens wij verwerken, waarom, hoe lang en welke rechten je hebt.",
+      "Read the Privacy Policy of Asian Spices: which personal data we process, why, how long we retain it, and what rights you have.",
+    alternates: {
+      canonical: "/privacy-policy",
+    },
   };
 }
 

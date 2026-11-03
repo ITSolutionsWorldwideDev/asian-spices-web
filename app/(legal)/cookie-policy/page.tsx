@@ -8,9 +8,9 @@ import cookiesData from "@/data/legal/cookiesData.json";
 
 export function generateMetadata() {
   return {
-    title: "Cookieverklaring | Asian Spices",
+    title: "Cookie Policy | Asian Spices",
     description:
-      "Lees de cookieverklaring van Asian Spices: welke cookies en vergelijkbare technieken wij gebruiken, waarvoor, en hoe je je keuze beheert.",
+      "Read the Cookie Policy of Asian Spices: which cookies and similar technologies we use, why, and how you can manage your preferences.",
     alternates: {
       canonical: "/cookie-policy",
     },

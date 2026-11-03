@@ -8,9 +8,9 @@ import returnData from "@/data/legal/returnData.json";
 
 export function generateMetadata() {
   return {
-    title: "Annulerings-, Retour- en Terugbetalingsbeleid | Asian Spices",
+    title: "Cancellation, Return & Refund Policy | Asian Spices",
     description:
-      "Lees het annulerings-, retour- en terugbetalingsbeleid van Asian Spices Online B.V.: voorwaarden per productcategorie, procedures en vergoedingen.",
+      "Read the Cancellation, Return and Refund Policy of Asian Spices Online B.V.: terms per product category, procedures, and reimbursements.",
     alternates: {
       canonical: "/return-&-refund-policy",
     },

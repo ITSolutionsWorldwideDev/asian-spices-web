@@ -31,8 +31,8 @@ export default function OrderTimeline({
   const currentIndex = getStepIndex(status);
 
   return (
-    <div className="border rounded-lg p-4 bg-white">
-      <h3 className="font-semibold mb-4">Order Progress</h3>
+    <div className="border rounded-lg p-3.5 sm:p-4 bg-white min-w-0 overflow-hidden">
+      <h3 className="font-semibold mb-4 text-sm sm:text-base">Order Progress</h3>
 
       <div className="flex flex-col gap-4">
         {steps.map((step, index) => {

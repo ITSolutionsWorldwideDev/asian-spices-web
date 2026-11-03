@@ -1,20 +1,20 @@
 {
   "meta": {
-    "badge": "Juridisch",
-    "title": "Algemene Voorwaarden",
-    "subtitle": "Deze algemene voorwaarden zijn van toepassing op elk gebruik van de website www.asianspices.online en op elke bestelling die je bij Asian Spices Online B.V. plaatst.",
-    "lastUpdated": "22 september 2026",
-    "effectiveFrom": "22 september 2026"
+    "badge": "Legal",
+    "title": "Terms & Conditions",
+    "subtitle": "These terms and conditions apply to any use of the website www.asianspices.online and to every order you place with Asian Spices Online B.V.",
+    "lastUpdated": "22 September 2026",
+    "effectiveFrom": "22 September 2026"
   },
   "support": {
-    "heading": "Hulp nodig?",
-    "text": "Onze klantenservice helpt je graag met vragen over je bestelling, levering of voorwaarden.",
+    "heading": "Need help?",
+    "text": "Our customer service team is happy to assist you with questions regarding your order, delivery, or terms.",
     "email": "support@asianspices.online"
   },
   "sections": [
     {
       "id": "wie-zijn-wij",
-      "title": "1. Wie zijn wij?",
+      "title": "1. Who are we?",
       "blocks": [
         {
           "type": "paragraph",
@@ -23,267 +23,267 @@
         {
           "type": "list",
           "items": [
-            "Vestigingsadres: Slakkenveen 341, 3205 GK Spijkenisse",
-            "KvK nummer: 42041922",
-            "E-mail: info@asianspices.online",
-            "Klantenservice: support@asianspices.online",
-            "Telefoon: 0644844844",
-            "Btw-identificatienummer: NL869440317B01"
+            "Registered address: Slakkenveen 341, 3205 GK Spijkenisse",
+            "KvK number: 42041922",
+            "Email: info@asianspices.online",
+            "Customer service: support@asianspices.online",
+            "Phone: 0644844844",
+            "VAT identification number: NL869440317B01"
           ]
         }
       ]
     },
     {
       "id": "definities",
-      "title": "2. Definities",
+      "title": "2. Definitions",
       "blocks": [
         {
           "type": "list",
           "items": [
-            "Verkoper: Asian Spices Online B.V.",
-            "Klant/consument: de natuurlijke persoon die niet handelt in de uitoefening van een beroep of bedrijf en een overeenkomst aangaat met Asian Spices.",
-            "Overeenkomst: de overeenkomst tussen Asian Spices en de klant met betrekking tot de aankoop van producten.",
-            "Website: www.asianspices.online en de bijbehorende app."
+            "Seller: Asian Spices Online B.V.",
+            "Customer/consumer: the natural person who is not acting in the exercise of a profession or business and enters into an agreement with Asian Spices.",
+            "Agreement: the agreement between Asian Spices and the customer regarding the purchase of products.",
+            "Website: www.asianspices.online and the corresponding app."
           ]
         }
       ]
     },
     {
       "id": "toepasselijkheid",
-      "title": "3. Toepasselijkheid",
+      "title": "3. Applicability",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Deze voorwaarden zijn van toepassing op elk aanbod van Asian Spices en op elke tot stand gekomen overeenkomst tussen Asian Spices en de klant."
+          "text": "These terms apply to every offer by Asian Spices and to every concluded agreement between Asian Spices and the customer."
         },
         {
           "type": "paragraph",
-          "text": "Het plaatsen van een bestelling en het aanmaken van een klantaccount is uitsluitend toegestaan voor personen van 18 jaar en ouder. Bij het plaatsen van een bestelling verklaart de klant 18 jaar of ouder te zijn."
+          "text": "Placing an order and creating a customer account is permitted exclusively for individuals aged 18 and older. By placing an order, the customer declares to be 18 years of age or older."
         }
       ]
     },
     {
       "id": "aanbod-overeenkomst",
-      "title": "4. Het aanbod en totstandkoming van de overeenkomst",
+      "title": "4. The Offer and Formation of the Agreement",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "De overeenkomst tussen de klant en Asian Spices komt tot stand op het moment dat de klant de bestelling plaatst en de (vooruit)betaling heeft voldaan. Asian Spices werkt met vooruitbetaling: de bestelling wordt pas definitief en in behandeling genomen zodra de betaling is ontvangen en bevestigd."
+          "text": "The agreement between the customer and Asian Spices is concluded at the moment the customer places the order and completes the (advance) payment. Asian Spices operates on advance payment: the order only becomes definitive and processed once payment has been received and confirmed."
         },
         {
           "type": "paragraph",
-          "text": "Daarnaast geldt het volgende:"
+          "text": "In addition, the following applies:"
         },
         {
           "type": "list",
           "items": [
-            "Aanbiedingen en prijzen op de website zijn geldig zolang zij op de website vermeld staan, tenzij anders aangegeven.",
-            "Asian Spices behoudt zich het recht voor om een bestelling te weigeren of te annuleren, bijvoorbeeld bij een kennelijke fout in prijs of voorraad."
+            "Offers and prices on the website are valid for as long as they are stated on the website, unless indicated otherwise.",
+            "Asian Spices reserves the right to refuse or cancel an order, for example in the case of an obvious error in pricing or stock."
           ]
         }
       ]
     },
     {
       "id": "prijzen-betaling",
-      "title": "5. Prijzen en betaling",
+      "title": "5. Prices and Payment",
       "blocks": [
         {
           "type": "list",
           "items": [
-            "Alle vermelde prijzen zijn in euro’s en inclusief btw.",
-            "Verzendkosten zijn niet inbegrepen in de productprijs, tenzij anders vermeld, zie de Verzendinformatie-pagina.",
-            "Betaling vindt plaats via Pay.nl. Via Pay.nl kan de klant betalen met alle gangbare Nederlandse betaalmethoden, waaronder bankoverschrijving/iDEAL van de deelnemende Nederlandse banken.",
-            "PayPal wordt op korte termijn toegevoegd als extra betaalmethode. Deze pagina wordt bijgewerkt zodra PayPal live staat.",
-            "Bij een kennelijke fout of vergissing in de prijsopgave is Asian Spices niet gebonden aan deze foutieve prijs."
+            "All stated prices are in euros and include VAT.",
+            "Shipping costs are not included in the product price, unless stated otherwise; see the Shipping Information page.",
+            "Payment is processed via Pay.nl. Through Pay.nl, the customer can pay using all standard Dutch payment methods, including bank transfer / iDEAL from participating Dutch banks.",
+            "PayPal will be added as an additional payment method in the short term. This page will be updated once PayPal is live.",
+            "In the event of an obvious error or mistake in the price quotation, Asian Spices is not bound by this erroneous price."
           ]
         }
       ]
     },
     {
       "id": "levering",
-      "title": "6. Levering",
+      "title": "6. Delivery",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Voor levertijden, verzendkosten en verzendgebied verwijzen wij naar onze Verzendinformatie-pagina."
+          "text": "For delivery times, shipping rates, and shipping regions, please refer to our Shipping Information page."
         },
         {
           "type": "paragraph",
-          "text": "Het risico van beschadiging of vermissing van producten berust tot het moment van bezorging aan de klant bij Asian Spices (de verkoper)."
+          "text": "The risk of damage or loss of products rests with Asian Spices (the seller) until the moment of delivery to the customer."
         }
       ]
     },
     {
       "id": "annuleren-retouren",
-      "title": "7. Annuleren, herroepingsrecht en retourneren",
+      "title": "7. Cancellation, Right of Withdrawal, and Returns",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Voor annuleren, het herroepingsrecht, retourtermijnen en terugbetalingen verwijzen wij naar onze pagina ‘Annulerings-, Retour- en Terugbetalingsbeleid’."
+          "text": "For cancellation, the right of withdrawal, return timeframes, and refunds, please refer to our ‘Cancellation, Return and Refund Policy’ page."
         }
       ]
     },
     {
       "id": "eigendomsvoorbehoud",
-      "title": "8. Eigendomsvoorbehoud",
+      "title": "8. Retention of Title",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Geleverde producten blijven eigendom van Asian Spices totdat de klant volledig heeft betaald."
+          "text": "Delivered products remain the property of Asian Spices until the customer has paid in full."
         }
       ]
     },
     {
       "id": "garantie-conformiteit",
-      "title": "9. Garantie en conformiteit",
+      "title": "9. Warranty and Conformity",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Producten moeten voldoen aan de overeenkomst, de in het aanbod vermelde specificaties en de wettelijke conformiteitseisen."
+          "text": "Products must comply with the agreement, the specifications stated in the offer, and statutory conformity requirements."
         },
         {
           "type": "paragraph",
-          "text": "De garantie geldt niet in geval van onoordeelkundig gebruik door de klant of schade ontstaan na aflevering door onjuiste opslag door de klant."
+          "text": "The warranty does not apply in cases of improper use by the customer or damage arising after delivery due to incorrect storage by the customer."
         }
       ]
     },
     {
       "id": "klachten",
-      "title": "10. Klachten",
+      "title": "10. Complaints",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Klachten over de uitvoering van de overeenkomst kunnen worden gemeld via:"
+          "text": "Complaints about the performance of the agreement can be reported via:"
         },
         {
           "type": "list",
           "items": [
-            "E-mail: support@asianspices.online",
-            "Telefoon: +31 6 44844844"
+            "Email: support@asianspices.online",
+            "Phone: +31 6 44844844"
           ]
         },
         {
           "type": "paragraph",
-          "text": "Asian Spices reageert binnen 14 dagen op een klacht met een inhoudelijke reactie of, indien meer tijd nodig is voor onderzoek, met een indicatie van de verwachte afhandelingstermijn."
+          "text": "Asian Spices responds within 14 days to a complaint with a substantive reply or, if more time is required for investigation, an indication of the expected timeframe for resolution."
         }
       ]
     },
     {
       "id": "aansprakelijkheid",
-      "title": "11. Aansprakelijkheid",
+      "title": "11. Liability",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Asian Spices is niet aansprakelijk voor schade die ontstaat door:"
+          "text": "Asian Spices is not liable for damages resulting from:"
         },
         {
           "type": "list",
           "items": [
-            "onjuist gebruik van producten door de klant;",
-            "het niet raadplegen van de productinformatie, ingrediëntenlijst of allergeneninformatie vóór gebruik;",
-            "allergische reacties of gezondheidsklachten die ontstaan door een reeds bestaande allergie, intolerantie of medische aandoening van de klant."
+            "improper use of products by the customer;",
+            "failure to consult product information, ingredient lists, or allergen details prior to use;",
+            "allergic reactions or health issues arising from a pre-existing allergy, intolerance, or medical condition of the customer."
           ]
         },
         {
           "type": "callout",
-          "text": "Gebruik in combinatie met medicijnen of medische aandoeningen: gebruik je voorgeschreven medicatie, ben je zwanger, geef je borstvoeding of heb je een medische aandoening? Raadpleeg dan vóór gebruik van onze producten altijd eerst je arts, apotheker of een andere bevoegde zorgverlener. Asian Spices geeft geen medisch advies en de klantenservice beoordeelt niet of een product geschikt is in combinatie met medicijnen of een medische aandoening.",
+          "text": "Use in combination with medications or medical conditions: if you use prescribed medication, are pregnant, breastfeeding, or have a medical condition, always consult your physician, pharmacist, or other qualified healthcare professional before using our products. Asian Spices does not provide medical advice and customer service does not evaluate whether a product is suitable in combination with medication or medical conditions.",
           "variant": "warning"
         },
         {
           "type": "paragraph",
-          "text": "Onverminderd het voorgaande is de aansprakelijkheid van Asian Spices, voor zover wettelijk toegestaan, beperkt tot het bedrag van de betreffende bestelling. Asian Spices is niet aansprakelijk voor indirecte schade, waaronder gevolgschade, gederfde winst of gemiste besparingen, behalve in geval van opzet of bewuste roekeloosheid van Asian Spices."
+          "text": "Without prejudice to the foregoing, the liability of Asian Spices, to the extent permitted by law, is limited to the amount of the relevant order. Asian Spices is not liable for indirect damages, including consequential loss, lost profits, or lost savings, except in cases of intent or deliberate recklessness by Asian Spices."
         }
       ]
     },
     {
       "id": "overmacht",
-      "title": "12. Overmacht",
+      "title": "12. Force Majeure",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Asian Spices is niet gehouden tot het nakomen van verplichtingen als dit onmogelijk is door overmacht, waaronder in ieder geval begrepen: natuurrampen, oorlog, stakingen, verstoringen bij vervoerders en cyberaanvallen of grootschalige storingen bij door Asian Spices gebruikte IT-leveranciers."
+          "text": "Asian Spices is not obligated to fulfill obligations if this is impossible due to force majeure, including in any event: natural disasters, war, strikes, disruptions with carriers, and cyberattacks or large-scale outages at IT providers used by Asian Spices."
         }
       ]
     },
     {
       "id": "intellectueel-eigendom",
-      "title": "13. Intellectueel eigendom",
+      "title": "13. Intellectual Property",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Alle content op de website (teksten, afbeeldingen, logo, vormgeving) is eigendom van Asian Spices of haar licentiegevers en mag niet zonder toestemming worden gebruikt."
+          "text": "All content on the website (texts, images, logo, design) is the property of Asian Spices or its licensors and may not be used without prior written permission."
         }
       ]
     },
     {
       "id": "klantaccount",
-      "title": "14. Klantaccount",
+      "title": "14. Customer Account",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Voor het aanmaken en gebruiken van een klantaccount gelden de bepalingen zoals beschreven in onze Privacyverklaring (hoofdstuk 4.2)."
+          "text": "The provisions described in our Privacy Policy (Chapter 4.2) apply to creating and using a customer account."
         },
         {
           "type": "paragraph",
-          "text": "De klant is zelf verantwoordelijk voor het vertrouwelijk houden van je inloggegevens en wachtwoord en voor alle activiteiten die via het account plaatsvinden. Vermoed je onbevoegd gebruik van je account? Neem dan direct contact op via support@asianspices.online."
+          "text": "The customer is solely responsible for maintaining the confidentiality of login credentials and password, and for all activities that occur under the account. If you suspect unauthorized use of your account, contact us immediately at support@asianspices.online."
         },
         {
           "type": "paragraph",
-          "text": "Asian Spices mag een account tijdelijk of permanent blokkeren bij (vermoeden van) misbruik, fraude, het verstrekken van onjuiste gegevens, of bij overtreding van deze algemene voorwaarden."
+          "text": "Asian Spices may temporarily or permanently suspend an account in the event of (suspected) abuse, fraud, provision of incorrect data, or violation of these terms and conditions."
         }
       ]
     },
     {
       "id": "puntenprogramma-reviews",
-      "title": "15. Puntenprogramma en reviews",
+      "title": "15. Points Program and Reviews",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Klanten met een account kunnen deelnemen aan het puntenprogramma van Asian Spices. Punten kunnen onder meer worden verdiend door acties zoals:"
+          "text": "Customers with an account can participate in the Asian Spices points program. Points can be earned through actions such as:"
         },
         {
           "type": "list",
           "items": [
-            "Het uploaden van een video (bijv. een review of gebruikservaring)",
-            "Het delen van content op social media",
-            "Het abonneren/volgen van het Asian Spices-kanaal of -account"
+            "Uploading a video (e.g. a review or product experience)",
+            "Sharing content on social media",
+            "Subscribing to / following the Asian Spices channel or account"
           ]
         },
         {
           "type": "paragraph",
-          "text": "De exacte hoeveelheid punten per actie, de puntendrempels en de bijbehorende beloningen worden binnen het platform zelf gecommuniceerd en kunnen van tijd tot tijd wijzigen; deze worden daarom niet in detail in deze algemene voorwaarden vastgelegd."
+          "text": "The exact amount of points per action, point thresholds, and associated rewards are communicated within the platform itself and may change from time to time; they are therefore not set out in detail in these general terms and conditions."
         },
         {
           "type": "paragraph",
-          "text": "Asian Spices behoudt zich het recht voor om deelname aan het puntenprogramma te weigeren of te beëindigen bij misbruik, fraude, of het inzenden van ongepaste content (bijv. video’s die niet aan de communityregels voldoen)."
+          "text": "Asian Spices reserves the right to refuse or terminate participation in the points program in cases of abuse, fraud, or the submission of inappropriate content (e.g., videos that do not adhere to community guidelines)."
         }
       ]
     },
     {
       "id": "toepasselijk-recht-geschillen",
-      "title": "16. Toepasselijk recht en geschillen",
+      "title": "16. Applicable Law and Disputes",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Op deze voorwaarden en alle overeenkomsten met Asian Spices is Nederlands recht van toepassing."
+          "text": "These terms and all agreements with Asian Spices are governed by Dutch law."
         },
         {
           "type": "paragraph",
-          "text": "Geschillen kunnen worden voorgelegd aan de bevoegde Nederlandse rechter."
+          "text": "Disputes may be submitted to the competent Dutch court."
         },
         {
           "type": "paragraph",
-          "text": "Daarnaast biedt de Europese Unie consumenten een gratis platform voor het online oplossen van geschillen met een webwinkel, zonder tussenkomst van een rechter: het ODR-platform (Online Dispute Resolution), te vinden op https://ec.europa.eu/consumers/odr. Dit platform is bedoeld voor geschillen tussen consumenten en ondernemers over online aankopen binnen de EU."
+          "text": "Additionally, the European Union offers consumers a free platform for resolving online disputes with an online shop without court intervention: the ODR (Online Dispute Resolution) platform, available at https://ec.europa.eu/consumers/odr. This platform is intended for disputes between consumers and merchants regarding online purchases within the EU."
         }
       ]
     },
     {
       "id": "wijzigingen",
-      "title": "17. Wijzigingen",
+      "title": "17. Amendments",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Asian Spices kan deze algemene voorwaarden wijzigen. De meest actuele versie staat op de website. Voor reeds geplaatste bestellingen gelden de voorwaarden die golden op het moment van bestellen."
+          "text": "Asian Spices may amend these general terms and conditions. The most up-to-date version is published on the website. For orders already placed, the terms that applied at the time of ordering shall remain in effect."
         }
       ]
     },
@@ -294,10 +294,10 @@
         {
           "type": "list",
           "items": [
-            "E-mail: info@asianspices.online",
-            "Klantenservice: support@asianspices.online",
-            "Telefoon: +31 6 44844844",
-            "Adres: Slakkenveen 341, 3205 GK Spijkenisse"
+            "Email: info@asianspices.online",
+            "Customer service: support@asianspices.online",
+            "Phone: +31 6 44844844",
+            "Address: Slakkenveen 341, 3205 GK Spijkenisse"
           ]
         }
       ]

@@ -3,7 +3,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import ProductCard from "@/components/ui/ProductCard";
 import { mapProductCardData } from "@/lib/catalog/map-product-card";
 import { useLoaderStore } from "@/store/useLoaderStore";
@@ -167,11 +167,14 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
             {loading ? (
               "Loading..."
             ) : atEnd ? (
-              "Show Less"
+              <>
+                Show Less
+                <ArrowUp className="ml-3 h-4 w-4" />
+              </>
             ) : (
               <>
                 Load More
-                <ArrowRight className="ml-3 h-4 w-4" />
+                <ArrowDown className="ml-3 h-4 w-4" />
               </>
             )}
           </button>
