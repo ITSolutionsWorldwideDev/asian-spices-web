@@ -304,13 +304,17 @@ export async function PUT(
  * DELETE RECIPE
  */
 export async function DELETE(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const customerId = await getCurrentCustomer();
 
-    const { id } = await req.json();
+    if (customerId instanceof NextResponse) {
+      return customerId;
+    }
+
+    const { id } = await params;
 
     const result = await pool.query(
       `

@@ -28,7 +28,7 @@ export default function RecipeHeaderActions({
   const [saving, setSaving] = useState(false);
 
   async function handleFavorite() {
-    if (saving) return;
+    if (saving || saved) return;
 
     setSaving(true);
 
@@ -119,10 +119,11 @@ export default function RecipeHeaderActions({
         <button
           type="button"
           onClick={handleFavorite}
-          disabled={saving}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-gray-900 shadow-md transition hover:bg-gray-50 disabled:opacity-60"
-          aria-label={saved ? "Unlike recipe" : "Like recipe"}
+          disabled={saving || saved}
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-gray-900 shadow-md transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+          aria-label={saved ? "Recipe already liked" : "Like recipe"}
           aria-pressed={saved}
+          title={saved ? "You already liked this recipe" : "Like recipe"}
         >
           <Heart
             className={`h-5 w-5 ${saved ? "fill-red-500 text-red-500" : "fill-none"}`}

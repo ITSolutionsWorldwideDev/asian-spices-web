@@ -3,6 +3,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { useZodForm } from "@/hooks/useZodForm";
 
@@ -93,6 +94,7 @@ export default function RecipeForm({
   onSuccess,
 }: Props) {
   const isEdit = Boolean(recipeId);
+  const router = useRouter();
 
   const { show, hide } = useLoaderStore();
 
@@ -316,6 +318,11 @@ export default function RecipeForm({
       );
 
       onSuccess?.();
+
+      if (!isEdit) {
+        router.push("/account/recipes");
+        router.refresh();
+      }
     } catch (err) {
       console.error(err);
       setApiError("Failed to save recipe");
