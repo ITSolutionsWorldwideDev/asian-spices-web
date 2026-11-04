@@ -354,13 +354,11 @@ export function generateOrderConfirmationEmailHtml(data: OrderConfirmationEmailD
                         </td>
                       </tr>
                     </table>
-                    <!--
-                    <div style="text-align: center;">
-                      <a href="${loginUrl}" style="display: inline-block; background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 10px 24px; border-radius: 9999px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; font-weight: 700;">
+                                        <div style="text-align: center; margin: 12px 0 6px 0;">
+                      <a href="${loginUrl}" target="_blank" style="display: inline-block; background-color: #ea580c; color: #ffffff; text-decoration: none; padding: 11px 26px; border-radius: 9999px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 13px; font-weight: 700;">
                         Inloggen op uw account &rarr;
                       </a>
                     </div>
-                    -->
                     <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11px; color: #6b7280; text-align: center; margin-top: 10px;">
                       Voor uw veiligheid raden wij aan uw wachtwoord na het inloggen te wijzigen.
                     </div>
@@ -939,7 +937,7 @@ UW ACCOUNT IS AANGEMAAKT
 Er is automatisch een account voor u aangemaakt:
 E-mail: ${data.email || ''}
 Tijdelijk wachtwoord: ${guestPassword}
-<!-- Inloggen: ${loginUrl} -->
+Inloggen: ${loginUrl}
 ` : ''}
 
 Status: Besteld -> Verzonden -> Opgeleverd

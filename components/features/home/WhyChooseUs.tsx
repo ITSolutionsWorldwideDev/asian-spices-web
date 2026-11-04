@@ -26,7 +26,7 @@ const features = [
     icon: "mingcute_medal-fill.png",
   },
   {
-    title: "No Parking, No Hassle:",
+    title: "No Parking, No Hassle",
     desc: "Order online and save time. We bring it to you.",
     iconBg: "bg-linear-to-b from-pink-400 to-rose-500",
     icon: "hugeicons_trade-up.png",

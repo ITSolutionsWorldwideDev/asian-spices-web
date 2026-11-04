@@ -298,6 +298,7 @@ export function generatePartnerApplicationEmailHtml(data: PartnerApplicationEmai
 
           <!-- 6. Footer -->
           ${renderEmailSocialFooter({
+            logoUrl: logoSrc,
             tiktokIconUrl: tiktokIconSrc,
             instagramIconUrl: instagramIconSrc,
             facebookIconUrl: facebookIconSrc,

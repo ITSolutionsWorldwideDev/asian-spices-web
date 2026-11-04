@@ -154,7 +154,11 @@ export default function InfiniteProducts({ initialProducts, filters }: any) {
 
   return (
     <>
-      <ProductCard products={visibleProducts} disableSlicing={true} />
+      <ProductCard
+        products={visibleProducts}
+        disableSlicing={true}
+        gridClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 min-[1440px]:grid-cols-4 gap-3.5 sm:gap-4 lg:gap-5 mt-6 sm:mt-8 lg:mt-10"
+      />
 
       {showButton && (
         <div className="mt-8 mb-10 flex justify-center">

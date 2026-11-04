@@ -163,11 +163,10 @@ export default function ExploreTheCollection() {
 
         <div
           ref={tabsRef}
-          className="flex w-full max-w-full min-w-0 gap-2 overflow-x-auto pb-1.5 pt-0.5 scrollbar-hide sm:gap-2.5 touch-pan-x"
+          className="flex w-full max-w-full min-w-0 gap-2 overflow-x-auto pb-1.5 pt-0.5 scrollbar-hide sm:gap-2.5"
           style={{
             scrollbarWidth: "none",
             WebkitOverflowScrolling: "touch",
-            overscrollBehaviorX: "contain",
           }}
         >
           <button
@@ -232,11 +231,10 @@ export default function ExploreTheCollection() {
 
           <div
             ref={sliderRef}
-            className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-3 py-2 scrollbar-hide sm:px-1 sm:gap-5 touch-pan-x"
+            className="flex snap-x snap-proximity gap-4 overflow-x-auto px-3 py-2 scrollbar-hide sm:px-1 sm:gap-5"
             style={{
               scrollbarWidth: "none",
               WebkitOverflowScrolling: "touch",
-              overscrollBehaviorX: "contain",
             }}
           >
             {products.map((product) => (
