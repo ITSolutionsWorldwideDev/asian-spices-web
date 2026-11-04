@@ -228,19 +228,6 @@ export default function AddressForm({
           />
         </FormField>
 
-        {/* ADDRESS LINE 2 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Address Line 2
-          </label>
-
-          <input
-            {...register("address_line2")}
-            placeholder="Apartment, suite, etc. (optional)"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-          />
-        </div>
-
         {/* CITY + STATE */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <FormField label="City" error={getErrorMessage(errors.city)}>

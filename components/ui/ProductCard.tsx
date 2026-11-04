@@ -44,11 +44,13 @@ type Product = {
 interface ProductCardProps {
   products: Product[];
   disableSlicing?: boolean;
+  gridClassName?: string;
 }
 
 export default function ProductCard({
   products,
   disableSlicing = false,
+  gridClassName,
 }: ProductCardProps) {
   const { symbol, rate } = useCurrencyStore();
   const { taxRules, taxRulesLoaded } = useGlobalStore();
@@ -81,7 +83,12 @@ export default function ProductCard({
 
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-10">
+      <div
+        className={
+          gridClassName ||
+          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mt-10"
+        }
+      >
         {visibleProducts.map((product, index) => {
           const pickQty = getPickQty(product.id);
 
@@ -168,7 +175,7 @@ export default function ProductCard({
           return (
             <div
               key={`${product.id}-${index}`}
-              className="h-full min-w-0 bg-white rounded-2xl shadow hover:shadow-2xl transition p-3 sm:p-4 relative flex flex-col justify-between"
+              className="h-full min-w-0 w-full bg-white rounded-2xl shadow hover:shadow-2xl transition p-3 sm:p-3.5 lg:p-4 relative flex flex-col justify-between"
               data-cart-anchor
             >
               {/* Upper Section */}
@@ -295,16 +302,16 @@ export default function ProductCard({
 
               {/* Qty picker + cart — fixed-width stepper so qty never collapses */}
               <div
-                className="notranslate mt-4 pt-1 flex min-w-0 items-stretch gap-2"
+                className="notranslate mt-4 pt-1 flex min-w-0 items-center gap-2 sm:gap-2.5"
                 translate="no"
               >
-                <div className="inline-flex h-11 sm:h-12 shrink-0 items-stretch overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div className="inline-flex h-11 sm:h-12 shrink-0 items-stretch overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xs">
                   <button
                     type="button"
                     aria-label={`Decrease quantity of ${product.name}`}
                     onClick={() => setPickQty(product.id, pickQty - 1)}
                     disabled={pickQty <= 1}
-                    className="h-full w-9 shrink-0 flex items-center justify-center bg-gray-100 text-base font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
+                    className="h-full w-8 sm:w-9 shrink-0 flex items-center justify-center bg-gray-100 text-base font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
                   >
                     −
                   </button>
@@ -318,13 +325,13 @@ export default function ProductCard({
                       if (isNaN(value) || value < 1) return;
                       setPickQty(product.id, value);
                     }}
-                    className="h-full w-9 shrink-0 border-x border-gray-200 bg-white text-center text-sm font-semibold text-stone-900 outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    className="h-full w-8 sm:w-9 shrink-0 border-x border-gray-200 bg-white text-center text-sm font-semibold text-stone-900 outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                   <button
                     type="button"
                     aria-label={`Increase quantity of ${product.name}`}
                     onClick={() => setPickQty(product.id, pickQty + 1)}
-                    className="h-full w-9 shrink-0 flex items-center justify-center bg-gray-100 text-base font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
+                    className="h-full w-8 sm:w-9 shrink-0 flex items-center justify-center bg-gray-100 text-base font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
                   >
                     +
                   </button>
@@ -332,7 +339,7 @@ export default function ProductCard({
                 <button
                   type="button"
                   aria-label={`Add ${pickQty} ${product.name} to cart`}
-                  className="cursor-pointer shrink-0 h-11 w-11 sm:h-12 sm:w-auto sm:min-w-[76px] sm:px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="cursor-pointer shrink-0 h-11 w-14 sm:h-12 sm:w-16 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.96] shadow-xs hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
                   onClick={(e) => {
                     if (currentPrice == null) return;
                     addToCart(
@@ -360,7 +367,7 @@ export default function ProductCard({
                   }}
                   disabled={currentPrice == null}
                 >
-                  <CartPlusIcon className="h-6 w-auto sm:h-7 shrink-0" />
+                  <CartPlusIcon className="h-5.5 w-auto sm:h-6 shrink-0" />
                 </button>
               </div>
             </div>

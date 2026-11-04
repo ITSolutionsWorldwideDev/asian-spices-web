@@ -2,7 +2,12 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-const UFS_BASE = "https://luyetxymax.ufs.sh/f";
+// Fallback across all UploadThing apps/domains used in Asian Spices
+const UFS_BASES = [
+  "https://luyetxymax.ufs.sh/f",
+  "https://nm60drcq00.ufs.sh/f",
+  "https://utfs.io/f",
+];
 
 function getMimeTypeFromExt(ext: string): string {
   switch (ext.toLowerCase()) {
@@ -39,23 +44,40 @@ export async function GET(
   const [, baseKey, ext] = match;
 
   try {
-    // 1. Try full filename first (matches new uploads where customId ends with .jpg/.png)
-    let upstream = await fetch(`${UFS_BASE}/${encodeURIComponent(filename)}`, {
-      next: { revalidate: 60 * 60 * 24 * 30 },
-    });
+    let upstream: Response | null = null;
 
-    // 2. Fallback to key without extension (matches older uploads keyed by raw UploadThing key)
-    if (!upstream.ok) {
-      upstream = await fetch(`${UFS_BASE}/${encodeURIComponent(baseKey)}`, {
-        next: { revalidate: 60 * 60 * 24 * 30 },
-      });
+    for (const base of UFS_BASES) {
+      try {
+        // 1. Try full filename first (matches new uploads where customId ends with .jpg/.png)
+        let res = await fetch(`${base}/${encodeURIComponent(filename)}`, {
+          next: { revalidate: 60 * 60 * 24 * 30 },
+        });
+
+        // 2. Fallback to key without extension (matches older uploads keyed by raw UploadThing key)
+        if (!res.ok) {
+          res = await fetch(`${base}/${encodeURIComponent(baseKey)}`, {
+            next: { revalidate: 60 * 60 * 24 * 30 },
+          });
+        }
+
+        if (res.ok && res.body) {
+          upstream = res;
+          break;
+        }
+      } catch {
+        continue;
+      }
     }
 
-    if (!upstream.ok || !upstream.body) {
-      return new NextResponse("Image not found", { status: upstream.status || 404 });
+    if (!upstream || !upstream.body) {
+      return new NextResponse("Image not found", { status: 404 });
     }
 
-    const contentType = getMimeTypeFromExt(ext);
+    const upstreamContentType = upstream.headers.get("content-type");
+    const contentType =
+      upstreamContentType && upstreamContentType.startsWith("image/")
+        ? upstreamContentType
+        : getMimeTypeFromExt(ext);
 
     // Return a clean response that strips UploadThing's `x-robots-tag: noindex`
     return new NextResponse(upstream.body, {

@@ -49,6 +49,7 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
   const email = (data.email && data.email.trim()) || '';
   const temporaryPassword = data.temporaryPassword?.trim() || '';
   const accountType = (data.accountType && data.accountType.trim()) || 'Klantaccount';
+  const loginUrl = (data.loginUrl && data.loginUrl.trim()) || 'https://asianspices.online/login';
   const logoSrc = data.logoUrl || DEFAULT_LOGO_SRC || ASIAN_SPICES_LOGO_BASE64;
   const tiktokIconSrc = data.tiktokIconUrl || DEFAULT_TIKTOK_SRC || TIKTOK_ICON_BASE64;
   const instagramIconSrc = data.instagramIconUrl || DEFAULT_INSTAGRAM_SRC || INSTAGRAM_ICON_BASE64;
@@ -246,6 +247,29 @@ export function generateAccountRegistrationEmailHtml(data: AccountRegistrationEm
                 </tr>
               </table>
               ` : ''}
+
+              <!-- CTA: Direct inloggen op uw account -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 4px 0 22px 0;">
+                <tr>
+                  <td align="center" style="padding: 4px 0 14px 0;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+                      <tr>
+                        <td align="center" bgcolor="#ea580c" style="background-color: #ea580c; border-radius: 9999px; padding: 14px 34px; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35);">
+                          <a href="${loginUrl}" target="_blank" style="display: inline-block; font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 14px; font-weight: 700; color: #ffffff; text-decoration: none; letter-spacing: 0.3px; line-height: 100%;">
+                            Inloggen op uw account &rarr;
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; font-size: 11.5px; color: #71717a; text-align: center; margin-top: 12px; line-height: 18px;">
+                      Werkt de knop niet? Ga direct naar:<br />
+                      <a href="${loginUrl}" target="_blank" style="color: #ea580c; text-decoration: underline; font-weight: 600; word-break: break-all;">
+                        ${escapeHtml(loginUrl)}
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
 
               <!-- Benefits Card (Matches How Nu Verder style) -->
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; border-radius: 12px; border: 1px solid #edf0f3; padding: 20px; margin-bottom: 8px;">
@@ -558,6 +582,7 @@ export function generateAccountRegistrationEmailText(data: AccountRegistrationEm
   const email = (data.email && data.email.trim()) || '';
   const temporaryPassword = data.temporaryPassword?.trim() || '';
   const accountType = (data.accountType && data.accountType.trim()) || 'Klantaccount';
+  const loginUrl = (data.loginUrl && data.loginUrl.trim()) || 'https://asianspices.online/login';
 
   const greetingLine = firstName
     ? `Welkom bij Asian Spices, ${firstName}!`
@@ -583,6 +608,12 @@ UW ACCOUNTGEGEVENS:
 E-mailadres: ${email}
 ${temporaryPassword ? `Tijdelijk wachtwoord: ${temporaryPassword}\n` : ''}Accounttype: ${accountType}
 ${temporaryPassword ? '\nVeiligheidstip: Wij raden u aan om na het inloggen dit tijdelijke wachtwoord te wijzigen via uw profielinstellingen.\n' : ''}
+DIRECT INLOGGEN:
+--------------------------------------------------
+U kunt direct inloggen op uw account via onderstaande link:
+${loginUrl}
+
+--------------------------------------------------
 Met uw account heeft u direct toegang tot:
 - Overzicht van uw actuele en eerdere bestellingen
 - Inzicht en beheer van uw contact- en factuurgegevens

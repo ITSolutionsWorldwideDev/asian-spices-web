@@ -29,6 +29,30 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
   const [loading, setLoading] = useState(true);
   const [qtyByProduct, setQtyByProduct] = useState<Record<string, number>>({});
   const sliderRef = useRef<HTMLDivElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnterCard = (id: any) => {
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(hover: hover)").matches
+    ) {
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = setTimeout(() => {
+        setHoveredId(id);
+      }, 150);
+    }
+  };
+
+  const handleMouseLeaveCard = () => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    setHoveredId(null);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    };
+  }, []);
 
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
@@ -49,7 +73,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
     async function loadSaleItems() {
       try {
         const res = await fetch(
-          "/api/products?sale_only=true&sort=random&limit=5",
+          "/api/products?sale_only=true&sort=random",
         );
         const json = await res.json();
 
@@ -139,16 +163,24 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
       <button
         type="button"
         aria-label="Previous deals"
-        onClick={() => scroll("left")}
-        className="absolute left-0 top-1/2 z-40 hidden sm:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center -translate-y-1/2 rounded-full border border-gray-100 bg-black text-white opacity-100 shadow-md transition active:scale-95 sm:left-1 md:left-0 md:opacity-0 md:group-hover:opacity-100"
+        onClick={() => {
+          handleMouseLeaveCard();
+          scroll("left");
+        }}
+        onMouseEnter={handleMouseLeaveCard}
+        className="absolute left-0 top-1/2 z-[70] hidden sm:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center -translate-y-1/2 rounded-full border border-gray-100 bg-black text-white opacity-100 shadow-md transition active:scale-95 sm:left-1 md:left-0 md:opacity-0 md:group-hover:opacity-100 cursor-pointer"
       >
         <ChevronLeft size={20} />
       </button>
       <button
         type="button"
         aria-label="Next deals"
-        onClick={() => scroll("right")}
-        className="absolute right-0 top-1/2 z-40 hidden sm:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center -translate-y-1/2 rounded-full border border-gray-100 bg-black text-white opacity-100 shadow-md transition active:scale-95 sm:right-1 md:right-0 md:opacity-0 md:group-hover:opacity-100"
+        onClick={() => {
+          handleMouseLeaveCard();
+          scroll("right");
+        }}
+        onMouseEnter={handleMouseLeaveCard}
+        className="absolute right-0 top-1/2 z-[70] hidden sm:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center -translate-y-1/2 rounded-full border border-gray-100 bg-black text-white opacity-100 shadow-md transition active:scale-95 sm:right-1 md:right-0 md:opacity-0 md:group-hover:opacity-100 cursor-pointer"
       >
         <ChevronRight size={20} />
       </button>
@@ -156,6 +188,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
       {/* Horizontal Scroll Box */}
       <div
         ref={sliderRef}
+        onScroll={handleMouseLeaveCard}
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-3 py-3 scrollbar-hide sm:gap-4 sm:px-10 sm:py-4 md:gap-6 md:px-12"
         style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
       >
@@ -231,6 +264,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
             <div
               key={item.id}
               className="relative w-[280px] sm:w-[300px] flex-shrink-0 snap-start rounded-2xl border border-gray-50 bg-white p-4 text-black shadow-lg flex flex-col justify-between sm:p-5"
+              onMouseLeave={handleMouseLeaveCard}
             >
               <div className="relative flex flex-col flex-1">
                 {/* Badges Container */}
@@ -247,14 +281,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                 <Link
                   href={productHref}
                   className="flex flex-col flex-1 block group cursor-pointer"
-                  onMouseEnter={() => {
-                    if (
-                      typeof window !== "undefined" &&
-                      window.matchMedia("(hover: hover)").matches
-                    ) {
-                      setHoveredId(item.id);
-                    }
-                  }}
+                  onMouseEnter={() => handleMouseEnterCard(item.id)}
                 >
                   <div className="relative block h-48 w-full overflow-hidden rounded-xl bg-gray-50 sm:h-52">
                     <Image
@@ -323,7 +350,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                     aria-label={`Decrease quantity of ${item.title}`}
                     onClick={() => setPickQty(String(item.id), pickQty - 1)}
                     disabled={pickQty <= 1}
-                    className="h-full w-9 shrink-0 flex items-center justify-center bg-gray-100 text-base font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
+                    className="h-full w-8 sm:w-9 shrink-0 flex items-center justify-center bg-gray-100 text-base font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer"
                   >
                     −
                   </button>
@@ -337,13 +364,13 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                       if (isNaN(value) || value < 1) return;
                       setPickQty(String(item.id), value);
                     }}
-                    className="h-full w-9 shrink-0 border-x border-gray-200 bg-white text-center text-sm font-semibold text-stone-900 outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    className="h-full w-8 sm:w-9 shrink-0 border-x border-gray-200 bg-white text-center text-sm font-semibold text-stone-900 outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                   <button
                     type="button"
                     aria-label={`Increase quantity of ${item.title}`}
                     onClick={() => setPickQty(String(item.id), pickQty + 1)}
-                    className="h-full w-9 shrink-0 flex items-center justify-center bg-gray-100 text-base font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
+                    className="h-full w-8 sm:w-9 shrink-0 flex items-center justify-center bg-gray-100 text-base font-medium text-stone-700 transition hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer"
                   >
                     +
                   </button>
@@ -351,7 +378,7 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                 <button
                   type="button"
                   aria-label={`Add ${pickQty} ${item.title} to cart`}
-                  className="cursor-pointer shrink-0 h-11 w-11 sm:h-12 sm:w-auto sm:min-w-[76px] sm:px-4 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="cursor-pointer shrink-0 h-11 w-14 sm:h-12 sm:w-16 rounded-xl bg-[#FE8C00] hover:bg-[#e57e00] text-white flex items-center justify-center transition active:scale-[0.96] shadow-xs hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
                   onClick={(e) => {
                     if (realPrice == null || baseWithTax == null) return;
                     addToCart(
@@ -379,14 +406,14 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
                   }}
                   disabled={realPrice == null}
                 >
-                  <CartPlusIcon className="h-7 w-auto" />
+                  <CartPlusIcon className="h-5.5 w-auto sm:h-6 shrink-0" />
                 </button>
               </div>
 
               {hoveredId === item.id && (
                 <div
                   className="absolute -left-2 -right-2 -top-2 z-50 hidden rounded-2xl border border-gray-100 bg-white p-4 shadow-2xl md:block md:min-w-[320px] lg:min-w-[340px]"
-                  onMouseLeave={() => setHoveredId(null)}
+                  onMouseLeave={handleMouseLeaveCard}
                 >
                   <Flash_Sale_Hover_product_Card
                     item={displayItem}
