@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Star,
   Check,
@@ -27,6 +27,7 @@ import { useGlobalStore } from "@/store/useGlobalStore";
 import Link from "next/link";
 import { anchorFromClick } from "@/lib/cart-toast-anchor";
 import { resolveTaxRate } from "@/lib/commerce/tax";
+import { toGa4Item, trackViewItem } from "@/lib/seo/ecommerce";
 
 export default function ProductDesc({
   product,
@@ -143,6 +144,19 @@ export default function ProductDesc({
   }
 
   const priceReady = taxRate != null;
+
+  useEffect(() => {
+    if (!priceReady || !currentPrice) return;
+    trackViewItem(
+      toGa4Item({
+        id: product.id,
+        name: product.name,
+        category: product.category_slug || category,
+        price: currentPrice,
+        quantity: 1,
+      }),
+    );
+  }, [product.id, priceReady, currentPrice, product.name, product.category_slug, category]);
 
   const rawSave =
     originalPrice && originalPrice > currentPrice

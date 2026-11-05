@@ -31,8 +31,10 @@ export async function GET(req: NextRequest) {
         json_agg(
           json_build_object(
             'id', i.product_id,
-            'title', p.name,            
+            'title', p.name,
+            'slug', p.slug,
             'category_id', p.category_id,
+            'category_slug', c.slug,
             'price', i.price,
             'quantity', i.quantity,
             'image', md.file_url
@@ -42,6 +44,7 @@ export async function GET(req: NextRequest) {
       FROM store_orders o
       LEFT JOIN store_order_items i ON o.id = i.order_id
       LEFT JOIN store_products p ON i.product_id = p.id
+      LEFT JOIN store_categories c ON c.id = p.category_id
       LEFT JOIN store_product_images pi 
         ON pi.product_id = p.id AND pi.is_primary = true
       LEFT JOIN media md ON md.media_id = pi.url::int

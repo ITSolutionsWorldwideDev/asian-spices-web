@@ -29,6 +29,7 @@ import {
   SHIPPING_OPTIONS,
 } from "@/lib/commerce/pricing";
 import { useRecipeDiscountStore } from "@/store/useRecipeDiscountStore";
+import { toGa4Item, trackBeginCheckout } from "@/lib/seo/ecommerce";
 
 export type CheckoutData = {
   email: string;
@@ -106,6 +107,23 @@ export default function Checkout() {
   useEffect(() => {
     fetchInitialData();
   }, []);
+
+  const beginCheckoutTracked = useRef(false);
+  useEffect(() => {
+    if (beginCheckoutTracked.current || cart.length === 0) return;
+    beginCheckoutTracked.current = true;
+    trackBeginCheckout(
+      cart.map((item) =>
+        toGa4Item({
+          id: item.id,
+          name: item.title,
+          category: item.category_slug,
+          price: Number(item.base_price) || 0,
+          quantity: item.quantity,
+        }),
+      ),
+    );
+  }, [cart]);
 
   useEffect(() => {
     const cancelAbandonedCheckoutOrder = async () => {

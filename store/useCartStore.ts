@@ -6,6 +6,7 @@ import { useCurrencyStore } from "./useCurrencyStore";
 import { useGlobalStore } from "./useGlobalStore";
 import { useToastStore, type CartActionOptions } from "./useToastStore";
 import { calculateTotals } from "@/lib/commerce/pricing";
+import { toGa4Item, trackAddToCart } from "@/lib/seo/ecommerce";
 
 export interface CartItem {
   id: string;
@@ -82,6 +83,16 @@ export const useCartStore = create<CartState>()(
         }
 
         set({ cart: updatedCart });
+
+        trackAddToCart(
+          toGa4Item({
+            id: item.id,
+            name: item.title,
+            category: item.category_slug,
+            price: Number(item.base_price) || 0,
+            quantity: addQty,
+          }),
+        );
 
         const newQty = existing ? existing.quantity + addQty : addQty;
         if (options?.showToast !== false) {

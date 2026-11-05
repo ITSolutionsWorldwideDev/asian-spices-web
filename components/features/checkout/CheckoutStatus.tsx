@@ -11,6 +11,7 @@ import OrderSummaryReadOnly from "./OrderSummaryReadOnly";
 
 import { useLoaderStore } from "@/store/useLoaderStore";
 import { useCartStore } from "@/store/useCartStore";
+import { toGa4Item, trackPurchase } from "@/lib/seo/ecommerce";
 
 interface Order {
   id: string;
@@ -88,8 +89,30 @@ export default function CheckoutStatus({ orderId }: { orderId: string }) {
   useEffect(() => {
     if (order?.payment_status === "paid") {
       clearCart();
+
+      const items = (order.cart_items || [])
+        .filter((item: any) => item?.id && item?.title)
+        .map((item: any) =>
+          toGa4Item({
+            id: item.id,
+            name: item.title,
+            category: item.category_slug,
+            price: Number(item.price) || 0,
+            quantity: Number(item.quantity) || 1,
+          }),
+        );
+
+      if (items.length > 0) {
+        trackPurchase({
+          transactionId: order.order_number || order.id,
+          value: Number(order.total_amount) || 0,
+          tax: Number(order.tax_amount) || 0,
+          shipping: Number(order.shipping_amount) || 0,
+          items,
+        });
+      }
     }
-  }, [order?.payment_status]);
+  }, [order?.payment_status, order, clearCart]);
 
   if (loading) {
     return (
