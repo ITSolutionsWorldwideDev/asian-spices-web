@@ -80,7 +80,7 @@ export function ProductLinkCard({ productUrl }: ProductLinkCardProps) {
   const imageUrl = preview?.imageUrl ?? null;
 
   return (
-    <div className="overflow-hidden rounded-[1.55rem] border border-[rgba(226,218,204,0.95)] bg-[rgba(249,246,240,0.98)] shadow-[0_18px_40px_rgba(95,61,37,0.09)]">
+    <div className="overflow-hidden rounded-xl sm:rounded-[1.55rem] border border-[rgba(226,218,204,0.95)] bg-[rgba(249,246,240,0.98)] shadow-[0_18px_40px_rgba(95,61,37,0.09)]">
       {imageUrl ? (
         <div className="aspect-[16/8.25] overflow-hidden bg-[rgba(92,65,45,0.08)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -91,46 +91,46 @@ export function ProductLinkCard({ productUrl }: ProductLinkCardProps) {
           />
         </div>
       ) : null}
-      <div className="space-y-4 p-5 sm:p-6">
-        <div className="flex items-start justify-between gap-4">
+      <div className="space-y-2.5 sm:space-y-4 p-3.5 sm:p-5 md:p-6">
+        <div className="flex items-start justify-between gap-3 sm:gap-4">
           <div className="space-y-1">
-            <p className="inline-flex rounded-full bg-[rgba(224,176,74,0.18)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[rgba(152,104,30,0.95)]">
+            <p className="inline-flex rounded-full bg-[rgba(224,176,74,0.18)] px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.12em] text-[rgba(152,104,30,0.95)]">
               Product
             </p>
-            <h3 className="text-[1.65rem] font-semibold leading-[1.2] text-[#43362f]">
+            <h3 className="text-base sm:text-xl md:text-[1.65rem] font-semibold leading-snug sm:leading-[1.2] text-[#43362f]">
               {title}
             </h3>
           </div>
           {base_price ? (
-            <span className="shrink-0 rounded-full bg-[rgba(189,94,66,0.12)] px-3.5 py-1.5 text-sm font-semibold text-[var(--paprika)]">
+            <span className="shrink-0 rounded-full bg-[rgba(189,94,66,0.12)] px-2.5 py-1 sm:px-3.5 sm:py-1.5 text-xs sm:text-sm font-semibold text-[var(--paprika)]">
               {base_price}
             </span>
           ) : null}
         </div>
 
         {description ? (
-          <p className="line-clamp-3 text-[15px] leading-7 text-[#5b4d43]">
+          <p className="line-clamp-3 text-xs sm:text-[15px] leading-5 sm:leading-7 text-[#5b4d43]">
             {description}
           </p>
         ) : null}
 
         {status === "loading" ? (
-          <p className="text-sm text-[rgba(116,98,84,0.8)]">
+          <p className="text-xs sm:text-sm text-[rgba(116,98,84,0.8)]">
             Loading product preview...
           </p>
         ) : null}
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <a
             href={productUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex rounded-full bg-[var(--paprika)] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#c7644d]"
+            className="inline-flex rounded-full bg-[var(--paprika)] px-3.5 py-1.5 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-medium text-white transition-colors hover:bg-[#c7644d]"
           >
             View Product
           </a>
           {status === "error" ? (
-            <span className="text-sm text-[rgba(116,98,84,0.8)]">
+            <span className="text-xs sm:text-sm text-[rgba(116,98,84,0.8)]">
               Product page link is still available.
             </span>
           ) : null}

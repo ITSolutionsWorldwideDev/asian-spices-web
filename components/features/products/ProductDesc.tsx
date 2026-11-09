@@ -343,33 +343,33 @@ export default function ProductDesc({
           {isPriceAvailable ? (
             <div
               className={`flex flex-wrap items-center gap-3 sm:gap-4 ${
-                hasSale ? "rounded-xl border border-slate-200 p-3 sm:px-4 sm:py-3 bg-white" : ""
+                hasSale ? "rounded-xl border border-slate-200 p-2.5 sm:px-3.5 sm:py-2.5 bg-white" : ""
               }`}
             >
               {!priceReady ? (
                 <span
-                  className="inline-block h-10 sm:h-12 w-28 animate-pulse rounded bg-orange-100"
+                  className="inline-block h-8 sm:h-9 w-24 animate-pulse rounded bg-orange-100"
                   aria-hidden
                 />
               ) : (
                 <>
                   {hasSale && originalPrice && (
-                    <span className="text-2xl sm:text-3xl lg:text-5xl font-bold leading-none text-gray-400 line-through">
+                    <span className="text-base sm:text-lg lg:text-xl font-medium leading-none text-gray-400 line-through">
                       {symbol}
                       {(originalPrice * rate).toFixed(2)}
                     </span>
                   )}
                   <span
                     className={`font-extrabold leading-none text-orange-500 ${
-                      hasSale ? "text-3xl sm:text-4xl lg:text-6xl" : "text-3xl sm:text-4xl lg:text-5xl"
+                      hasSale ? "text-2xl sm:text-3xl lg:text-3xl" : "text-2xl sm:text-3xl lg:text-3xl"
                     }`}
                   >
                     {symbol}
                     {(currentPrice * rate).toFixed(2)}
                   </span>
                   {hasSale && rawSave > 0 && (
-                    <p className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-green-100 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm lg:text-lg font-bold text-green-700">
-                      <Clock3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px]" />
+                    <p className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs sm:text-sm font-semibold text-green-700">
+                      <Clock3 className="w-3.5 h-3.5 shrink-0" />
                       You save {symbol}
                       {(rawSave * rate).toFixed(2)}
                     </p>
