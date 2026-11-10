@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
-import Nav from "@/components/layout/Nav";
 import FilterSidebar from "@/components/features/products/FilterSidebar";
 import InfiniteProducts from "@/components/features/products/InfiniteProducts";
 import SortDropdown from "@/components/features/products/filters/SortDropdown";
@@ -203,9 +202,6 @@ export default async function CategoryPage({
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Top Floating / Fixed Nav */}
-      <Nav />
-
       {/* 1. Dedicated Hero Section Wrapper */}
       <section className="relative w-full bg-gradient-to-b from-[#fbf9f5] via-[#faf7f2]/50 to-white pt-2 sm:pt-2 md:pt-3 xl:pt-4 pb-2 sm:pb-4 border-b border-gray-100/60">
         <div className="container mx-auto px-4 sm:px-6">

@@ -60,19 +60,13 @@ export const getProducts = async (filters: any) => {
         SELECT COUNT(*)::int
         FROM store_product_reviews rv
         WHERE rv.product_id = p.id
-          AND (
-            rv.status IS NULL
-            OR rv.status IN ('approved', 'pending', 'published')
-          )
+          AND rv.status = 'approved'
       ) AS reviews,
       (
         SELECT ROUND(AVG(rv.rating)::numeric, 1)
         FROM store_product_reviews rv
         WHERE rv.product_id = p.id
-          AND (
-            rv.status IS NULL
-            OR rv.status IN ('approved', 'pending', 'published')
-          )
+          AND rv.status = 'approved'
       ) AS avg_rating,
       ${rankField}
     FROM store_products p
@@ -284,20 +278,14 @@ export const getProductBySlug = async (
         SELECT COUNT(*)::int
         FROM store_product_reviews rv
         WHERE rv.product_id = p.id
-          AND (
-            rv.status IS NULL
-            OR rv.status IN ('approved', 'pending', 'published')
-          )
+          AND rv.status = 'approved'
       ) AS reviews,
       COALESCE(
         (
           SELECT ROUND(AVG(rv.rating)::numeric, 1)::float
           FROM store_product_reviews rv
           WHERE rv.product_id = p.id
-            AND (
-              rv.status IS NULL
-              OR rv.status IN ('approved', 'pending', 'published')
-            )
+            AND rv.status = 'approved'
         ),
         0
       ) AS rating,
@@ -306,10 +294,7 @@ export const getProductBySlug = async (
           SELECT ROUND(AVG(rv.rating)::numeric, 1)::float
           FROM store_product_reviews rv
           WHERE rv.product_id = p.id
-            AND (
-              rv.status IS NULL
-              OR rv.status IN ('approved', 'pending', 'published')
-            )
+            AND rv.status = 'approved'
         ),
         0
       ) AS avg_rating,
@@ -460,10 +445,7 @@ export const getProductReviews = async (productId: string, page = 1) => {
     FROM store_product_reviews r
     Left JOIN store_customers c ON r.customer_id = c.id
     WHERE r.product_id = $1
-      AND (
-        r.status IS NULL
-        OR r.status IN ('approved', 'pending', 'published')
-      )
+      AND r.status = 'approved'
     ORDER BY r.created_at DESC
     LIMIT $2 OFFSET $3
   `;
@@ -474,20 +456,14 @@ export const getProductReviews = async (productId: string, page = 1) => {
       ROUND(AVG(rating)::numeric, 1) as avg
     FROM store_product_reviews
     WHERE product_id = $1
-      AND (
-        status IS NULL
-        OR status IN ('approved', 'pending', 'published')
-      )
+      AND status = 'approved'
   `;
 
   const breakdownQuery = `
     SELECT rating, COUNT(*)::int as count
     FROM store_product_reviews
     WHERE product_id = $1
-      AND (
-        status IS NULL
-        OR status IN ('approved', 'pending', 'published')
-      )
+      AND status = 'approved'
     GROUP BY rating
   `;
 
@@ -514,10 +490,7 @@ export const getProductReviewsSummary = async (productId: string) => {
       ROUND(AVG(rating)::numeric, 1) AS average
     FROM store_product_reviews
     WHERE product_id = $1
-      AND (
-        status IS NULL
-        OR status IN ('approved', 'pending', 'published')
-      )
+      AND status = 'approved'
     `,
     [productId],
   );
@@ -541,10 +514,7 @@ export const getSiteReviewsSummary = async () => {
     FROM store_product_reviews
     WHERE product_id IS NOT NULL
       AND rating IS NOT NULL
-      AND (
-        status IS NULL
-        OR status IN ('approved', 'pending', 'published')
-      )
+      AND status = 'approved'
     `,
   );
 
@@ -564,10 +534,7 @@ export const getRecipeReviewsSummary = async (recipeId: string) => {
     FROM store_product_reviews
     WHERE rating IS NOT NULL
       AND recipe_id = $1
-      AND (
-        status IS NULL
-        OR status IN ('approved', 'pending', 'published')
-      )
+      AND status = 'approved'
     `,
     [recipeId],
   );
@@ -594,10 +561,7 @@ export const getRecipeReviews = async (recipeId: string, page = 1) => {
     FROM store_product_reviews r
     LEFT JOIN store_customers c ON r.customer_id = c.id
     WHERE r.recipe_id = $1
-      AND (
-        r.status IS NULL
-        OR r.status IN ('approved', 'pending', 'published')
-      )
+      AND r.status = 'approved'
     ORDER BY r.created_at DESC
     LIMIT $2 OFFSET $3
   `;
@@ -609,10 +573,7 @@ export const getRecipeReviews = async (recipeId: string, page = 1) => {
     FROM store_product_reviews
     WHERE recipe_id = $1
       AND rating IS NOT NULL
-      AND (
-        status IS NULL
-        OR status IN ('approved', 'pending', 'published')
-      )
+      AND status = 'approved'
   `;
 
   const [reviewsRes, statsRes] = await Promise.all([

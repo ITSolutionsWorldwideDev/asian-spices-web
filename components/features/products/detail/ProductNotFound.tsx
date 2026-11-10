@@ -4,16 +4,11 @@
 
 import Link from "next/link";
 import { SearchX } from "lucide-react";
-import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 
 export default function ProductNotFound() {
   return (
     <div className="bg-gray-50">
-      <div className="bg-black">
-        <Nav />
-      </div>
-
       <div className="bg-gray-50 min-h-200 flex flex-col">
         {/* TOP SPACE (same feel as product page) */}
         <div className="container mx-auto px-6 py-20 flex flex-col items-center text-center">

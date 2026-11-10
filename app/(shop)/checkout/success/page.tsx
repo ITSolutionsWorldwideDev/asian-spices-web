@@ -1,6 +1,5 @@
 // app/checkout/success/page.tsx
 
-import Nav from "@/components/layout/Nav";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import CheckoutStatus from "@/components/features/checkout/CheckoutStatus";
@@ -25,10 +24,6 @@ export default async function Page({ searchParams }: Props) {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-black">
-        <Nav />
-      </div>
-
       <div className="container mx-auto px-6 py-10">
         <div className="mb-10">
           <Link

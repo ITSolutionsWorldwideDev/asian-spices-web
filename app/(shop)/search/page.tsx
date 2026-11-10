@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { getProducts } from "@/lib/dbactions/products";
 import { getRecipes } from "@/lib/dbactions/recipes";
-import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import { Search } from "lucide-react";
 import SearchResultsClient from "@/components/features/search/SearchResultsClient";
@@ -115,11 +114,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <>
       <main className="min-h-screen bg-gray-50">
-        {/* Nav */}
-        <div className="bg-white shadow-sm">
-          <Nav />
-        </div>
-
         {/* Header */}
         <div className="border-b bg-white px-4 py-5 sm:py-8">
           <div className="container mx-auto">

@@ -1,7 +1,6 @@
 // app/checkout/cancel/page.tsx
 
 import React from "react";
-import Nav from "@/components/layout/Nav";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { pool } from "@/core/db";
@@ -50,10 +49,6 @@ export default async function Page({ searchParams }: Props) {
 
   return (
     <div>
-      <div className="bg-black">
-        <Nav />
-      </div>
-
       <div className="container mx-auto px-6 py-10">
         <div className="mb-10">
           <Link href="/cart">

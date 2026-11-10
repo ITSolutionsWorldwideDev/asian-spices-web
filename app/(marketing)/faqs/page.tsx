@@ -1,7 +1,6 @@
 import ContactDetails from "@/components/features/contact/ContactDetails";
 import Faqs from "@/components/features/contact/Faqs";
 import Footer from "@/components/layout/Footer";
-import Nav from "@/components/layout/Nav";
 import Image from "next/image";
 import faqsData from "@/data/faqsData.json";
 import { getFaqPageJsonLd, type FaqItem } from "@/lib/seo/schema";
@@ -35,8 +34,6 @@ const FaqsPage = () => {
         </div>
 
         <div className="relative z-10">
-          <Nav />
-
           <div className="container mx-auto px-6 pt-10 pb-36 md:pb-40 text-center text-white">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Frequently Asked Questions

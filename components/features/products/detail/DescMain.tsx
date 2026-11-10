@@ -2,7 +2,6 @@
 
 import ProductDesc from "@/components/features/products/ProductDesc";
 import Footer from "@/components/layout/Footer";
-import Nav from "@/components/layout/Nav";
 import RelatedProductsSlider from "./RelatedProductsSlider";
 
 interface Props {
@@ -20,10 +19,6 @@ export default function ProductDescrption({
 
   return (
     <div className="bg-gray-50">
-      <div className="bg-black">
-        <Nav />
-      </div>
-
       <ProductDesc product={product} category={displayCategory} />
 
       <div className="container mx-auto mt-6 sm:mt-10 px-4 py-4 sm:p-5">

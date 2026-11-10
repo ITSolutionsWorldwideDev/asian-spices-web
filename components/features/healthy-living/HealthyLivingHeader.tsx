@@ -1,5 +1,3 @@
-import Nav from "@/components/layout/Nav";
-
 interface TextandImage {
   heading: string;
   text: string;
@@ -8,15 +6,13 @@ interface TextandImage {
 
 const HealthyLivingHeader = ({ heading, text, imageLink }: TextandImage) => {
   return (
-    <section className="relative h-auto w-full">
+    <section className="relative h-auto min-h-[280px] w-full sm:min-h-[340px] md:min-h-[380px]">
       <img
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
         src={`/assets${imageLink}`}
         alt=""
       />
       <div className="pointer-events-none absolute inset-0 bg-black/40" aria-hidden />
-
-      <Nav />
 
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-white container mx-auto px-4">
         <div className="text-center">

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Home, Search, ShoppingBag, ChefHat, HelpCircle } from "lucide-react";
-import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 
 const quickLinks = [
@@ -33,10 +32,6 @@ const quickLinks = [
 export default function NotFound() {
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
-      <div className="bg-black">
-        <Nav />
-      </div>
-
       <main className="flex-1 flex flex-col">
         <div className="container mx-auto px-6 py-16 md:py-24 flex flex-col items-center text-center">
           <p className="text-7xl md:text-8xl font-bold text-orange-500/20 select-none mb-2">

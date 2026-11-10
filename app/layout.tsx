@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import Providers from "@/components/providers/Providers";
 import GlobalLoader from "@/components/ui/GlobalLoader";
+import Nav from "@/components/layout/Nav";
 import GoogleTagManager, {
   GoogleTagManagerBody,
   GoogleTagManagerHead,
@@ -91,6 +92,7 @@ export default async function RootLayout({
 
         <Providers>
           <GlobalLoader />
+          <Nav />
           {children}
           <CountryChangeModal />
           <CartToast />
