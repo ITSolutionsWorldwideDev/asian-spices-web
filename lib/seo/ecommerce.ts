@@ -34,12 +34,9 @@ function pushEcommerce(event: string, ecommerce: EcommercePayload) {
   // Clear previous ecommerce object so items don't merge across events
   window.dataLayer.push({ ecommerce: null });
   window.dataLayer.push({ event, ecommerce });
-
-  // Also send via gtag so GA4 picks it up even without a GTM event tag
-  if (typeof window.gtag === "function") {
-    const { items, ...rest } = ecommerce;
-    window.gtag("event", event, { ...rest, items });
-  }
+  // NOTE: gtag() direct call removed — GTM container already forwards
+  // dataLayer events to GA4 via its own GA4 event tag, so calling
+  // window.gtag() here as well caused every event to fire twice in GA4.
 }
 
 export function toGa4Item(input: {
