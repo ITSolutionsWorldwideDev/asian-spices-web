@@ -1,7 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
 import Footer from "@/components/layout/Footer";
-import Nav from "@/components/layout/Nav";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -58,7 +57,6 @@ const AboutUs = () => {
           }}
         />
         <div className="absolute inset-0 bg-black/55" aria-hidden />
-        <Nav />
         <div className="relative z-10 container mx-auto px-4 pb-8 pt-2 sm:pb-10 sm:pt-3 lg:pb-12">
           <div className="grid items-center gap-6 lg:grid-cols-[1fr_minmax(250px,280px)] lg:gap-10">
             <div className="max-w-3xl">

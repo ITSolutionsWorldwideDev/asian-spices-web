@@ -1,4 +1,3 @@
-import Nav from "@/components/layout/Nav";
 import React from "react";
 import AdvertisingSolution from "./AdvertisingSolution";
 import Advantages from "./Advantages";
@@ -9,9 +8,6 @@ import SalesCalltoAction from "./SalesCalltoAction";
 const PartnerPlatform = () => {
   return (
     <div>
-      <div className="bg-black">
-        <Nav />
-      </div>
       <AdvertisingSolution />
       <Advantages />
       <KickstartSales />

@@ -36,16 +36,16 @@ export default function Homei() {
       <Header />
       {/* <AnnouncementBar /> */}
 
-      <div className="container relative mx-auto min-w-0">
+      <div className="container relative mx-auto min-w-0 overflow-hidden">
         <Image
           src="/assets/home/collections/collection-bg.webp"
           alt="Decorative spice pattern with star anise, cloves, and peppercorns"
           fill
           sizes="(max-width: 1280px) 100vw, 1280px"
-          className="object-cover opacity-90"
+          className="pointer-events-none object-cover opacity-35 blur-[2px]"
           priority={false}
         />
-        <div className="relative bg-white/80">
+        <div className="relative bg-white/85">
           {/* Flash sale shell is static; product cards fetch client-side inside */}
           <div className="px-3 pt-10 pb-2 sm:px-4 sm:pt-14 sm:pb-4 md:pt-20 md:pb-6">
             <div className="min-w-0 max-w-full px-4">

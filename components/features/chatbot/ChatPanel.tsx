@@ -211,7 +211,7 @@ export function ChatPanel({ onClose }: ChatPanelProps) {
   /* bg-[rgba(255,250,244,0.62)]  */
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-[2rem] border border-[rgba(255,255,255,0.36)] bg-white shadow-[0_28px_90px_rgba(64,40,27,0.26)]">
+    <section className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl sm:rounded-[2rem] border border-[rgba(255,255,255,0.36)] bg-white shadow-[0_28px_90px_rgba(64,40,27,0.26)]">
       <ChatHeader
         connectionStatus={connectionStatus}
         isLoading={isPending}

@@ -2,16 +2,14 @@
 
 import React from "react";
 import TabSwitching from "./TabSwitching";
-import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 
 const PartnerRegistration = () => {
   return (
     <div>
-      <div className="bg-black mb-4">
-        <Nav />
+      <div className="mb-4">
+        <TabSwitching />
       </div>
-      <TabSwitching />
       <Footer />
     </div>
   );

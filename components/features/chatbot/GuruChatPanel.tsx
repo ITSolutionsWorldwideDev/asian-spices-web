@@ -124,7 +124,7 @@ export function GuruChatPanel({ onClose }: GuruChatPanelProps) {
   }
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-[2rem] border border-[rgba(122,158,84,0.18)] bg-white shadow-[0_28px_90px_rgba(51,66,38,0.22)]">
+    <section className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl sm:rounded-[2rem] border border-[rgba(122,158,84,0.18)] bg-white shadow-[0_28px_90px_rgba(51,66,38,0.22)]">
       <div className="flex items-center justify-between gap-4 border-b border-[rgba(122,158,84,0.14)] bg-[rgba(240,246,232,0.5)] px-5 py-4">
         <div className="relative h-12 w-[132px] shrink-0">
           <Image

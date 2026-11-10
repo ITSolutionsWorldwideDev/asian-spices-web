@@ -177,10 +177,7 @@ export async function getRecipes(params: GetRecipesParams) {
           FROM store_product_reviews spr
           WHERE spr.recipe_id = r.id
             AND spr.rating IS NOT NULL
-            AND (
-              spr.status IS NULL
-              OR spr.status IN ('approved', 'pending', 'published')
-            )
+            AND spr.status = 'approved'
         ),
         0
       )::float AS average_rating,

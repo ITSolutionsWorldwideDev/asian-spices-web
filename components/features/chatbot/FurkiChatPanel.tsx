@@ -202,7 +202,7 @@ export function FurkiChatPanel({ onClose }: FurkiChatPanelProps) {
   }
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-[2rem] border border-[rgba(226,102,27,0.18)] bg-white shadow-[0_28px_90px_rgba(31,27,24,0.24)]">
+    <section className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl sm:rounded-[2rem] border border-[rgba(226,102,27,0.18)] bg-white shadow-[0_28px_90px_rgba(31,27,24,0.24)]">
       <div className="flex items-center justify-between gap-4 bg-[#1f1b18] px-5 py-4">
         <div className="flex min-w-0 items-center gap-3">
           <FurkiAvatar size={44} />

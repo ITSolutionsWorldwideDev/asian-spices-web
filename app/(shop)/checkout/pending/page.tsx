@@ -1,7 +1,6 @@
 // app/checkout/pending/page.tsx
 import React from "react";
 import CheckoutStatus from "@/components/features/checkout/CheckoutStatus";
-import Nav from "@/components/layout/Nav";
 
 interface Props {
   searchParams: { orderId?: string };
@@ -10,10 +9,6 @@ interface Props {
 export default function Page({ searchParams }: Props) {
   return (
     <div>
-      <div className="bg-black">
-        <Nav />
-      </div>
-
       <div className="container mx-auto px-6 py-10">
         <h1 className="text-2xl font-semibold mb-6">
           Processing Payment

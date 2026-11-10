@@ -9,26 +9,28 @@ type LogoAvatarProps = {
   rounded?: string;
   ring?: boolean;
   priority?: boolean;
+  className?: string;
 };
 
 export function LogoAvatar({
-  size = 64,
-  rounded = "rounded-[1.6rem]",
+  size = 48,
+  rounded = "rounded-full",
   ring = false,
   priority = false,
+  className = "",
 }: LogoAvatarProps) {
   const [hasError, setHasError] = useState(false);
 
   return (
     <div
-      className={`relative flex items-center justify-center overflow-hidden bg-transparent ${rounded} ${
-        ring ? "shadow-[0_16px_34px_rgba(95,61,37,0.18)] ring-1 ring-[rgba(197,122,49,0.14)]" : ""
-      }`}
-      style={{ width: size, height: size }}
+      className={`relative flex items-center justify-center shrink-0 overflow-hidden bg-transparent ${rounded} ${
+        ring ? "shadow-[0_10px_24px_rgba(95,61,37,0.16)] ring-1 ring-[rgba(197,122,49,0.14)]" : ""
+      } ${className}`}
+      style={className ? undefined : { width: size, height: size }}
     >
       {hasError ? (
         <div className="flex h-full w-full items-center justify-center rounded-full bg-[#f6efe1] shadow-[0_12px_28px_rgba(95,61,37,0.12)]">
-          <Bot className="h-8 w-8 text-[var(--saffron)]" />
+          <Bot className="h-5 w-5 sm:h-7 sm:w-7 text-[var(--saffron)]" />
         </div>
       ) : (
         <Image

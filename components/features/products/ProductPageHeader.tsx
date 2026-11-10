@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Nav from "@/components/layout/Nav";
 import LazyVideo from "@/components/ui/LazyVideo";
 
 interface TextandImage {
@@ -70,13 +69,8 @@ const ProductPageHeader = ({
             />
           </div>
 
-          {/* Nav positioned at the top over the banner */}
-          <div className="absolute top-0 left-0 right-0 z-20">
-            <Nav />
-          </div>
-
-          {/* Headings: On mobile, cleanly positioned in the open area below the search bar. On desktop, centered in the open middle area. */}
-          <div className="absolute inset-x-0 bottom-0 top-[115px] sm:top-[125px] md:top-0 md:inset-0 z-10 flex flex-col items-center justify-center text-center text-white px-4 pb-3 md:pb-0 pointer-events-none md:pt-14 lg:pt-18 md:-translate-y-2 lg:-translate-y-4">
+          {/* Headings: centered over the banner */}
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white px-4 pb-3 md:pb-0 pointer-events-none">
             {heading && (
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
                 {heading}
@@ -103,9 +97,7 @@ const ProductPageHeader = ({
 
       <div className="pointer-events-none absolute inset-0 bg-black/45" aria-hidden />
 
-      <Nav />
-
-      <div className="relative z-10 container mx-auto flex min-h-[280px] flex-col items-center justify-center px-4 pb-8 pt-0 text-center text-white -translate-y-4 sm:-translate-y-6 md:-translate-y-8 md:min-h-[340px] lg:min-h-[380px]">
+      <div className="relative z-10 container mx-auto flex min-h-[280px] flex-col items-center justify-center px-4 py-8 text-center text-white md:min-h-[340px] lg:min-h-[380px]">
         <h1 className="mx-auto max-w-[50rem] text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
           {heading}
         </h1>

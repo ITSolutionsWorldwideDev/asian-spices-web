@@ -7,7 +7,6 @@ import { useSession } from "next-auth/react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-import Nav from "@/components/layout/Nav";
 import OrderSummary from "./OrderSummary";
 import ContactForm from "./ContactForm";
 import ShippingForm from "./ShippingForm";
@@ -550,10 +549,6 @@ export default function Checkout() {
 
   return (
     <div className="notranslate" translate="no">
-      <div className="bg-black">
-        <Nav />
-      </div>
-
       <div className="container mx-auto px-6 py-10">
         <div className="mb-10">
           <Link href="/cart">

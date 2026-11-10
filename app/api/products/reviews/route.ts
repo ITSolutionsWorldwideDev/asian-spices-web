@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
       const result = await pool.query(
         `SELECT id, rating, comment, guest_name, status 
          FROM store_product_reviews 
-         WHERE status = 'approved' OR status = 'pending'
+         WHERE status = 'approved'
          ORDER BY id DESC 
          LIMIT $1 OFFSET $2`,
         [limit, offset],

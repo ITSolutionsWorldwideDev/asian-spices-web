@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { BarChart3, Clock3, Users } from "lucide-react";
-import Nav from "@/components/layout/Nav";
 import RecipeHeaderActions from "./RecipeHeaderActions";
 import { getRecipeImageSrc } from "@/core/utils";
 
@@ -103,11 +102,7 @@ export default function RecipeDetailHeader({
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/35" />
 
-        <div className="absolute inset-x-0 top-0 z-20">
-          <Nav />
-        </div>
-
-        <div className="relative z-10 w-full pt-[7.5rem] pb-8 sm:pt-32 sm:pb-10 md:pb-12">
+        <div className="relative z-10 w-full pt-8 pb-8 sm:pt-10 sm:pb-10 md:pb-12">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-3xl">
               {recipe.category_slug ? (

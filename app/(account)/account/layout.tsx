@@ -4,7 +4,6 @@ import { getServerSession } from "next-auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireAuth, webAuthOptions } from "@/core/auth";
-import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import Image from "next/image";
 
@@ -29,7 +28,6 @@ export default async function AccountLayout({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Nav />
       <div className="absolute inset-0 h-screen -z-10">
         <Image
           src={`/assets/home/homeheaderimages/a8de5a3724f7239b78cdee795f978b5faba485b4 (1).webp`}

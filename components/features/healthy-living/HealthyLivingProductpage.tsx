@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import Nav from "@/components/layout/Nav";
 import CategoryHeroDescription from "@/components/features/category/CategoryHeroDescription";
 import Footer from "@/components/layout/Footer";
 import ComingSoonCategory from "@/components/features/category/ComingSoonCategory";
@@ -144,9 +143,6 @@ export default async function HealthyLivingProductpage({
   return (
     <div className="bg-white min-h-screen">
       <JsonLd data={faqJsonLd} />
-
-      {/* Top Floating / Fixed Nav */}
-      <Nav />
 
       {/* 1. Dedicated Hero Section Wrapper (Category Design) */}
       <section className="relative w-full bg-gradient-to-b from-[#fbf9f5] via-[#faf7f2]/50 to-white pt-2 sm:pt-2 md:pt-3 xl:pt-4 pb-2 sm:pb-4 border-b border-gray-100/60">

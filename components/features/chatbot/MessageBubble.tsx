@@ -19,10 +19,6 @@ type MessageBubbleProps = {
 
 const YOUTUBE_URL_PATTERN =
   /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})[^\s)]*/gi;
-// const PRODUCT_URL_PATTERN =
-//   /https?:\/\/(?:www\.)?(?:asian-spices-web\.vercel\.app|asian-spices\.nl)\/spices\/[A-Za-z0-9-_%]+/gi;
-// const RECIPE_URL_PATTERN =
-// /https?:\/\/(?:www\.)?(?:asian-spices-web\.vercel\.app|asian-spices\.nl)\/recipes\/[A-Za-z0-9-_%]+/gi;
 
 const PRODUCT_URL_PATTERN =
   /https?:\/\/(?:www\.)?(?:asianspices\.online|asian-spices-web\.vercel\.app|asian-spices\.nl)\/spices\/[A-Za-z0-9-_%]+/gi;
@@ -91,8 +87,8 @@ function ContentSection({
   children: ReactNode;
 }) {
   return (
-    <section className="space-y-3">
-      <p className="px-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[rgba(154,114,86,0.82)]">
+    <section className="space-y-2 sm:space-y-3">
+      <p className="px-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-[rgba(154,114,86,0.82)]">
         {title}
       </p>
       {children}
@@ -103,7 +99,6 @@ function ContentSection({
 export function MessageBubble({ message }: MessageBubbleProps) {
   const prefersReducedMotion = useReducedMotion();
   const isUser = message.role === "user";
-  const assistantLogoSize = 88;
   const timestampLabel = formatTimestamp(message.timestamp);
   const assistantText = isUser
     ? message.content
@@ -129,16 +124,16 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       }
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.32, ease: "easeOut" }}
-      className={`flex ${isUser ? "justify-end" : "justify-start"} ${isUser ? "" : "items-start gap-3"}`}
+      className={`flex ${isUser ? "justify-end" : "justify-start"} ${isUser ? "" : "items-start gap-2 sm:gap-3"}`}
     >
       {!isUser ? (
-        <LogoAvatar size={assistantLogoSize} rounded="rounded-full" ring />
+        <LogoAvatar className="h-8 w-8 sm:h-11 sm:w-11 shrink-0" rounded="rounded-full" ring />
       ) : null}
       <div
-        className={`space-y-3 ${isUser ? "max-w-[96%] items-end sm:max-w-[82%]" : "max-w-[calc(100%-5.25rem)] items-start sm:max-w-[calc(100%-6.25rem)]"}`}
+        className={`space-y-1.5 sm:space-y-3 ${isUser ? "max-w-[94%] items-end sm:max-w-[82%]" : "max-w-[calc(100%-2.5rem)] items-start sm:max-w-[calc(100%-3.5rem)]"}`}
       >
         {!isUser ? (
-          <p className="px-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-[rgba(154,114,86,0.72)]">
+          <p className="px-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-[rgba(154,114,86,0.72)]">
             Bibi for Asian Spices
           </p>
         ) : null}
@@ -159,19 +154,19 @@ export function MessageBubble({ message }: MessageBubbleProps) {
                 : { opacity: 1, y: 0, clipPath: "inset(0 0 0% 0 round 24px)" }
             }
             transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-            className={`rounded-[1.55rem] px-4 py-3 shadow-[0_16px_34px_rgba(95,61,37,0.08)] ${
+            className={`rounded-[1.15rem] sm:rounded-[1.55rem] px-3 py-2 sm:px-4 sm:py-3 shadow-[0_10px_24px_rgba(95,61,37,0.06)] ${
               isUser
                 ? "rounded-br-sm border border-[rgba(223,123,103,0.16)] bg-[rgba(232,224,214,0.7)] text-[#554741] shadow-none"
-                : "rounded-[1.45rem] border border-[rgba(233,228,219,0.98)] bg-white px-[1.05rem] py-[0.95rem] text-[var(--foreground)] sm:px-[1.15rem] sm:py-[1rem]"
+                : "rounded-[1.15rem] sm:rounded-[1.45rem] border border-[rgba(233,228,219,0.98)] bg-white px-3 py-2 text-[var(--foreground)] sm:px-[1.15rem] sm:py-[1rem]"
             }`}
           >
             {isUser ? (
-              <p className="whitespace-pre-wrap text-sm leading-7 sm:text-[15px]">
+              <p className="whitespace-pre-wrap text-xs sm:text-sm leading-5 sm:leading-7">
                 {message.content}
               </p>
             ) : (
-              <div className="space-y-4">
-                <div className="prose-bibi text-[15px] leading-8 text-[#4f443c] sm:text-[15px]">
+              <div className="space-y-2 sm:space-y-4">
+                <div className="prose-bibi text-xs sm:text-[15px] leading-5 sm:leading-8 text-[#4f443c]">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {assistantText}
                   </ReactMarkdown>
@@ -183,7 +178,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
 
         {!isUser && recipeUrls.length ? (
           <ContentSection title="Recipes">
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid gap-2.5 sm:gap-4 lg:grid-cols-2">
               {recipeUrls.map((recipeUrl) => (
                 <RecipeLinkCard
                   key={recipeUrl}
@@ -201,15 +196,9 @@ export function MessageBubble({ message }: MessageBubbleProps) {
           </ContentSection>
         ) : null}
 
-        {!isUser && imageResults.length ? (
-          <ContentSection title="Product Photos">
-            <ImageResultGrid images={imageResults} />
-          </ContentSection>
-        ) : null}
-
         {!isUser && productUrls.length ? (
           <ContentSection title="Products">
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid gap-2.5 sm:gap-4 lg:grid-cols-2">
               {productUrls.map((productUrl) => (
                 <ProductLinkCard key={productUrl} productUrl={productUrl} />
               ))}
@@ -217,14 +206,22 @@ export function MessageBubble({ message }: MessageBubbleProps) {
           </ContentSection>
         ) : null}
 
+        {!isUser && imageResults.length ? (
+          <ContentSection title="Images">
+            <ImageResultGrid images={imageResults} />
+          </ContentSection>
+        ) : null}
+
         {showMetadata ? (
           <div
-            className={`flex items-center gap-2 px-1 text-xs text-[var(--muted)] ${isUser ? "justify-end" : "justify-start"}`}
+            className={`flex items-center gap-2 px-1 text-[10px] text-[rgba(146,128,114,0.92)] ${isUser ? "justify-end" : "justify-start"}`}
           >
             {timestampLabel ? <span>{timestampLabel}</span> : null}
-            {message.status === "sending" ? <span>Sending...</span> : null}
+            {message.status === "sending" ? <span>Sending…</span> : null}
             {message.status === "error" ? (
-              <span className="text-[var(--paprika)]">Failed</span>
+              <span className="text-red-500">
+                {message.errorMessage ?? "Not delivered"}
+              </span>
             ) : null}
           </div>
         ) : null}

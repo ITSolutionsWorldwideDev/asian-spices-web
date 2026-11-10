@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, Star } from "lucide-react";
-import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import TermsContent from "@/components/features/legal/TermsContent";
 import shippingData from "@/data/legal/shippingData.json";
@@ -24,10 +23,6 @@ export default function ShippingInfoPage() {
     <div className="bg-[#fdf6ef]">
       {/* HERO */}
       <section className="relative">
-        <div className="relative z-10">
-          <Nav />
-        </div>
-
         <div className="relative h-[300px] md:h-[340px] w-full overflow-hidden">
           <Image
             src="/assets/home/homeheaderimages/a8de5a3724f7239b78cdee795f978b5faba485b4 (1).webp"

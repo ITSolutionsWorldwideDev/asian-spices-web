@@ -5,7 +5,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Nav from "@/components/layout/Nav";
 
 type BannerOverlay = {
   line1: string;
@@ -89,8 +88,6 @@ export default function Header() {
   return (
     /* Flash Sale section ke sath exact side padding match kar di hai */
     <section className="w-full bg-white px-3 pt-1 pb-2 sm:px-6 md:px-10">
-      <Nav />
-
       <div className="relative isolate mx-auto w-full max-w-[90rem] overflow-hidden rounded-[1.25rem] bg-[#f6d7cf] shadow-lg sm:rounded-[1.75rem] md:rounded-[2rem] lg:rounded-[2.5rem]">
         {/* Mobile par height kam aur desktop par balanced rakhi hai */}
         <div className="relative h-[280px] w-full sm:h-[340px] md:h-[420px] lg:h-[490px] xl:h-[520px]">
