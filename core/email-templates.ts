@@ -316,16 +316,16 @@ export async function sendOrderConfirmationEmail(orderId: string, customClient?:
     const brandingAttachments = getEmailBrandingAttachments();
 
     // 5️⃣ Dispatch (try "order" profile, fallback to "support", then fallback to "partners")
-    // const orderBcc = [
-    //   "sales@asianspices.online",
-    //   "order@asianspices.online",
+    const orderBcc = [
+      "sales@asianspices.online",
+      "order@asianspices.online",
     //   // "cheila.lopes@itsolutionshub2010.com",
     //   // "ahmed.mehmood@itsolutionshub2010.com",
-    //   // "zraja@itsolutionsworldwide.com",
-    //   // "sdevi@itsolutionsworldwide.com",
-    //   "ahmad.raza@itsolutionsworldwide.com",
-    // ];
-    const orderBcc: string[] = []; // BCC empty: prevents 550 SPAM rejections from mass-BCC internal aliases
+      "zraja@itsolutionsworldwide.com",
+      "sdevi@itsolutionsworldwide.com",
+      "ahmad.raza@itsolutionsworldwide.com",
+    ];
+    // const orderBcc: string[] = []; // BCC empty: prevents 550 SPAM rejections from mass-BCC internal aliases
 
     try {
       await sendEmail({
@@ -532,8 +532,8 @@ export async function sendCancellationEmail(
           "order@asianspices.online",
           // "cheila.lopes@itsolutionshub2010.com",
           "ahmed.mehmood@itsolutionshub2010.com",
-          // "zraja@itsolutionsworldwide.com",
-          // "sdevi@itsolutionsworldwide.com",
+          "zraja@itsolutionsworldwide.com",
+          "sdevi@itsolutionsworldwide.com",
         ],
         subject: `Bestelling geannuleerd #${order.order_number} - Asian Spices`,
         html: emailHtml,
@@ -550,8 +550,8 @@ export async function sendCancellationEmail(
           "order@asianspices.online",
           // "cheila.lopes@itsolutionshub2010.com",
           "ahmed.mehmood@itsolutionshub2010.com",
-          // "zraja@itsolutionsworldwide.com",
-          // "sdevi@itsolutionsworldwide.com",
+          "zraja@itsolutionsworldwide.com",
+          "sdevi@itsolutionsworldwide.com",
         ],
         subject: `Bestelling geannuleerd #${order.order_number} - Asian Spices`,
         html: emailHtml,
@@ -599,8 +599,8 @@ export async function sendPartnerRegistrationEmail({
       to: email,
       cc: [
         "ahmed.mehmood@itsolutionshub2010.com",
-        // "zraja@itsolutionsworldwide.com",
-        // "sdevi@itsolutionsworldwide.com",
+        "zraja@itsolutionsworldwide.com",
+        "sdevi@itsolutionsworldwide.com",
       ],
       subject: `Uw partneraanvraag is ontvangen (${applicationId}) - Asian Spices`,
       html: emailHtml,
@@ -643,8 +643,8 @@ export async function sendPartnerVerificationEmail(options: {
       to: options.email,
       cc: [
         "ahmed.mehmood@itsolutionshub2010.com",
-        // "zraja@itsolutionsworldwide.com",
-        // "sdevi@itsolutionsworldwide.com",
+        "zraja@itsolutionsworldwide.com",
+        "sdevi@itsolutionsworldwide.com",
       ],
       subject: "Welkom als goedgekeurde partner - Asian Spices",
       html: emailHtml,
@@ -705,8 +705,8 @@ export async function sendPartnerCredentialsEmail({
         to: email,
         cc: [
           "ahmed.mehmood@itsolutionshub2010.com",
-          // "zraja@itsolutionsworldwide.com",
-          // "sdevi@itsolutionsworldwide.com",
+          "zraja@itsolutionsworldwide.com",
+          "sdevi@itsolutionsworldwide.com",
         ],
         subject: "Uw partneromgeving staat voor u klaar - Asian Spices",
         html: emailHtml,
@@ -723,8 +723,8 @@ export async function sendPartnerCredentialsEmail({
         to: email,
         cc: [
           "ahmed.mehmood@itsolutionshub2010.com",
-          // "zraja@itsolutionsworldwide.com",
-          // "sdevi@itsolutionsworldwide.com",
+          "zraja@itsolutionsworldwide.com",
+          "sdevi@itsolutionsworldwide.com",
         ],
         subject: "Uw partneromgeving staat voor u klaar - Asian Spices",
         html: emailHtml,
@@ -1099,6 +1099,7 @@ Need help? Contact us at support@asianspices.online
   try {
     await sendEmail({
       to: email,
+      bcc: ["support@asianspices.online"],
       subject: "Your Asian Spices verification code",
       html: emailHtml,
       text: emailText,
@@ -1261,9 +1262,12 @@ export async function sendAccountWelcomeEmail({
 
   const brandingAttachments = getEmailBrandingAttachments();
 
+  const accountWelcomeBcc = ["support@asianspices.online"];
+
   try {
     const res = await sendEmail({
       to: email,
+      bcc: accountWelcomeBcc,
       subject: "Bevestiging registratie account - Asian Spices",
       html: emailHtml,
       text: emailText,
@@ -1281,6 +1285,7 @@ export async function sendAccountWelcomeEmail({
     try {
       const res = await sendEmail({
         to: email,
+        bcc: accountWelcomeBcc,
         subject: "Bevestiging registratie account - Asian Spices",
         html: emailHtml,
         text: emailText,
@@ -1297,6 +1302,7 @@ export async function sendAccountWelcomeEmail({
       try {
         const res = await sendEmail({
           to: email,
+          bcc: accountWelcomeBcc,
           subject: "Bevestiging registratie account - Asian Spices",
           html: emailHtml,
           text: emailText,
@@ -1585,6 +1591,7 @@ export async function sendNewsletterWelcomeEmail(email: string) {
 
     await sendEmail({
       to: email,
+      bcc: ["support@asianspices.online"],
       subject: "You subscribed to our newsletter — thank you! 🎉",
       html: emailHtml,
       fromAccount: "support",
