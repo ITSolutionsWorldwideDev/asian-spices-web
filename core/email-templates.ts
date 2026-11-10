@@ -40,7 +40,11 @@ import {
   generatePartnerCredentialsEmailHtml,
   generatePartnerCredentialsEmailText,
 } from "./utils/mails/partner-credentials";
-import { getEmailBrandingAttachments, renderEmailSocialFooter } from "./utils/mails/shared";
+import {
+  getEmailBrandingAttachments,
+  renderEmailSocialFooter,
+  DEFAULT_LOGO_SRC,
+} from "./utils/mails/shared";
 
 /**
  * Feature flag for the customer confirmation email when the Contact Us form is submitted.
@@ -941,7 +945,7 @@ export async function sendReturnStatusUpdateEmail(returnId: string) {
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e4e4e7;">
           <tr>
             <td style="padding: 28px 32px; text-align: center; border-bottom: 1px solid #f4f4f5;">
-              <img src="cid:as-logo" alt="Asian Spices" width="120" style="display: block; margin: 0 auto;" />
+              <img src="${DEFAULT_LOGO_SRC}" alt="Asian Spices" width="120" style="display: block; margin: 0 auto;" />
             </td>
           </tr>
           <tr>
@@ -1473,7 +1477,7 @@ support@asianspices.online`;
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e4e4e7;">
           <tr>
             <td style="padding: 28px 32px; text-align: center; border-bottom: 1px solid #f4f4f5;">
-              <img src="cid:as-logo" alt="Asian Spices" width="120" style="display: block; margin: 0 auto;" />
+              <img src="${DEFAULT_LOGO_SRC}" alt="Asian Spices" width="120" style="display: block; margin: 0 auto;" />
             </td>
           </tr>
           <tr>

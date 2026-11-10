@@ -6,6 +6,13 @@ import {
   YOUTUBE_ICON_BASE64,
 } from './partner-icons-data';
 
+const CDN_BASE = 'https://www.asianspices.online/images';
+const DEFAULT_LOGO_SRC = `${CDN_BASE}/asian-spices-logo.png`;
+const DEFAULT_TIKTOK_SRC = `${CDN_BASE}/tiktok.png`;
+const DEFAULT_INSTAGRAM_SRC = `${CDN_BASE}/instagram.png`;
+const DEFAULT_FACEBOOK_SRC = `${CDN_BASE}/facebook.png`;
+const DEFAULT_YOUTUBE_SRC = `${CDN_BASE}/youtube.png`;
+
 export interface EmailFooterOptions {
   logoUrl?: string;
   tiktokIconUrl?: string;
@@ -20,13 +27,14 @@ export interface EmailFooterOptions {
  * Outlook (Word engine) & Gmail bulletproof social footer.
  * Note: Never wrap <table> with <a> tag because Outlook ignores/strips links on tables.
  * Anchor tags must reside inside <td>.
+ * Uses HTTPS hosted image URLs by default because Gmail strips base64 data URIs.
  */
 export function renderEmailSocialFooter(options: EmailFooterOptions = {}): string {
-  const logoSrc = options.logoUrl || ASIAN_SPICES_LOGO_BASE64;
-  const tiktokIconSrc = options.tiktokIconUrl || TIKTOK_ICON_BASE64;
-  const instagramIconSrc = options.instagramIconUrl || INSTAGRAM_ICON_BASE64;
-  const facebookIconSrc = options.facebookIconUrl || FACEBOOK_ICON_BASE64;
-  const youtubeIconSrc = options.youtubeIconUrl || YOUTUBE_ICON_BASE64;
+  const logoSrc = options.logoUrl || DEFAULT_LOGO_SRC || ASIAN_SPICES_LOGO_BASE64;
+  const tiktokIconSrc = options.tiktokIconUrl || DEFAULT_TIKTOK_SRC || TIKTOK_ICON_BASE64;
+  const instagramIconSrc = options.instagramIconUrl || DEFAULT_INSTAGRAM_SRC || INSTAGRAM_ICON_BASE64;
+  const facebookIconSrc = options.facebookIconUrl || DEFAULT_FACEBOOK_SRC || FACEBOOK_ICON_BASE64;
+  const youtubeIconSrc = options.youtubeIconUrl || DEFAULT_YOUTUBE_SRC || YOUTUBE_ICON_BASE64;
   const signoff = options.signoffText || 'Hartelijke groet,<br /><strong style="color: #18181b; font-weight: 800;">Het Asian Spices Team</strong>';
   const subtext = options.subtext ?? 'We kijken uit naar een inspirerende, smaakvolle en langdurige samenwerking. Welkom bij de Asian Spices-familie!';
 
