@@ -1,9 +1,10 @@
 "use client";
 
 import { type ReactNode } from "react";
+import Link from "next/link";
 
 import { motion, useReducedMotion } from "framer-motion";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { ImageResultGrid } from "@/components/features/chatbot/ImageResultGrid";
@@ -29,6 +30,27 @@ const PRODUCT_URL_PATTERN =
 
 const RECIPE_URL_PATTERN =
   /https?:\/\/(?:www\.)?(?:asianspices\.online|asian-spices-web\.vercel\.app|asian-spices\.nl)\/recipes\/[A-Za-z0-9-_%]+/gi;
+
+const MARKDOWN_COMPONENTS: Components = {
+  a: ({ href, children }) =>
+    href?.startsWith("/") && !href.startsWith("//") ? (
+      <Link
+        href={href}
+        className="font-medium text-[#c9560f] underline decoration-[#c9560f]/40 transition hover:decoration-[#c9560f]"
+      >
+        {children}
+      </Link>
+    ) : (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-medium text-[#c9560f] underline decoration-[#c9560f]/40 transition hover:decoration-[#c9560f]"
+      >
+        {children}
+      </a>
+    ),
+};
 
 function formatTimestamp(timestamp: string) {
   if (!timestamp) {
@@ -117,6 +139,11 @@ export function MessageBubble({ message }: MessageBubbleProps) {
     Boolean(timestampLabel) ||
     message.status === "sending" ||
     message.status === "error";
+  const showSupportLink =
+    !isUser &&
+    /\b(?:customer support|support team|contact us|my orders|order status|track your order|returns policy)\b/i.test(
+      message.content,
+    );
 
   return (
     <motion.div
@@ -172,10 +199,23 @@ export function MessageBubble({ message }: MessageBubbleProps) {
             ) : (
               <div className="space-y-4">
                 <div className="prose-bibi text-[15px] leading-8 text-[#4f443c] sm:text-[15px]">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={MARKDOWN_COMPONENTS}
+                  >
                     {assistantText}
                   </ReactMarkdown>
                 </div>
+                {showSupportLink ? (
+                  <div className="pt-1">
+                    <Link
+                      href="/contact"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(226,102,27,0.22)] bg-[#fff8f2] px-3.5 py-1.5 text-xs font-semibold text-[#c9560f] shadow-sm transition hover:bg-[#ffeedd]"
+                    >
+                      <span>💬 Need Help? Contact Customer Support</span>
+                    </Link>
+                  </div>
+                ) : null}
               </div>
             )}
           </motion.div>

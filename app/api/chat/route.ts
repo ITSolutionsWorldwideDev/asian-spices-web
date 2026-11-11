@@ -32,6 +32,7 @@ type N8nNormalizedResponse = {
 
 type UnknownRecord = Record<string, unknown>;
 const INTERNAL_TOOL_TRACE_PATTERNS = [
+  /^calling\s+[a-z0-9_]+/i,
   /^calling tools:/i,
   /^tool(?:\s|:)/i,
   /\bintermediateSteps\b/i,
@@ -39,6 +40,9 @@ const INTERNAL_TOOL_TRACE_PATTERNS = [
   /\btoolInput\b/i,
   /\btoolName\b/i,
 ];
+
+const FALLBACK_BIBI_REPLY =
+  "I'm here to help with recipes, spices, and cooking tips! For order tracking, shipping, or returns, please visit our [Contact Us](/contact) page or reach out directly to Customer Support.";
 
 function asString(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value : null;
@@ -78,13 +82,8 @@ function normalizePayload(
   fallbackConversationId: string | null,
 ): N8nNormalizedResponse {
   const record = unwrapN8nPayload(payload);
-  const reply = extractReply(payload);
-
-  if (!reply) {
-    throw new Error(
-      "Bibi returned an internal tool log instead of a customer-facing reply.",
-    );
-  }
+  const rawReply = extractReply(payload);
+  const reply = rawReply?.trim() ? rawReply : FALLBACK_BIBI_REPLY;
 
   return {
     reply,

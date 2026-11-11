@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AlertTriangle } from "lucide-react";
 
 type ErrorBannerProps = {
@@ -21,7 +22,13 @@ export function ErrorBanner({
               Message delivery failed
             </p>
             <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-              {message}
+              {message}{" "}
+              <Link
+                href="/contact"
+                className="font-medium text-[var(--paprika)] underline underline-offset-2 hover:opacity-80"
+              >
+                Contact Support
+              </Link>
             </p>
           </div>
         </div>
