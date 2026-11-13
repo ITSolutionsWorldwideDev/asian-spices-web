@@ -189,7 +189,7 @@ export function ChatPanel({ onClose }: ChatPanelProps) {
   }
 
   function handlePromptSelect(prompt: string) {
-    setInput(prompt);
+    void submitMessage(prompt);
   }
 
   function handleClearChat() {

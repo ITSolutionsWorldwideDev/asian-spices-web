@@ -1,23 +1,23 @@
 const prompts = [
   {
-    title: "Recipe Ideas",
-    subtitle: "Help me find a chicken dinner",
-    prompt: "I want help finding a recipe.",
+    title: "Curry Recipes",
+    subtitle: "Popular chicken, lamb & vegan curries",
+    prompt: "Can you recommend some popular traditional curry recipes?",
   },
   {
-    title: "Find Products",
-    subtitle: "Help me find the right spices",
-    prompt: "I want help finding products.",
+    title: "Spice Substitutions",
+    subtitle: "Quick swaps for missing spices",
+    prompt: "What are the most common spice substitutions when cooking Asian dishes?",
   },
   {
-    title: "Build My Dish",
-    subtitle: "Find the spices and staples for me",
-    prompt: "I want help building a dish.",
+    title: "Essential Spices",
+    subtitle: "Must-have spices for authentic taste",
+    prompt: "What essential spices should I have for authentic Asian cooking?",
   },
   {
-    title: "Shop by Dish",
-    subtitle: "Show me products for one recipe",
-    prompt: "I want to shop for a dish.",
+    title: "Customer Support",
+    subtitle: "Help with orders, shipping or contact",
+    prompt: "How do I check my order status or contact Asian Spices customer support?",
   },
 ];
 

@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Star,
   Check,
@@ -145,8 +145,10 @@ export default function ProductDesc({
 
   const priceReady = taxRate != null;
 
+  const viewItemTracked = useRef(false);
   useEffect(() => {
-    if (!priceReady || !currentPrice) return;
+    if (viewItemTracked.current || !priceReady || !currentPrice) return;
+    viewItemTracked.current = true;
     trackViewItem(
       toGa4Item({
         id: product.id,

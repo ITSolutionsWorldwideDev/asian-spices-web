@@ -22,23 +22,61 @@ const MESSAGES_STORAGE_KEY = "furki-chat-messages";
 const WELCOME_MESSAGE =
   "Hi, I'm Furki from Asian Spices customer support! Ask me about orders, shipping, returns, payments or your account. How can I help today?";
 
-const TOPIC_CARDS: Array<{ emoji: string; label: string; description: string }> = [
-  { emoji: "📦", label: "My Order", description: "Questions about an order you placed." },
-  { emoji: "🚚", label: "Shipping & Delivery", description: "Delivery times, costs and countries." },
-  { emoji: "↩️", label: "Returns & Refunds", description: "How returns and refunds work." },
-  { emoji: "💳", label: "Payments", description: "Payment methods and payment issues." },
-  { emoji: "👤", label: "My Account", description: "Login, password and account help." },
-  { emoji: "🌶️", label: "Products", description: "Questions about our spices and products." },
+const TOPIC_CARDS: Array<{
+  emoji: string;
+  label: string;
+  description: string;
+  prompt: string;
+}> = [
+  {
+    emoji: "📦",
+    label: "Where is my order?",
+    description: "Track shipping status and delivery updates.",
+    prompt: "How do I track my order?",
+  },
+  {
+    emoji: "🚚",
+    label: "Shipping & Delivery",
+    description: "Delivery times, costs, and countries.",
+    prompt: "How long does delivery take and what are the shipping costs?",
+  },
+  {
+    emoji: "↩️",
+    label: "Returns & Refunds",
+    description: "Return window, conditions, and how to get refunded.",
+    prompt: "What is your return and refund policy?",
+  },
+  {
+    emoji: "💳",
+    label: "Payments & Promos",
+    description: "Accepted payment methods and discount codes.",
+    prompt: "Which payment methods and discount codes can I use?",
+  },
+  {
+    emoji: "✏️",
+    label: "Cancel or Change Order",
+    description: "Order modifications, cancellations, and address updates.",
+    prompt: "Can I cancel or modify my order after placing it?",
+  },
+  {
+    emoji: "🌶️",
+    label: "Quality & Halal",
+    description: "Authenticity, freshness, and Halal certification.",
+    prompt: "Are your spices and food products authentic, fresh, and halal?",
+  },
+  {
+    emoji: "💔",
+    label: "Damaged or Missing Items",
+    description: "Broken products, replacements, and missing parcels.",
+    prompt: "What should I do if an item arrives damaged or items are missing from my order?",
+  },
+  {
+    emoji: "🤝",
+    label: "Become a Partner",
+    description: "Seller registration, onboarding, and partner hub.",
+    prompt: "How do I become a seller or partner on Asian Spices?",
+  },
 ];
-
-const TOPIC_PROMPTS: Record<string, string> = {
-  "My Order": "I have a question about my order.",
-  "Shipping & Delivery": "How does shipping and delivery work?",
-  "Returns & Refunds": "How can I return a product or get a refund?",
-  Payments: "Which payment methods can I use?",
-  "My Account": "I need help with my account.",
-  Products: "I have a question about a product.",
-};
 
 // Furki links to pages where the other bots live (e.g. /recipes for Bibi):
 // site links navigate client-side, anything else opens in a new tab.
@@ -188,10 +226,8 @@ export function FurkiChatPanel({ onClose }: FurkiChatPanelProps) {
     }
   }
 
-  function handleSelectTopic(label: string) {
-    const prompt = TOPIC_PROMPTS[label] ?? label;
-    setInput(prompt);
-    inputRef.current?.focus();
+  function handleSelectTopic(prompt: string) {
+    void sendMessage(prompt);
   }
 
   function handleClearChat() {
@@ -260,8 +296,9 @@ export function FurkiChatPanel({ onClose }: FurkiChatPanelProps) {
                   <button
                     key={topic.label}
                     type="button"
-                    onClick={() => handleSelectTopic(topic.label)}
-                    className="rounded-[1.1rem] border border-[rgba(226,102,27,0.16)] bg-white p-4 text-left shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:-translate-y-0.5 hover:border-[rgba(226,102,27,0.4)] hover:bg-[#fff8f2]"
+                    onClick={() => handleSelectTopic(topic.prompt)}
+                    disabled={isSending}
+                    className="rounded-[1.1rem] border border-[rgba(226,102,27,0.16)] bg-white p-4 text-left shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:-translate-y-0.5 hover:border-[rgba(226,102,27,0.4)] hover:bg-[#fff8f2] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <span className="font-semibold text-[#3a2e26]">
                       {topic.emoji} {topic.label}
