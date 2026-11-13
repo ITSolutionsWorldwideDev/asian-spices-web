@@ -531,29 +531,29 @@ export default function Checkout() {
 
   return (
     <div className="notranslate" translate="no">
-      <div className="container mx-auto px-6 py-10">
-        <div className="mb-10">
+      <div className="container mx-auto px-3.5 sm:px-6 py-4 sm:py-10 pb-36 sm:pb-16">
+        <div className="mb-6 sm:mb-10">
           <Link href="/cart">
             <p className="text-sm text-gray-500 flex items-center cursor-pointer">
               <ArrowLeft className="size-[15]" /> Back to Cart
             </p>
           </Link>
-          <h1 className="text-2xl font-semibold mt-2">Checkout</h1>
+          <h1 className="text-xl sm:text-2xl font-semibold mt-1.5 sm:mt-2">Checkout</h1>
         </div>
 
         {!isLoggedIn && (
-          <div className="bg-yellow-50 p-4 rounded mb-4">
-            <p className="text-sm">
+          <div className="bg-yellow-50 p-3 sm:p-4 rounded-lg mb-4 text-xs sm:text-sm">
+            <p>
               Already have an account?{" "}
-              <Link href="/login" className="underline">
+              <Link href="/login" className="underline font-medium text-orange-600 hover:text-orange-700">
                 Login
               </Link>
             </p>
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-[60%_35%] gap-8">
-          <div className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[60%_35%] gap-6 sm:gap-8">
+          <div className="space-y-6 sm:space-y-8">
             {apiError && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
                 {apiError}

@@ -16,11 +16,11 @@ interface Props {
 const METHODS = [
   {
     id: "paynl" as const,
-    label: "Ideal | Wero",
+    label: "iDEAL & Wero",
     description: "Pay securely via iDEAL and other methods",
     logo: {
       src: "/assets/payment/ideal-wero.svg",
-      alt: "Ideal | Wero",
+      alt: "iDEAL & Wero",
       width: 100,
       height: 32,
     },
@@ -50,14 +50,14 @@ export default function PaymentForm({
 
   return (
     <div className="notranslate flex justify-center" translate="no">
-      <div className="w-full bg-white rounded-xl border border-[#E5E7EB] p-8">
-        <h2 className="text-xl font-semibold mb-2">Payment Method</h2>
-        <p className="text-sm text-gray-500 mb-6">
+      <div className="w-full bg-white rounded-xl border border-[#E5E7EB] p-4 sm:p-6 md:p-8">
+        <h2 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">Payment Method</h2>
+        <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6">
           You&apos;ll enter your payment details in the final step.
         </p>
 
         {minOrderMessage ? (
-          <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3.5 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm text-amber-800">
             {minOrderMessage}
           </div>
         ) : null}
@@ -71,54 +71,56 @@ export default function PaymentForm({
                 key={option.id}
                 type="button"
                 onClick={() => setMethod(option.id)}
-                className={`w-full flex items-center justify-between gap-4 border rounded-xl px-4 py-4 text-left transition ${selected
+                className={`w-full flex items-center justify-between gap-2.5 sm:gap-4 border rounded-xl p-3 sm:p-4 text-left transition ${
+                  selected
                     ? "border-orange-500 bg-orange-50 ring-1 ring-orange-500"
                     : "border-gray-200 hover:border-gray-300 bg-white"
-                  }`}
+                }`}
               >
-                <span className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
                   <span
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${selected
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
+                      selected
                         ? "border-orange-500"
                         : "border-gray-300"
-                      }`}
+                    }`}
                     aria-hidden
                   >
                     {selected ? (
                       <span className="h-2.5 w-2.5 rounded-full bg-orange-500" />
                     ) : null}
                   </span>
-                  <span className="min-w-0">
-                    <span className="block font-medium text-gray-900">
+                  <div className="min-w-0 flex-1">
+                    <span className="block font-semibold text-sm sm:text-base text-gray-900 leading-tight">
                       {option.label}
                     </span>
-                    <span className="block text-xs text-gray-500 truncate">
+                    <span className="block text-[11px] sm:text-xs text-gray-500 mt-0.5 leading-tight truncate">
                       {option.description}
                     </span>
-                  </span>
-                </span>
+                  </div>
+                </div>
 
-                <span className="shrink-0 flex items-center justify-end h-10">
+                <div className="shrink-0 flex items-center justify-end h-7 sm:h-8 max-w-[75px] sm:max-w-[100px]">
                   <Image
                     src={option.logo.src}
                     alt={option.logo.alt}
                     width={option.logo.width}
                     height={option.logo.height}
-                    className="object-contain h-full w-auto"
+                    className="object-contain h-full w-auto max-h-7 sm:max-h-8"
                     unoptimized
                   />
-                </span>
+                </div>
               </button>
             );
           })}
         </div>
 
-        <div className="flex items-center gap-2 mt-4 bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
-          <Lock size={16} />
-          Your payment information is encrypted and secure
+        <div className="flex items-center gap-2 mt-4 bg-gray-100 rounded-lg p-3 sm:p-4 text-xs sm:text-sm text-gray-600">
+          <Lock size={15} className="shrink-0" />
+          <span>Your payment information is encrypted and secure</span>
         </div>
 
-        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+        <label className="mt-4 sm:mt-5 flex cursor-pointer items-start gap-2.5 sm:gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 sm:px-4 sm:py-3 text-xs sm:text-sm text-gray-700 leading-relaxed">
           <input
             type="checkbox"
             checked={agreedToTerms}
@@ -159,11 +161,11 @@ export default function PaymentForm({
         <button
           type="button"
           disabled={!canContinue}
-          className={`w-full mt-6 px-6 py-3 rounded-lg text-white flex items-center justify-center gap-2 transition
-          ${!canContinue
+          className={`w-full mt-5 sm:mt-6 px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg text-sm sm:text-base font-semibold text-white flex items-center justify-center gap-2 transition ${
+            !canContinue
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-orange-500 hover:bg-orange-600"
-            }`}
+              : "bg-orange-500 hover:bg-orange-600 shadow-sm"
+          }`}
           onClick={() => placeOrder(method)}
         >
           <Lock size={16} />

@@ -215,7 +215,7 @@ export default function OrderSummary({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-[#E5E7EB] p-6">
+    <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 sm:p-6">
       <h2 className="font-semibold mb-4">Order Summary</h2>
 
       <div className="space-y-4 mb-6">
@@ -536,7 +536,7 @@ export default function OrderSummary({
   const hasFreeShipping = shipping <= 0;
 
   return (
-    <div className="bg-white rounded-xl border border-[#E5E7EB] p-6">
+    <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 sm:p-6">
       <h2 className="font-semibold mb-4">Order Summary</h2>
 
       <div className="space-y-4 mb-6">
