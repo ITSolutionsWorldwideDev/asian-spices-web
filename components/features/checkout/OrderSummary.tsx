@@ -445,6 +445,26 @@ export default function OrderSummary({
           </p>
         )}
 
+        {!appliedPromo && (
+          <div className="mt-2.5 text-xs text-gray-500">
+            <p className="font-medium text-gray-600 mb-1">Tips:</p>
+            <ul className="space-y-0.5 text-gray-500">
+              <li className="flex items-center gap-1.5">
+                <span className="text-gray-400">•</span>
+                <span>Always use Caps</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span className="text-gray-400">•</span>
+                <span>No spaces</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span className="text-gray-400">•</span>
+                <span>No special signs</span>
+              </li>
+            </ul>
+          </div>
+        )}
+
         {appliedDiscount && (
           <div className="mt-4 rounded-lg border border-orange-200 bg-orange-50 p-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-orange-700">
@@ -462,8 +482,6 @@ export default function OrderSummary({
             </button>
           </div>
         )}
-
-        <p className="mt-2 text-xs text-gray-500">Try: SPICE20 or WELCOME10</p>
       </div>
 
       {!hasFreeShipping && amountForFreeShipping > 0 && (

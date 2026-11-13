@@ -6,6 +6,7 @@ import { useZodForm } from "@/hooks/useZodForm";
 import { contactSchema, type ContactFormData } from "@/lib/validation/contact";
 import { getErrorMessage } from "@/lib/validation/getErrorMessage";
 import ReCaptcha, { ReCaptchaRef } from "@/components/ui/ReCaptcha";
+import { useLoaderStore } from "@/store/useLoaderStore";
 
 const ContactUsForm = () => {
   const [status, setStatus] = useState<{
@@ -15,6 +16,7 @@ const ContactUsForm = () => {
 
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCaptchaRef>(null);
+  const { show: showLoader, hide: hideLoader } = useLoaderStore();
 
   const {
     register,
@@ -39,6 +41,8 @@ const ContactUsForm = () => {
       });
       return;
     }
+
+    showLoader("Sending your message...");
 
     try {
       const res = await fetch("/api/contact", {
@@ -75,6 +79,8 @@ const ContactUsForm = () => {
       });
       recaptchaRef.current?.reset();
       setCaptchaToken(null);
+    } finally {
+      hideLoader();
     }
   };
 
