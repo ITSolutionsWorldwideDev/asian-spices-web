@@ -4,6 +4,8 @@ import {
   getRecipeReviews,
 } from "@/lib/dbactions/products";
 import { pool } from "@/core/db";
+import { getOrSet } from "@/lib/redis/cache";
+import { homeReviewsAllCacheKey, REDIS_TTL } from "@/lib/redis/keys";
 
 export async function GET(req: NextRequest) {
   try {
@@ -19,17 +21,24 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(data);
     }
 
-    // Homepage / general reviews slider
+    // Home page reviews slider only (productId=all)
     if (!productId || productId === "all") {
-      const result = await pool.query(
-        `SELECT id, rating, comment, guest_name, status 
-         FROM store_product_reviews 
-         WHERE status = 'approved'
-         ORDER BY id DESC 
-         LIMIT $1 OFFSET $2`,
-        [limit, offset],
+      const rows = await getOrSet(
+        homeReviewsAllCacheKey(page),
+        REDIS_TTL.HOME_REVIEWS_ALL,
+        async () => {
+          const result = await pool.query(
+            `SELECT id, rating, comment, guest_name, status 
+             FROM store_product_reviews 
+             WHERE status = 'approved'
+             ORDER BY id DESC 
+             LIMIT $1 OFFSET $2`,
+            [limit, offset],
+          );
+          return result.rows;
+        },
       );
-      return NextResponse.json(result.rows);
+      return NextResponse.json(rows);
     }
 
     const data = await getProductReviews(productId, page);

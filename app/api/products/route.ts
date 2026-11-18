@@ -1,7 +1,7 @@
 // app/api/products/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { getProducts } from "@/lib/dbactions/products";
+import { getFlashSaleProducts, getProducts } from "@/lib/dbactions/products";
 
 const cleanArray = (arr: string[] = []) =>
   arr.filter((v) => v && v !== "" && v !== "null" && v !== "undefined");
@@ -21,6 +21,9 @@ export async function GET(req: NextRequest) {
       ? ""
       : rawCategory || "spices";
 
+  const saleOnly = searchParams.get("sale_only") === "true";
+  const countryCode = searchParams.get("country") || "NL";
+
   const filters = {
     category,
     subcategories,
@@ -31,14 +34,17 @@ export async function GET(req: NextRequest) {
     search: searchParams.get("search"),
     sort: searchParams.get("sort") || "newest",
     page: Number(searchParams.get("page") || "1"),
-    saleOnly: searchParams.get("sale_only") === "true",
+    saleOnly,
     limit: Number(searchParams.get("limit") || "20"),
-    countryCode: searchParams.get("country") || "NL",
+    countryCode,
     showUnavailable: true,
   };
 
   try {
-    const products = await getProducts(filters);
+    // Home Flash Sale: all sale products, Redis cache-aside (no limit)
+    const products = saleOnly
+      ? await getFlashSaleProducts(countryCode)
+      : await getProducts(filters);
 
     return NextResponse.json({
       data: products,

@@ -1,7 +1,15 @@
 import { pool } from "@/core/db";
+import { getOrSet } from "@/lib/redis/cache";
+import { REDIS_KEYS, REDIS_TTL } from "@/lib/redis/keys";
 
-/** Active categories + subcategories for the shop mega menu */
-export const getShopCategories = async () => {
+type ShopCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  subcategories: { id: string; name: string; slug: string }[];
+};
+
+async function fetchShopCategoriesFromDb(): Promise<ShopCategory[]> {
   const { rows } = await pool.query<{
     id: string;
     name: string;
@@ -30,15 +38,7 @@ export const getShopCategories = async () => {
      ORDER BY c.name ASC, sc.name ASC`,
   );
 
-  const map = new Map<
-    string,
-    {
-      id: string;
-      name: string;
-      slug: string;
-      subcategories: { id: string; name: string; slug: string }[];
-    }
-  >();
+  const map = new Map<string, ShopCategory>();
 
   for (const row of rows) {
     let cat = map.get(row.id);
@@ -56,7 +56,15 @@ export const getShopCategories = async () => {
   }
 
   return Array.from(map.values());
-};
+}
+
+/** Active categories + subcategories for the shop mega menu */
+export const getShopCategories = async (): Promise<ShopCategory[]> =>
+  getOrSet(
+    REDIS_KEYS.SHOP_CATEGORIES,
+    REDIS_TTL.SHOP_CATEGORIES,
+    fetchShopCategoriesFromDb,
+  );
 
 export const getStoreCategoryBySlug = async (slug: string) => {
   const normalized = (slug || "").toLowerCase().trim();

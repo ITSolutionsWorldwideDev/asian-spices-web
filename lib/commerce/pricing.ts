@@ -1,6 +1,6 @@
 // lib/pricing.ts
 
-import { CartItem } from "@/store/useCartStore";
+import type { CartItem } from "@/types/cart";
 import { resolveTaxRate } from "@/lib/commerce/tax";
 
 export const FREE_SHIPPING_THRESHOLD = 50;
