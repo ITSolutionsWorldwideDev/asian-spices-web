@@ -1,7 +1,11 @@
 import { pool } from "@/core/db";
 import { toCleanImageUrl } from "@/lib/media/toCleanImageUrl";
 import { getOrSet } from "@/lib/redis/cache";
-import { homeExploreAllCacheKey, REDIS_TTL } from "@/lib/redis/keys";
+import {
+  getFirst20ProductOfEachCategoryCacheKey,
+  homeExploreAllCacheKey,
+  REDIS_TTL,
+} from "@/lib/redis/keys";
 
 async function fetchProductsFromDb(filters: any) {
   const {
@@ -214,6 +218,16 @@ async function fetchProductsFromDb(filters: any) {
   }));
 }
 
+function hasNoListingFilters(filters: any) {
+  return (
+    (filters?.subcategories?.length ?? 0) === 0 &&
+    (filters?.brands?.length ?? 0) === 0 &&
+    !filters?.minPrice &&
+    !filters?.maxPrice &&
+    !filters?.search
+  );
+}
+
 /** Home Explore → Shop by Categories → All only (screenshot case). */
 function shouldCacheHomeExploreAll(filters: any) {
   const category = filters?.category || "all";
@@ -221,12 +235,6 @@ function shouldCacheHomeExploreAll(filters: any) {
   const limit = Number(filters?.limit);
   const page = Number(filters?.page ?? 1);
   const sort = filters?.sort || "newest";
-  const hasExtraFilters =
-    (filters?.subcategories?.length ?? 0) > 0 ||
-    (filters?.brands?.length ?? 0) > 0 ||
-    !!filters?.minPrice ||
-    !!filters?.maxPrice ||
-    !!filters?.search;
 
   return (
     !filters?.saleOnly &&
@@ -234,18 +242,52 @@ function shouldCacheHomeExploreAll(filters: any) {
     limit === 10 &&
     page === 1 &&
     sort === "newest" &&
-    !hasExtraFilters
+    hasNoListingFilters(filters)
+  );
+}
+
+/**
+ * First listing page only (category pages + /products all).
+ * No sort/brands/subcategories/price/search filters.
+ */
+function shouldCacheListingFirstPage(filters: any) {
+  const limit = Number(filters?.limit ?? 20);
+  const page = Number(filters?.page ?? 1);
+  const sort = filters?.sort || "newest";
+
+  return (
+    !filters?.saleOnly &&
+    limit === 20 &&
+    page === 1 &&
+    sort === "newest" &&
+    hasNoListingFilters(filters)
   );
 }
 
 export const getProducts = async (filters: any) => {
-  if (!shouldCacheHomeExploreAll(filters)) {
-    return fetchProductsFromDb(filters);
+  if (shouldCacheHomeExploreAll(filters)) {
+    return getOrSet(
+      homeExploreAllCacheKey(filters?.countryCode || "NL"),
+      REDIS_TTL.HOME_EXPLORE_ALL,
+      () => fetchProductsFromDb(filters),
+    );
   }
 
-  return getOrSet(
-    homeExploreAllCacheKey(filters?.countryCode || "NL"),
-    REDIS_TTL.HOME_EXPLORE_ALL,
-    () => fetchProductsFromDb(filters),
-  );
+  if (shouldCacheListingFirstPage(filters)) {
+    const categoryKey =
+      filters?.category && filters.category !== "all"
+        ? filters.category
+        : "all";
+
+    return getOrSet(
+      getFirst20ProductOfEachCategoryCacheKey(
+        categoryKey,
+        filters?.countryCode || "NL",
+      ),
+      REDIS_TTL.GET_FIRST_20_PRODUCT_OF_EACH_CATEGORY,
+      () => fetchProductsFromDb(filters),
+    );
+  }
+
+  return fetchProductsFromDb(filters);
 };

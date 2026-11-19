@@ -1,6 +1,30 @@
 import { pool } from "@/core/db";
+import { getOrSet } from "@/lib/redis/cache";
+import {
+  categoryBrandsCacheKey,
+  categorySubcategoriesCacheKey,
+  REDIS_TTL,
+} from "@/lib/redis/keys";
 
-export const getSubcategories = async (category: string, filters: any = {}) => {
+/** First category page only: no brands/subcategories/price/search filters. */
+function shouldCacheCategorySidebar(category: string, filters: any = {}) {
+  const hasCategory = !!category && category !== "all";
+  const page = Number(filters?.page ?? 1);
+  const sort = filters?.sort || "newest";
+
+  return (
+    hasCategory &&
+    page === 1 &&
+    sort === "newest" &&
+    (filters?.subcategories?.length ?? 0) === 0 &&
+    (filters?.brands?.length ?? 0) === 0 &&
+    !filters?.minPrice &&
+    !filters?.maxPrice &&
+    !filters?.search
+  );
+}
+
+async function fetchSubcategoriesFromDb(category: string, filters: any = {}) {
   const { brands, minPrice, maxPrice, search } = filters;
   const isAllCategories = !category || category === "all";
 
@@ -83,6 +107,18 @@ export const getSubcategories = async (category: string, filters: any = {}) => {
 
   const result = await pool.query(query, values);
   return result.rows;
+}
+
+export const getSubcategories = async (category: string, filters: any = {}) => {
+  if (!shouldCacheCategorySidebar(category, filters)) {
+    return fetchSubcategoriesFromDb(category, filters);
+  }
+
+  return getOrSet(
+    categorySubcategoriesCacheKey(category),
+    REDIS_TTL.CATEGORY_SUBCATEGORIES,
+    () => fetchSubcategoriesFromDb(category, filters),
+  );
 };
 
 /** Top-level shop categories with counts, for the sidebar filter. */
@@ -155,7 +191,7 @@ export const getCategories = async (filters: any = {}) => {
   return result.rows;
 };
 
-export const getBrands = async (category: string, filters: any = {}) => {
+async function fetchBrandsFromDb(category: string, filters: any = {}) {
   const { subcategories, minPrice, maxPrice, search } = filters;
   const isAllCategories = !category || category === "all";
 
@@ -243,4 +279,16 @@ export const getBrands = async (category: string, filters: any = {}) => {
   const result = await pool.query(query, values);
 
   return result.rows;
+}
+
+export const getBrands = async (category: string, filters: any = {}) => {
+  if (!shouldCacheCategorySidebar(category, filters)) {
+    return fetchBrandsFromDb(category, filters);
+  }
+
+  return getOrSet(
+    categoryBrandsCacheKey(category),
+    REDIS_TTL.CATEGORY_BRANDS,
+    () => fetchBrandsFromDb(category, filters),
+  );
 };

@@ -3,6 +3,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { pool } from "@/core/db";
+import { redis } from "@/lib/redis/client";
+import { REDIS_KEYS, REDIS_TTL } from "@/lib/redis/keys";
+
+const PAKISTANI_BROWN_RICE_SLUG = "pakistani-brown-rice-easy-tarka-chaval";
 
 export async function GET(
   req: NextRequest,
@@ -10,6 +14,22 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
+
+    if (slug === PAKISTANI_BROWN_RICE_SLUG) {
+      try {
+        const cached = await redis.get(
+          REDIS_KEYS.PAKISTANI_BROWN_RICE_EASY_TARKA_CHAVAL,
+        );
+        if (cached !== null && cached !== undefined) {
+          return NextResponse.json(cached);
+        }
+      } catch (error) {
+        console.error(
+          "Redis get pakistani-brown-rice failed, falling back to DB:",
+          error,
+        );
+      }
+    }
 
     const { rows } = await pool.query(
       `
@@ -95,15 +115,27 @@ export async function GET(
       [recipe.category_id, recipe.id],
     );
 
-    return NextResponse.json({
+    const payload = {
       success: true,
-
       item: {
         ...recipe,
-
         relatedRecipes: related.rows,
       },
-    });
+    };
+
+    if (slug === PAKISTANI_BROWN_RICE_SLUG) {
+      try {
+        await redis.set(
+          REDIS_KEYS.PAKISTANI_BROWN_RICE_EASY_TARKA_CHAVAL,
+          payload,
+          { ex: REDIS_TTL.PAKISTANI_BROWN_RICE_EASY_TARKA_CHAVAL },
+        );
+      } catch (error) {
+        console.error("Redis set pakistani-brown-rice failed:", error);
+      }
+    }
+
+    return NextResponse.json(payload);
   } catch (error: any) {
     console.error("GET RECIPE DETAIL ERROR:", error);
 

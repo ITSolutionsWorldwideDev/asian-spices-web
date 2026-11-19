@@ -1,10 +1,43 @@
 import { pool } from "@/core/db";
 import { toCleanImageUrl } from "@/lib/media/toCleanImageUrl";
+import { redis } from "@/lib/redis/client";
+import {
+  getMostlyViewdProductsCacheKey,
+  REDIS_TTL,
+} from "@/lib/redis/keys";
+
+
+//// tahats for redis caching ///////
+const MOSTLY_VIEWED_PRODUCT_SLUGS = [
+  "trs-pure-butter-ghee-1kg",
+  "trs-garam-masala-powder-100g",
+  "trs-curry-leaves-30g",
+  "nescafe-sunrise-coffee-50g",
+] as const;
 
 export const getProductBySlug = async (
   slug: string,
   countryCode: string = "NL",
 ) => {
+  const shouldCache = (
+    MOSTLY_VIEWED_PRODUCT_SLUGS as readonly string[]
+  ).includes(slug);
+  const cacheKey = getMostlyViewdProductsCacheKey(slug, countryCode);
+
+  if (shouldCache) {
+    try {
+      const cached = await redis.get(cacheKey);
+      if (cached !== null && cached !== undefined) {
+        return cached;
+      }
+    } catch (error) {
+      console.error(
+        "Redis get mostly viewed product failed, falling back to DB:",
+        error,
+      );
+    }
+  }
+
   const query = `
     SELECT 
       p.id,
@@ -126,11 +159,12 @@ export const getProductBySlug = async (
   `;
 
   const result = await pool.query(query, [slug, countryCode.toUpperCase()]);
+  
   const row = result.rows[0];
 
   if (!row) return null;
 
-  return {
+  const product = {
     ...row,
     rating: Number(row.rating || row.avg_rating || 0),
     avg_rating: Number(row.avg_rating || row.rating || 0),
@@ -141,6 +175,18 @@ export const getProductBySlug = async (
     })),
     highlights: row.highlights || [], // Safely fall back if column doesn't exist
   };
+
+  if (shouldCache) {
+    try {
+      await redis.set(cacheKey, product, {
+        ex: REDIS_TTL.GET_MOSTLY_VIEWD_PRODUCTS,
+      });
+    } catch (error) {
+      console.error("Redis set mostly viewed product failed:", error);
+    }
+  }
+
+  return product;
 };
 
 export const getRelatedProducts = async (
