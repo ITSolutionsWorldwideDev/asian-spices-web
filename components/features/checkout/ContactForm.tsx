@@ -16,8 +16,8 @@ export default function ContactForm({ data, setFormData, errors }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-[#E5E7EB] p-8">
-      <h2 className="font-semibold mb-6">Contact Information</h2>
+    <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 sm:p-6 md:p-8">
+      <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Contact Information</h2>
 
       <div className="space-y-4">
         <div>

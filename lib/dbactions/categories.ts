@@ -1,7 +1,15 @@
 import { pool } from "@/core/db";
+import { getOrSet } from "@/lib/redis/cache";
+import { REDIS_KEYS, REDIS_TTL } from "@/lib/redis/keys";
 
-/** Active categories + subcategories for the shop mega menu */
-export const getShopCategories = async () => {
+type ShopCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  subcategories: { id: string; name: string; slug: string }[];
+};
+
+async function fetchShopCategoriesFromDb(): Promise<ShopCategory[]> {
   const { rows } = await pool.query<{
     id: string;
     name: string;
@@ -13,23 +21,24 @@ export const getShopCategories = async () => {
     `SELECT c.id, c.name, c.slug,
             sc.id AS subcategory_id, sc.name AS subcategory_name, sc.slug AS subcategory_slug
      FROM store_categories c
-     LEFT JOIN store_subcategories sc ON sc.category_id = c.id
+     LEFT JOIN store_subcategories sc
+       ON sc.category_id = c.id
+      AND EXISTS (
+        SELECT 1 FROM store_products p
+        WHERE p.subcategory_id = sc.id AND p.status = 1
+      )
      WHERE c.status = 1
        AND LOWER(c.slug) <> 'healthy-living'
        AND LOWER(c.slug) <> 'herbal-food-supplements'
        AND LOWER(c.name) <> 'herbal food supplements'
+       AND EXISTS (
+         SELECT 1 FROM store_products p
+         WHERE p.category_id = c.id AND p.status = 1
+       )
      ORDER BY c.name ASC, sc.name ASC`,
   );
 
-  const map = new Map<
-    string,
-    {
-      id: string;
-      name: string;
-      slug: string;
-      subcategories: { id: string; name: string; slug: string }[];
-    }
-  >();
+  const map = new Map<string, ShopCategory>();
 
   for (const row of rows) {
     let cat = map.get(row.id);
@@ -47,7 +56,15 @@ export const getShopCategories = async () => {
   }
 
   return Array.from(map.values());
-};
+}
+
+/** Active categories + subcategories for the shop mega menu */
+export const getShopCategories = async (): Promise<ShopCategory[]> =>
+  getOrSet(
+    REDIS_KEYS.SHOP_CATEGORIES,
+    REDIS_TTL.SHOP_CATEGORIES,
+    fetchShopCategoriesFromDb,
+  );
 
 export const getStoreCategoryBySlug = async (slug: string) => {
   const normalized = (slug || "").toLowerCase().trim();

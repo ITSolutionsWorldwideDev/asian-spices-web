@@ -1,20 +1,12 @@
 import { create } from "zustand";
+import type { CartToastPayload } from "@/types/cart";
 
-export type CartToastVariant = "added" | "increased";
-
-export type ToastAnchor = {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
-};
-
-export type CartToastPayload = {
-  variant: CartToastVariant;
-  title: string;
-  subtitle?: string;
-  anchor?: ToastAnchor;
-};
+export type {
+  CartToastVariant,
+  ToastAnchor,
+  CartToastPayload,
+  CartActionOptions,
+} from "@/types/cart";
 
 type ToastState = {
   toast: CartToastPayload | null;
@@ -39,8 +31,3 @@ export const useToastStore = create<ToastState>((set) => ({
     set({ toast: null });
   },
 }));
-
-export type CartActionOptions = {
-  anchor?: ToastAnchor;
-  showToast?: boolean;
-};
