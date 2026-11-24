@@ -38,7 +38,7 @@ export async function syncCustomerToOdoo(customerId: string): Promise<number> {
   const partnerPayload: Record<string, unknown> = {
     name: displayName,
     ref: c.id,
-    company_type: isBusiness ? "company" : "person",
+    is_company: isBusiness,
     email: c.email || false,
     phone: c.phone || false,
     street: c.address_line1 || false,
