@@ -63,7 +63,7 @@ export async function syncPaidOrderToOdoo(orderId: string) {
         name: item.product_name || `Product (${item.product_id})`,
         product_uom_qty: Number(item.quantity),
         price_unit: unitPriceExclVat,
-        tax_id: taxId ? [[6, 0, [taxId]]] : [[6, 0, []]],
+        tax_ids: taxId ? [[6, 0, [taxId]]] : [[6, 0, []]],
       },
     ]);
   }
@@ -78,7 +78,7 @@ export async function syncPaidOrderToOdoo(orderId: string) {
         name: `Shipping (${order.shipping_provider || order.order_type})`,
         product_uom_qty: 1,
         price_unit: shippingAmount,
-        tax_id: standardVatId ? [[6, 0, [standardVatId]]] : [[6, 0, []]],
+        tax_ids: standardVatId ? [[6, 0, [standardVatId]]] : [[6, 0, []]],
       },
     ]);
   }
@@ -92,7 +92,7 @@ export async function syncPaidOrderToOdoo(orderId: string) {
         name: "Order Discount",
         product_uom_qty: 1,
         price_unit: -Math.abs(discountAmount),
-        tax_id: [[6, 0, []]],
+        tax_ids: [[6, 0, []]],
       },
     ]);
   }
