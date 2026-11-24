@@ -7,7 +7,7 @@ import Image from "next/image";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 
-import { CartItem } from "@/store/useCartStore";
+import type { CartItem } from "@/types/cart";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import { useRecipeDiscountStore } from "@/store/useRecipeDiscountStore";

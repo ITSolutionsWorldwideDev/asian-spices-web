@@ -3,6 +3,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { pool } from "@/core/db";
+import { redis } from "@/lib/redis/client";
+import { homeRecipesCacheKey, REDIS_TTL } from "@/lib/redis/keys";
 
 export async function GET(req: NextRequest) {
   try {
@@ -24,6 +26,26 @@ export async function GET(req: NextRequest) {
     const featured = searchParams.get("featured") || "";
 
     const offset = (page - 1) * limit;
+
+    // Home recipes carousel only: /api/recipes?limit=3
+    const isHomeRecipes =
+      limit === 3 &&
+      page === 1 &&
+      !search &&
+      !category &&
+      !tag &&
+      featured !== "true";
+
+    if (isHomeRecipes) {
+      try {
+        const cached = await redis.get(homeRecipesCacheKey());
+        if (cached !== null && cached !== undefined) {
+          return NextResponse.json(cached);
+        }
+      } catch (error) {
+        console.error("Redis get home:recipes failed, falling back to DB:", error);
+      }
+    }
 
     /*
      * WHERE CLAUSES
@@ -168,7 +190,7 @@ export async function GET(req: NextRequest) {
       values,
     );
 
-    return NextResponse.json({
+    const payload = {
       success: true,
 
       items: rows,
@@ -179,7 +201,19 @@ export async function GET(req: NextRequest) {
         total,
         totalPages: Math.ceil(total / limit),
       },
-    });
+    };
+
+    if (isHomeRecipes) {
+      try {
+        await redis.set(homeRecipesCacheKey(), payload, {
+          ex: REDIS_TTL.HOME_RECIPES,
+        });
+      } catch (error) {
+        console.error("Redis set home:recipes failed:", error);
+      }
+    }
+
+    return NextResponse.json(payload);
   } catch (error: any) {
     console.error("GET RECIPES ERROR:", error);
 
