@@ -9,6 +9,7 @@ import {
 } from "@/core/order-routing";
 
 import { sendOrderConfirmationEmail } from "@/core/email-templates";
+import { syncPaidOrderToOdoo } from "@/core/odoo/syncOrder";
 
 export async function POST(req: NextRequest) {
   try {
@@ -87,6 +88,10 @@ export async function POST(req: NextRequest) {
           } catch (emailErr) {
             console.error("[Email Trigger Error PayNL Workflow]:", emailErr);
           }
+
+          await syncPaidOrderToOdoo(orderId).catch((err) =>
+            console.error("[Odoo Sync Error]:", err)
+          );
         }
 
         return NextResponse.json({

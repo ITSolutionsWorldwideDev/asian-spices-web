@@ -8,6 +8,7 @@ import {
   ORDER_EVENTS,
 } from "@/core/order-routing";
 import { sendOrderConfirmationEmail } from "@/core/email-templates";
+import { syncPaidOrderToOdoo } from "@/core/odoo/syncOrder";
 
 const PAYPAL_API =
   process.env.PAYPAL_ENV === "production"
@@ -210,6 +211,10 @@ async function markPayPalOrderPaid(
     } catch (emailErr) {
       console.error("[Email Trigger Error Background Execution]:", emailErr);
     }
+
+    await syncPaidOrderToOdoo(orderId).catch((err) =>
+      console.error("[Odoo Sync Error]:", err)
+    );
   }
 }
 
