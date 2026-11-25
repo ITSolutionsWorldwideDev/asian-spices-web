@@ -1,13 +1,13 @@
 // Run with: node test-sync.js [optional_order_id]
 async function run() {
-  const defaultOrderId = "271afd09-9617-499f-91b9-51f1ed486a49"; // ORD-20260000000065
+  const defaultOrderId = "d39ebf48-71d2-4c88-b09e-ae99ddb355c4"; // ORD-20260000000066
   const orderId = process.argv[2] || defaultOrderId;
 
   const url = "https://asian-spices-dev-web.vercel.app/api/admin/odoo-sync";
   const body = { orderId };
 
   console.log("Triggering Odoo sync on:", url);
-  console.log("Order UUID:", orderId, orderId === defaultOrderId ? "(ORD-20260000000065)" : "");
+  console.log("Order UUID:", orderId, orderId === defaultOrderId ? "(ORD-20260000000066)" : "");
 
   try {
     const res = await fetch(url, {
