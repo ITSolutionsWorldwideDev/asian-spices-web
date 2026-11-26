@@ -6,7 +6,7 @@ import path from "path";
 const nextConfig: NextConfig = {
   devIndicators: false,
   turbopack: {
-    root: path.resolve(__dirname),
+    root: path.resolve(process.cwd()),
   },
   typescript: {
     ignoreBuildErrors: false,

@@ -25,6 +25,44 @@ async function getAsianSpicesCompanyId(): Promise<number | null> {
   }
 }
 
+async function getEurCurrencyId(): Promise<number | null> {
+  try {
+    const currencies = await odooExecute<number[]>(
+      "res.currency",
+      "search",
+      [[["name", "=", "EUR"]]],
+      { limit: 1 }
+    );
+    return currencies?.[0] || null;
+  } catch (err) {
+    console.warn("[Odoo EUR Currency Warning]:", err);
+    return null;
+  }
+}
+
+async function getEurPricelistId(
+  eurCurrencyId: number | null,
+  companyId: number | null
+): Promise<number | null> {
+  if (!eurCurrencyId) return null;
+  try {
+    const domain: unknown[] = [["currency_id", "=", eurCurrencyId]];
+    if (companyId) {
+      domain.push(["company_id", "in", [companyId, false]]);
+    }
+    const pricelists = await odooExecute<number[]>(
+      "product.pricelist",
+      "search",
+      [domain],
+      { limit: 1 }
+    );
+    return pricelists?.[0] || null;
+  } catch (err) {
+    console.warn("[Odoo EUR Pricelist Warning]:", err);
+    return null;
+  }
+}
+
 async function getOdooSalesTaxId(
   taxRatePercent: number,
   companyId: number | null
@@ -68,6 +106,47 @@ async function getOdooSalesTaxId(
   }
 }
 
+async function sendOdooInvoiceEmail(
+  odooInvoiceId: number,
+  odooContext: Record<string, unknown>
+) {
+  try {
+    const templates = await odooExecute<number[]>(
+      "mail.template",
+      "search",
+      [[
+        ["model", "=", "account.move"],
+        "|",
+        ["name", "ilike", "Invoice"],
+        ["name", "ilike", "Factuur"],
+      ]],
+      { limit: 1, context: odooContext }
+    );
+
+    const templateId = templates?.[0] || null;
+    if (templateId) {
+      await odooExecute(
+        "mail.template",
+        "send_mail",
+        [templateId, odooInvoiceId],
+        {
+          force_send: true,
+          email_values: {
+            email_from: "order@asianspices.online",
+            email_cc: "admin@asianspices.online,ahmad.raza@itsolutionsworldwide.com",
+          },
+          context: odooContext,
+        }
+      );
+      console.log(`[Odoo Invoice Email]: Invoice #${odooInvoiceId} sent successfully via Odoo`);
+    } else {
+      console.warn("[Odoo Invoice Email Warning]: No mail.template found for account.move");
+    }
+  } catch (err) {
+    console.warn("[Odoo Invoice Email Error]:", err);
+  }
+}
+
 export async function syncPaidOrderToOdoo(orderId: string) {
   const orderRes = await pool.query(
     `SELECT o.*, s.name AS store_name
@@ -99,6 +178,9 @@ export async function syncPaidOrderToOdoo(orderId: string) {
     ? { allowed_company_ids: [companyId], company_id: companyId }
     : {};
 
+  const eurCurrencyId = await getEurCurrencyId();
+  const eurPricelistId = await getEurPricelistId(eurCurrencyId, companyId);
+
   const partnerId = await syncCustomerToOdoo(order.customer_id);
 
   const itemsRes = await pool.query(
@@ -116,16 +198,38 @@ export async function syncPaidOrderToOdoo(orderId: string) {
     const taxRate = Number(item.tax_rate || 0);
     const taxId = await getOdooSalesTaxId(taxRate, companyId);
 
-    orderLines.push([
-      0,
-      0,
-      {
-        name: item.product_name || `Product (${item.product_id})`,
-        product_uom_qty: Number(item.quantity),
-        price_unit: unitPriceExclVat,
-        tax_ids: taxId ? [[6, 0, [taxId]]] : [[6, 0, []]],
-      },
-    ]);
+    // Look up Odoo product by SKU from bulk imported POS catalog
+    let odooProductId: number | null = null;
+    if (item.product_sku) {
+      try {
+        const prods = await odooExecute<number[]>(
+          "product.product",
+          "search",
+          [[
+            ["default_code", "=", item.product_sku.trim()],
+            ...(companyId ? [["company_id", "in", [companyId, false]]] : []),
+          ]],
+          { limit: 1, context: odooContext }
+        );
+        if (prods?.length) odooProductId = prods[0];
+      } catch (prodErr) {
+        console.warn("[Odoo Product Lookup Warning]:", prodErr);
+      }
+    }
+
+    const lineData: Record<string, unknown> = {
+      name: item.product_name || `Product (${item.product_id})`,
+      product_uom_qty: Number(item.quantity),
+      qty_delivered: Number(item.quantity),
+      price_unit: unitPriceExclVat,
+      tax_ids: taxId ? [[6, 0, [taxId]]] : [[6, 0, []]],
+    };
+
+    if (odooProductId) {
+      lineData.product_id = odooProductId;
+    }
+
+    orderLines.push([0, 0, lineData]);
   }
 
   const shippingAmount = Number(order.shipping_amount || 0);
@@ -137,6 +241,7 @@ export async function syncPaidOrderToOdoo(orderId: string) {
       {
         name: `Shipping (${order.shipping_provider || order.order_type})`,
         product_uom_qty: 1,
+        qty_delivered: 1,
         price_unit: shippingAmount,
         tax_ids: standardVatId ? [[6, 0, [standardVatId]]] : [[6, 0, []]],
       },
@@ -175,6 +280,12 @@ export async function syncPaidOrderToOdoo(orderId: string) {
   if (companyId) {
     orderPayload.company_id = companyId;
   }
+  if (eurCurrencyId) {
+    orderPayload.currency_id = eurCurrencyId;
+  }
+  if (eurPricelistId) {
+    orderPayload.pricelist_id = eurPricelistId;
+  }
 
   const odooOrderId = await odooExecute<number>(
     "sale.order",
@@ -201,16 +312,27 @@ export async function syncPaidOrderToOdoo(orderId: string) {
 
     if (invoiceIds?.length) {
       odooInvoiceId = invoiceIds[0];
-      try {
+
+      // Ensure invoice uses EUR
+      if (eurCurrencyId) {
         await odooExecute(
           "account.move",
-          "action_post",
-          [[odooInvoiceId]],
+          "write",
+          [[odooInvoiceId], { currency_id: eurCurrencyId }],
           { context: odooContext }
-        );
-      } catch (postErr) {
-        console.warn("[Odoo Invoice Post Warning]:", postErr);
+        ).catch(() => {});
       }
+
+      // Post invoice
+      await odooExecute(
+        "account.move",
+        "action_post",
+        [[odooInvoiceId]],
+        { context: odooContext }
+      );
+
+      // Email invoice with PDF attachment to customer, BCC to admin & ahmad.raza
+      await sendOdooInvoiceEmail(odooInvoiceId, odooContext);
     }
   } catch (invErr) {
     console.warn("[Odoo Invoice Creation Warning]:", invErr);
