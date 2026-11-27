@@ -114,11 +114,28 @@ export default function FlashSaleProductCard({ onLoad }: FlashSaleProductCardPro
             discount_value: p.discount_value,
             off: offBadge,
             description: stripHtml(p.description || ""),
-            qualities: Array.isArray(p.highlights) && p.highlights.length
-              ? p.highlights.map(String).filter(Boolean)
-              : p.health_benefits
-                ? [p.health_benefits]
-                : [],
+            // Strip HTML so hover chips don't show raw tags like <li><p...
+            qualities: (() => {
+              if (Array.isArray(p.highlights) && p.highlights.length) {
+                return p.highlights
+                  .map((h: unknown) => stripHtml(String(h || "")))
+                  .filter(Boolean);
+              }
+
+              const benefits = stripHtml(String(p.health_benefits || ""));
+              if (!benefits) return [];
+
+              // health_benefits is often a long paragraph — only use short tag-like text
+              const parts = benefits
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean);
+              if (parts.length > 1 && parts.every((part) => part.length <= 40)) {
+                return parts.slice(0, 4);
+              }
+
+              return benefits.length <= 40 ? [benefits] : [];
+            })(),
             rating: Number(p.avg_rating) || 0,
             reviews: Number(p.reviews) || 0,
             seller_name: p.seller_name || null,

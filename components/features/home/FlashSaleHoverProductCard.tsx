@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { getProductPath } from "@/lib/catalog/product-path";
+import { stripHtml } from "@/lib/seo/product-metadata";
 import { useCurrencyStore } from "@/store/useCurrencyStore";
 
 interface FlashSaleProduct {
@@ -105,24 +106,29 @@ const Flash_Sale_Hover_product_Card: React.FC<HoverCardProps> = ({ item }) => {
 
       <hr className="border-gray-100 my-3" />
 
-      {/* Feature Tags Container */}
+      {/* Feature Tags Container — plain text only (no raw HTML chips) */}
       {item.qualities.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3">
-          {item.qualities.flatMap(q => q.split(',')).slice(0, 4).map((tag, index) => (
-            <span
-              key={index}
-              className="px-2.5 py-0.5 text-[11px] font-medium text-gray-600 rounded-md bg-gray-100 border border-gray-200 truncate max-w-[150px]"
-            >
-              {tag.trim()}
-            </span>
-          ))}
+          {item.qualities
+            .flatMap((q) => stripHtml(String(q || "")).split(","))
+            .map((tag) => tag.trim())
+            .filter((tag) => tag && tag.length <= 40 && !tag.includes("<"))
+            .slice(0, 4)
+            .map((tag, index) => (
+              <span
+                key={index}
+                className="px-2.5 py-0.5 text-[11px] font-medium text-gray-600 rounded-md bg-gray-100 border border-gray-200 truncate max-w-[150px]"
+              >
+                {tag}
+              </span>
+            ))}
         </div>
       )}
 
       {/* Shortened Description Blocks */}
       {item.description ? (
         <p className="text-gray-500 text-xs leading-relaxed line-clamp-4">
-          {item.description}
+          {stripHtml(item.description)}
         </p>
       ) : null}
     </div>
