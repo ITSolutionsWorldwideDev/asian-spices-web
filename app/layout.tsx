@@ -58,7 +58,7 @@ export async function generateMetadata(): Promise<Metadata> {
           alt: "Asian Spices - Authentic Asian Groceries & Spices Online",
         },
       ],
-      locale: "nl_NL",
+      locale: "en_NL",
       type: "website",
     },
   };
@@ -74,7 +74,7 @@ export default async function RootLayout({
   const siteReviews = await getSiteReviewsSummary();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-NL" suppressHydrationWarning>
       <head>
         {/* GTM must be as high as possible in <head> for Search Console verification */}
         <GoogleTagManagerHead />
